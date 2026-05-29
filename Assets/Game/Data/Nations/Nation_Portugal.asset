@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a28157625267b6847b2a38444d9807ae, type: 3}
+  m_Name: Nation_Portugal
+  m_EditorClassIdentifier: Game::Game.Data.NationData
+  nationId: nation.portugal
+  displayNameKo: "\uD3EC\uB974\uD22C\uAC08"
+  displayNameOriginal: Portugal
+  flagIcon: {fileID: 0}
+  accentColor: {r: 0.06, g: 0.4, b: 0.2, a: 1}
+  startingPort: {fileID: 11400000, guid: 3f72a76a28a4d8f42b4c3332002d28fa, type: 2}
+  startingYear: 1415
+  shortIntro: "\uD070 \uBC14\uB2E4\uB85C \uAC00\uC7A5 \uBA3C\uC800 \uBAA8\uD5D8\uC744
+    \uB5A0\uB09C \uC791\uC740 \uB098\uB77C."
+  greeting: "\uD658\uC601\uD569\uB2C8\uB2E4, \uC5B4\uB9B0 \uD56D\uD574\uC0AC\uB2D8!
+    \uC6B0\uB9AC \uD3EC\uB974\uD22C\uAC08\uC740 \uAC00\uC7A5 \uBA3C\uC800 \uD070
+    \uBC14\uB2E4\uB85C \uB098\uAC14\uB2F5\uB2C8\uB2E4. \uD568\uAED8 \uC0C8\uB85C\uC6B4
+    \uB545\uC744 \uCC3E\uC544\uBCFC\uAE4C\uC694?"
+  designerNotes: "\uC5D4\uB9AC\uCF00 \uC655\uC790\uC758 \uD56D\uD574 \uD559\uAD50,
+    \uCE74\uB77C\uBCA8\uC120, \uC544\uD504\uB9AC\uCE74 \uC11C\uD574\uC548 \uD0D0\uD5D8."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uD3EC\uB974\uD22C\uAC08_\uC81C\uAD6D"

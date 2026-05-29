@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0d9a81d75203b74cbb07915727d4c52, type: 3}
+  m_Name: Character_Henrique
+  m_EditorClassIdentifier: Game::Game.Data.CharacterData
+  characterId: character.henrique
+  displayNameKo: "\uC5D4\uB9AC\uCF00 \uC655\uC790"
+  gender: 0
+  role: 0
+  portrait: {fileID: 0}
+  bravery: 70
+  seamanship: 60
+  keenEye: 70
+  startingGoodReputation: 50000
+  startingBadReputation: 0
+  nation: {fileID: 11400000, guid: d3ae184577970864a8cffd9371bb3569, type: 2}
+  homePort: {fileID: 11400000, guid: 3f72a76a28a4d8f42b4c3332002d28fa, type: 2}
+  shortIntro: "\uD3EC\uB974\uD22C\uAC08\uC758 \uC655\uC790\uC774\uC790, \uD56D\uD574\uC0AC\uB4E4\uC744
+    \uB3C4\uC640 \uD070 \uBC14\uB2E4\uB85C \uBCF4\uB0B8 \uC0AC\uB78C\uC774\uC5D0\uC694."
+  moreInfo: "\uC5D4\uB9AC\uCF00 \uC655\uC790\uB294 \uC9C1\uC811 \uD070 \uBC14\uB2E4\uB85C
+    \uB098\uAC00\uC9C0\uB294 \uC54A\uC558\uC9C0\uB9CC, \uC5B4\uB9B0 \uD56D\uD574\uC0AC\uB4E4\uC744
+    \uAC00\uB974\uCE58\uACE0 \uB3C4\uC640 \uC0C8\uB85C\uC6B4 \uAE38\uC744 \uC5F4\uC5C8\uB2F5\uB2C8\uB2E4."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC5D4\uD788\uD06C_(\uD3EC\uB974\uD22C\uAC08)"

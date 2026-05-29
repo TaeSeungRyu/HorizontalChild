@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Ceuta
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.ceuta
+  displayNameKo: "\uC138\uC6B0\uD0C0"
+  displayNameOriginal: Ceuta
+  nation: {fileID: 11400000, guid: d3ae184577970864a8cffd9371bb3569, type: 2}
+  latitude: 35.9
+  longitude: -5.3
+  shortDescription: "\uBC14\uB2E4\uB97C \uAC74\uB108 \uC0C8 \uAE38\uC774 \uC2DC\uC791\uB41C
+    \uC791\uC740 \uD56D\uAD6C."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: e91d9d9d071ced84f820250be5d2600a, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC138\uC6B0\uD0C0"

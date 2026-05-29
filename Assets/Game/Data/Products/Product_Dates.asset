@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27e49de8f35219c44a63185efbb0dde3, type: 3}
+  m_Name: Product_Dates
+  m_EditorClassIdentifier: Game::Game.Data.ProductData
+  productId: product.dates
+  displayNameKo: "\uB300\uCD94\uC57C\uC790"
+  icon: {fileID: 0}
+  basePrice: 25
+  isSpecial: 0
+  originPort: {fileID: 11400000, guid: b09782d33c0ce4e43999e0b9badc47a5, type: 2}
+  shortDescription: "\uC0AC\uB9C9\uC744 \uAC74\uB108\uC628 \uB2EC\uCF64\uD558\uACE0
+    \uCAC0\uB4DD\uD55C \uC5F4\uB9E4\uC608\uC694."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uB300\uCD94\uC57C\uC790"

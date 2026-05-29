@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f673533686edc14e9e607386aac7bb9, type: 3}
+  m_Name: Ship_Caravel
+  m_EditorClassIdentifier: Game::Game.Data.ShipData
+  shipId: ship.caravel
+  displayName: "\uCE90\uB7EC\uBCA8"
+  icon: {fileID: 0}
+  prefab3D: {fileID: 0}
+  cannonPower: 3
+  speed: 8
+  cargoCapacity: 60
+  maxDurability: 50
+  basePrice: 5000
+  gate:
+    requiredGoodReputation: 0
+    requiredBadReputation: 0
+  shortDescription: "\uC791\uACE0 \uBE60\uB978, \uD070 \uBC14\uB2E4 \uBAA8\uD5D8\uC5D0
+    \uB531 \uC88B\uC740 \uC791\uC740 \uBC30\uC608\uC694."
+  longDescription: "\uC0BC\uAC01 \uB3DB\uACFC \uC0AC\uAC01 \uB3DB\uC744 \uAC19\uC774
+    \uB2EC\uC544 \uBC14\uB78C\uC744 \uC798 \uC7A1\uC544\uC694. \uD3EC\uB974\uD22C\uAC08
+    \uC0AC\uB78C\uB4E4\uC774 \uAC00\uC7A5 \uBA3C\uC800 \uD070 \uBC14\uB2E4\uB85C
+    \uB098\uAC08 \uB54C \uD0D4\uB2F5\uB2C8\uB2E4."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uCE90\uB7EC\uBCA8"
