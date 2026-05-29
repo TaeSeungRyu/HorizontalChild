@@ -16,8 +16,11 @@
 | 시각 | **2D 베이스 + 약간의 3D (2.5D)** |
 | 조작 | **직접 조종** (자동 길찾기 아님) |
 | 시대 배경 | **실제 대항해시대 (15~17세기)** — 가상 세계 아님 |
-| 플랫폼 | **모바일 / 태블릿 전용** (PC 빌드 안 함) |
+| 플랫폼 | **Android 전용** (iOS·PC 빌드 안 함) |
+| 기준 기기 | **Galaxy S23** (2340×1080, 19.5:9, **가로 모드 고정**) |
 | 1차 시연 항구 | **리스본 ↔ 세우타** |
+| 아트 톤 | **화려하지 않은 미니멀 / 로우폴리 / 플랫** — CC0·OFL 우선 |
+| 앱 정책 | **오프라인 · 권한 0 · 광고 0 · IAP 0 · 비상업** (순수 교육 목적) |
 | 교육 목적 | ① 세계 지리 ② 지역 특산물 ③ 숨겨진 발견물 ④ 역사 |
 
 핵심 원칙: **시뮬레이션 깊이보다 접근성 우선.** 어린이가 5~10분 안에 첫 항해를 시작할 수 있어야 한다.
@@ -37,14 +40,17 @@
   - 모든 항구·발견물·인물·사건은 사실 기반. 출처를 데이터에 기록.
   - 시대상 민감 주제(노예무역, 식민지화, 종교 갈등)는 회피하지 않되 **사실 중심·중립적 어조**로.
   - 시각 톤은 고지도·범선 일러스트 분위기. 너무 SF / 판타지로 가지 않는다.
-- **모바일 / 태블릿 전용**:
+- **Android 전용 (Galaxy S23 기준)**:
   - 입력은 **터치 only** — 가상 조이스틱, 슬라이더, 큰 탭 버튼. 키보드/마우스 매핑 만들지 않음.
   - 렌더 파이프라인은 **`Mobile_RPAsset` / `Mobile_Renderer`** 사용 (`PC_*` 에셋은 빌드에서 제외).
-  - **가로 모드 우선** (배가 좌우로 항해하는 게임 특성).
-  - 안전 영역(Safe Area)을 UI에 반영. iPhone 노치/펀치홀, Android 제스처 영역 회피.
-  - 다양한 해상도/aspect ratio 대응: `Canvas Scaler` 의 `Scale With Screen Size`, Reference Resolution 1920×1080 또는 2208×1242 정도로.
-  - 성능 예산: 60fps 목표, 저사양 폰(예: 4년 전 안드로이드) 기준. 3D 폴리곤 수 / 텍스처 크기 / 동적 라이트 보수적으로.
-  - 발열·배터리 고려: 정적인 항구 화면에서는 프레임 캡 또는 일시정지 가능한 구조.
+  - **가로 모드 고정** (Landscape Left/Right). Player Settings에서 세로 비활성화.
+  - **기준 해상도 2340×1080 (19.5:9)**. Canvas Scaler `Scale With Screen Size`, Reference Resolution **2340×1080**, Match `Width or Height = 0.5`.
+  - 안전 영역: 가로 모드에서 펀치홀은 **상단 가장자리(시계 기준 12시 → 가로에선 좌 또는 우 끝)** 에 위치. 중요 UI는 펀치홀을 침범하지 않도록 `Screen.safeArea` 기반 패딩.
+  - 성능 예산: **S23 (Snapdragon 8 Gen 2, 8GB RAM)** 기준이므로 매우 여유로움. 60fps 안정 + 적당한 셰이더/파티클 여유. 그래도 발열·배터리 배려해 항구 화면 등 정적인 곳에서는 프레임 캡 또는 일시정지 가능 구조.
+  - **개발 환경**: Unity Hub의 Add Modules로 **Android Build Support + OpenJDK + Android SDK & NDK Tools** 설치. Mac/Xcode 불필요.
+  - **빌드 산출물**: Google Play 배포는 `.aab` (Android App Bundle), 사이드로드 테스트는 `.apk`. 1차 시연은 USB로 S23에 `.apk` 설치하는 흐름.
+  - **Player Settings**: Scripting Backend = **IL2CPP**, Target Architectures = **ARMv7 + ARM64** (Play Store는 ARM64 필수), Minimum API Level = 23 이상 권장, Target API Level = 최신.
+  - **키스토어**: 1차 시연 단계엔 Unity 기본 debug.keystore로 OK. 스토어 출시 시점에 release용 키스토어 생성·백업 필수.
 
 ---
 
@@ -87,7 +93,7 @@
   - 대륙: 2.5D 평면에 노멀맵 또는 약간의 메쉬 양각.
 - **2D 라이트**: URP의 2D Renderer 또는 3D Renderer 위에 Sprite Lit 셰이더 — 처음에는 단순하게 가고, 분위기 잡을 때 도입.
 
-→ **`Mobile_RPAsset` / `Mobile_Renderer` 기준** 으로 시작한다. 기존 `PC_*` 에셋은 참고용으로 두되 빌드에는 사용하지 않음. 향후 빌드 타깃은 Android / iOS (우선순위는 §10에서 결정).
+→ **`Mobile_RPAsset` / `Mobile_Renderer` 기준** 으로 시작한다. 기존 `PC_*` 에셋은 참고용으로 두되 빌드에는 사용하지 않음. 빌드 타깃은 **Android 단독** (Google Play 정책에 맞춰 ARM64 빌드 포함).
 
 ---
 
@@ -190,47 +196,167 @@ Assets/
 
 ## 7. 필요한 에셋 (1차 마일스톤 기준, 최소 임시본)
 
-| 카테고리 | 항목 | 1차에서 필요한 양 | 비고 |
+| 카테고리 | 항목 | 1차에서 필요한 양 | 추천 출처 |
 |---|---|---|---|
-| 지도 | 세계지도 텍스처 | 1장 | 임시는 위키미디어 commons의 자유 이용 지도라도 OK |
-| 배 | 3D 저폴리 모델 | 1척 | Unity Asset Store / Sketchfab CC0 |
-| 항구 | 도시 일러스트 | 2개 | 임시는 placeholder 색 박스 |
-| 발견물 | 일러스트 | 1개 | 임시는 placeholder |
-| UI | 한글 폰트 (라이선스 확인) | 1종 | Pretendard, 나눔 등 |
-| BGM/SFX | — | 1차에서는 생략 가능 | |
+| 지도 | 이베리아 반도 + 북아프리카 텍스처 | 1장 | 임시: 위키미디어 commons 자유 이용 고지도 / Asset Store "World Map" |
+| 배 | 3D 캐러벨선 또는 저폴리 범선 | 1척 | Asset Store "Low Poly Ship", "Caravel" 검색 / Sketchfab CC0 |
+| 항구 | 도시 일러스트 (리스본, 세우타) | 2장 | 1차는 placeholder 가능. 추후 어린이 친화 일러스트 의뢰/구매 |
+| 발견물 | 지브롤터 해협 일러스트 | 1장 | 1차는 placeholder 가능 |
+| UI | 한글 폰트 | 1종 | **Pretendard**(OFL, 무료, 모바일 친화), 나눔스퀘어 |
+| 터치 UI 키트 | 가상 조이스틱 + 슬라이더/버튼 | 1세트 | Asset Store 검색 `"Joystick Pack"`(무료), `"Mobile UI"` |
+| 입력 패키지 | 가상 컨트롤 컴포넌트 | — | **Unity 공식 패키지**: `com.unity.inputsystem` 의 `On-Screen Stick`/`On-Screen Button` (별도 결제 X) |
+| 사운드 (선택) | BGM/SFX | — | 1차는 생략. 추후 Freesound.org (CC0) / Asset Store |
 
 **저작권**: 어린이용/배포 의도라면 처음부터 CC0 또는 명확한 상업 라이선스만 사용. 출처를 `Assets/Game/Art/CREDITS.md` 에 누적 기록.
 
+### 7.1 Asset Store 에서 에셋 받는 정확한 흐름
+
+> Unity 6의 Asset Store는 **에디터 안에 카탈로그가 없다.** 브라우저에서 "내 계정에 추가" 한 뒤, 에디터의 Package Manager에서 다운로드/임포트하는 2단계 흐름이다.
+
+1. **브라우저에서 획득**
+   - https://assetstore.unity.com 접속 → Unity 계정 로그인(에디터에서 쓰는 것과 같은 계정).
+   - 원하는 에셋 페이지에서 **`Add to My Assets`** (무료) 또는 **`Buy Now`** (유료) 클릭.
+   - 이 단계가 끝나면 해당 에셋이 내 라이브러리에 등록됨.
+
+2. **Unity Editor에서 다운로드 / 임포트**
+   - `Window` → `Package Manager` 열기.
+   - 좌상단 드롭다운을 **`Packages: My Assets`** 로 변경.
+   - 방금 추가한 에셋이 목록에 보임 → 선택 → 우하단 **`Download`** → 끝나면 **`Import`**.
+   - Import 창이 뜨면 필요한 항목만 체크해서 임포트 (예시 씬은 빼도 됨).
+
+3. **임포트 위치 정리 (중요)**
+   - 대부분의 Asset Store 패키지는 `Assets/` 루트에 자기 폴더를 만들어 떨어진다 (예: `Assets/JoystickPack/`).
+   - 그대로 두면 프로젝트 루트가 어지러워지므로, 임포트 직후 **`Assets/ThirdParty/<에셋이름>/`** 으로 옮길 것을 권장.
+   - 옮길 때 Unity 에디터에서 드래그하면 GUID·메타 파일이 같이 따라가서 안전. 파일 탐색기로 옮기면 참조가 깨질 수 있음.
+   - 임포트 직후 git에는 `Assets/ThirdParty/<에셋이름>.meta` + 내부 파일들이 같이 커밋되어야 함 (그래야 다른 환경에서 동작).
+
+4. **내 게임 코드에서 사용**
+   - `Assets/Game/...` 의 스크립트/프리팹이 `Assets/ThirdParty/...` 의 자산을 참조하는 식으로 사용.
+   - `Game.asmdef` 가 ThirdParty 어셈블리를 참조해야 하는 경우는 `asmdef`의 References에 추가.
+
+5. **라이선스 확인**
+   - 모든 Asset Store 에셋은 기본적으로 [Asset Store EULA](https://unity.com/legal/as-terms) 의 라이선스를 따른다. **상업 배포 가능**한 것이 대부분이지만, 일부는 "한 명의 시트(seat)당 1라이선스" 등 제약이 있음.
+   - 어린이용으로 배포한다면 에셋 페이지의 **License** 섹션을 반드시 확인.
+   - 받은 에셋의 이름·버전·라이선스·출처 URL을 `Assets/Game/Art/CREDITS.md` 에 한 줄씩 기록.
+
+### 7.2 첫 마일스톤용 추천 검색어 (참고)
+- 배: `"Low Poly Ships"`, `"Sailing Ship"`, `"Caravel"`, `"Pirate Ship"` (저폴리 / 무료 필터)
+- 가상 조이스틱: `"Joystick Pack"` (무료, 매우 흔함)
+- 세계지도: 직접 텍스처 한 장 마련하는 게 더 빠를 수 있음 (Wikimedia Commons에서 다운 → `Assets/Game/Art/Map/` 에 PNG로 넣고 Sprite로 import).
+- 한글 폰트: Asset Store보다는 https://github.com/orioncactus/pretendard 에서 OFL 라이선스로 직접 받는 게 깔끔.
+
+**결론**: 사용자가 말한 흐름(Package Manager → Asset Store)이 맞다. 다만 "Asset Store에서 받기" 자체는 **브라우저**에서 일어나고, **Package Manager는 받은 걸 프로젝트로 가져오는 도구** 라는 점만 기억하면 된다.
+
+### 7.3 화려하지 않은 톤에 맞는 무료(CC0/OFL) 에셋 출처
+
+> 화려하지 않은 = 미니멀 / 로우폴리 / 플랫 색감. 어린이 교육 게임 톤과도 잘 맞고, **CC0** 라이선스가 가장 깔끔하다(저작자 표기 의무 없음, 상업적 사용/수정 자유).
+
+#### 3D 모델 — 우선순위순
+| 사이트 | 라이선스 | 추천도 | 비고 |
+|---|---|---|---|
+| **[Kenney.nl](https://kenney.nl)** | **CC0** | ★★★★★ | 이 프로젝트의 톤과 거의 완벽히 일치. `Pirate Kit`, `Watercraft Kit`, `City Kit`, `UI Pack` 등 통일된 스타일. **1순위로 여기부터 보세요.** |
+| **[Quaternius.com](https://quaternius.com)** | **CC0** | ★★★★ | 깔끔한 로우폴리. 카툰 톤. Ultimate Nature/Modular 시리즈 풍부. |
+| **[Poly Pizza](https://poly.pizza)** | CC0 / CC-BY 혼합 | ★★★★ | Google Poly 후속. 검색 강력. **라이선스 필터를 CC0로 고정**하면 안전. |
+| **[Sketchfab](https://sketchfab.com/3d-models?features=downloadable)** | CC0/CC-BY/그 외 | ★★★ | 양은 많지만 라이선스가 천차만별. 다운로드 가능 + CC0 필터 사용. |
+
+#### 2D 아트 · 아이콘 · UI
+| 사이트 | 라이선스 | 추천도 | 비고 |
+|---|---|---|---|
+| **[Kenney.nl](https://kenney.nl)** | **CC0** | ★★★★★ | 2D 게임 키트, UI Pack(`Game Icons` 시리즈)도 풍부. |
+| **[Game-icons.net](https://game-icons.net)** | CC-BY 3.0 | ★★★★★ | 검은 단색 SVG 아이콘 4000+ 개. **대항해/항해/모험 아이콘이 매우 풍부**. 색상은 Unity에서 입혀 사용. 출처 표기만 하면 무료. |
+| **[itch.io 무료 에셋](https://itch.io/game-assets/free)** | 각자 다름 | ★★★ | "Pixel Art 항구" 같이 어린이 친화 톤 가끔 발견. 라이선스는 페이지마다 확인. |
+| **[OpenGameArt.org](https://opengameart.org)** | CC0/CC-BY/GPL | ★★★ | 양은 많지만 잡탕. 라이선스 필터 필수. |
+
+#### 한글 폰트
+| 폰트 | 라이선스 | 비고 |
+|---|---|---|
+| **[Pretendard](https://github.com/orioncactus/pretendard)** | **OFL** | 모바일 가독성 매우 좋음. 둥글지는 않으나 깔끔. |
+| **[나눔손글씨/나눔스퀘어](https://hangeul.naver.com/font)** (네이버) | OFL | 둥글둥글, 어린이 톤에 잘 맞음. |
+| **[본명조 / 본고딕](https://github.com/adobe-fonts)** (Adobe + Google) | OFL | 무난, 안정적. |
+
+#### 사운드 · 음악 (1차 마일스톤 이후)
+| 사이트 | 라이선스 | 비고 |
+|---|---|---|
+| **[Freesound.org](https://freesound.org)** | CC0 / CC-BY | 효과음 풍부. CC0 필터 사용. |
+| **[Pixabay (Sound)](https://pixabay.com/sound-effects/)** | Pixabay License | 사실상 무료 + 출처 표기 권장. |
+| **[Mixkit](https://mixkit.co/free-sound-effects/)** | Mixkit License (무료) | 음악·SFX. |
+| **[Incompetech](https://incompetech.com)** (Kevin MacLeod) | CC-BY 4.0 | BGM. 출처 표기 필수. |
+
+#### 지도 / 지리 데이터 (실제 모티브용)
+| 사이트 | 라이선스 | 비고 |
+|---|---|---|
+| **[위키미디어 커먼즈](https://commons.wikimedia.org)** | 다양 (PD/CC0/CC-BY) | 옛 항해 지도, 고지도 다수. 페이지마다 라이선스 확인. |
+| **[Natural Earth](https://www.naturalearthdata.com)** | Public Domain | 정확한 세계 해안선·국경 GIS 데이터. 가공해서 텍스처로 활용. |
+| **[OpenStreetMap](https://www.openstreetmap.org)** | ODbL | 출처 표기 + 동일 라이선스 공유 의무. 1차 시연용으로 굳이 필요 없음. |
+
+#### Unity Asset Store (무료 카테고리)
+브라우저에서 https://assetstore.unity.com 접속 → 좌측 `Pricing: Free` 필터 → 카테고리(`3D > Environments`, `2D > GUI` 등) 좁히기. Asset Store EULA는 상업적 사용을 허용하지만 일부 에셋에는 추가 조항이 있으니 각 페이지의 License 섹션 확인.
+
+#### 첫 시도 제안 (리스본 ↔ 세우타 마일스톤)
+1. **배 3D**: Kenney `Pirate Kit` 또는 `Watercraft Kit`의 작은 범선/캐러벨선 한 척.
+2. **항구 아이콘 / 발견물 아이콘**: Game-icons.net 에서 anchor / lighthouse / compass / ship-wheel 같은 키워드로 검색.
+3. **UI / HUD 아이콘**: Kenney `UI Pack`.
+4. **세계지도 텍스처**: Natural Earth 의 shaded relief 이미지를 받아 이베리아 반도 + 북아프리카 영역만 잘라 쓰기. 또는 위키미디어의 15~17세기 고지도 PD 이미지.
+5. **폰트**: Pretendard 한 종류.
+6. **사운드**: 1차에서는 생략.
+
+#### 받은 에셋 관리 규칙
+- 받은 즉시 출처 / 라이선스 / 버전 / URL을 **`Assets/Game/Art/CREDITS.md`** 에 한 줄씩 누적 기록 (배포 시 라이선스 확인이 쉬워짐).
+- CC-BY 계열을 사용했다면, 게임 내 크레딧 화면에서 저작자를 표기.
+- Asset Store 에셋과 외부 사이트 에셋 모두 **`Assets/ThirdParty/`** 하위로 격리해 관리.
+
 ---
 
-## 8. 조작 / 입력 (확정안)
+## 8. 조작 / 입력 (확정안 — 터치 전용)
 
-**직접 조종**으로 결정됨. 클릭 자동 항해 시스템은 만들지 않는다.
+**직접 조종 + 모바일/태블릿 전용**으로 결정됨. 키보드/마우스 매핑은 만들지 않는다. 클릭 자동 항해 시스템도 만들지 않는다.
 
-- **세계지도 화면 (항해 중)**:
-  - `좌/우 방향키 (또는 A/D)` — 키 회전.
-  - `위 방향키 (또는 W)` — 가속.
-  - `아래 방향키 (또는 S)` — 감속 / 정지.
-  - `Space` — 항구 도착 시 입항 / 발견물 트리거 확인.
-  - `Tab` 또는 `J` — 항해일지(도감) 열기.
-  - `M` — 큰 지도(미니맵 확장).
-- **항구/발견 패널 UI**: 마우스 클릭 또는 `Space` / `Enter` 로 진행.
-- **조작 보조 (초등 저학년 배려)**:
-  - 약한 관성. 멈춤이 너무 길어지지 않도록 자연 감속을 추가.
-  - 미니맵에 가까운 항구/발견물 방향 화살표 표시.
-  - 육지에 부딪혀도 **데미지/사망 없이** 살짝 튕기고 끝.
+### 8.1 화면 레이아웃 (가로 모드)
+```
+ ┌─────────────────────────────────────────────────────┐
+ │  ☰ 메뉴      📖 항해일지           🗺 지도         │  ← 상단 HUD
+ │                                                     │
+ │                                                     │
+ │                  [ 항해 화면 ]                      │
+ │                  (배 + 바다 + 해안선)                │
+ │                                                     │
+ │                                                     │
+ │  ╭───╮                                  ▲          │
+ │  │ 🕹 │                                ⏸           │  ← 좌: 조타 조이스틱
+ │  ╰───╯                                  ▼          │     우: 가속/감속 + 멈춤
+ └─────────────────────────────────────────────────────┘
+```
+- **왼손 영역**: 가상 조이스틱 (조타). 왼쪽으로 밀면 좌현, 오른쪽으로 밀면 우현.
+- **오른손 영역**: 위쪽 화살표 = 가속, 아래쪽 = 감속, 가운데 = 정지 버튼(돛 내림).
+- **상단 HUD**: 메뉴 / 항해일지(도감) / 지도(미니맵 확장) 아이콘.
+- 모든 터치 타깃은 **최소 48dp (≈ 9mm)** 이상. 어린이 손가락 + 두꺼운 손가락에도 잘 눌리도록.
+- 양손 엄지 영역은 **Safe Area 안쪽**으로 둠. 노치/펀치홀과 겹치지 않도록.
 
-### 8.1 Input Actions 재작성
-기존 `Assets/InputSystem_Actions.inputactions` 의 `Move` / `Look` / `Attack` / `Interact` / `Crouch` 는 이 게임에 맞지 않으므로 액션 맵을 다시 만든다.
+### 8.2 입력 액션 (Input System 재작성)
+기존 `Assets/InputSystem_Actions.inputactions` 의 `Move` / `Look` / `Attack` / `Interact` / `Crouch` 는 이 게임에 맞지 않으므로 새로 만든다. 모든 액션은 **터치 디바이스** 바인딩만 갖는다.
 
-| 새 액션 | 타입 | 바인딩 (PC) |
+| 새 액션 | 타입 | 바인딩 |
 |---|---|---|
-| `Steer` | Value (float, -1~1) | A/D, ←/→ |
-| `Throttle` | Value (float, -1~1) | W/S, ↑/↓ |
-| `Confirm` | Button | Space, Enter, 마우스 좌클릭 |
-| `OpenJournal` | Button | Tab, J |
-| `OpenMap` | Button | M |
-| `Cancel` | Button | Esc, 마우스 우클릭 |
+| `Steer` | Value (Vector2) | `On-Screen Stick` (좌측 조이스틱 UI) |
+| `Throttle` | Value (float, -1~1) | `On-Screen Button` ▲(+1) / ▼(-1) 두 개 합성 |
+| `Confirm` | Button | 터치 (UI 버튼 또는 항구/발견물 패널의 탭) |
+| `OpenJournal` | Button | HUD의 📖 버튼 |
+| `OpenMap` | Button | HUD의 🗺 버튼 |
+| `PauseStop` | Button | HUD의 ⏸ 버튼 (배 정지) |
+
+`On-Screen Stick` / `On-Screen Button` 은 **Unity 공식 Input System 패키지에 포함**되어 있음 — 별도 결제 불필요. UI에 컴포넌트 붙이면 곧바로 액션과 연결됨.
+
+### 8.3 조작 보조 (초등 저학년 배려)
+- 약한 관성. 멈춤이 너무 길어지지 않도록 자연 감속 추가.
+- "정지" 버튼을 한 번 누르면 배가 천천히 멈춤(돛 내림 연출).
+- 미니맵에 가까운 항구/발견물 **방향 화살표** 표시.
+- 육지에 부딪혀도 **데미지/사망 없이** 살짝 튕기고 끝. 시각·청각 피드백은 가볍게.
+- 첫 진입 시 **튜토리얼 오버레이** — "여기를 밀어서 방향을 바꿔보세요" 식의 손가락 가이드.
+
+### 8.4 기기별 고려
+- **태블릿** (예: iPad 9.7" 이상): 조이스틱·버튼이 화면에 비해 작아지지 않도록 **DP/pt 기준 고정 크기** 사용 + 양쪽 끝 여백 자동 확대.
+- **폰** (5.5" 이상): 가로 모드에서도 조이스틱/버튼이 화면 절반을 차지하지 않도록 적당히 작게.
+- **반응형**: Canvas Scaler `Scale With Screen Size`, Match `Width or Height = 0.5` 정도가 무난한 시작점.
 
 ---
 
@@ -244,16 +370,17 @@ Assets/
 
 ## 10. 여전히 사용자에게 묻고 싶은 것
 
-> ✅ 결정됨: 연령대(초등 저학년), 조작(직접 조종), 시대 배경(실제 15~17세기).
+> ✅ 결정됨: 연령대(초등 저학년), 조작(직접 조종), 시대 배경(실제 15~17세기), 플랫폼(**Android 단독**), 1차 시연 항구(리스본↔세우타), 아트 톤(미니멀·로우폴리·플랫, CC0/OFL 우선).
 
 남은 디테일:
 
-1. **플랫폼**: PC만 가도 되는가? 향후 태블릿/모바일 고려가 필요한가?
-2. **세션 길이**: 한 번 켰을 때 5~10분에 끝나는 미니 항해 위주인가, 한 시간 이상 이어지는 모험인가?
-3. **1차 시연용 항구 후보**: 리스본 / 카이로 / 베네치아 / 이스탄불 / 캘리컷 등 — 어디서 시작하면 좋을까? (1차 마일스톤은 항구 2개)
-4. **출발 항구 / 주인공 국적**: 대항해시대2처럼 여러 국적 중 고르는가, 아니면 고정인가?
-5. **개발 인력**: 사용자 본인 단독? 아트는 외주/에셋스토어? 텍스트 콘텐츠는 누가 작성?
+1. **테스트 기기**: 손에 있는 안드로이드 기기는 무엇인지? 모델/OS 버전이 정해지면 Safe Area·성능 예산이 잡힘.
+2. **화면 방향**: 가로 모드 고정으로 가도 되는가? 세로 모드 지원이 필요한가?
+3. **세션 길이**: 한 번 켰을 때 5~10분에 끝나는 미니 항해 위주인가, 한 시간 이상 이어지는 모험인가?
+4. **출발 항구 / 주인공 국적**: 1차에서는 "리스본의 포르투갈 견습 항해사" 같이 고정으로 갈까, 아니면 처음부터 선택지를 둘까?
+5. **개발 인력**: 사용자 본인 단독? 텍스트 콘텐츠(역사 해설·발견물 설명)는 누가 작성? AI 보조 사용 의향?
 6. **로컬라이즈 시스템**: 처음부터 Unity Localization 패키지를 깔고 갈 것인가, 일단 한글 하드코딩으로 빨리 갈 것인가?
+7. **앱 배포 의도**: 가족/지인 시연용 / 학교 시범 / Google Play 정식 출시 — 어디까지를 목표로 하나? (Play 출시면 콘텐츠 등급 심사, 개인정보 처리방침, 아이콘·스크린샷 등 사전 준비 필요)
 
 ---
 
