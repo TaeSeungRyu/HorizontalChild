@@ -641,7 +641,7 @@ _(위 양식을 복사해서 발견물 추가)_
 | --------------------- | ---------------------- | ---- | ---------- | -------------------- | --------- | ---- | ---- | ------ | --------- |
 | `character.henrique`  | 엔리케 왕자            | 남   | Adventurer | `nation.portugal`    | 1394~1460 | 70   | 60   | 70     | 50,000    |
 | `character.elcano`    | 후안 세바스티안 엘카노 | 남   | Adventurer | `nation.spain`       | 1487~1526 | 80   | 95   | 75     | 45,000    |
-| `character.cadamosto` | 알비제 카다모스토      | 남   | Adventurer | `nation.italy`       | 1432~1488 | 65   | 75   | 80     | 30,000    |
+| `character.cadamosto` | 알비제 카다모스토      | 남   | Adventurer | `nation.italy`       | 1432~1483 | 65   | 75   | 80     | 30,000    |
 | `character.barents`   | 빌럼 바렌츠            | 남   | Adventurer | `nation.netherlands` | 1550~1597 | 85   | 80   | 80     | 40,000    |
 | `character.hudson`    | 헨리 허드슨            | 남   | Adventurer | `nation.england`     | ?~1611    | 80   | 75   | 85     | 35,000    |
 | `character.pirireis`  | 피리 레이스            | 남   | Adventurer | `nation.ottoman`     | 1465~1553 | 70   | 80   | 95     | 40,000    |
