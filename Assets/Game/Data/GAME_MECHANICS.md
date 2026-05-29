@@ -73,11 +73,13 @@ NPC는 1.1 공통 능력치에 더해 다음을 갖는다.
 public enum Gender { Male, Female }
 public enum NpcType { Merchant, Escort, Pirate }
 public enum NpcState { AtPort, AtSea, Hired, Defeated }
+public enum CharacterRole { Adventurer, Townsperson }  // §8.17 옵션 A
 
 [CreateAssetMenu] public class CharacterData : ScriptableObject {
     public string characterId;
     public string displayName;
     public Gender gender;
+    public CharacterRole role;         // Adventurer = 바다 가능, Townsperson = 항구 전용
     public Sprite portrait;            // 미니멀 톤 아바타
     public int bravery;                // 1~100
     public int seamanship;             // 1~100
@@ -541,6 +543,53 @@ public static class GameClock {
 ### §8.15 — 패배 시 50% 손실의 사용자 친화 처리
 - "돈 50% 손실" 이 어린이에게 강한 좌절이 될 수 있음.
 - 대안: 일정 금액 이하로는 깎이지 않음(예: 항상 1,000원은 남김), 또는 비율 더 작게.
+
+### §8.16 — 무국적 항구의 처리 정책 ✅ 옵션 A 1차 결정 (2026-05-29)
+
+M3 확장 항구 13개 중 일부는 8개 선택 국적 어디에도 속하지 않는다:
+- 카사블랑카 (모로코)
+- 마르세유 (프랑스)
+- 베르겐 (노르웨이)
+- 함부르크 (한자 동맹)
+- 코펜하겐 (덴마크)
+- 나가사키 (일본)
+- 말라카 (말레이 술탄국)
+
+**1차 결정 — 옵션 A: 국적 무관 중립 항구**:
+- 어느 국적이든 같은 조건으로 입항·무역·고용 가능.
+- PortData 의 `nationId` 필드는 빈 값 (`""` 또는 `null`) 으로 두고, 게임 로직에서 "중립" 으로 처리.
+- 어린이 친화 + 구현 단순.
+
+추후 옵션 B(시세 페널티) 또는 옵션 C(임시 국가) 로의 변경은 별도 결정 시점에 다시 검토.
+
+### §8.17 — "캐릭터 NPC" vs "100명 항해 NPC 풀" 의 관계 ✅ 옵션 A 확정 (2026-05-29)
+
+**확정 — 옵션 A: 두 카테고리 분리.**
+
+`CharacterData` 에 `role` enum 필드 추가:
+- **`Adventurer`** — 바다에 나갈 수 있는 항해사형 NPC. 100명 풀과 별개의 "특별 NPC" 로 광장에서 항상 만남. 고용 가능.
+- **`Townsperson`** — 항구의 마을 사람 (시장 상인·장인·도선사 등). 100명 풀에서 제외. 광장에서 항상 만남, 고용 가능, 단 바다에 나가지 않음.
+
+100명 일반 풀은 별도. 자동 생성 기반으로 코드에서 관리 (§8.18).
+
+**16명 캐릭터 NPC 분류** (적용 결과):
+- **Adventurer (8명)**: 엔리케 왕자, 엘카노, 카다모스토, 바렌츠, 허드슨, 피리 레이스, 이순신, 정화 — 실존 인물 전원.
+- **Townsperson (8명)**: 카타리나, 이사벨, 베아트리체, 안나, 엘레노어, 아이셰, 덕이, 메이린 — 가상 캐릭터 전원.
+
+이는 자연스러운 시작점이며, 추후 가상 캐릭터 중 일부를 Adventurer 로 풀어 줄지는 별도 결정.
+
+### §8.18 — 84명의 일반 항해 NPC 풀 시드 (신규)
+
+§8.17 옵션 A 채택 시 — 캐릭터 NPC 외에 추가로 작성해야 하는 84명의 일반 항해 NPC:
+- 50 상업선 - 16 = (캐릭터 NPC 중 Adventurer 분류된 16명 제외) → **남은 슬롯 자동 채움**.
+- 또는: 캐릭터 NPC 16명은 "특별 NPC" 로 별도 풀, 100명은 모두 자동 생성된 일반 NPC.
+
+권장: **후자**. 캐릭터 NPC 16명은 광장에서 항상 만날 수 있는 "이름 있는 사람" 으로 두고, 100명 일반 풀은 자동 생성된 익명의 항해사들로 채운다. 자동 생성 방식:
+- 이름: 각 국적별 흔한 이름 풀에서 무작위 조합.
+- 능력치: 평균 40~60 사이 정규분포, 직업(Merchant/Escort/Pirate)에 따라 약간의 편향.
+- 거점 항구: 항구별 인구 비례 무작위 분배.
+
+이는 콘텐츠 작업이 아닌 **코드로 처리**할 영역. CONTENT_DESIGN.md에 시드를 따로 작성하지 않는다.
 
 ---
 

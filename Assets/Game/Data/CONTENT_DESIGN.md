@@ -8,12 +8,12 @@
 
 ## 0. 이 문서가 다루는 / 다루지 않는 것
 
-| 다룬다 | 다루지 않는다 |
-|---|---|
-| 콘텐츠 단위별 워크북 표·양식 | 게임 시스템, 입력, 빌드, 정책 (→ `GAME_PREP.md`) |
-| 어휘·톤·길이·민감 주제 가이드라인 | 일러스트 / 폰트 / 사운드 (→ `GAME_PREP.md` §7) |
-| 출처 표기 규칙 | 저장 시스템, 마일스톤 (→ `GAME_PREP.md` §9, §12) |
-| 작성·검수 체크리스트 | 코드 구조 |
+| 다룬다                            | 다루지 않는다                                    |
+| --------------------------------- | ------------------------------------------------ |
+| 콘텐츠 단위별 워크북 표·양식      | 게임 시스템, 입력, 빌드, 정책 (→ `GAME_PREP.md`) |
+| 어휘·톤·길이·민감 주제 가이드라인 | 일러스트 / 폰트 / 사운드 (→ `GAME_PREP.md` §7)   |
+| 출처 표기 규칙                    | 저장 시스템, 마일스톤 (→ `GAME_PREP.md` §9, §12) |
+| 작성·검수 체크리스트              | 코드 구조                                        |
 
 ---
 
@@ -135,7 +135,7 @@
 - **한 줄 소개**: "가장 큰 배를 만들어 멀리 바다를 누볐던 나라예요."
 - **시작 인사말**: "안녕하세요! 우리는 아주 큰 배를 만들 줄 알아요. 함께 어디까지 갈 수 있는지 떠나 볼까요?"
 - **국가 고유 메모**: 명나라, 정화의 일곱 차례 원정(1405~1433), 큰 보선(寶船), 도자기·차·비단의 본고장, 남쪽 큰 강(주강)의 항구 광저우.
-- **출처**: 위키백과 [정화](https://ko.wikipedia.org/wiki/정화_(명나라)), [명나라](https://ko.wikipedia.org/wiki/명나라)
+- **출처**: 위키백과 [정화](<https://ko.wikipedia.org/wiki/정화_(명나라)>), [명나라](https://ko.wikipedia.org/wiki/명나라)
 
 ---
 
@@ -144,18 +144,32 @@
 > 목표 수량: M1=2, M2=8, M3=20~30, M4=30~50.
 > ID는 `port.<영문도시명>` 형식.
 
-| ID | 한국명 | 원어명 | 국가 | 좌표 (위도, 경도) | 한 줄 설명 (어린이용) | 대표 특산물 (ID 목록) | 출처 |
-|---|---|---|---|---|---|---|---|
-| `port.lisbon` ✅ | 리스본 | Lisboa | `nation.portugal` | 38.7°N, 9.1°W | "큰 바다로 가는 문이 활짝 열린 도시." | `product.salt_cod`, `product.cork` | 위키백과 |
-| `port.ceuta` ✅ | 세우타 | Ceuta | (당시 포르투갈령) | 35.9°N, 5.3°W | "바다를 건너 새 길이 시작된 작은 항구." | `product.dates` | 위키백과 |
-| `port.sevilla` ✅ | 세비야 | Sevilla | `nation.spain` | 37.4°N, 5.9°W | "큰 강을 따라 새 땅의 보물이 모이는 도시." | `product.olive_oil`, `product.orange` | 위키백과 |
-| `port.venezia` ✅ | 베네치아 | Venezia | `nation.italy` | 45.4°N, 12.3°E | "물길이 거리가 된 신기한 도시." | `product.murano_glass`, `product.pepper` | 위키백과 |
-| `port.amsterdam` ✅ | 암스테르담 | Amsterdam | `nation.netherlands` | 52.4°N, 4.9°E | "운하 위로 배들이 쉴 새 없이 오가는 도시." | `product.dutch_cheese`, `product.tulip` | 위키백과 |
-| `port.london` ✅ | 런던 | London | `nation.england` | 51.5°N, 0.1°W | "안개 낀 큰 강가에서 배들이 출발하는 도시." | `product.wool`, `product.tin` | 위키백과 |
-| `port.istanbul` ✅ | 이스탄불 | İstanbul | `nation.ottoman` | 41.0°N, 28.9°E | "동쪽과 서쪽 사이의 큰 시장이 열리는 도시." | `product.persian_carpet`, `product.spice_clove` | 위키백과 |
-| `port.busan` ✅ | 부산 | 釜山 | `nation.joseon` | 35.1°N, 129.0°E | "동쪽 바다로 나가는 우리나라 큰 항구." | `product.celadon`, `product.ginseng` | 위키백과 |
-| `port.guangzhou` ✅ | 광저우 | 廣州 | `nation.china` | 23.1°N, 113.3°E | "남쪽 큰 강 어귀에서 도자기와 비단이 모이는 도시." | `product.porcelain`, `product.silk` | 위키백과 |
-| _(추가 행을 복사해서 사용)_ | | | | | | | |
+| ID                                                    | 한국명       | 원어명        | 국가                          | 좌표 (위도, 경도) | 한 줄 설명 (어린이용)                                  | 대표 특산물 (ID 목록)                           | 출처                                                                  |
+| ----------------------------------------------------- | ------------ | ------------- | ----------------------------- | ----------------- | ------------------------------------------------------ | ----------------------------------------------- | --------------------------------------------------------------------- |
+| `port.lisbon` ✅                                      | 리스본       | Lisboa        | `nation.portugal`             | 38.7°N, 9.1°W     | "큰 바다로 가는 문이 활짝 열린 도시."                  | `product.salt_cod`, `product.cork`              | 위키백과                                                              |
+| `port.ceuta` ✅                                       | 세우타       | Ceuta         | (당시 포르투갈령)             | 35.9°N, 5.3°W     | "바다를 건너 새 길이 시작된 작은 항구."                | `product.dates`                                 | 위키백과                                                              |
+| `port.sevilla` ✅                                     | 세비야       | Sevilla       | `nation.spain`                | 37.4°N, 5.9°W     | "큰 강을 따라 새 땅의 보물이 모이는 도시."             | `product.olive_oil`, `product.orange`           | 위키백과                                                              |
+| `port.venezia` ✅                                     | 베네치아     | Venezia       | `nation.italy`                | 45.4°N, 12.3°E    | "물길이 거리가 된 신기한 도시."                        | `product.murano_glass`, `product.pepper`        | 위키백과                                                              |
+| `port.amsterdam` ✅                                   | 암스테르담   | Amsterdam     | `nation.netherlands`          | 52.4°N, 4.9°E     | "운하 위로 배들이 쉴 새 없이 오가는 도시."             | `product.dutch_cheese`, `product.tulip`         | 위키백과                                                              |
+| `port.london` ✅                                      | 런던         | London        | `nation.england`              | 51.5°N, 0.1°W     | "안개 낀 큰 강가에서 배들이 출발하는 도시."            | `product.wool`, `product.tin`                   | 위키백과                                                              |
+| `port.istanbul` ✅                                    | 이스탄불     | İstanbul      | `nation.ottoman`              | 41.0°N, 28.9°E    | "동쪽과 서쪽 사이의 큰 시장이 열리는 도시."            | `product.persian_carpet`, `product.spice_clove` | 위키백과                                                              |
+| `port.busan` ✅                                       | 부산         | 釜山          | `nation.joseon`               | 35.1°N, 129.0°E   | "동쪽 바다로 나가는 우리나라 큰 항구."                 | `product.celadon`, `product.ginseng`            | 위키백과                                                              |
+| `port.guangzhou` ✅                                   | 광저우       | 廣州          | `nation.china`                | 23.1°N, 113.3°E   | "남쪽 큰 강 어귀에서 도자기와 비단이 모이는 도시."     | `product.porcelain`, `product.silk`             | 위키백과                                                              |
+| **M3 확장 — 5개 지역 × 추가 항구 (대항해시대2 참고)** |              |               |                               |                   |                                                        |                                                 |                                                                       |
+| `port.porto` ✅                                       | 포르투       | Porto         | `nation.portugal`             | 41.2°N, 8.6°W     | "강 어귀의 언덕에 자리한 포도주의 도시."               | `product.salt_cod`, `product.cork`              | 위키백과                                                              |
+| `port.cadiz` ✅                                       | 카디스       | Cádiz         | `nation.spain`                | 36.5°N, 6.3°W     | "큰 바다로 나가는 배들이 모이는 옛 항구."              | `product.olive_oil`, `product.orange`           | 위키백과                                                              |
+| `port.casablanca` ✅                                  | 카사블랑카   | الدار البيضاء | (중립 — 모로코)               | 33.6°N, 7.6°W     | "북아프리카의 흰 집들이 모인 큰 항구."                 | `product.dates`                                 | 위키백과                                                              |
+| `port.las_palmas` ✅                                  | 라스 팔마스  | Las Palmas    | `nation.spain`                | 28.1°N, 15.4°W    | "큰 바다로 떠나기 전 마지막으로 들르는 섬 항구."       | `product.orange`                                | 위키백과 [카나리아 제도](https://ko.wikipedia.org/wiki/카나리아_제도) |
+| `port.marseille` ✅                                   | 마르세유     | Marseille     | (중립 — 프랑스)               | 43.3°N, 5.4°E     | "오래된 지중해 항구, 향신료가 모이는 곳."              | `product.pepper`, `product.olive_oil`           | 위키백과                                                              |
+| `port.napoli` ✅                                      | 나폴리       | Napoli        | `nation.italy`                | 40.8°N, 14.3°E    | "큰 화산 옆에 자리한 활기찬 항구 도시."                | `product.murano_glass`, `product.olive_oil`     | 위키백과                                                              |
+| `port.alexandria` ✅                                  | 알렉산드리아 | الإسكندرية    | `nation.ottoman`              | 31.2°N, 29.9°E    | "옛 등대가 서 있던 이집트의 큰 항구."                  | `product.spice_clove`, `product.pepper`         | 위키백과                                                              |
+| `port.bergen` ✅                                      | 베르겐       | Bergen        | (중립 — 노르웨이)             | 60.4°N, 5.3°E     | "차가운 북쪽 바다에서 마른 생선과 나무를 보내는 항구." | `product.salt_cod`                              | 위키백과                                                              |
+| `port.hamburg` ✅                                     | 함부르크     | Hamburg       | (중립 — 한자 동맹)            | 53.5°N, 10.0°E    | "강을 따라 큰 배들이 드나드는 북쪽 시장 도시."         | `product.dutch_cheese`, `product.wool`          | 위키백과 [한자 동맹](https://ko.wikipedia.org/wiki/한자_동맹)         |
+| `port.copenhagen` ✅                                  | 코펜하겐     | København     | (중립 — 덴마크)               | 55.7°N, 12.6°E    | "바다와 바다 사이의 작은 길목에 있는 항구."            | `product.dutch_cheese`                          | 위키백과                                                              |
+| `port.nagasaki` ✅                                    | 나가사키     | 長崎          | (중립 — 일본)                 | 32.7°N, 129.9°E   | "큰 바다 사람들이 처음 일본에 닿은 작은 만."           | `product.porcelain`, `product.silk`             | 위키백과 [난반 무역](https://ko.wikipedia.org/wiki/난반_무역)         |
+| `port.malacca` ✅                                     | 말라카       | Malaka        | (중립 — 말레이 술탄국)        | 2.2°N, 102.2°E    | "동남아시아 좁은 바닷길의 큰 향신료 시장."             | `product.pepper`, `product.spice_clove`         | 위키백과 [말라카 술탄국](https://ko.wikipedia.org/wiki/말라카_술탄국) |
+| `port.manila` ✅                                      | 마닐라       | Manila        | `nation.spain` (1571 도래 후) | 14.6°N, 120.9°E   | "동쪽 큰 바다와 새 땅을 잇는 다리 같은 항구."          | `product.silk`, `product.american_silver`       | 위키백과 [마닐라 갈레온](https://ko.wikipedia.org/wiki/마닐라_갈레온) |
+| _(추가 행을 복사해서 사용)_                           |              |               |                               |                   |                                                        |                                                 |                                                                       |
 
 **상세 페이지가 필요한 항구**(특별한 역사·스토리를 가진 곳)는 표 아래에 별도 헤더로 길게 작성:
 
@@ -176,49 +190,49 @@
 
 각 시작 항구는 **일반 2종 + 스페셜 1종** 으로 총 3종을 판매한다(기획 §"항구에서는 각각 특산물 3개정도를 판매하고 있어야 해").
 
-| 항구 | 일반 (항상 매매) | 스페셜 (미션 전용) |
-|---|---|---|
-| `port.lisbon` | `product.salt_cod`, `product.cork` | `product.madeira_wine` |
-| `port.ceuta` | `product.dates` | `product.gold_dust` |
-| `port.sevilla` | `product.olive_oil`, `product.orange` | `product.american_silver` |
-| `port.venezia` | `product.murano_glass`, `product.pepper` | `product.venetian_lace` |
-| `port.amsterdam` | `product.dutch_cheese`, `product.tulip` | `product.delftware` |
-| `port.london` | `product.wool`, `product.tin` | `product.english_ale` |
-| `port.istanbul` | `product.persian_carpet`, `product.spice_clove` | `product.turkish_coffee` |
-| `product.busan` | `product.celadon`, `product.ginseng` | `product.hanji` |
-| `port.guangzhou` | `product.silk`, `product.porcelain` | `product.chinese_tea` |
+| 항구             | 일반 (항상 매매)                                | 스페셜 (미션 전용)        |
+| ---------------- | ----------------------------------------------- | ------------------------- |
+| `port.lisbon`    | `product.salt_cod`, `product.cork`              | `product.madeira_wine`    |
+| `port.ceuta`     | `product.dates`                                 | `product.gold_dust`       |
+| `port.sevilla`   | `product.olive_oil`, `product.orange`           | `product.american_silver` |
+| `port.venezia`   | `product.murano_glass`, `product.pepper`        | `product.venetian_lace`   |
+| `port.amsterdam` | `product.dutch_cheese`, `product.tulip`         | `product.delftware`       |
+| `port.london`    | `product.wool`, `product.tin`                   | `product.english_ale`     |
+| `port.istanbul`  | `product.persian_carpet`, `product.spice_clove` | `product.turkish_coffee`  |
+| `product.busan`  | `product.celadon`, `product.ginseng`            | `product.hanji`           |
+| `port.guangzhou` | `product.silk`, `product.porcelain`             | `product.chinese_tea`     |
 
 #### 전체 특산물 표
 
-| ID | 한국명 | 원산지 (PortData ID) | isSpecial | 한 줄 해설 (어린이용) | 출처 |
-|---|---|---|---|---|---|
-| `product.salt_cod` ✅ | 소금 대구 | `port.lisbon` | ❌ | "긴 항해에 든든한, 소금에 절인 대구예요." | 위키백과 [Bacalhau](https://en.wikipedia.org/wiki/Bacalhau) |
-| `product.cork` ✅ | 코르크 | `port.lisbon` | ❌ | "포도주병의 마개로 쓰이는 가벼운 나무껍질이에요." | 위키백과 |
-| `product.madeira_wine` ✅ | 마데이라 와인 | `port.lisbon` | ⭐ | "포르투갈 마데이라 섬에서 햇볕을 받아 만든 달콤한 술이에요. (어른용)" | 위키백과 [마데이라 와인](https://ko.wikipedia.org/wiki/마데이라_와인) |
-| `product.dates` ✅ | 대추야자 | `port.ceuta` | ❌ | "사막을 건너온 달콤하고 쫀득한 열매예요." | 위키백과 |
-| `product.gold_dust` ✅ | 사하라 황금 가루 | `port.ceuta` | ⭐ | "사하라 사막을 낙타로 건너 온 반짝이는 금가루예요." | 위키백과 [트랜스사하라 무역](https://ko.wikipedia.org/wiki/사하라_횡단_무역) |
-| `product.olive_oil` ✅ | 올리브유 | `port.sevilla` | ❌ | "올리브 열매를 짜서 만든 노란 기름이에요." | 위키백과 |
-| `product.orange` ✅ | 세비야 오렌지 | `port.sevilla` | ❌ | "달콤하고 새콤한 둥근 과일이에요." | 위키백과 |
-| `product.american_silver` ✅ | 신대륙 은 | `port.sevilla` | ⭐ | "큰 바다 건너 새 땅에서 가져온 반짝이는 은이에요." | 위키백과 [포토시 은광](https://ko.wikipedia.org/wiki/포토시) |
-| `product.murano_glass` ✅ | 무라노 유리 | `port.venezia` | ❌ | "베네치아 옆 작은 섬에서만 만든 색깔 유리예요." | 위키백과 [무라노](https://ko.wikipedia.org/wiki/무라노) |
-| `product.pepper` ✅ | 후추 | `port.venezia` (중계) | ❌ | "음식의 맛을 매콤하게 해 주는 작고 까만 알갱이예요." | 위키백과 |
-| `product.venetian_lace` ✅ | 베네치아 레이스 | `port.venezia` | ⭐ | "실로 정말 가늘게 짠 꽃 같은 무늬의 천이에요." | 위키백과 |
-| `product.tulip` ✅ | 튤립 | `port.amsterdam` | ❌ | "봄에 피는 큰 꽃이에요. 옛날엔 금처럼 비쌌대요." | 위키백과 |
-| `product.dutch_cheese` ✅ | 네덜란드 치즈 | `port.amsterdam` | ❌ | "둥글고 노란, 우유로 만든 음식이에요." | 위키백과 |
-| `product.delftware` ✅ | 델프트 도자기 | `port.amsterdam` | ⭐ | "네덜란드 델프트 마을에서 만든 파란 무늬 도자기예요." | 위키백과 [델프트 도자기](https://ko.wikipedia.org/wiki/델프트_도자기) |
-| `product.wool` ✅ | 양털 | `port.london` | ❌ | "양에서 깎아낸 따뜻한 털이에요." | 위키백과 |
-| `product.tin` ✅ | 주석 | `port.london` | ❌ | "잘 휘어지는 은빛 금속이에요." | 위키백과 |
-| `product.english_ale` ✅ | 영국 에일 | `port.london` | ⭐ | "보리로 만든 영국 사람들의 음료예요. (어른용)" | 위키백과 |
-| `product.persian_carpet` ✅ | 페르시아 양탄자 | `port.istanbul` | ❌ | "예쁜 무늬가 가득한 두툼한 깔개예요." | 위키백과 |
-| `product.spice_clove` ✅ | 정향 | `port.istanbul` | ❌ | "꽃봉오리를 말린 향기로운 양념이에요." | 위키백과 |
-| `product.turkish_coffee` ✅ | 튀르크 커피 | `port.istanbul` | ⭐ | "물에 진하게 끓여 마시는 향이 좋은 음료예요. (어른용)" | 위키백과 [터키 커피](https://ko.wikipedia.org/wiki/터키_커피) |
-| `product.celadon` ✅ | 청자 | `port.busan` | ❌ | "푸르스름한 색이 도는 우리나라 도자기예요." | 위키백과 |
-| `product.ginseng` ✅ | 인삼 | `port.busan` | ❌ | "몸에 좋다고 알려진 우리나라 약초예요." | 위키백과 |
-| `product.hanji` ✅ | 한지 | `port.busan` | ⭐ | "닥나무로 만든 우리나라의 튼튼한 종이예요." | 위키백과 [한지](https://ko.wikipedia.org/wiki/한지) |
-| `product.silk` ✅ | 비단 | `port.guangzhou` | ❌ | "누에가 만들어 주는 부드럽고 반짝이는 천이에요." | 위키백과 |
-| `product.porcelain` ✅ | 도자기 | `port.guangzhou` | ❌ | "흰 흙으로 구워 만든 단단하고 예쁜 그릇이에요." | 위키백과 |
-| `product.chinese_tea` ✅ | 중국 차 | `port.guangzhou` | ⭐ | "찻잎을 뜨거운 물에 우려 마시는 향긋한 음료예요." | 위키백과 [중국차](https://ko.wikipedia.org/wiki/중국_차) |
-| _(추가 행을 복사해서 사용)_ | | | | | |
+| ID                           | 한국명           | 원산지 (PortData ID)  | isSpecial | 한 줄 해설 (어린이용)                                                 | 출처                                                                         |
+| ---------------------------- | ---------------- | --------------------- | --------- | --------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| `product.salt_cod` ✅        | 소금 대구        | `port.lisbon`         | ❌        | "긴 항해에 든든한, 소금에 절인 대구예요."                             | 위키백과 [Bacalhau](https://en.wikipedia.org/wiki/Bacalhau)                  |
+| `product.cork` ✅            | 코르크           | `port.lisbon`         | ❌        | "포도주병의 마개로 쓰이는 가벼운 나무껍질이에요."                     | 위키백과                                                                     |
+| `product.madeira_wine` ✅    | 마데이라 와인    | `port.lisbon`         | ⭐        | "포르투갈 마데이라 섬에서 햇볕을 받아 만든 달콤한 술이에요. (어른용)" | 위키백과 [마데이라 와인](https://ko.wikipedia.org/wiki/마데이라_와인)        |
+| `product.dates` ✅           | 대추야자         | `port.ceuta`          | ❌        | "사막을 건너온 달콤하고 쫀득한 열매예요."                             | 위키백과                                                                     |
+| `product.gold_dust` ✅       | 사하라 황금 가루 | `port.ceuta`          | ⭐        | "사하라 사막을 낙타로 건너 온 반짝이는 금가루예요."                   | 위키백과 [트랜스사하라 무역](https://ko.wikipedia.org/wiki/사하라_횡단_무역) |
+| `product.olive_oil` ✅       | 올리브유         | `port.sevilla`        | ❌        | "올리브 열매를 짜서 만든 노란 기름이에요."                            | 위키백과                                                                     |
+| `product.orange` ✅          | 세비야 오렌지    | `port.sevilla`        | ❌        | "달콤하고 새콤한 둥근 과일이에요."                                    | 위키백과                                                                     |
+| `product.american_silver` ✅ | 신대륙 은        | `port.sevilla`        | ⭐        | "큰 바다 건너 새 땅에서 가져온 반짝이는 은이에요."                    | 위키백과 [포토시 은광](https://ko.wikipedia.org/wiki/포토시)                 |
+| `product.murano_glass` ✅    | 무라노 유리      | `port.venezia`        | ❌        | "베네치아 옆 작은 섬에서만 만든 색깔 유리예요."                       | 위키백과 [무라노](https://ko.wikipedia.org/wiki/무라노)                      |
+| `product.pepper` ✅          | 후추             | `port.venezia` (중계) | ❌        | "음식의 맛을 매콤하게 해 주는 작고 까만 알갱이예요."                  | 위키백과                                                                     |
+| `product.venetian_lace` ✅   | 베네치아 레이스  | `port.venezia`        | ⭐        | "실로 정말 가늘게 짠 꽃 같은 무늬의 천이에요."                        | 위키백과                                                                     |
+| `product.tulip` ✅           | 튤립             | `port.amsterdam`      | ❌        | "봄에 피는 큰 꽃이에요. 옛날엔 금처럼 비쌌대요."                      | 위키백과                                                                     |
+| `product.dutch_cheese` ✅    | 네덜란드 치즈    | `port.amsterdam`      | ❌        | "둥글고 노란, 우유로 만든 음식이에요."                                | 위키백과                                                                     |
+| `product.delftware` ✅       | 델프트 도자기    | `port.amsterdam`      | ⭐        | "네덜란드 델프트 마을에서 만든 파란 무늬 도자기예요."                 | 위키백과 [델프트 도자기](https://ko.wikipedia.org/wiki/델프트_도자기)        |
+| `product.wool` ✅            | 양털             | `port.london`         | ❌        | "양에서 깎아낸 따뜻한 털이에요."                                      | 위키백과                                                                     |
+| `product.tin` ✅             | 주석             | `port.london`         | ❌        | "잘 휘어지는 은빛 금속이에요."                                        | 위키백과                                                                     |
+| `product.english_ale` ✅     | 영국 에일        | `port.london`         | ⭐        | "보리로 만든 영국 사람들의 음료예요. (어른용)"                        | 위키백과                                                                     |
+| `product.persian_carpet` ✅  | 페르시아 양탄자  | `port.istanbul`       | ❌        | "예쁜 무늬가 가득한 두툼한 깔개예요."                                 | 위키백과                                                                     |
+| `product.spice_clove` ✅     | 정향             | `port.istanbul`       | ❌        | "꽃봉오리를 말린 향기로운 양념이에요."                                | 위키백과                                                                     |
+| `product.turkish_coffee` ✅  | 튀르크 커피      | `port.istanbul`       | ⭐        | "물에 진하게 끓여 마시는 향이 좋은 음료예요. (어른용)"                | 위키백과 [터키 커피](https://ko.wikipedia.org/wiki/터키_커피)                |
+| `product.celadon` ✅         | 청자             | `port.busan`          | ❌        | "푸르스름한 색이 도는 우리나라 도자기예요."                           | 위키백과                                                                     |
+| `product.ginseng` ✅         | 인삼             | `port.busan`          | ❌        | "몸에 좋다고 알려진 우리나라 약초예요."                               | 위키백과                                                                     |
+| `product.hanji` ✅           | 한지             | `port.busan`          | ⭐        | "닥나무로 만든 우리나라의 튼튼한 종이예요."                           | 위키백과 [한지](https://ko.wikipedia.org/wiki/한지)                          |
+| `product.silk` ✅            | 비단             | `port.guangzhou`      | ❌        | "누에가 만들어 주는 부드럽고 반짝이는 천이에요."                      | 위키백과                                                                     |
+| `product.porcelain` ✅       | 도자기           | `port.guangzhou`      | ❌        | "흰 흙으로 구워 만든 단단하고 예쁜 그릇이에요."                       | 위키백과                                                                     |
+| `product.chinese_tea` ✅     | 중국 차          | `port.guangzhou`      | ⭐        | "찻잎을 뜨거운 물에 우려 마시는 향긋한 음료예요."                     | 위키백과 [중국차](https://ko.wikipedia.org/wiki/중국_차)                     |
+| _(추가 행을 복사해서 사용)_  |                  |                       |           |                                                                       |                                                                              |
 
 > **어린이 톤 주석**: 와인·에일·커피는 "어른용" 으로 한 줄 부기. 게임에서 캐릭터가 "마신다" 묘사는 하지 않고 **상자 / 통** 형태의 화물로만 등장시킬 것.
 
@@ -233,30 +247,37 @@
 
 **각국 1개씩 시드 (M3 의 8개 출발점)** — 시작 항구 근처 자연·랜드마크 위주.
 
-| ID | 한국명 | 카테고리 | 위치 (좌표 또는 PortData ID 근처) | 시대 | 관련 국가 |
-|---|---|---|---|---|---|
-| `disc.gibraltar_strait` ✅ | 지브롤터 해협 | 랜드마크 | 36.0°N, 5.6°W | 고대부터 | `nation.portugal` |
-| `disc.canary_islands` ✅ | 카나리아 제도 | 랜드마크 | 28.3°N, 16.6°W | 15세기 (정복 완료 1496) | `nation.spain` |
-| `disc.blue_grotto` ✅ | 푸른 동굴 (카프리섬) | 랜드마크 | 40.6°N, 14.2°E | 고대부터 | `nation.italy` |
-| `disc.texel_seals` ✅ | 텍셀 섬의 바다표범 | 동식물 | 53.0°N, 4.8°E | 자연 | `nation.netherlands` |
-| `disc.white_cliffs_of_dover` ✅ | 도버의 흰 절벽 | 랜드마크 | 51.1°N, 1.3°E | 자연 | `nation.england` |
-| `disc.bosphorus_strait` ✅ | 보스포루스 해협 | 랜드마크 | 41.1°N, 29.1°E | 고대부터 | `nation.ottoman` |
-| `disc.hallasan_mountain` ✅ | 한라산 (제주) | 랜드마크 | 33.4°N, 126.5°E | 자연 | `nation.joseon` |
-| `disc.pearl_river_delta` ✅ | 주강 삼각주 | 랜드마크 | 22.6°N, 113.4°E | 자연 | `nation.china` |
-| **M3 도감 20개 채우기 — 추가 시드 12개** | | | | | |
-| `disc.cape_bojador` ✅ | 보자도르 곶 | 사건 | 26.1°N, 14.5°W | 1434 (질 이아네스 통과) | `nation.portugal` |
-| `disc.cape_of_good_hope` ✅ | 희망봉 | 랜드마크 | 34.4°S, 18.5°E | 1488 (디아스 도달) | `nation.portugal` |
-| `disc.calicut_arrival` ✅ | 인도 캘리컷 도착 | 사건 | 11.3°N, 75.8°E | 1498 (바스쿠 다 가마) | `nation.portugal` |
-| `disc.tenochtitlan_meeting` ✅ | 테노치티틀란과의 만남 | 사건 | 19.4°N, 99.1°W | 1519 | `nation.spain` |
-| `disc.santa_maria_de_belem` ✅ | 벨렘탑 | 유적 | 38.7°N, 9.2°W | 1519 건립 | `nation.portugal` |
-| `disc.colosseum` ✅ | 콜로세움 | 유적 | 41.9°N, 12.5°E | 고대(서기 80년 완공) | `nation.italy` |
-| `disc.windmill_kinderdijk` ✅ | 킨더다이크 풍차들 | 랜드마크 | 51.9°N, 4.6°E | 18세기 완성, 중세부터 운영 | `nation.netherlands` |
-| `disc.stonehenge` ✅ | 스톤헨지 | 유적 | 51.2°N, 1.8°W | 선사시대 | `nation.england` |
-| `disc.hagia_sophia` ✅ | 아야 소피아 | 유적 | 41.0°N, 28.9°E | 537 (건립), 1453 (이스탄불 정복 후 모스크) | `nation.ottoman` |
-| `disc.gyeongbokgung` ✅ | 경복궁 | 유적 | 37.6°N, 126.9°E | 1395 건립 | `nation.joseon` |
-| `disc.great_wall` ✅ | 만리장성 | 유적 | 40.4°N, 116.6°E | 명나라 시대 보강 | `nation.china` |
-| `disc.african_elephant` ✅ | 아프리카 코끼리 | 동식물 | (사하라 이남 아프리카) | 자연 | — |
-| _(추가 행을 복사해서 사용)_ | | | | | |
+| ID                                       | 한국명                | 카테고리 | 위치 (좌표 또는 PortData ID 근처) | 시대                                       | 관련 국가            |
+| ---------------------------------------- | --------------------- | -------- | --------------------------------- | ------------------------------------------ | -------------------- |
+| `disc.gibraltar_strait` ✅               | 지브롤터 해협         | 랜드마크 | 36.0°N, 5.6°W                     | 고대부터                                   | `nation.portugal`    |
+| `disc.canary_islands` ✅                 | 카나리아 제도         | 랜드마크 | 28.3°N, 16.6°W                    | 15세기 (정복 완료 1496)                    | `nation.spain`       |
+| `disc.blue_grotto` ✅                    | 푸른 동굴 (카프리섬)  | 랜드마크 | 40.6°N, 14.2°E                    | 고대부터                                   | `nation.italy`       |
+| `disc.texel_seals` ✅                    | 텍셀 섬의 바다표범    | 동식물   | 53.0°N, 4.8°E                     | 자연                                       | `nation.netherlands` |
+| `disc.white_cliffs_of_dover` ✅          | 도버의 흰 절벽        | 랜드마크 | 51.1°N, 1.3°E                     | 자연                                       | `nation.england`     |
+| `disc.bosphorus_strait` ✅               | 보스포루스 해협       | 랜드마크 | 41.1°N, 29.1°E                    | 고대부터                                   | `nation.ottoman`     |
+| `disc.hallasan_mountain` ✅              | 한라산 (제주)         | 랜드마크 | 33.4°N, 126.5°E                   | 자연                                       | `nation.joseon`      |
+| `disc.pearl_river_delta` ✅              | 주강 삼각주           | 랜드마크 | 22.6°N, 113.4°E                   | 자연                                       | `nation.china`       |
+| **M3 도감 20개 채우기 — 추가 시드 12개** |                       |          |                                   |                                            |                      |
+| `disc.cape_bojador` ✅                   | 보자도르 곶           | 사건     | 26.1°N, 14.5°W                    | 1434 (질 이아네스 통과)                    | `nation.portugal`    |
+| `disc.cape_of_good_hope` ✅              | 희망봉                | 랜드마크 | 34.4°S, 18.5°E                    | 1488 (디아스 도달)                         | `nation.portugal`    |
+| `disc.calicut_arrival` ✅                | 인도 캘리컷 도착      | 사건     | 11.3°N, 75.8°E                    | 1498 (바스쿠 다 가마)                      | `nation.portugal`    |
+| `disc.tenochtitlan_meeting` ✅           | 테노치티틀란과의 만남 | 사건     | 19.4°N, 99.1°W                    | 1519                                       | `nation.spain`       |
+| `disc.santa_maria_de_belem` ✅           | 벨렘탑                | 유적     | 38.7°N, 9.2°W                     | 1519 건립                                  | `nation.portugal`    |
+| `disc.colosseum` ✅                      | 콜로세움              | 유적     | 41.9°N, 12.5°E                    | 고대(서기 80년 완공)                       | `nation.italy`       |
+| `disc.windmill_kinderdijk` ✅            | 킨더다이크 풍차들     | 랜드마크 | 51.9°N, 4.6°E                     | 18세기 완성, 중세부터 운영                 | `nation.netherlands` |
+| `disc.stonehenge` ✅                     | 스톤헨지              | 유적     | 51.2°N, 1.8°W                     | 선사시대                                   | `nation.england`     |
+| `disc.hagia_sophia` ✅                   | 아야 소피아           | 유적     | 41.0°N, 28.9°E                    | 537 (건립), 1453 (이스탄불 정복 후 모스크) | `nation.ottoman`     |
+| `disc.gyeongbokgung` ✅                  | 경복궁                | 유적     | 37.6°N, 126.9°E                   | 1395 건립                                  | `nation.joseon`      |
+| `disc.great_wall` ✅                     | 만리장성              | 유적     | 40.4°N, 116.6°E                   | 명나라 시대 보강                           | `nation.china`       |
+| `disc.african_elephant` ✅               | 아프리카 코끼리       | 동식물   | (사하라 이남 아프리카)            | 자연                                       | —                    |
+| **동식물 카테고리 보강 6개**             |                       |          |                                   |                                            |                      |
+| `disc.giraffe` ✅                        | 기린                  | 동식물   | (동아프리카 → 1414 명나라 진상)   | 1414                                       | `nation.china`       |
+| `disc.indian_peacock` ✅                 | 인도 공작             | 동식물   | (인도 남서부)                     | 자연                                       | —                    |
+| `disc.bird_of_paradise` ✅               | 극락조                | 동식물   | (말루쿠 / 뉴기니)                 | 16세기 유럽 첫 보고                        | —                    |
+| `disc.galapagos_tortoise` ✅             | 갈라파고스 거대 거북  | 동식물   | (갈라파고스 제도, 신대륙)         | 1535 발견                                  | —                    |
+| `disc.dodo` ✅                           | 도도새                | 동식물   | (모리셔스 섬, 인도양)             | 1598 보고                                  | `nation.netherlands` |
+| `disc.polar_bear` ✅                     | 북극곰                | 동식물   | (북극해, 노바야젬랴 일대)         | 1596 바렌츠의 보고                         | `nation.netherlands` |
+| _(추가 행을 복사해서 사용)_              |                       |          |                                   |                                            |                      |
 
 #### 상세 해설
 
@@ -505,6 +526,78 @@
 
 ---
 
+#### 🧭 기린 — `disc.giraffe` ✅
+
+- **카테고리**: 동식물
+- **메인 해설**:
+  > "목이 아주아주 긴 동물이에요. 1414년에 동아프리카에서 명나라까지 바다 건너 데려와 큰 화제가 되었답니다. 키가 높은 곳의 잎도 거뜬히 먹지요."
+- **더 보기**: "명나라 사람들은 이 기린을 보고 '기린' 이라는 전설 속 동물 같다며 깜짝 놀랐대요."
+- **관련 인물·사건**: 정화의 원정대가 동아프리카에서 명으로 진상(1414).
+- **출처**: 위키백과 [기린](https://ko.wikipedia.org/wiki/기린)
+- **민감 표현 회피 확인**: ✅
+
+---
+
+#### 🧭 인도 공작 — `disc.indian_peacock` ✅
+
+- **카테고리**: 동식물
+- **메인 해설**:
+  > "인도에 사는, 꼬리를 활짝 펼치면 파랑·초록 무지개색이 빛나는 새예요. 자기를 뽐낼 때 꼬리를 부채처럼 펴 흔든답니다. 깃털 하나하나가 큰 눈처럼 생겼어요."
+- **더 보기**: "옛날 인도 왕들이 정원에서 길렀고, 바스쿠 다 가마가 유럽에 가져갔다고 해요."
+- **관련 인물·사건**: 1498 캘리컷 도착 이후 유럽에 본격 소개.
+- **출처**: 위키백과 [인도공작](https://ko.wikipedia.org/wiki/인도공작)
+- **민감 표현 회피 확인**: ✅
+
+---
+
+#### 🧭 극락조 — `disc.bird_of_paradise` ✅
+
+- **카테고리**: 동식물
+- **메인 해설**:
+  > "동남아시아 깊은 숲에 사는, 깃털이 폭죽처럼 화려한 새예요. 16세기 유럽 사람들이 처음 봤을 때 너무 예뻐서 '천국의 새' 라고 불렀답니다."
+- **더 보기**: "수컷이 멋진 깃털을 흔들며 춤을 추듯 움직여요."
+- **관련 인물·사건**: 1522년경 마젤란 함대 잔존선이 유럽으로 깃털을 가지고 옴.
+- **출처**: 위키백과 [극락조](https://ko.wikipedia.org/wiki/극락조과)
+- **민감 표현 회피 확인**: ✅
+
+---
+
+#### 🧭 갈라파고스 거대 거북 — `disc.galapagos_tortoise` ✅
+
+- **카테고리**: 동식물
+- **메인 해설**:
+  > "큰 바다 건너 작은 섬에 사는 어마어마하게 큰 거북이에요. 등딱지가 어른보다 더 크고, 백 년 넘게도 산답니다. 1535년 한 스페인 신부가 길을 잃었다가 처음 보았다고 해요."
+- **더 보기**: "느릿느릿 걷지만 무척 힘이 세요."
+- **관련 인물·사건**: 1535 토마스 데 베를랑가의 우연한 발견. 갈라파고스 = 스페인어로 '거북'.
+- **출처**: 위키백과 [갈라파고스땅거북](https://ko.wikipedia.org/wiki/갈라파고스땅거북)
+- **민감 표현 회피 확인**: ✅
+
+---
+
+#### 🧭 도도새 — `disc.dodo` ✅
+
+- **카테고리**: 동식물
+- **메인 해설**:
+  > "인도양 한가운데 모리셔스 섬에만 살던 통통한 새예요. 날지는 못하지만 사람을 무서워하지 않아 가까이 다가왔대요. 1598년 네덜란드 배가 처음 보고 기록을 남겼답니다."
+- **더 보기**: "안타깝게도 시간이 흘러 이제는 만날 수 없게 되었어요. 그래서 사람들은 그림과 기록으로만 도도새를 기억해요."
+- **관련 인물·사건**: 1598 네덜란드 함대가 모리셔스에서 첫 기록. 17세기 후반 멸종.
+- **출처**: 위키백과 [도도](<https://ko.wikipedia.org/wiki/도도_(새)>)
+- **민감 표현 회피 확인**: ✅ (멸종을 "이제는 만날 수 없다" 로 부드럽게)
+
+---
+
+#### 🧭 북극곰 — `disc.polar_bear` ✅
+
+- **카테고리**: 동식물
+- **메인 해설**:
+  > "얼음 가득한 북쪽 바다에 사는 새하얀 큰 곰이에요. 두툼한 털 덕분에 추운 곳에서도 거뜬해요. 1596년 빌럼 바렌츠 일행이 북쪽 항해 중 처음 그림으로 남겼답니다."
+- **더 보기**: "얼음 위에서 헤엄도 아주 잘 쳐요."
+- **관련 인물·사건**: 1596 빌럼 바렌츠의 3차 북극 항해.
+- **출처**: 위키백과 [북극곰](https://ko.wikipedia.org/wiki/북극곰)
+- **민감 표현 회피 확인**: ✅
+
+---
+
 #### 🧭 [발견물 이름] — `disc.<id>`
 
 - **카테고리**: [랜드마크 / 동식물 / 유적 / 사건]
@@ -522,18 +615,18 @@ _(위 양식을 복사해서 발견물 추가)_
 
 > 항구·발견물을 묶는 큰 구역. 잠금 해제 단위로도 쓰임. ID는 `region.<영문이름>`.
 
-| ID | 한국명 | 포함 항구 | 포함 발견물 | 잠금 해제 조건 |
-|---|---|---|---|---|
-| `region.iberia` ✅ | 이베리아 반도 | `port.lisbon`, `port.sevilla` | `disc.gibraltar_strait`, `disc.canary_islands` | **시작 시 해제** (포르투갈·스페인 국적 선택 시) |
-| `region.north_africa_west` ✅ | 북아프리카 서해안 | `port.ceuta` | `disc.cape_bojador` | 세우타 첫 입항 또는 보자도르 곶 발견 시 해제 |
-| `region.mediterranean` ✅ | 지중해 | `port.venezia`, `port.istanbul` | `disc.blue_grotto`, `disc.bosphorus_strait`, `disc.colosseum`, `disc.hagia_sophia` | **시작 시 해제** (이탈리아·오스만 국적 선택 시) / 그 외 국가는 이베리아에서 지중해로 진입 시 해제 |
-| `region.north_sea` ✅ | 북해 | `port.amsterdam`, `port.london` | `disc.texel_seals`, `disc.white_cliffs_of_dover`, `disc.windmill_kinderdijk`, `disc.stonehenge` | **시작 시 해제** (네덜란드·영국 국적 선택 시) / 그 외 국가는 이베리아 북쪽으로 항해 후 해제 |
-| `region.east_asia` ✅ | 동아시아 | `port.busan`, `port.guangzhou` | `disc.hallasan_mountain`, `disc.pearl_river_delta`, `disc.gyeongbokgung`, `disc.great_wall` | **시작 시 해제** (조선·중국 국적 선택 시) / 그 외 국가는 인도양 경유 후 해제 (M3 이후 항로 추가 필요) |
-| _(M3 이후 확장 후보)_ | | | | |
-| `region.atlantic_west_africa` | 대서양 서아프리카 | (M3 추가) | `disc.cape_of_good_hope`, `disc.african_elephant` | 보자도르 곶 발견 후 해제 |
-| `region.indian_ocean` | 인도양 | (M3 추가) | `disc.calicut_arrival` | 희망봉 발견 후 해제 |
-| `region.new_world` | 신대륙 | (M4 추가) | `disc.tenochtitlan_meeting`, `disc.galapagos_tortoise` | 카나리아 제도 출항 후 서쪽 일정 거리 항해 시 해제 |
-| _(추가 행을 복사해서 사용)_ | | | | |
+| ID                            | 한국명            | 포함 항구                                                                           | 포함 발견물                                                                                     | 잠금 해제 조건                                                                                        |
+| ----------------------------- | ----------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `region.iberia` ✅            | 이베리아 반도     | `port.lisbon`, `port.porto`, `port.sevilla`, `port.cadiz`                           | `disc.gibraltar_strait`, `disc.canary_islands`, `disc.santa_maria_de_belem`                     | **시작 시 해제** (포르투갈·스페인 국적 선택 시)                                                       |
+| `region.north_africa_west` ✅ | 북아프리카 서해안 | `port.ceuta`, `port.casablanca`, `port.las_palmas`                                  | `disc.cape_bojador`                                                                             | 세우타 첫 입항 또는 보자도르 곶 발견 시 해제                                                          |
+| `region.mediterranean` ✅     | 지중해            | `port.venezia`, `port.napoli`, `port.marseille`, `port.istanbul`, `port.alexandria` | `disc.blue_grotto`, `disc.bosphorus_strait`, `disc.colosseum`, `disc.hagia_sophia`              | **시작 시 해제** (이탈리아·오스만 국적 선택 시) / 그 외 국가는 이베리아에서 지중해로 진입 시 해제     |
+| `region.north_sea` ✅         | 북해              | `port.amsterdam`, `port.london`, `port.hamburg`, `port.bergen`, `port.copenhagen`   | `disc.texel_seals`, `disc.white_cliffs_of_dover`, `disc.windmill_kinderdijk`, `disc.stonehenge` | **시작 시 해제** (네덜란드·영국 국적 선택 시) / 그 외 국가는 이베리아 북쪽으로 항해 후 해제           |
+| `region.east_asia` ✅         | 동아시아          | `port.busan`, `port.nagasaki`, `port.guangzhou`, `port.malacca`, `port.manila`      | `disc.hallasan_mountain`, `disc.pearl_river_delta`, `disc.gyeongbokgung`, `disc.great_wall`     | **시작 시 해제** (조선·중국 국적 선택 시) / 그 외 국가는 인도양 경유 후 해제 (M3 이후 항로 추가 필요) |
+| _(M3 이후 확장 후보)_         |                   |                                                                                     |                                                                                                 |                                                                                                       |
+| `region.atlantic_west_africa` | 대서양 서아프리카 | (M3 추가)                                                                           | `disc.cape_of_good_hope`, `disc.african_elephant`                                               | 보자도르 곶 발견 후 해제                                                                              |
+| `region.indian_ocean`         | 인도양            | (M3 추가)                                                                           | `disc.calicut_arrival`                                                                          | 희망봉 발견 후 해제                                                                                   |
+| `region.new_world`            | 신대륙            | (M4 추가)                                                                           | `disc.tenochtitlan_meeting`, `disc.galapagos_tortoise`                                          | 카나리아 제도 출항 후 서쪽 일정 거리 항해 시 해제                                                     |
+| _(추가 행을 복사해서 사용)_   |                   |                                                                                     |                                                                                                 |                                                                                                       |
 
 ---
 
@@ -544,16 +637,16 @@ _(위 양식을 복사해서 발견물 추가)_
 
 #### 시드 8명 요약 표
 
-| ID | 한국명 | 성별 | 국가 | 시대 | 용기 | 항해 | 눈썰미 | 좋은 명성 |
-|---|---|---|---|---|---|---|---|---|
-| `character.henrique` | 엔리케 왕자 | 남 | `nation.portugal` | 1394~1460 | 70 | 60 | 70 | 50,000 |
-| `character.elcano` | 후안 세바스티안 엘카노 | 남 | `nation.spain` | 1487~1526 | 80 | 95 | 75 | 45,000 |
-| `character.cadamosto` | 알비제 카다모스토 | 남 | `nation.italy` | 1432~1488 | 65 | 75 | 80 | 30,000 |
-| `character.barents` | 빌럼 바렌츠 | 남 | `nation.netherlands` | 1550~1597 | 85 | 80 | 80 | 40,000 |
-| `character.hudson` | 헨리 허드슨 | 남 | `nation.england` | ?~1611 | 80 | 75 | 85 | 35,000 |
-| `character.pirireis` | 피리 레이스 | 남 | `nation.ottoman` | 1465~1553 | 70 | 80 | 95 | 40,000 |
-| `character.yi_sunsin` | 이순신 | 남 | `nation.joseon` | 1545~1598 | 95 | 85 | 90 | 50,000 |
-| `character.zheng_he` | 정화 | 남 | `nation.china` | 1371~1433 | 80 | 95 | 80 | 50,000 |
+| ID                    | 한국명                 | 성별 | Role       | 국가                 | 시대      | 용기 | 항해 | 눈썰미 | 좋은 명성 |
+| --------------------- | ---------------------- | ---- | ---------- | -------------------- | --------- | ---- | ---- | ------ | --------- |
+| `character.henrique`  | 엔리케 왕자            | 남   | Adventurer | `nation.portugal`    | 1394~1460 | 70   | 60   | 70     | 50,000    |
+| `character.elcano`    | 후안 세바스티안 엘카노 | 남   | Adventurer | `nation.spain`       | 1487~1526 | 80   | 95   | 75     | 45,000    |
+| `character.cadamosto` | 알비제 카다모스토      | 남   | Adventurer | `nation.italy`       | 1432~1488 | 65   | 75   | 80     | 30,000    |
+| `character.barents`   | 빌럼 바렌츠            | 남   | Adventurer | `nation.netherlands` | 1550~1597 | 85   | 80   | 80     | 40,000    |
+| `character.hudson`    | 헨리 허드슨            | 남   | Adventurer | `nation.england`     | ?~1611    | 80   | 75   | 85     | 35,000    |
+| `character.pirireis`  | 피리 레이스            | 남   | Adventurer | `nation.ottoman`     | 1465~1553 | 70   | 80   | 95     | 40,000    |
+| `character.yi_sunsin` | 이순신                 | 남   | Adventurer | `nation.joseon`      | 1545~1598 | 95   | 85   | 90     | 50,000    |
+| `character.zheng_he`  | 정화                   | 남   | Adventurer | `nation.china`       | 1371~1433 | 80   | 95   | 80     | 50,000    |
 
 > ⚠ **성별 다양성 메모**: 시드 8명이 모두 남성이다 — 15~17세기 실존 항해사 자료가 남성에 편중. M3 이후 **가상 여성 캐릭터** 를 동등 비중으로 추가할 것 (예: 항구의 시장 상인, 모험가 조합 길드장 등). 어린이 교육 게임에서 성별 균형은 의식적으로 챙겨야 한다.
 
@@ -565,7 +658,7 @@ _(위 양식을 복사해서 발견물 추가)_
 - **한 줄 소개**: "포르투갈의 왕자이자, 항해사들을 도와 큰 바다로 보낸 사람이에요."
 - **더 보기**: "엔리케 왕자는 직접 큰 바다로 나가지는 않았지만, 어린 항해사들을 가르치고 도와 새로운 길을 열었답니다."
 - **고용 보너스 (잠정)**: 항해 +5, 눈썰미 +5
-- **출처**: 위키백과 [엔리케 왕자](https://ko.wikipedia.org/wiki/엔히크_(포르투갈))
+- **출처**: 위키백과 [엔리케 왕자](<https://ko.wikipedia.org/wiki/엔히크_(포르투갈)>)
 
 ##### 🇪🇸 후안 세바스티안 엘카노 — `character.elcano` ✅
 
@@ -622,7 +715,349 @@ _(위 양식을 복사해서 발견물 추가)_
 - **한 줄 소개**: "아주 큰 배들을 이끌고 일곱 번이나 멀리 바다를 누빈 명나라 사령관이에요."
 - **더 보기**: "동남아시아·인도·아프리카 동쪽 바닷가까지 가서 사람들을 만났답니다."
 - **고용 보너스 (잠정)**: 항해 +10, 용기 +5
-- **출처**: 위키백과 [정화](https://ko.wikipedia.org/wiki/정화_(명나라))
+- **출처**: 위키백과 [정화](<https://ko.wikipedia.org/wiki/정화_(명나라)>)
+
+---
+
+#### 가상 NPC 8명 (성별 균형 — 모두 여성)
+
+> 시드 8명이 모두 실존 남성이라 균형을 맞추기 위해 가상 여성 캐릭터를 같은 수로 추가한다. 각각 시대에 실제로 존재했던 **직업**을 부여해 시대 고증과 어울리게 했다. 이름은 그 시대·문화권에서 자주 쓰이던 가상의 이름.
+>
+> 능력치는 항해사보다 낮은 분포(직업 특화형). 시장 상인은 눈썰미, 도선사는 항해 등.
+
+##### 가상 NPC 요약 표
+
+| ID                   | 한국명     | 성별 | Role        | 국가                 | 직업                       | 용기 | 항해 | 눈썰미 | 좋은 명성 |
+| -------------------- | ---------- | ---- | ----------- | -------------------- | -------------------------- | ---- | ---- | ------ | --------- |
+| `character.catarina` | 카타리나   | 여   | Townsperson | `nation.portugal`    | 리스본 시장 상인           | 30   | 25   | 65     | 12,000    |
+| `character.isabel`   | 이사벨     | 여   | Townsperson | `nation.spain`       | 세비야 모험가 조합 길드장  | 60   | 55   | 75     | 25,000    |
+| `character.beatrice` | 베아트리체 | 여   | Townsperson | `nation.italy`       | 무라노 유리 장인 가문의 딸 | 35   | 30   | 80     | 15,000    |
+| `character.anna`     | 안나       | 여   | Townsperson | `nation.netherlands` | 암스테르담 운하 도선사     | 45   | 70   | 60     | 18,000    |
+| `character.eleanor`  | 엘레노어   | 여   | Townsperson | `nation.england`     | 런던 모직물 상인           | 35   | 30   | 70     | 14,000    |
+| `character.ayse`     | 아이셰     | 여   | Townsperson | `nation.ottoman`     | 이스탄불 향신료 시장 상인  | 40   | 30   | 80     | 16,000    |
+| `character.deok_yi`  | 덕이       | 여   | Townsperson | `nation.joseon`      | 동래 왜관 의녀 (통역 가능) | 50   | 35   | 85     | 20,000    |
+| `character.mei_lin`  | 메이린     | 여   | Townsperson | `nation.china`       | 광저우 비단 장인           | 35   | 25   | 80     | 16,000    |
+
+##### 🇵🇹 카타리나 — `character.catarina` ✅
+
+- **소속**: `nation.portugal` / 거점 `port.lisbon` / 광장 노출
+- **한 줄 소개**: "리스본 시장에서 소금 대구와 코르크를 파는 명랑한 아주머니예요."
+- **더 보기**: "어느 항구의 시세가 좋은지 누구보다 잘 알고 있답니다."
+- **고용 보너스 (잠정)**: 눈썰미 +10 (시장 가격에 밝음)
+- **메모**: 가상 캐릭터. "카타리나"는 그 시대 포르투갈 여성에게 흔했던 이름.
+
+##### 🇪🇸 이사벨 — `character.isabel` ✅
+
+- **소속**: `nation.spain` / 거점 `port.sevilla` / 모험가 조합 길드장
+- **한 줄 소개**: "세비야 모험가 조합을 이끄는 단호하고 다정한 길드장이에요."
+- **더 보기**: "여러 항해 의뢰를 매일 살피고, 새내기 항해사를 응원해 줘요."
+- **고용 보너스 (잠정)**: 용기 +5, 눈썰미 +5
+- **메모**: 가상 캐릭터. "이사벨"은 카스티야 여왕 이름이기도 한 흔한 이름.
+
+##### 🇮🇹 베아트리체 — `character.beatrice` ✅
+
+- **소속**: `nation.italy` / 거점 `port.venezia` / 무라노 유리 장인 가문
+- **한 줄 소개**: "베네치아 옆 무라노 섬에서 색깔 유리를 만드는 솜씨 좋은 장인이에요."
+- **더 보기**: "어릴 때부터 아버지 작업장에서 자라 어떤 빛이 가장 예쁜지 알아요."
+- **고용 보너스 (잠정)**: 눈썰미 +10 (예술가의 안목)
+- **메모**: 가상 캐릭터. 베네치아 장인 가문의 딸 설정.
+
+##### 🇳🇱 안나 — `character.anna` ✅
+
+- **소속**: `nation.netherlands` / 거점 `port.amsterdam` / 운하 도선사
+- **한 줄 소개**: "암스테르담 운하 사이로 큰 배를 안전하게 안내하는 도선사예요."
+- **더 보기**: "좁은 물길과 다리 사이를 작은 배로 능숙하게 빠져나간답니다."
+- **고용 보너스 (잠정)**: 항해 +10
+- **메모**: 가상 캐릭터. 네덜란드 황금기 운하 도시의 직업.
+
+##### 🇬🇧 엘레노어 — `character.eleanor` ✅
+
+- **소속**: `nation.england` / 거점 `port.london` / 모직물 상인
+- **한 줄 소개**: "런던에서 가장 좋은 영국 양털과 천을 다루는 야무진 상인이에요."
+- **더 보기**: "어느 양털이 가장 부드럽고 따뜻한지 손끝으로 알아내요."
+- **고용 보너스 (잠정)**: 눈썰미 +8
+- **메모**: 가상 캐릭터. 16세기 영국 모직 산업 종사자 설정.
+
+##### 🇹🇷 아이셰 — `character.ayse` ✅
+
+- **소속**: `nation.ottoman` / 거점 `port.istanbul` / 향신료 시장 상인
+- **한 줄 소개**: "이스탄불 큰 시장에서 향신료 향을 알아맞히는 솜씨 좋은 상인이에요."
+- **더 보기**: "정향, 후추, 계피… 한 번 맡으면 어디서 온 것인지 단번에 알아요."
+- **고용 보너스 (잠정)**: 눈썰미 +10
+- **메모**: 가상 캐릭터. "아이셰"는 오스만 시대 흔한 여성 이름.
+
+##### 🇰🇷 덕이 — `character.deok_yi` ✅
+
+- **소속**: `nation.joseon` / 거점 `port.busan` / 동래 왜관 의녀
+- **한 줄 소개**: "약초를 잘 알고, 일본말도 조금 할 줄 아는 부산의 의녀예요."
+- **더 보기**: "동래 왜관(조선과 일본이 만나던 곳)에서 자라 다른 말과 풍습에 익숙해요."
+- **고용 보너스 (잠정)**: 눈썰미 +10, 용기 +5
+- **메모**: 가상 캐릭터. **의녀**는 조선의 여성 의료인 제도(실제로 있었던 직업). "덕이"는 조선 시대 흔한 여성 이름.
+
+##### 🇨🇳 메이린 — `character.mei_lin` ✅
+
+- **소속**: `nation.china` / 거점 `port.guangzhou` / 비단 장인
+- **한 줄 소개**: "광저우에서 누에를 치고 비단을 짜는 다정한 장인이에요."
+- **더 보기**: "한 올 한 올 정성스럽게 짠 비단의 결을 알아보는 눈이 좋아요."
+- **고용 보너스 (잠정)**: 눈썰미 +10
+- **메모**: 가상 캐릭터. "메이린(梅琳)"은 명·청대 여성 이름 풍.
+
+---
+
+### 2.7 의뢰 시드 (MissionTemplate)
+
+> `GAME_MECHANICS.md` §5 (발견물 미션) + §2.2 (모험가 조합) 모델 기준. 각 시작 항구에서 발급할 **첫 의뢰 1쌍씩(발견물 1 + 교역 1) = 18개** 시드.
+>
+> 보상 수치는 잠정 — 게임 밸런싱 시 조정. ID 명명: `mission.<type>.<항구>.<목표키워드>`.
+
+#### 의뢰 타입
+
+- **Discovery** (발견물): 의뢰 항구에서 받음 → 지도 아이템 → 좌표 ±3% 도달 → 정박 및 탐색 → 의뢰 항구 복귀.
+- **TradeBuy** (사 오기): 다른 항구에서 특정 특산물을 사 와서 의뢰 항구로 돌아옴.
+- **TradeDeliver** (가져다 주기): 의뢰 항구에서 화물을 받아 다른 항구로 전달.
+
+#### 의뢰 시드 요약 표
+
+| ID                                        | 발급 항구        | 타입         | 목표 (발견물 또는 특산물)    | 목표 항구        | 보상 돈 | 좋은 명성 | 거리            |
+| ----------------------------------------- | ---------------- | ------------ | ---------------------------- | ---------------- | ------- | --------- | --------------- |
+| `mission.disc.lisbon.gibraltar` ⭐ M1     | `port.lisbon`    | Discovery    | `disc.gibraltar_strait`      | (현지 복귀)      | 1,000   | +100      | 단거리          |
+| `mission.trade.lisbon.ceuta_salt_cod`     | `port.lisbon`    | TradeDeliver | `product.salt_cod` 5개       | `port.ceuta`     | 500     | +50       | 단거리          |
+| `mission.disc.ceuta.cape_bojador`         | `port.ceuta`     | Discovery    | `disc.cape_bojador`          | (현지 복귀)      | 1,500   | +150      | 중거리          |
+| `mission.trade.ceuta.lisbon_cork`         | `port.ceuta`     | TradeBuy     | `product.cork` 5개           | `port.lisbon`    | 500     | +50       | 단거리          |
+| `mission.disc.sevilla.canary`             | `port.sevilla`   | Discovery    | `disc.canary_islands`        | (현지 복귀)      | 1,500   | +150      | 중거리          |
+| `mission.trade.sevilla.lisbon_madeira` ⭐ | `port.sevilla`   | TradeBuy     | `product.madeira_wine` 3통   | `port.lisbon`    | 3,000   | +200      | 중거리 (스페셜) |
+| `mission.disc.venezia.blue_grotto`        | `port.venezia`   | Discovery    | `disc.blue_grotto`           | (현지 복귀)      | 1,500   | +150      | 중거리          |
+| `mission.trade.venezia.istanbul_clove`    | `port.venezia`   | TradeBuy     | `product.spice_clove` 5개    | `port.istanbul`  | 1,500   | +100      | 중거리          |
+| `mission.disc.amsterdam.texel_seals`      | `port.amsterdam` | Discovery    | `disc.texel_seals`           | (현지 복귀)      | 1,000   | +100      | 단거리          |
+| `mission.trade.amsterdam.london_cheese`   | `port.amsterdam` | TradeDeliver | `product.dutch_cheese` 5개   | `port.london`    | 500     | +50       | 단거리          |
+| `mission.disc.london.dover`               | `port.london`    | Discovery    | `disc.white_cliffs_of_dover` | (현지 복귀)      | 1,000   | +100      | 단거리          |
+| `mission.trade.london.amsterdam_tulip`    | `port.london`    | TradeBuy     | `product.tulip` 5개          | `port.amsterdam` | 500     | +50       | 단거리          |
+| `mission.disc.istanbul.bosphorus`         | `port.istanbul`  | Discovery    | `disc.bosphorus_strait`      | (현지 복귀)      | 1,000   | +100      | 단거리          |
+| `mission.trade.istanbul.venezia_clove`    | `port.istanbul`  | TradeDeliver | `product.spice_clove` 5개    | `port.venezia`   | 1,500   | +100      | 중거리          |
+| `mission.disc.busan.hallasan`             | `port.busan`     | Discovery    | `disc.hallasan_mountain`     | (현지 복귀)      | 1,500   | +150      | 중거리          |
+| `mission.trade.busan.guangzhou_silk`      | `port.busan`     | TradeBuy     | `product.silk` 5개           | `port.guangzhou` | 2,000   | +150      | 장거리          |
+| `mission.disc.guangzhou.pearl_river`      | `port.guangzhou` | Discovery    | `disc.pearl_river_delta`     | (현지 복귀)      | 1,000   | +100      | 단거리          |
+| `mission.trade.guangzhou.busan_porcelain` | `port.guangzhou` | TradeDeliver | `product.porcelain` 5개      | `port.busan`     | 2,000   | +150      | 장거리          |
+
+#### 의뢰별 어린이용 텍스트 (모험가 조합 UI)
+
+> 모든 텍스트는 §1·§3 가이드라인을 따른다. 한 문장 짧게 (~35자), 어휘 쉽게, 2~4문장.
+
+##### `mission.disc.lisbon.gibraltar` ⭐ M1 핵심
+
+- **제목**: "두 바다가 만나는 좁은 길을 찾아봐요"
+- **설명**: "리스본 남쪽 바다 어딘가에, 큰 바다와 잔잔한 바다를 잇는 좁은 바닷길이 있대요. 그곳을 찾아 지도에 점을 찍어 주세요."
+- **지도 아이템 이름**: "지브롤터로 가는 지도"
+
+##### `mission.trade.lisbon.ceuta_salt_cod`
+
+- **제목**: "세우타로 소금 대구를 전해 주세요"
+- **설명**: "북아프리카의 작은 항구 세우타에서 소금 대구를 기다리고 있어요. 우리 리스본에서 다섯 상자 가져다 주세요."
+
+##### `mission.disc.ceuta.cape_bojador`
+
+- **제목**: "남쪽 바다의 알 수 없는 곶을 알아봐 주세요"
+- **설명**: "세우타에서 더 남쪽으로 내려가면, 옛 뱃사람들이 잘 모르던 곶이 있다고 해요. 직접 가서 어떤 곳인지 살펴봐 주세요."
+- **지도 아이템 이름**: "보자도르 곶의 지도"
+
+##### `mission.trade.ceuta.lisbon_cork`
+
+- **제목**: "리스본에서 코르크 다섯 상자를 사 오세요"
+- **설명**: "세우타에는 코르크가 부족하답니다. 리스본에 가서 다섯 상자만 사 오면 좋겠어요."
+
+##### `mission.disc.sevilla.canary`
+
+- **제목**: "큰 바다로 가기 전, 따뜻한 섬들을 찾아봐요"
+- **설명**: "세비야에서 남서쪽 큰 바다로 나가면 일곱 개의 따뜻한 섬이 있다고 해요. 그곳을 직접 가 봐 주세요."
+- **지도 아이템 이름**: "카나리아 제도로 가는 지도"
+
+##### `mission.trade.sevilla.lisbon_madeira` ⭐ 스페셜
+
+- **제목**: "리스본에서 귀한 마데이라 와인을 구해 와요"
+- **설명**: "리스본 사람들이 햇볕에 잘 익힌 마데이라 와인을 구해 와 주실 수 있나요? 세 통이면 충분해요. (어른용 화물)"
+
+##### `mission.disc.venezia.blue_grotto`
+
+- **제목**: "남쪽 바다의 푸른 동굴을 찾아봐요"
+- **설명**: "베네치아 남쪽 작은 섬 옆에 빛이 푸르게 빛나는 동굴이 있대요. 그곳을 직접 보고 와 주세요."
+- **지도 아이템 이름**: "푸른 동굴의 지도"
+
+##### `mission.trade.venezia.istanbul_clove`
+
+- **제목**: "이스탄불에서 향기로운 정향을 사 오세요"
+- **설명**: "베네치아 시장에서 정향이 떨어졌어요. 이스탄불에 가서 다섯 봉지만 사 오세요."
+
+##### `mission.disc.amsterdam.texel_seals`
+
+- **제목**: "북쪽 섬의 바다표범을 만나 봐요"
+- **설명**: "암스테르담 북쪽 바다의 작은 섬에 바다표범 가족이 산다고 해요. 멀리서 살짝 인사하고 와 주세요."
+- **지도 아이템 이름**: "텍셀 섬의 지도"
+
+##### `mission.trade.amsterdam.london_cheese`
+
+- **제목**: "런던에 네덜란드 치즈를 전해 주세요"
+- **설명**: "바다 건너 런던 사람들이 네덜란드 치즈를 기다리고 있어요. 다섯 덩이만 전해 주세요."
+
+##### `mission.disc.london.dover`
+
+- **제목**: "남쪽 바닷가의 흰 절벽을 만나 봐요"
+- **설명**: "런던 남쪽 바다 끝에 새하얀 절벽이 우뚝 솟아 있다고 해요. 멀리서 그 모습을 보고 와 주세요."
+- **지도 아이템 이름**: "도버 절벽의 지도"
+
+##### `mission.trade.london.amsterdam_tulip`
+
+- **제목**: "암스테르담의 튤립을 사 오세요"
+- **설명**: "런던 정원사들이 봄에 피는 큰 꽃 튤립을 구하고 있어요. 암스테르담에서 다섯 화분만 가져와 주세요."
+
+##### `mission.disc.istanbul.bosphorus`
+
+- **제목**: "두 대륙을 잇는 좁은 바닷길을 찾아봐요"
+- **설명**: "이스탄불 한가운데를 지나는 좁은 바닷길이 있대요. 그곳에 점을 찍어 주세요."
+- **지도 아이템 이름**: "보스포루스 해협의 지도"
+
+##### `mission.trade.istanbul.venezia_clove`
+
+- **제목**: "베네치아에 정향을 전해 주세요"
+- **설명**: "베네치아 시장에서 정향이 떨어졌다는 소식이 들렸어요. 이스탄불의 향신료를 다섯 봉지 챙겨 전해 주세요."
+
+##### `mission.disc.busan.hallasan`
+
+- **제목**: "남쪽 바다 끝 큰 산을 찾아봐요"
+- **설명**: "부산에서 남쪽으로 내려가면 큰 산이 있는 섬이 있어요. 그 산을 직접 보고 돌아와 주세요."
+- **지도 아이템 이름**: "한라산 가는 지도"
+
+##### `mission.trade.busan.guangzhou_silk`
+
+- **제목**: "광저우에서 비단을 사 오세요"
+- **설명**: "조선의 양반 댁에서 광저우 비단을 찾아요. 다섯 필만 사 오면 좋겠어요. 길이 멀지만 무사히 다녀와 주세요."
+
+##### `mission.disc.guangzhou.pearl_river`
+
+- **제목**: "큰 강이 바다를 만나는 곳을 찾아봐요"
+- **설명**: "광저우의 큰 강이 바다와 만나는 곳을 직접 살펴보고 와 주세요."
+- **지도 아이템 이름**: "주강 삼각주 지도"
+
+##### `mission.trade.guangzhou.busan_porcelain`
+
+- **제목**: "조선의 부산에 도자기를 전해 주세요"
+- **설명**: "조선 부산에서 광저우 도자기를 기다리고 있다는 소식이 들려왔어요. 다섯 상자만 잘 포장해 전해 주세요."
+
+#### 다음 단계
+
+- 의뢰 텍스트 사용자 검수 후 SO 인스턴스로 옮긴다.
+- M3 확장 항구 13개의 의뢰는 후속 작업.
+- 의뢰 실패/포기 정책 (`GAME_MECHANICS.md` §8.7) 결정 후 시간 제한·페널티 필드 추가.
+
+---
+
+### 2.8 선박 카탈로그 (ShipData)
+
+> `GAME_MECHANICS.md` §3.6 모델 기준. 능력치 범위:
+>
+> - 대포 공격력(`cannonPower`) **1~30**
+> - 이동 속도(`speed`) **1~10**
+> - 적재 크기(`cargoCapacity`) **10~1000**
+> - 내구도(`maxDurability`) **10~200**
+>
+> 11척 시드 — 시작 배(캐러벨) + 9척 일반 + 1척 명성 게이트 해적선. 각각 한 줄 어린이용 소개 포함.
+
+#### 시드 11척 요약 표
+
+| ID                 | 한국명      | 원어/별칭         | 공격 | 속도 | 적재 | 내구 | 가격   | 명성 게이트               | 주요 조선소                    |
+| ------------------ | ----------- | ----------------- | ---- | ---- | ---- | ---- | ------ | ------------------------- | ------------------------------ |
+| `ship.caravel`     | 캐러벨      | Caravel           | 3    | 8    | 60   | 50   | 5,000  | 없음 (**시작 배**)        | 리스본, 세비야, 세우타         |
+| `ship.carrack`     | 캐락        | Carrack           | 6    | 6    | 200  | 80   | 15,000 | 없음                      | 리스본, 세비야                 |
+| `ship.galleon`     | 갈레온      | Galleon           | 15   | 5    | 400  | 120  | 40,000 | 좋은 명성 5,000 이상      | 세비야, 카디스, 마닐라         |
+| `ship.fluyt`       | 플류트      | Fluyt             | 4    | 7    | 350  | 70   | 25,000 | 없음                      | 암스테르담, 함부르크           |
+| `ship.galleass`    | 갈레아스    | Galleass          | 20   | 6    | 250  | 130  | 50,000 | 좋은 명성 10,000 이상     | 런던, 베네치아                 |
+| `ship.junk`        | 정크선      | Junk (戎克船)     | 8    | 5    | 500  | 100  | 30,000 | 없음                      | 광저우, 나가사키, 말라카       |
+| `ship.bao_chuan`   | 보선        | Bao Chuan (寶船)  | 12   | 4    | 900  | 100  | 80,000 | 좋은 명성 30,000 이상     | 광저우                         |
+| `ship.geobukseon`  | 거북선      | Geobukseon (龜船) | 20   | 7    | 150  | 200  | 70,000 | 좋은 명성 25,000 이상     | 부산                           |
+| `ship.dhow`        | 다우선      | Dhow              | 5    | 7    | 180  | 60   | 18,000 | 없음                      | 이스탄불, 알렉산드리아         |
+| `ship.galera`      | 갈레라      | Galera            | 10   | 8    | 100  | 70   | 22,000 | 없음                      | 베네치아, 나폴리, 마르세유     |
+| `ship.pirate_ship` | 빠른 약탈선 | Pirate Ship       | 22   | 9    | 200  | 110  | 60,000 | **나쁜 명성 15,000 이상** | (지정 조선소 없음 — 추후 결정) |
+
+> **명명 메모**: 게임 UI에서는 "해적선" 대신 **"빠른 약탈선"** 또는 그냥 모델명 표기 권장. §6.1 어린이 톤 가이드라인.
+
+#### 각 배 어린이용 한 줄 소개
+
+##### 🚢 캐러벨 — `ship.caravel` ✅ (M1 시작 배 후보)
+
+- **소개**: "작고 빠른, 큰 바다 모험에 딱 좋은 작은 배예요."
+- **더 보기**: "삼각 돛과 사각 돛을 같이 달아 바람을 잘 잡아요. 포르투갈 사람들이 가장 먼저 큰 바다로 나갈 때 탔답니다."
+- **출처**: 위키백과 [캐러벨](https://ko.wikipedia.org/wiki/캐러벨)
+
+##### 🚢 캐락 — `ship.carrack`
+
+- **소개**: "넓은 짐칸을 가진 든든한 원양 배예요."
+- **더 보기**: "큰 바다를 오래 항해할 수 있어, 인도까지 가는 항해에 많이 쓰였어요."
+- **출처**: 위키백과 [캐락](https://ko.wikipedia.org/wiki/캐러크)
+
+##### 🚢 갈레온 — `ship.galleon`
+
+- **소개**: "크고 단단한, 보물도 잔뜩 실을 수 있는 큰 배예요."
+- **더 보기**: "스페인이 신대륙에서 가져온 짐을 실어 나르던 큰 배랍니다."
+- **출처**: 위키백과 [갈레온](https://ko.wikipedia.org/wiki/갈레온)
+
+##### 🚢 플류트 — `ship.fluyt`
+
+- **소개**: "네덜란드 사람들이 만든, 짐을 많이 실으면서도 빠른 배예요."
+- **더 보기**: "사람은 적게 타도 되고, 짐은 더 많이 실을 수 있게 설계된 똑똑한 배예요."
+- **출처**: 위키백과 [플류트](https://ko.wikipedia.org/wiki/플류트선)
+
+##### 🚢 갈레아스 — `ship.galleass`
+
+- **소개**: "큰 대포를 많이 달 수 있는 영국·베네치아의 튼튼한 배예요."
+- **더 보기**: "돛도 있고 노도 있어서 바람이 없어도 움직일 수 있답니다."
+- **출처**: 위키백과 [갈레아스](https://ko.wikipedia.org/wiki/갈레아스)
+
+##### 🚢 정크선 — `ship.junk`
+
+- **소개**: "큰 사각 돛으로 바람을 잘 받는 동아시아의 안정적인 배예요."
+- **더 보기**: "여러 칸으로 나뉘어 있어 한 칸에 물이 들어와도 가라앉지 않게 만들어졌어요."
+- **출처**: 위키백과 [정크선](https://ko.wikipedia.org/wiki/정크선)
+
+##### 🚢 보선 — `ship.bao_chuan` ✨
+
+- **소개**: "정화 사령관이 이끌었다던 어마어마하게 큰 명나라 배예요."
+- **더 보기**: "기록에 따르면 일반 배의 몇 배나 컸다고 해요. 보물을 잔뜩 실을 수 있었답니다."
+- **출처**: 위키백과 [보선](<https://ko.wikipedia.org/wiki/보선_(배)>)
+
+##### 🚢 거북선 — `ship.geobukseon` ✨
+
+- **소개**: "튼튼한 지붕이 덮인 우리나라 조선의 멋진 배예요."
+- **더 보기**: "지붕 덕분에 비도 막고, 적의 화살도 막을 수 있었어요. 임진왜란 때 조선의 바다를 지켰답니다."
+- **출처**: 위키백과 [거북선](https://ko.wikipedia.org/wiki/거북선)
+- **민감 표현 회피 확인**: ✅ ("지켰다" 로 표현, 살상 묘사 없음)
+
+##### 🚢 다우선 — `ship.dhow`
+
+- **소개**: "삼각 돛이 매력적인 인도양과 아라비아의 빠른 배예요."
+- **더 보기**: "바람의 방향이 바뀌어도 잘 가도록 삼각 돛을 달았어요."
+- **출처**: 위키백과 [다우](<https://ko.wikipedia.org/wiki/다우_(선박)>)
+
+##### 🚢 갈레라 — `ship.galera`
+
+- **소개**: "노를 저어 갈 수 있는 지중해의 옛 배예요."
+- **더 보기**: "바람이 없는 잔잔한 지중해에서 사람이 노를 저어 움직였답니다."
+- **출처**: 위키백과 [갈리선](https://ko.wikipedia.org/wiki/갈리선)
+
+##### 🚢 빠른 약탈선 — `ship.pirate_ship` ⚠
+
+- **소개**: "(거친 평판이 있는 사람만 살 수 있는) 빠르고 강한 배예요."
+- **더 보기**: "공격력과 속도가 좋지만, 좋은 평판을 가진 사람에게는 팔지 않아요."
+- **메모**: §6.3 "나쁜 명성" 시스템 (옵션 A 유지)에 연결되는 배. UI 명명은 "약탈선" 등 부드러운 표현 사용.
+
+#### M1 의 플레이어 시작 배
+
+- **`ship.caravel` (캐러벨)** 1척, 기본 능력치(공격 3 / 속도 8 / 적재 60 / 내구 50), 명성 게이트 없음.
+- 8개국 모두 캐러벨로 시작 (어린이용 단순화). 추후 국적별 시작 배 차등화 결정 가능 (§8 신규 항목 후보).
+
+#### 다음 단계
+
+- 사용자 검수 후 SO 인스턴스로 옮긴다.
+- 조선소 카탈로그 정확한 매핑은 PortFacilities SO에서 정의 (어떤 항구에 어떤 배가 진열되는지).
+- 11척의 능력치 균형은 게임 밸런싱 단계에서 조정.
 
 ---
 
@@ -630,24 +1065,27 @@ _(위 양식을 복사해서 발견물 추가)_
 
 ### 3.1 어휘·문장 수준 — Before / After
 
-| ❌ Before | ✅ After |
-|---|---|
-| "포르투갈은 15세기 대항해시대를 견인한 이베리아 반도의 해양 강국으로…" | "포르투갈은 가장 먼저 큰 바다로 나간 작은 나라예요." |
-| "캘리컷에서 향신료 무역을 개시했다." | "캘리컷(인도 남쪽 항구)에서 후추를 사 왔어요." |
-| "교황의 칙령으로 토르데시야스 조약이 체결되었다." | "두 나라가 큰 사람을 모셔놓고 바다를 나눠 갖기로 약속했어요." |
+| ❌ Before                                                              | ✅ After                                                      |
+| ---------------------------------------------------------------------- | ------------------------------------------------------------- |
+| "포르투갈은 15세기 대항해시대를 견인한 이베리아 반도의 해양 강국으로…" | "포르투갈은 가장 먼저 큰 바다로 나간 작은 나라예요."          |
+| "캘리컷에서 향신료 무역을 개시했다."                                   | "캘리컷(인도 남쪽 항구)에서 후추를 사 왔어요."                |
+| "교황의 칙령으로 토르데시야스 조약이 체결되었다."                      | "두 나라가 큰 사람을 모셔놓고 바다를 나눠 갖기로 약속했어요." |
 
 ### 3.2 톤
+
 - 호기심·설렘·신기함 강조. "와, ~ 였대요." "신기하게도 ~ 해요."
 - 평가·판단 X. "용감했다" "위대했다" 같은 단정 표현 자제.
 - 어린이에게 직접 말 거는 2인칭 가능 (단, 일관성).
 
 ### 3.3 길이 기준
+
 - 한 줄 설명: **15~25자**.
 - 메인 해설: **2~4문장 (≈ 60~150자)**.
 - 더 보기: 추가 1~2문장.
 - 시작 인사말: 1~2문장.
 
 ### 3.4 민감 주제 다루기
+
 - **식민지화**: "다른 나라 사람들과 만났어요" / "어떤 사람들은 슬픈 일도 겪었어요" 정도. 폭력 묘사 X.
 - **종교 갈등**: 종교 자체를 좋다·나쁘다 평하지 않음. "그때 사람들이 믿었던 것" 으로.
 - **전쟁**: 영웅·승패가 아니라 "사람들이 다투었어요" + 결과만.
@@ -691,14 +1129,16 @@ _(위 양식을 복사해서 발견물 추가)_
 
 ## 7. 진행 상황 트래커
 
-| 단위 | M2 목표 | M3 목표 | M4 목표 | 현재 |
-|---|---|---|---|---|
-| 국가 (`NationData`) | 8 | 8 | 8 | **8 ✅ (M2 목표 달성)** |
-| 항구 (`PortData`) | 8 | 20~30 | 30~50 | **9 ✅ (M2 목표 달성)** |
-| 특산물 (`ProductData`) | 16 | 50 | 80~100 | **26 ✅ (M2 목표 달성, 일반 17 + 스페셜 9)** |
-| 발견물 (`DiscoveryData`) | 1 | 20 | 100 | **20 ✅ (M3 목표 달성)** — 랜드마크 9 · 동식물 2 · 유적 6 · 사건 3 |
-| 지역 (`RegionData`) | 5 | 8 | 10~12 | **5 ✅ (M2 목표 달성)** — 이베리아·북아프리카 서해안·지중해·북해·동아시아 (+ M3 후보 3개 표시) |
-| 캐릭터 (`CharacterData`) | 8 | 16~20 | 30+ | **8 ✅ (M2 목표 달성, 각국 대표 인물 1명씩)** |
+| 단위                     | M2 목표               | M3 목표                | M4 목표 | 현재                                                                   |
+| ------------------------ | --------------------- | ---------------------- | ------- | ---------------------------------------------------------------------- |
+| 국가 (`NationData`)      | 8                     | 8                      | 8       | **8 ✅**                                                               |
+| 항구 (`PortData`)        | 8                     | 20~30                  | 30~50   | **22 ✅ (M3 목표 달성)** — 시작 항구 9 + M3 확장 13                    |
+| 특산물 (`ProductData`)   | 16                    | 50                     | 80~100  | **26 ✅ (M2)** — 일반 17 + 스페셜 9. M3 50개 가는 길                   |
+| 발견물 (`DiscoveryData`) | 1                     | 20                     | 100     | **26 ✅ (M3 목표 초과)** — 랜드마크 9 · 동식물 **8** · 유적 6 · 사건 3 |
+| 지역 (`RegionData`)      | 5                     | 8                      | 10~12   | **5 ✅ (M2)** — M3 확장 후보 3개 시드 표시                             |
+| 캐릭터 (`CharacterData`) | 8                     | 16~20                  | 30+     | **16 ✅ (M3 하한 달성)** — 실존 8명 + 가상 8명, 성별 균형              |
+| 의뢰 (`MissionTemplate`) | 18 (각 시작 항구 1쌍) | 44 (M3 항구 13개 추가) | 100+    | **18 ✅ (M2 목표 달성)** — 발견물 9 + 교역 9                           |
+| 선박 (`ShipData`)        | 5~10                  | 10~15                  | 15+     | **11 ✅ (M2 목표 달성)** — 캐러벨~보선 + 빠른 약탈선                   |
 
 > 각 행을 채워나갈 때마다 "현재" 칸을 수동 갱신.
 
@@ -706,16 +1146,29 @@ _(위 양식을 복사해서 발견물 추가)_
 
 ## 8. 다음으로 채우면 좋은 것 (제안 우선순위)
 
-> ✅ **2026-05-29 2차 초안 완료**: 8개국 NationData / 9개 PortData / 26개 ProductData (일반 17 + 스페셜 9) / 20개 DiscoveryData / 5개 RegionData / 8명 CharacterData. M2 목표 전 영역 달성, 발견물은 M3 목표(20개)까지 도달.
+> ✅ **2026-05-29 5차 초안 완료**: 8개국 NationData / 22개 PortData / 26개 ProductData / 26개 DiscoveryData / 5개 RegionData / 16명 CharacterData / 18개 MissionTemplate / **11척 ShipData**. **M1 가동에 필요한 데이터 + 시스템 결정 모두 갖춤.**
+>
+> ✅ **결정 반영**: 무국적 항구 → 옵션 A 중립 (`GAME_MECHANICS.md` §8.16). NPC 카테고리 → 옵션 A `CharacterRole` enum (`GAME_MECHANICS.md` §8.17). 실존 8명 = Adventurer, 가상 8명 = Townsperson.
 
 다음 단계 후보:
 
-1. **콘텐츠 사용자 검수** — 사용자가 톤·사실·시대 고증을 직접 점검하고 §5 체크리스트 모두 통과. 특히 조선 인사말 / 이순신 NPC 표현 / 종교 관련 발견물(아야 소피아) 검토.
-2. **가상 NPC 8명 추가 (성별 균형)** — 실존 인물 8명은 모두 남성. 시장 상인·길드장 등 가상 여성 캐릭터 동등 비중으로 추가.
-3. **M3 지역 확장 항구** — 5개 RegionData 마다 2~3개씩 추가 항구 채우기 (지중해의 마르세유·나폴리, 북해의 베르겐, 동아시아의 나가사키 등).
-4. **발견물 추가 시드 (M4 가는 길, 50개 목표)** — 동식물 카테고리가 2개로 가장 부족. 신대륙 동물(라마·재규어) / 동남아 동물(코뿔새·코끼리) 등.
-5. **NpcDefinition 데이터** — CharacterData 8명에 NpcType(Merchant/Escort/Pirate) 매핑은 아직 미정 (실존 인물은 대부분 "고용 가능" 으로만 분류, 100명 풀의 일반 NPC 50/30/20 분포는 별도 채워야 함).
-6. **MissionTemplate 시드** — 각 항구의 첫 의뢰 1개씩(발견물 의뢰 + 교역 의뢰). M1 의 리스본 → 지브롤터 의뢰는 이미 정의 가능.
-7. **ScriptableObject 인스턴스 생성** — 코드 작업이 시작되는 시점(M1 진입)에 이 MD 내용을 Unity에 옮긴다.
+1. **콘텐츠 사용자 검수 (사용자 진행)** — §5 체크리스트 통과. 우선 점검:
+   - 조선 인사말 / 이순신 표현 / 의녀 "덕이" 직업 설정
+   - 종교 관련 발견물 (아야 소피아) 의 중립 표현
+   - "테노치티틀란과의 만남" 표현 톤
+   - 와인·에일·커피의 "어른용" 부기 자연스러움
+   - 가상 NPC 이름·직업이 시대 어울리는지
+   - §2.7 의뢰 텍스트 18개 — 어린이 어휘 수준 적합성
+   - **§2.8 선박 11척 — 능력치 균형 + 거북선/보선의 어린이 톤**
+2. **ScriptableObject 인스턴스 생성 (M1 코드 작업 진입)** — 검수 끝난 항목부터 Unity 에디터에서 SO 인스턴스로 옮긴다. 최소 M1 세트:
+   - `nation.portugal` + `port.lisbon` + `port.ceuta`
+   - `disc.gibraltar_strait`
+   - `product.salt_cod`, `product.cork`, `product.dates`
+   - `ship.caravel` (플레이어 시작 배)
+   - `mission.disc.lisbon.gibraltar` ⭐ M1 핵심
+   - `character.henrique` (포르투갈 시작 어드벤처러 — M2 에서 본격)
+3. **M3 확장 항구 13개의 의뢰 추가** — 18 + 26 = 44개 (M3 목표).
+4. **특산물 M3 50개로 확장** — 신규 항구의 특산물 매핑 보강 (마르세유 라벤더 / 베르겐 청어 / 함부르크 호박 / 알렉산드리아 파피루스 등).
+5. **`GAME_MECHANICS.md` §8 남은 결정 13개 정리** — M3 진입 전까지 미루어도 무방.
 
-콘텐츠 검수가 가장 먼저 — 그 위에 다음 작업을 쌓는 것이 안전하다.
+**M1 코드 작업이 곧 진입 가능한 상태.** 콘텐츠 검수와 SO 인스턴스 생성이 한 박자 차이로 진행될 수 있다.
