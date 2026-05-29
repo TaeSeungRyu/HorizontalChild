@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
   - component: {fileID: 330585548}
+  - component: {fileID: 330585549}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -270,6 +271,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game::Game.World.CameraFollow
   target: {fileID: 1690041786}
+  offset: {x: 0, y: 30, z: -15}
+  tiltAngle: 65
+  positionLerpSpeed: 5
+--- !u!114 &330585549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a429cae819c3814086a600e06ebd47f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game::Game.World.CameraFollow
+  target: {fileID: 0}
   offset: {x: 0, y: 30, z: -15}
   tiltAngle: 65
   positionLerpSpeed: 5
@@ -435,7 +452,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3f72a76a28a4d8f42b4c3332002d28fa, type: 2}
   activeDiscoveries:
   - {fileID: 11400000, guid: 89dd2279aec6e2246b0e0140f66a78b0, type: 2}
-  portIconPrefab: {fileID: 0}
+  portIconPrefab: {fileID: 8893140149326885892, guid: 63d1d7a40bbdade429fd41d729d77f73, type: 3}
   portIconsParent: {fileID: 0}
   onPortArrived:
     m_PersistentCalls:
