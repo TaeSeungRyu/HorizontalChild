@@ -60,7 +60,7 @@ namespace Game.UI
 
             if (titleText != null)
             {
-                titleText.text = $"🏠 {port.displayNameKo} 도착";
+                titleText.text = $"{port.displayNameKo} 도착";
             }
 
             if (messageText != null)

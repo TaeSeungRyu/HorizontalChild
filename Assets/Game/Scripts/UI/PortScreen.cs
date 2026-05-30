@@ -58,7 +58,7 @@ namespace Game.UI
                 string nationName = _currentPort.nation != null
                     ? _currentPort.nation.displayNameKo
                     : "중립 항구";
-                nameText.text = $"🏠 {_currentPort.displayNameKo} ({nationName})";
+                nameText.text = $"{_currentPort.displayNameKo} · {nationName}";
             }
 
             if (descriptionText != null)
@@ -80,22 +80,22 @@ namespace Game.UI
 
             if (_currentPort.commonProducts != null && _currentPort.commonProducts.Length > 0)
             {
-                sb.AppendLine("📦 <b>특산물</b>");
+                sb.AppendLine("<b>[ 특산물 ]</b>");
                 foreach (var product in _currentPort.commonProducts)
                 {
                     if (product == null) continue;
-                    sb.AppendLine($"  • {product.displayNameKo} — {product.shortDescription}");
+                    sb.AppendLine($"  · {product.displayNameKo} — {product.shortDescription}");
                 }
             }
 
             if (_currentPort.specialProducts != null && _currentPort.specialProducts.Length > 0)
             {
                 sb.AppendLine();
-                sb.AppendLine("⭐ <b>특별한 물건 (의뢰로만 구할 수 있어요)</b>");
+                sb.AppendLine("<b>[ 특별한 물건 (의뢰로만 구할 수 있어요) ]</b>");
                 foreach (var product in _currentPort.specialProducts)
                 {
                     if (product == null) continue;
-                    sb.AppendLine($"  • {product.displayNameKo} — {product.shortDescription}");
+                    sb.AppendLine($"  · {product.displayNameKo} — {product.shortDescription}");
                 }
             }
 
