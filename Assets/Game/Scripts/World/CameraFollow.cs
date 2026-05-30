@@ -29,24 +29,38 @@ namespace Game.World
         [Tooltip("위치 따라잡는 속도. 클수록 빠르게 추종.")]
         [Range(0.5f, 20f)] public float positionLerpSpeed = 5f;
 
+        [Tooltip("회전 따라잡는 속도. 클수록 빠르게 추종 (멀미 우려 시 작게).")]
+        [Range(0.5f, 20f)] public float rotationLerpSpeed = 4f;
+
+        [Header("Rotation Tracking")]
+        [Tooltip("배가 회전할 때 카메라도 따라 회전 — 어린이가 항구·발견물 방향 잡기 쉬움.\n끄면 북쪽 고정 (멀미 우려 시).")]
+        public bool followYaw = true;
+
         private void LateUpdate()
         {
             if (target == null) return;
 
-            // 목표 위치 = 타깃 위치 + 오프셋
-            Vector3 desiredPos = target.position + offset;
+            // 목표 위치 — 타깃 기준 오프셋을 타깃의 회전에 맞춰 적용 (followYaw 켤 때만)
+            Vector3 worldOffset = followYaw
+                ? target.rotation * offset
+                : offset;
+            Vector3 desiredPos = target.position + worldOffset;
             transform.position = Vector3.Lerp(
                 transform.position, desiredPos,
                 positionLerpSpeed * Time.deltaTime);
 
-            // 회전은 고정 — 타깃을 바라보되 yaw 는 따라가지 않음 (멀미 방지)
-            transform.rotation = Quaternion.Euler(tiltAngle, 0f, 0f);
+            // 목표 회전
+            float yaw = followYaw ? target.eulerAngles.y : 0f;
+            Quaternion desiredRot = Quaternion.Euler(tiltAngle, yaw, 0f);
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation, desiredRot,
+                rotationLerpSpeed * Time.deltaTime);
         }
 
         private void OnValidate()
         {
-            // 에디터에서 회전 미리보기
-            transform.rotation = Quaternion.Euler(tiltAngle, 0f, 0f);
+            // 에디터에서 기울기 미리보기 (yaw 는 런타임에 결정)
+            transform.rotation = Quaternion.Euler(tiltAngle, transform.eulerAngles.y, 0f);
         }
     }
 }
