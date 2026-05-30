@@ -40,6 +40,13 @@ namespace Game.World
         [Tooltip("항구 아이콘들을 묶을 부모 Transform. 비어 있으면 본 GameObject 하위에 생성.")]
         public Transform portIconsParent;
 
+        [Header("Auto Arrival Detection")]
+        [Tooltip("플레이어가 항구에 이 거리 이내로 접근하면 자동으로 도착 알림. 1 unit ≈ 7.4 km.")]
+        [Range(5f, 100f)] public float arrivalRadiusUnits = 20f;
+
+        [Tooltip("도착 알림 후 같은 항구를 다시 트리거하지 않을 거리. 이 거리 밖으로 나가야 다시 트리거.")]
+        [Range(10f, 200f)] public float rearmRadiusUnits = 60f;
+
         [Header("Events")]
         public UnityEvent<PortData> onPortArrived;
         public UnityEvent<DiscoveryData> onDiscoveryFound;
@@ -47,11 +54,69 @@ namespace Game.World
 
         private readonly List<GameObject> _spawnedIcons = new();
 
+        // 도착 알림 후 "다시 트리거 안 함" 상태인 항구 id 집합.
+        // 거리 밖으로 나가면 자동으로 해제됨.
+        private readonly HashSet<string> _suppressedPortIds = new();
+
         // ─── 라이프사이클 ────────────────────────────────────────────────────
 
         private void Start()
         {
             SpawnPortIcons();
+        }
+
+        private void Update()
+        {
+            CheckPortArrival();
+        }
+
+        // ─── 자동 항구 도착 감지 ─────────────────────────────────────────────
+
+        /// <summary>
+        /// 매 프레임 플레이어 위치와 각 항구의 거리를 확인.
+        /// arrivalRadiusUnits 이내로 들어오면 onPortArrived 발행 (한 번만).
+        /// rearmRadiusUnits 밖으로 나가면 다시 트리거 가능 상태로 복귀.
+        /// </summary>
+        private void CheckPortArrival()
+        {
+            if (playerShip == null || activePorts == null) return;
+
+            var shipPos = playerShip.transform.position;
+
+            foreach (var port in activePorts)
+            {
+                if (port == null) continue;
+
+                var portPos = GeoCoordinate.LatLngToWorld(port.latitude, port.longitude);
+                float dist = Vector3.Distance(shipPos, portPos);
+
+                if (_suppressedPortIds.Contains(port.portId))
+                {
+                    // 한 번 트리거된 항구 — 멀리 나가면 다시 켜짐
+                    if (dist > rearmRadiusUnits)
+                    {
+                        _suppressedPortIds.Remove(port.portId);
+                    }
+                }
+                else
+                {
+                    // 가까이 가면 도착 알림 발행
+                    if (dist <= arrivalRadiusUnits)
+                    {
+                        _suppressedPortIds.Add(port.portId);
+                        onPortArrived?.Invoke(port);
+                    }
+                }
+            }
+        }
+
+        /// <summary>외부에서 강제 재무장 — 항구 화면에서 떠날 때 호출 (떠난 직후 즉시 재진입 방지).</summary>
+        public void SuppressPort(string portId)
+        {
+            if (!string.IsNullOrEmpty(portId))
+            {
+                _suppressedPortIds.Add(portId);
+            }
         }
 
         // ─── 항구 아이콘 ────────────────────────────────────────────────────
