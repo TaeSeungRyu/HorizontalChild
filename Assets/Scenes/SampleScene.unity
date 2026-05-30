@@ -639,6 +639,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 89dd2279aec6e2246b0e0140f66a78b0, type: 2}
   portIconPrefab: {fileID: 8893140149326885892, guid: 63d1d7a40bbdade429fd41d729d77f73, type: 3}
   portIconsParent: {fileID: 0}
+  arrivalRadiusUnits: 20
+  rearmRadiusUnits: 60
   onPortArrived:
     m_PersistentCalls:
       m_Calls: []
@@ -1373,6 +1375,7 @@ GameObject:
   - component: {fileID: 1755955773}
   - component: {fileID: 1755955775}
   - component: {fileID: 1755955774}
+  - component: {fileID: 1755955776}
   m_Layer: 5
   m_Name: PortArrivalDialog
   m_TagString: Untagged
@@ -1441,6 +1444,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1755955772}
   m_CullTransparentMesh: 1
+--- !u!114 &1755955776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1755955772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7de6be6c194b2c040910b1d0452e0786, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game::Game.UI.PortArrivalDialog
+  panelRoot: {fileID: 0}
+  titleText: {fileID: 1412540315}
+  messageText: {fileID: 977208992}
+  yesButton: {fileID: 1785842349}
+  cancelButton: {fileID: 1205112437}
+  portScreen: {fileID: 0}
+  worldManager: {fileID: 600646454}
+  playerShip: {fileID: 1690041783}
 --- !u!1 &1785842347
 GameObject:
   m_ObjectHideFlags: 0
