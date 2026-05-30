@@ -29,6 +29,11 @@ namespace Game.UI
         public TMP_Text productListText;
         public Button leaveButton;
 
+        [Header("Sub Panels")]
+        [Tooltip("모험가 조합 버튼 클릭 시 열릴 패널. 비어 있으면 버튼이 비활성화됨.")]
+        public MissionGiverPanel missionGiverPanel;
+        public Button guildButton;
+
         private PortData _currentPort;
         private PortArrivalDialog _arrivalDialog;
 
@@ -38,6 +43,7 @@ namespace Game.UI
             panelRoot.SetActive(false);
 
             if (leaveButton != null) leaveButton.onClick.AddListener(OnLeaveClicked);
+            if (guildButton != null) guildButton.onClick.AddListener(OnGuildClicked);
         }
 
         /// <summary>외부(PortArrivalDialog)에서 호출 — 항구 화면 열기.</summary>
@@ -114,6 +120,12 @@ namespace Game.UI
 
             _currentPort = null;
             _arrivalDialog = null;
+        }
+
+        private void OnGuildClicked()
+        {
+            if (missionGiverPanel == null || _currentPort == null) return;
+            missionGiverPanel.OpenForPort(_currentPort);
         }
     }
 }
