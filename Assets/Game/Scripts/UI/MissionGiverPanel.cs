@@ -36,8 +36,13 @@ namespace Game.UI
         [Tooltip("MissionService 참조. 비어 있으면 런타임에 MissionService.Instance 자동 사용.")]
         public MissionService missionService;
 
+        [Header("Parent UI")]
+        [Tooltip("이 패널이 열려 있는 동안 숨겼다가, 닫으면 다시 표시할 부모 패널. 보통 PortScreen 의 panelRoot.")]
+        public GameObject parentPanelToHide;
+
         private PortData _currentPort;
         private MissionTemplate _displayedMission;
+        private bool _parentWasVisible;
 
         private void Awake()
         {
@@ -60,6 +65,14 @@ namespace Game.UI
             }
 
             _currentPort = port;
+
+            // 부모 패널 숨김 (화면 겹침 방지)
+            if (parentPanelToHide != null)
+            {
+                _parentWasVisible = parentPanelToHide.activeSelf;
+                parentPanelToHide.SetActive(false);
+            }
+
             RefreshDisplay();
             panelRoot.SetActive(true);
         }
@@ -67,6 +80,13 @@ namespace Game.UI
         public void Close()
         {
             panelRoot.SetActive(false);
+
+            // 부모 패널 복귀
+            if (parentPanelToHide != null && _parentWasVisible)
+            {
+                parentPanelToHide.SetActive(true);
+            }
+
             _currentPort = null;
             _displayedMission = null;
         }
