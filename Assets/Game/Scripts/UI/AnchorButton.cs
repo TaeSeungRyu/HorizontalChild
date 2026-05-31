@@ -1,0 +1,152 @@
+using Game.Data;
+using Game.Missions;
+using Game.Ship;
+using Game.World;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace Game.UI
+{
+    /// <summary>
+    /// "정박 및 탐색" 버튼 — 항해 중 화면에 떠 있는 UI 버튼.
+    ///
+    /// 동작 (기획서 준수):
+    ///   - 활성 의뢰가 Discovery 타입이고 targetDiscovery 가 있어야 의미 있음
+    ///   - 그 발견물 좌표 ±tolerance 안에 있으면 발견 처리 (MissionService.RegisterDiscovery + 패널 표시)
+    ///   - 거리 밖이면 안내 메시지 ("아무것도 못 찾았어요")
+    ///   - 활성 의뢰 없거나 발견물 의뢰가 아니면 "지금은 정박할 이유 없어요"
+    ///
+    /// "발견물은 오직 미션을 통해서만 찾을 수 있어야 함" (`GAME_MECHANICS.md` §5.5) 룰 적용.
+    /// </summary>
+    public class AnchorButton : MonoBehaviour
+    {
+        [Header("Refs")]
+        public Button button;
+
+        [Tooltip("결과를 짧게 표시할 텍스트. 비어 있으면 Console 로그만.")]
+        public TMP_Text statusText;
+
+        [Tooltip("정박 결과(성공/실패) 메시지를 자동으로 사라지게 할 시간.")]
+        [Range(0f, 10f)] public float statusVisibleSeconds = 3f;
+
+        [Header("Game Refs")]
+        public ShipController playerShip;
+        public MissionService missionService;
+        public DiscoveryFoundPanel discoveryFoundPanel;
+
+        private float _statusHideAt;
+
+        private void Awake()
+        {
+            if (button == null) button = GetComponent<Button>();
+            if (button != null) button.onClick.AddListener(OnAnchorClicked);
+            ClearStatus();
+        }
+
+        private void Start()
+        {
+            if (missionService == null) missionService = MissionService.Instance;
+        }
+
+        private void Update()
+        {
+            if (statusText != null && statusText.gameObject.activeSelf &&
+                _statusHideAt > 0f && Time.unscaledTime >= _statusHideAt)
+            {
+                ClearStatus();
+            }
+        }
+
+        private void OnAnchorClicked()
+        {
+            if (missionService == null) missionService = MissionService.Instance;
+            if (missionService == null)
+            {
+                Debug.LogError("[AnchorButton] MissionService 없음");
+                return;
+            }
+            if (playerShip == null)
+            {
+                Debug.LogError("[AnchorButton] PlayerShip 없음");
+                return;
+            }
+
+            // 항해 중에 자동 정지 (어린이 친화 — 일단 멈추고 결과 보기)
+            playerShip.HardStop();
+
+            // 의뢰 확인
+            var mission = missionService.CurrentMission;
+            if (mission == null ||
+                mission.type != MissionType.Discovery ||
+                mission.targetDiscovery == null)
+            {
+                ShowStatus("지금은 정박해도 찾을 게 없어요.\n먼저 의뢰를 받아 보세요.");
+                return;
+            }
+
+            var target = mission.targetDiscovery;
+
+            // 거리 체크 + 눈썰미 보너스
+            int keenEye = playerShip.captain != null ? playerShip.captain.keenEye : 50;
+            float adjusted = GeoCoordinate.ApplyKeenEyeBonus(target.searchToleranceBase, keenEye);
+            float toleranceDist = GeoCoordinate.GetSearchToleranceDistance(adjusted);
+
+            var playerPos = playerShip.transform.position;
+            var targetPos = GeoCoordinate.LatLngToWorld(target.latitude, target.longitude);
+            float dist = Vector3.Distance(playerPos, targetPos);
+
+            if (dist <= toleranceDist)
+            {
+                // 발견!
+                missionService.RegisterDiscovery(target);
+                if (discoveryFoundPanel != null)
+                {
+                    discoveryFoundPanel.Show(target);
+                }
+                ClearStatus();
+            }
+            else
+            {
+                // 거리 안내 (어린이 친화 — 좌표 직접 노출은 자제, 거리 비율로)
+                float ratio = dist / toleranceDist;
+                if (ratio < 2f)
+                {
+                    ShowStatus("거의 다 왔어요! 조금만 더 가 보세요.");
+                }
+                else if (ratio < 5f)
+                {
+                    ShowStatus("아직 멀어요. 더 찾아 봐요.");
+                }
+                else
+                {
+                    ShowStatus("여기엔 아무것도 없어요. 다른 방향으로 가 봐요.");
+                }
+            }
+        }
+
+        // ─── 상태 메시지 ────────────────────────────────────────────────────
+
+        private void ShowStatus(string msg)
+        {
+            if (statusText == null)
+            {
+                Debug.Log($"[AnchorButton] {msg}");
+                return;
+            }
+            statusText.text = msg;
+            statusText.gameObject.SetActive(true);
+            _statusHideAt = statusVisibleSeconds > 0f
+                ? Time.unscaledTime + statusVisibleSeconds
+                : 0f;
+        }
+
+        private void ClearStatus()
+        {
+            if (statusText == null) return;
+            statusText.text = "";
+            statusText.gameObject.SetActive(false);
+            _statusHideAt = 0f;
+        }
+    }
+}
