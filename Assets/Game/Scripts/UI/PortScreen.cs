@@ -1,5 +1,6 @@
 using System.Text;
 using Game.Data;
+using Game.Missions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,6 +35,9 @@ namespace Game.UI
         public MissionGiverPanel missionGiverPanel;
         public Button guildButton;
 
+        [Tooltip("의뢰 완료 시 표시할 패널. 비어 있으면 Console 로그만 남고 UI 알림 없음.")]
+        public MissionCompletedPanel missionCompletedPanel;
+
         private PortData _currentPort;
         private PortArrivalDialog _arrivalDialog;
 
@@ -55,6 +59,25 @@ namespace Game.UI
 
             FillUI();
             panelRoot.SetActive(true);
+
+            // 의뢰 항구 복귀 자동 완료 시도
+            TryCompleteActiveMission();
+        }
+
+        /// <summary>
+        /// 이 항구가 활성 의뢰의 발급 항구이고, 조건이 충족되면 자동 완료.
+        /// 완료 시 MissionCompletedPanel 표시 + 보상 지급 (MissionService 내부에서 PlayerState 호출).
+        /// </summary>
+        private void TryCompleteActiveMission()
+        {
+            var service = MissionService.Instance;
+            if (service == null) return;
+
+            var completed = service.TryCompleteAtPort(_currentPort);
+            if (completed != null && missionCompletedPanel != null)
+            {
+                missionCompletedPanel.Show(completed);
+            }
         }
 
         private void FillUI()

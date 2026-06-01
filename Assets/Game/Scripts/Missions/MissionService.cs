@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Game.Data;
+using Game.Player;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -162,6 +163,19 @@ namespace Game.Missions
             var completed = CurrentMission;
             CompletedMissionIds.Add(completed.missionId);
             CurrentMission = null;
+
+            // 보상 지급 (PlayerState 가 있으면)
+            var playerState = PlayerState.Instance;
+            if (playerState != null)
+            {
+                if (completed.rewardMoney > 0) playerState.AddMoney(completed.rewardMoney);
+                if (completed.rewardGoodReputation > 0) playerState.AddGoodReputation(completed.rewardGoodReputation);
+            }
+            else
+            {
+                Debug.LogWarning("[MissionService] PlayerState 인스턴스 없음 — 보상 지급 못 함.");
+            }
+
             onMissionCompleted?.Invoke(completed);
             Debug.Log(
                 $"[MissionService] 의뢰 완료! {completed.missionId} — " +
