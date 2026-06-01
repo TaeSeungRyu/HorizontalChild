@@ -27,14 +27,14 @@ AnchorButton 아래에 결과 메시지를 표시할 텍스트를 추가:
 2. Add Component → **`Anchor Button`** 검색·추가
 3. 필드 채우기:
 
-| 필드 | 값 |
-|---|---|
-| Button | 비워둠 (자동으로 자기 자신의 Button 사용) |
-| Status Text | 자식 또는 형제 GameObject `AnchorStatusText` 드래그 |
-| Status Visible Seconds | 3 (기본값) |
-| Player Ship | Hierarchy 의 PlayerShip 드래그 |
-| Mission Service | 비워둠 (런타임 자동) |
-| Discovery Found Panel | 다음 단계에서 만든 후 할당 |
+| 필드                   | 값                                                  |
+| ---------------------- | --------------------------------------------------- |
+| Button                 | 비워둠 (자동으로 자기 자신의 Button 사용)           |
+| Status Text            | 자식 또는 형제 GameObject `AnchorStatusText` 드래그 |
+| Status Visible Seconds | 3 (기본값)                                          |
+| Player Ship            | Hierarchy 의 PlayerShip 드래그                      |
+| Mission Service        | 비워둠 (런타임 자동)                                |
+| Discovery Found Panel  | 다음 단계에서 만든 후 할당                          |
 
 ---
 
@@ -50,16 +50,16 @@ AnchorButton 아래에 결과 메시지를 표시할 텍스트를 추가:
 
 `DiscoveryFoundPanel` 하위:
 
-| 자식 | 종류 | 이름 | 위치 / 비고 |
-|---|---|---|---|
-| 1 | UI ▸ Text - TextMeshPro | `HeaderText` | 상단 — "새로운 곳을 발견했어요!" (큰 폰트) |
-| 2 | UI ▸ Text - TextMeshPro | `NameText` | 헤더 아래 — 발견물 이름 (50pt) |
-| 3 | UI ▸ Text - TextMeshPro | `CategoryText` | 이름 옆 또는 아래 — 카테고리 (20pt 작게) |
-| 4 | UI ▸ Image | `IllustrationImage` | 중간 영역 — 일러스트 (M1 임시 비어둠) |
-| 5 | UI ▸ Panel(또는 Image) | `NoIllustrationPlaceholder` | IllustrationImage 자리에 같이, 일러스트 없을 때 보임 |
-| 6 | UI ▸ Text - TextMeshPro | `DescriptionText` | 본문 영역 — 메인 해설 (28pt) |
-| 7 | UI ▸ Text - TextMeshPro | `MoreInfoText` | 그 아래 — 더 보기 (24pt, 회색) |
-| 8 | UI ▸ Button - TextMeshPro | `CloseButton` | 하단 우측 — "닫기" |
+| 자식 | 종류                      | 이름                        | 위치 / 비고                                          |
+| ---- | ------------------------- | --------------------------- | ---------------------------------------------------- |
+| 1    | UI ▸ Text - TextMeshPro   | `HeaderText`                | 상단 — "새로운 곳을 발견했어요!" (큰 폰트)           |
+| 2    | UI ▸ Text - TextMeshPro   | `NameText`                  | 헤더 아래 — 발견물 이름 (50pt)                       |
+| 3    | UI ▸ Text - TextMeshPro   | `CategoryText`              | 이름 옆 또는 아래 — 카테고리 (20pt 작게)             |
+| 4    | UI ▸ Image                | `IllustrationImage`         | 중간 영역 — 일러스트 (M1 임시 비어둠)                |
+| 5    | UI ▸ Panel(또는 Image)    | `NoIllustrationPlaceholder` | IllustrationImage 자리에 같이, 일러스트 없을 때 보임 |
+| 6    | UI ▸ Text - TextMeshPro   | `DescriptionText`           | 본문 영역 — 메인 해설 (28pt)                         |
+| 7    | UI ▸ Text - TextMeshPro   | `MoreInfoText`              | 그 아래 — 더 보기 (24pt, 회색)                       |
+| 8    | UI ▸ Button - TextMeshPro | `CloseButton`               | 하단 우측 — "닫기"                                   |
 
 > 일러스트는 M1 에서 비어 있어도 됩니다. `NoIllustrationPlaceholder` 는 단순 회색 사각형 + "그림은 추후 추가됩니다" 텍스트 정도로 두면 됨.
 
@@ -69,17 +69,17 @@ AnchorButton 아래에 결과 메시지를 표시할 텍스트를 추가:
 2. Add Component → **`Discovery Found Panel`** 검색·추가
 3. 필드 채우기:
 
-| 필드 | 값 |
-|---|---|
-| Panel Root | 비워둠 (자동) |
-| Header Text | 자식 HeaderText 드래그 |
-| Name Text | 자식 NameText 드래그 |
-| Category Text | 자식 CategoryText 드래그 |
-| Description Text | 자식 DescriptionText 드래그 |
-| More Info Text | 자식 MoreInfoText 드래그 |
-| Illustration Image | 자식 IllustrationImage 드래그 (없으면 비워둠) |
+| 필드                        | 값                                                    |
+| --------------------------- | ----------------------------------------------------- |
+| Panel Root                  | 비워둠 (자동)                                         |
+| Header Text                 | 자식 HeaderText 드래그                                |
+| Name Text                   | 자식 NameText 드래그                                  |
+| Category Text               | 자식 CategoryText 드래그                              |
+| Description Text            | 자식 DescriptionText 드래그                           |
+| More Info Text              | 자식 MoreInfoText 드래그                              |
+| Illustration Image          | 자식 IllustrationImage 드래그 (없으면 비워둠)         |
 | No Illustration Placeholder | 자식 NoIllustrationPlaceholder 드래그 (없으면 비워둠) |
-| Close Button | 자식 CloseButton 드래그 |
+| Close Button                | 자식 CloseButton 드래그                               |
 
 ---
 
@@ -117,6 +117,7 @@ AnchorButton 아래에 결과 메시지를 표시할 텍스트를 추가:
 ### 시나리오 3 — 거리가 멀 때
 
 좌표에서 멀리 떨어진 곳에서 정박:
+
 - 거리 ratio < 2× → "거의 다 왔어요!"
 - ratio < 5× → "아직 멀어요."
 - 그 이상 → "여기엔 아무것도 없어요."
@@ -125,14 +126,14 @@ AnchorButton 아래에 결과 메시지를 표시할 텍스트를 추가:
 
 ## 자주 발생하는 문제
 
-| 증상 | 해결 |
-|---|---|
-| AnchorButton 컴포넌트가 검색에 안 나옴 | 컴파일 에러 확인 (Console). AnchorButton.cs 가 namespace Game.UI 인지 확인 |
-| 클릭해도 반응 없음 | Player Ship / Discovery Found Panel 필드가 비어있는지. AnchorButton 컴포넌트의 Button 칸이 자동으로 찼는지 (자기 GameObject 의 Button 컴포넌트) |
-| 발견 시 패널이 안 뜸 | AnchorButton 의 Discovery Found Panel 필드가 DiscoveryFoundPanel 로 채워졌는지 |
-| "지금은 정박해도 찾을 게 없어요" 가 계속 나옴 | 의뢰가 활성 상태가 아님. MissionGiverPanel 에서 의뢰를 받았는지, Console 의 `[MissionService] 의뢰 수락` 로그로 확인 |
-| 발견물 좌표에 도착해도 발견 안 됨 | searchToleranceBase (DiscoveryData 의 0.03) 가 너무 작거나, 좌표 계산이 잘못. Scene 창에서 Discovery 의 월드 좌표 (15 × lng, 15 × lat) 확인 |
-| 의뢰 받기 전에 정박 버튼 클릭하면 배가 멈춤 | 의도된 동작. 어린이가 우연히 누른 경우에도 자연스러움 |
+| 증상                                          | 해결                                                                                                                                            |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| AnchorButton 컴포넌트가 검색에 안 나옴        | 컴파일 에러 확인 (Console). AnchorButton.cs 가 namespace Game.UI 인지 확인                                                                      |
+| 클릭해도 반응 없음                            | Player Ship / Discovery Found Panel 필드가 비어있는지. AnchorButton 컴포넌트의 Button 칸이 자동으로 찼는지 (자기 GameObject 의 Button 컴포넌트) |
+| 발견 시 패널이 안 뜸                          | AnchorButton 의 Discovery Found Panel 필드가 DiscoveryFoundPanel 로 채워졌는지                                                                  |
+| "지금은 정박해도 찾을 게 없어요" 가 계속 나옴 | 의뢰가 활성 상태가 아님. MissionGiverPanel 에서 의뢰를 받았는지, Console 의 `[MissionService] 의뢰 수락` 로그로 확인                            |
+| 발견물 좌표에 도착해도 발견 안 됨             | searchToleranceBase (DiscoveryData 의 0.03) 가 너무 작거나, 좌표 계산이 잘못. Scene 창에서 Discovery 의 월드 좌표 (15 × lng, 15 × lat) 확인     |
+| 의뢰 받기 전에 정박 버튼 클릭하면 배가 멈춤   | 의도된 동작. 어린이가 우연히 누른 경우에도 자연스러움                                                                                           |
 
 ---
 
