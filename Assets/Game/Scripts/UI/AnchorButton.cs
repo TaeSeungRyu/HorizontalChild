@@ -35,6 +35,11 @@ namespace Game.UI
         public MissionService missionService;
         public DiscoveryFoundPanel discoveryFoundPanel;
 
+        [Header("Visibility")]
+        [Tooltip("이 GameObject 들 중 하나라도 활성이면 본 버튼/메시지를 숨김. " +
+                 "PortArrivalDialog / PortScreen / MissionGiverPanel / DiscoveryFoundPanel 등을 등록.")]
+        public GameObject[] hideWhileAnyActive;
+
         private float _statusHideAt;
 
         private void Awake()
@@ -51,8 +56,39 @@ namespace Game.UI
 
         private void Update()
         {
+            UpdateVisibility();
+
             if (statusText != null && statusText.gameObject.activeSelf &&
                 _statusHideAt > 0f && Time.unscaledTime >= _statusHideAt)
+            {
+                ClearStatus();
+            }
+        }
+
+        /// <summary>
+        /// 다른 패널이 떠 있는 동안 본 버튼·메시지 모두 숨김.
+        /// 매 프레임 체크 — 이벤트 구독보다 단순하고 안정적.
+        /// </summary>
+        private void UpdateVisibility()
+        {
+            bool shouldHide = false;
+            if (hideWhileAnyActive != null)
+            {
+                foreach (var go in hideWhileAnyActive)
+                {
+                    if (go != null && go.activeInHierarchy)
+                    {
+                        shouldHide = true;
+                        break;
+                    }
+                }
+            }
+
+            if (gameObject.activeSelf == shouldHide)
+            {
+                gameObject.SetActive(!shouldHide);
+            }
+            if (statusText != null && shouldHide && statusText.gameObject.activeSelf)
             {
                 ClearStatus();
             }
@@ -86,6 +122,13 @@ namespace Game.UI
             }
 
             var target = mission.targetDiscovery;
+
+            // 이미 발견한 발견물 — 재검출 방지
+            if (missionService.DiscoveredIds.Contains(target.discoveryId))
+            {
+                ShowStatus($"이미 {target.displayNameKo} 을(를) 찾았어요.\n의뢰를 준 항구로 돌아가 보고하세요.");
+                return;
+            }
 
             // 거리 체크 + 눈썰미 보너스
             int keenEye = playerShip.captain != null ? playerShip.captain.keenEye : 50;

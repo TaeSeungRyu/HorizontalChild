@@ -69,12 +69,21 @@ namespace Game.World
 
         /// <summary>
         /// 발견물 좌표 허용 오차(비율) → Unity Unit 거리.
-        /// 기본 0.03 (±3%) 은 세계 가로의 3% = WorldWidthUnits × 0.03.
-        /// 눈썰미 보너스로 toleranceBase 가 0.05 까지 커질 수 있음 (GAME_MECHANICS §1.1).
+        ///
+        /// 의미 재정의 (M1):
+        ///   기획서 "좌표 ±3%" 의 의도는 **좌표 근처의 작은 영역** — 세계 전체의 3% 가 아님.
+        ///   탐색 거리 기준 상수 = 250 units (≈ 1850 km 가 아니라 좌표 자체와의 거리 단위).
+        ///   - tolerance 0.03 → 7.5 units ≈ 55 km
+        ///   - tolerance 0.05 → 12.5 units ≈ 93 km (눈썰미 100 보너스 최대치)
+        ///   - tolerance 0.10 → 25 units ≈ 185 km
+        ///
+        /// 항구 도착 거리(SeaWorldManager.arrivalRadiusUnits = 20 ≈ 148 km) 보다 살짝 작거나 비슷한 정도.
+        /// 어린이가 좌표 근처에 가야 발견되도록 — 너무 쉽지 않게.
         /// </summary>
         public static float GetSearchToleranceDistance(float toleranceBase)
         {
-            return WorldWidthUnits * Mathf.Clamp(toleranceBase, 0f, 0.2f);
+            const float DistanceScale = 250f;
+            return DistanceScale * Mathf.Clamp(toleranceBase, 0f, 0.2f);
         }
 
         /// <summary>
