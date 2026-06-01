@@ -19,6 +19,7 @@ namespace Game.UI
     ///
     /// "발견물은 오직 미션을 통해서만 찾을 수 있어야 함" (`GAME_MECHANICS.md` §5.5) 룰 적용.
     /// </summary>
+    [RequireComponent(typeof(CanvasGroup))]
     public class AnchorButton : MonoBehaviour
     {
         [Header("Refs")]
@@ -41,9 +42,13 @@ namespace Game.UI
         public GameObject[] hideWhileAnyActive;
 
         private float _statusHideAt;
+        private CanvasGroup _canvasGroup;
 
         private void Awake()
         {
+            _canvasGroup = GetComponent<CanvasGroup>();
+            if (_canvasGroup == null) _canvasGroup = gameObject.AddComponent<CanvasGroup>();
+
             if (button == null) button = GetComponent<Button>();
             if (button != null) button.onClick.AddListener(OnAnchorClicked);
             ClearStatus();
@@ -67,7 +72,7 @@ namespace Game.UI
 
         /// <summary>
         /// 다른 패널이 떠 있는 동안 본 버튼·메시지 모두 숨김.
-        /// 매 프레임 체크 — 이벤트 구독보다 단순하고 안정적.
+        /// 매 프레임 체크 — CanvasGroup.alpha 로 가림 (자기 GameObject 는 활성 유지해서 Update 계속).
         /// </summary>
         private void UpdateVisibility()
         {
@@ -84,11 +89,15 @@ namespace Game.UI
                 }
             }
 
-            if (gameObject.activeSelf == shouldHide)
+            if (_canvasGroup != null)
             {
-                gameObject.SetActive(!shouldHide);
+                _canvasGroup.alpha = shouldHide ? 0f : 1f;
+                _canvasGroup.interactable = !shouldHide;
+                _canvasGroup.blocksRaycasts = !shouldHide;
             }
-            if (statusText != null && shouldHide && statusText.gameObject.activeSelf)
+
+            // statusText 는 별도 GameObject — 패널 떠 있는 동안 메시지도 숨김
+            if (shouldHide && statusText != null && statusText.gameObject.activeSelf)
             {
                 ClearStatus();
             }

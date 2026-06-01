@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 7490052}
   - component: {fileID: 7490051}
   - component: {fileID: 7490054}
+  - component: {fileID: 7490055}
   m_Layer: 5
   m_Name: AnchorButton
   m_TagString: Untagged
@@ -259,6 +260,23 @@ MonoBehaviour:
   playerShip: {fileID: 1690041783}
   missionService: {fileID: 0}
   discoveryFoundPanel: {fileID: 1082307442}
+  hideWhileAnyActive:
+  - {fileID: 1755955772}
+  - {fileID: 1456863947}
+  - {fileID: 322249804}
+  - {fileID: 1082307438}
+--- !u!225 &7490055
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7490049}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &224066302
 GameObject:
   m_ObjectHideFlags: 0
