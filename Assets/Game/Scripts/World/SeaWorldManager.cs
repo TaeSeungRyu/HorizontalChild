@@ -47,10 +47,16 @@ namespace Game.World
         [Tooltip("도착 알림 후 같은 항구를 다시 트리거하지 않을 거리. 이 거리 밖으로 나가야 다시 트리거.")]
         [Range(10f, 200f)] public float rearmRadiusUnits = 60f;
 
+        [Tooltip("항구를 직접 클릭했을 때 입항 가능한 거리. 자동 도착보다 살짝 넓게 설정 가능.")]
+        [Range(10f, 200f)] public float clickEnterRadiusUnits = 30f;
+
         [Header("Events")]
         public UnityEvent<PortData> onPortArrived;
         public UnityEvent<DiscoveryData> onDiscoveryFound;
         public UnityEvent onSearchFailed;
+
+        [Tooltip("클릭한 항구가 너무 멀 때 발행. UI 토스트 등에 연결.")]
+        public UnityEvent<PortData> onPortClickTooFar;
 
         private readonly List<GameObject> _spawnedIcons = new();
 
@@ -205,6 +211,31 @@ namespace Game.World
         {
             if (port == null) return;
             onPortArrived?.Invoke(port);
+        }
+
+        /// <summary>
+        /// 사용자가 항구 아이콘을 클릭했을 때 — 거리 체크 후 입항 다이얼로그 트리거.
+        /// 거리 안이면 onPortArrived 발행 (자동 도착과 동일 흐름).
+        /// 거리 밖이면 onPortClickTooFar 발행 + Console 로그.
+        /// </summary>
+        public void TryEnterPortFromClick(PortData port)
+        {
+            if (port == null || playerShip == null) return;
+
+            var shipPos = playerShip.transform.position;
+            var portPos = GeoCoordinate.LatLngToWorld(port.latitude, port.longitude);
+            float dist = Vector3.Distance(shipPos, portPos);
+
+            if (dist <= clickEnterRadiusUnits)
+            {
+                _suppressedPortIds.Add(port.portId);
+                onPortArrived?.Invoke(port);
+            }
+            else
+            {
+                Debug.Log($"[SeaWorldManager] {port.displayNameKo} 너무 멀어요 (거리 {dist:F0}/{clickEnterRadiusUnits:F0})");
+                onPortClickTooFar?.Invoke(port);
+            }
         }
     }
 }
