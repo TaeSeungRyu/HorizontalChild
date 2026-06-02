@@ -54,6 +54,8 @@ namespace Game.UI
         public void OpenForPort(PortData port, PortArrivalDialog arrivalDialog)
         {
             if (port == null) return;
+            if (panelRoot == null) panelRoot = gameObject; // GameObject 가 비활성 상태에서 호출돼 Awake 가 안 불린 경우 안전장치
+
             _currentPort = port;
             _arrivalDialog = arrivalDialog;
 

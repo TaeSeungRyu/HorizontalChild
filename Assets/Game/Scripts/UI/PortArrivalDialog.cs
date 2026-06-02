@@ -56,6 +56,8 @@ namespace Game.UI
         public void Show(PortData port)
         {
             if (port == null) return;
+            if (panelRoot == null) panelRoot = gameObject; // 비활성 GameObject 호출 안전장치
+
             _currentPort = port;
 
             if (titleText != null)

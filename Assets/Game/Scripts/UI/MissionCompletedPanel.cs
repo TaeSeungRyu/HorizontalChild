@@ -36,6 +36,7 @@ namespace Game.UI
         public void Show(MissionTemplate completed)
         {
             if (completed == null) return;
+            if (panelRoot == null) panelRoot = gameObject; // 비활성 GameObject 호출 안전장치
 
             if (headerText != null)
             {

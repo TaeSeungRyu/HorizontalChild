@@ -57,6 +57,7 @@ namespace Game.UI
         public void OpenForPort(PortData port)
         {
             if (port == null) return;
+            if (panelRoot == null) panelRoot = gameObject; // 비활성 GameObject 호출 안전장치
             if (missionService == null) missionService = MissionService.Instance;
             if (missionService == null)
             {
