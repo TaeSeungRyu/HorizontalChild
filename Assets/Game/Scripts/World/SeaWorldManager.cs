@@ -41,11 +41,11 @@ namespace Game.World
         public Transform portIconsParent;
 
         [Header("Auto Arrival Detection")]
-        [Tooltip("플레이어가 항구에 이 거리 이내로 접근하면 자동으로 도착 알림. 1 unit ≈ 7.4 km.")]
-        [Range(5f, 100f)] public float arrivalRadiusUnits = 20f;
+        [Tooltip("플레이어가 항구에 이 거리 이내로 접근하면 자동으로 도착 알림. 0 이면 자동 도착 비활성 (버튼만 사용). 1 unit ≈ 7.4 km.")]
+        [Range(0f, 100f)] public float arrivalRadiusUnits = 20f;
 
         [Tooltip("도착 알림 후 같은 항구를 다시 트리거하지 않을 거리. 이 거리 밖으로 나가야 다시 트리거.")]
-        [Range(10f, 200f)] public float rearmRadiusUnits = 60f;
+        [Range(0f, 200f)] public float rearmRadiusUnits = 60f;
 
         [Tooltip("항구를 직접 클릭했을 때 입항 가능한 거리. 자동 도착보다 살짝 넓게 설정 가능.")]
         [Range(10f, 200f)] public float clickEnterRadiusUnits = 30f;
