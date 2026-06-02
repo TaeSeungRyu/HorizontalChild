@@ -96,7 +96,7 @@ namespace Game.UI
         private void ShowNoMission()
         {
             if (missionTitleText != null) missionTitleText.text = "(없음)";
-            if (progressText != null) progressText.text = "항구의 모험가 조합에서 의뢰를 받아 보세요.";
+            if (progressText != null) progressText.text = "항구에서 의뢰를 받아요.";
         }
 
         private void ShowMission(MissionTemplate m)
