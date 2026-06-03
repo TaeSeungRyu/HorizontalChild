@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 359c5c86a7c54f849bd0672764cb69ed, type: 3}
+  m_Name: Mission_DiscVeneziaBlueGrotto
+  m_EditorClassIdentifier: Game::Game.Data.MissionTemplate
+  missionId: mission.disc.venezia.blue_grotto
+  issuerPort: {fileID: 11400000, guid: 223af44ca8b9b0143a7c488e46acc2f7, type: 2}
+  targetDiscovery: {fileID: 11400000, guid: 41d423760415021469bda9cb3bca8bab, type: 2}
+  rewardMoney: 1500
+  rewardGoodReputation: 150
+  title: "\uB0A8\uCABD \uBC14\uB2E4\uC758 \uD478\uB978 \uB3D9\uAD74\uC744 \uCC3E\uC544\uBD10\uC694"
+  description: "\uBCA0\uB124\uCE58\uC544 \uB0A8\uCABD \uC791\uC740 \uC12C \uC606\uC5D0
+    \uBE5B\uC774 \uD478\uB974\uAC8C \uBE5B\uB098\uB294 \uB3D9\uAD74\uC774 \uC788\uB300\uC694.
+    \uADF8\uACF3\uC744 \uC9C1\uC811 \uBCF4\uACE0 \uC640 \uC8FC\uC138\uC694."
+  mapItemName: "\uD478\uB978 \uB3D9\uAD74\uC758 \uC9C0\uB3C4"

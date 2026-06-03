@@ -1846,7 +1846,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 79006b120a9b7ee449e7d079b682a591, type: 2}
   - {fileID: 11400000, guid: f54cafdbf47aabd449efdecdefe34c9c, type: 2}
   activeDiscoveries:
+  - {fileID: 11400000, guid: 41d423760415021469bda9cb3bca8bab, type: 2}
+  - {fileID: 11400000, guid: 4059b6f0f327b91438ae0c38f723a268, type: 2}
+  - {fileID: 11400000, guid: 4f900ddcc6c76a84b8e2f38e33f61b4f, type: 2}
+  - {fileID: 11400000, guid: 12a8998993dfc9c4b80ee348ed1f8cd9, type: 2}
   - {fileID: 11400000, guid: 89dd2279aec6e2246b0e0140f66a78b0, type: 2}
+  - {fileID: 11400000, guid: f0e3687cf3565f64eacf176660d2e7e4, type: 2}
+  - {fileID: 11400000, guid: 53cc4f53a62e1cc4c893f02bcac29514, type: 2}
+  - {fileID: 11400000, guid: 1549831da67528243b2b9271d812ce80, type: 2}
+  - {fileID: 11400000, guid: a3f6563c13308fb4f9e0dfd51a14cfa5, type: 2}
   portIconPrefab: {fileID: 8893140149326885892, guid: 63d1d7a40bbdade429fd41d729d77f73, type: 3}
   portIconsParent: {fileID: 0}
   arrivalRadiusUnits: 5

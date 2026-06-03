@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_PearlRiverDelta
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.pearl_river_delta
+  displayNameKo: "\uC8FC\uAC15 \uC0BC\uAC01\uC8FC"
+  category: 0
+  latitude: 22.6
+  longitude: 113.4
+  searchToleranceBase: 0.03
+  mainDescription: "\uC911\uAD6D \uB0A8\uCABD\uC758 \uD070 \uAC15\uC774 \uBC14\uB2E4\uC640
+    \uB9CC\uB098\uB294 \uACF3\uC774\uC5D0\uC694. \uAC15\uBB3C\uC774 \uC5EC\uB7EC
+    \uAC08\uB798\uB85C \uAC08\uB77C\uC838 \uC791\uC740 \uC12C\uB4E4\uC744 \uB9CC\uB4E4\uC5B4\uC694.
+    \uC61B\uB0A0\uBD80\uD130 \uB3C4\uC790\uAE30\uC640 \uBE44\uB2E8\uC744 \uC2E4\uC740
+    \uBC30\uB4E4\uC774 \uBAA8\uC774\uB294 \uD070 \uC2DC\uC7A5\uC774\uC5C8\uB2F5\uB2C8\uB2E4."
+  moreInfo: "\uAD11\uC800\uC6B0\uB294 \uC774 \uAC15 \uC5B4\uADC0\uC758 \uAC00\uC7A5
+    \uD070 \uD56D\uAD6C\uC608\uC694."
+  eraLabel: "\uC790\uC5F0"
+  relatedNation: {fileID: 11400000, guid: cbc1844d13557d44d902828645768cd5, type: 2}
+  illustration: {fileID: 0}
+  relatedFigures: "\uBA85\xB7\uCCAD \uC2DC\uB300 \uAD11\uC800\uC6B0 \uBB34\uC5ED\uC758
+    \uC911\uC2EC \uAE38"
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC8FC\uC7A5\uAC15"
+  sensitiveExpressionChecked: 1

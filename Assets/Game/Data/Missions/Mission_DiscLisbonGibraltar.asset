@@ -13,12 +13,8 @@ MonoBehaviour:
   m_Name: Mission_DiscLisbonGibraltar
   m_EditorClassIdentifier: Game::Game.Data.MissionTemplate
   missionId: mission.disc.lisbon.gibraltar
-  type: 0
   issuerPort: {fileID: 11400000, guid: 3f72a76a28a4d8f42b4c3332002d28fa, type: 2}
   targetDiscovery: {fileID: 11400000, guid: 89dd2279aec6e2246b0e0140f66a78b0, type: 2}
-  targetProduct: {fileID: 0}
-  targetPort: {fileID: 0}
-  targetProductQuantity: 0
   rewardMoney: 1000
   rewardGoodReputation: 100
   title: "\uB450 \uBC14\uB2E4\uAC00 \uB9CC\uB098\uB294 \uC881\uC740 \uAE38\uC744
