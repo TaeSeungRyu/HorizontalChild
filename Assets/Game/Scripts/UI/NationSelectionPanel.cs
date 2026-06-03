@@ -158,6 +158,13 @@ namespace Game.UI
                 playerShip.HardStop();
             }
 
+            // 3) 선택된 국가의 선장 캐릭터 자동 할당 — 능력치 보너스 적용
+            if (playerShip != null && _selected.startingCharacter != null)
+            {
+                playerShip.captain = _selected.startingCharacter;
+                Debug.Log($"[NationSelectionPanel] 선장 할당: {_selected.startingCharacter.displayNameKo} (용기 {_selected.startingCharacter.bravery} / 항해 {_selected.startingCharacter.seamanship} / 눈썰미 {_selected.startingCharacter.keenEye})");
+            }
+
             Hide();
         }
 

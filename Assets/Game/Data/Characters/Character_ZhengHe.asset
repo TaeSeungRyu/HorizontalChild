@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0d9a81d75203b74cbb07915727d4c52, type: 3}
+  m_Name: Character_ZhengHe
+  m_EditorClassIdentifier: Game::Game.Data.CharacterData
+  characterId: character.zheng_he
+  displayNameKo: "\uC815\uD654"
+  gender: 0
+  role: 0
+  portrait: {fileID: 0}
+  bravery: 80
+  seamanship: 95
+  keenEye: 80
+  startingGoodReputation: 50000
+  startingBadReputation: 0
+  nation: {fileID: 11400000, guid: cbc1844d13557d44d902828645768cd5, type: 2}
+  homePort: {fileID: 11400000, guid: f54cafdbf47aabd449efdecdefe34c9c, type: 2}
+  shortIntro: "\uC544\uC8FC \uD070 \uBC30\uB4E4\uC744 \uC774\uB04C\uACE0 \uC77C\uACF1
+    \uBC88\uC774\uB098 \uBA40\uB9AC \uBC14\uB2E4\uB97C \uB204\uBE48 \uBA85\uB098\uB77C
+    \uC0AC\uB839\uAD00\uC774\uC5D0\uC694."
+  moreInfo: "\uB3D9\uB0A8\uC544\uC2DC\uC544\xB7\uC778\uB3C4\xB7\uC544\uD504\uB9AC\uCE74
+    \uB3D9\uCABD \uBC14\uB2F7\uAC00\uAE4C\uC9C0 \uAC00\uC11C \uC0AC\uB78C\uB4E4\uC744
+    \uB9CC\uB0AC\uB2F5\uB2C8\uB2E4."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC815\uD654_(\uBA85\uB098\uB77C)"

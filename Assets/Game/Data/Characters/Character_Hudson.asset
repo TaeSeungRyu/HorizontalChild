@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0d9a81d75203b74cbb07915727d4c52, type: 3}
+  m_Name: Character_Hudson
+  m_EditorClassIdentifier: Game::Game.Data.CharacterData
+  characterId: character.hudson
+  displayNameKo: "\uD5E8\uB9AC \uD5C8\uB4DC\uC2A8"
+  gender: 0
+  role: 0
+  portrait: {fileID: 0}
+  bravery: 80
+  seamanship: 75
+  keenEye: 85
+  startingGoodReputation: 35000
+  startingBadReputation: 0
+  nation: {fileID: 11400000, guid: 804e011f398380d449247e5c259e623a, type: 2}
+  homePort: {fileID: 11400000, guid: 385c67c80e950c34083d95589919088d, type: 2}
+  shortIntro: "\uBD81\uCABD\uC73C\uB85C \uAC00\uB294 \uAE38\uC744 \uCC3E\uC73C\uB824
+    \uD55C \uC601\uAD6D\uC758 \uD0D0\uD5D8\uAC00\uC608\uC694."
+  moreInfo: "\uADF8\uC758 \uC774\uB984\uC744 \uB534 '\uD5C8\uB4DC\uC2A8\uAC15' \uACFC
+    '\uD5C8\uB4DC\uC2A8\uB9CC' \uC774 \uBD81\uC544\uBA54\uB9AC\uCE74\uC5D0 \uC788\uC5B4\uC694."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uD5E8\uB9AC_\uD5C8\uB4DC\uC2A8"

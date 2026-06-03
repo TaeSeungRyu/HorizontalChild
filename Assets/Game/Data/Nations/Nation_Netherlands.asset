@@ -18,6 +18,7 @@ MonoBehaviour:
   flagIcon: {fileID: 0}
   accentColor: {r: 1, g: 0.55, b: 0, a: 1}
   startingPort: {fileID: 11400000, guid: a970c5aab4ff46c45b99ac86db221b90, type: 2}
+  startingCharacter: {fileID: 11400000, guid: 399517f4cabfeec4eae3c36fb3e14fbc, type: 2}
   startingYear: 1602
   shortIntro: "\uC791\uC9C0\uB9CC \uAC00\uC7A5 \uB9CE\uC740 \uBC30\uB97C \uAC00\uC9C4
     \uBC14\uB2E4\uC758 \uB098\uB77C\uC608\uC694."
