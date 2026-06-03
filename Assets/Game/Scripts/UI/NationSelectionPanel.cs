@@ -152,17 +152,21 @@ namespace Game.UI
             if (gameSession == null) gameSession = GameSession.Instance;
             gameSession?.SetSelectedNation(_selected);
 
-            // 2) PlayerShip 위치를 시작 항구로 이동
+            // 2) PlayerShip 위치를 시작 항구 + 바다 쪽 offset 으로 이동
             if (playerShip != null && _selected.startingPort != null)
             {
                 var port = _selected.startingPort;
-                var portWorld = GeoCoordinate.LatLngToWorld(port.latitude, port.longitude);
+                var spawnLat = port.latitude + _selected.startingSeaOffsetLatitude;
+                var spawnLng = port.longitude + _selected.startingSeaOffsetLongitude;
+                var spawnWorld = GeoCoordinate.LatLngToWorld(spawnLat, spawnLng);
                 var newPos = new Vector3(
-                    portWorld.x,
+                    spawnWorld.x,
                     playerShip.transform.position.y,
-                    portWorld.z);
+                    spawnWorld.z);
                 playerShip.transform.position = newPos;
                 playerShip.HardStop();
+
+                Debug.Log($"[NationSelectionPanel] 시작 위치: 항구({port.latitude:F1}, {port.longitude:F1}) + 오프셋({_selected.startingSeaOffsetLatitude:F1}, {_selected.startingSeaOffsetLongitude:F1}) → 월드 ({newPos.x:F0}, {newPos.z:F0})");
             }
 
             // 3) 선택된 국가의 선장 캐릭터 자동 할당 — 능력치 보너스 적용

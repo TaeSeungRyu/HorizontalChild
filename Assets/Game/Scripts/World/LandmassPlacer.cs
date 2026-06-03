@@ -27,6 +27,9 @@ namespace Game.World
         [Tooltip("육지 GameObject 들을 묶을 부모. 비어 있으면 본 GameObject 하위에 생성.")]
         public Transform landmassesParent;
 
+        [Tooltip("☑ 하면 큐브의 MeshRenderer 를 끔. 충돌(BoxCollider)은 유지. 세계지도 텍스처를 사용할 때 큐브가 지도를 가리지 않게.")]
+        public bool hideVisuals = false;
+
         private LandmassData[] EffectiveLandmasses =>
             (landmassCatalog != null && landmassCatalog.all != null && landmassCatalog.all.Length > 0)
                 ? landmassCatalog.all : landmasses;
@@ -61,15 +64,22 @@ namespace Game.World
                 cube.transform.position = new Vector3(centerWorld.x, sizeY * 0.5f - 0.1f, centerWorld.z);
                 cube.transform.localScale = new Vector3(sizeX, sizeY, sizeZ);
 
-                // 색상
+                // 색상 (또는 시각 숨김)
                 var renderer = cube.GetComponent<Renderer>();
                 if (renderer != null)
                 {
-                    var mat = defaultMaterial != null
-                        ? new Material(defaultMaterial)
-                        : new Material(Shader.Find("Universal Render Pipeline/Lit"));
-                    mat.color = data.color;
-                    renderer.material = mat;
+                    if (hideVisuals)
+                    {
+                        renderer.enabled = false;
+                    }
+                    else
+                    {
+                        var mat = defaultMaterial != null
+                            ? new Material(defaultMaterial)
+                            : new Material(Shader.Find("Universal Render Pipeline/Lit"));
+                        mat.color = data.color;
+                        renderer.material = mat;
+                    }
                 }
 
                 // BoxCollider (Cube primitive 가 기본 부착) 는 그대로 — Static

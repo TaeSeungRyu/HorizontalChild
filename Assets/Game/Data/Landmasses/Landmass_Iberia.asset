@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game::Game.Data.LandmassData
   landmassId: land.iberia
   displayNameKo: "\uC774\uBCA0\uB9AC\uC544 \uBC18\uB3C4"
-  centerLatitude: 40
-  centerLongitude: -3
-  sizeLatitude: 8
-  sizeLongitude: 10
+  centerLatitude: 39.5
+  centerLongitude: -1
+  sizeLatitude: 9
+  sizeLongitude: 8
   color: {r: 0.65, g: 0.55, b: 0.4, a: 1}
   height: 1.5
   sourceUrl: 

@@ -15,7 +15,7 @@ MonoBehaviour:
   landmassId: land.british_isles
   displayNameKo: "\uC601\uAD6D \uC12C"
   centerLatitude: 54
-  centerLongitude: -3
+  centerLongitude: -4.5
   sizeLatitude: 8
   sizeLongitude: 7
   color: {r: 0.65, g: 0.55, b: 0.4, a: 1}

@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game::Game.Data.LandmassData
   landmassId: land.north_africa
   displayNameKo: "\uBD81\uC544\uD504\uB9AC\uCE74"
-  centerLatitude: 26
-  centerLongitude: 5
-  sizeLatitude: 20
+  centerLatitude: 25
+  centerLongitude: 10
+  sizeLatitude: 16
   sizeLongitude: 40
   color: {r: 0.75, g: 0.65, b: 0.45, a: 1}
   height: 1.5

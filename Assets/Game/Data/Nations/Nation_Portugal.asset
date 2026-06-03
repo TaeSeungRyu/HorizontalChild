@@ -20,6 +20,8 @@ MonoBehaviour:
   startingPort: {fileID: 11400000, guid: 3f72a76a28a4d8f42b4c3332002d28fa, type: 2}
   startingCharacter: {fileID: 11400000, guid: b4511fa2ecb090e4ab34ddb8c4637606, type: 2}
   startingYear: 1415
+  startingSeaOffsetLatitude: 0
+  startingSeaOffsetLongitude: -1.5
   shortIntro: "\uD070 \uBC14\uB2E4\uB85C \uAC00\uC7A5 \uBA3C\uC800 \uBAA8\uD5D8\uC744
     \uB5A0\uB09C \uC791\uC740 \uB098\uB77C."
   greeting: "\uD658\uC601\uD569\uB2C8\uB2E4, \uC5B4\uB9B0 \uD56D\uD574\uC0AC\uB2D8!
