@@ -47,13 +47,14 @@
 2. Add Component → **`On-Screen Stick`** 검색·추가
 3. 필드 채우기:
 
-| 필드 | 값 |
-|---|---|
-| **Movement Range** | **80** (배경 안에서 핸들이 움직이는 반경) |
-| **Use Isolated Input Actions** | ☐ 비활성 (기본값) |
-| **Control Path** | **`<Gamepad>/leftStick`** 입력 |
+| 필드                           | 값                                        |
+| ------------------------------ | ----------------------------------------- |
+| **Movement Range**             | **80** (배경 안에서 핸들이 움직이는 반경) |
+| **Use Isolated Input Actions** | ☐ 비활성 (기본값)                         |
+| **Control Path**               | **`<Gamepad>/leftStick`** 입력            |
 
 ⚠ Control Path 입력 방법:
+
 - 옆의 ▼ 드롭다운 클릭
 - **Gamepad ▸ Left Stick** 선택
 - 또는 직접 `<Gamepad>/leftStick` 타이핑
@@ -117,6 +118,7 @@ AnchorButton/EnterPortButton 의 `Hide While Any Active` 배열에 **TouchContro
 2. AnchorButton 컴포넌트와 유사한 컨트롤러 컴포넌트를 작성
 
 **M1 단순화 — 그냥 그대로 두기**:
+
 - 패널 위에 조이스틱이 살짝 보여도 동작 X (패널이 raycast 가로채면 조이스틱 클릭 안 됨)
 - 시각적으로 조금 어수선하지만 기능엔 문제 없음
 - 추후 폴리시에서 자동 숨김 컴포넌트 추가
@@ -151,12 +153,12 @@ AnchorButton/EnterPortButton 의 `Hide While Any Active` 배열에 **TouchContro
 
 ## 자주 발생하는 문제
 
-| 증상 | 해결 |
-|---|---|
-| 조이스틱 끌어도 배 안 움직임 | On-Screen Stick 의 Control Path 가 `<Gamepad>/leftStick` 인지 확인. inputactions 에 Gamepad 바인딩이 있는지 확인 |
-| 버튼 눌러도 가속 안 됨 | On-Screen Button 의 Control Path 가 `<Gamepad>/dpad/up` (가속) 또는 `<Gamepad>/dpad/down` (감속) 인지 확인 |
-| 조이스틱 핸들이 안 움직임 | On-Screen Stick 의 Movement Range 가 너무 작음 (50 이상 권장). 또는 핸들이 배경의 자식이 아님 |
-| 키보드 입력이 안 됨 | (이전에 동작했으면) 기존 키보드 바인딩이 inputactions 에 그대로 있는지. 사라졌으면 가이드의 키보드 바인딩 부분 다시 추가 |
+| 증상                         | 해결                                                                                                                     |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| 조이스틱 끌어도 배 안 움직임 | On-Screen Stick 의 Control Path 가 `<Gamepad>/leftStick` 인지 확인. inputactions 에 Gamepad 바인딩이 있는지 확인         |
+| 버튼 눌러도 가속 안 됨       | On-Screen Button 의 Control Path 가 `<Gamepad>/dpad/up` (가속) 또는 `<Gamepad>/dpad/down` (감속) 인지 확인               |
+| 조이스틱 핸들이 안 움직임    | On-Screen Stick 의 Movement Range 가 너무 작음 (50 이상 권장). 또는 핸들이 배경의 자식이 아님                            |
+| 키보드 입력이 안 됨          | (이전에 동작했으면) 기존 키보드 바인딩이 inputactions 에 그대로 있는지. 사라졌으면 가이드의 키보드 바인딩 부분 다시 추가 |
 
 ---
 
