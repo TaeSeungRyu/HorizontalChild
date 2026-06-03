@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a28157625267b6847b2a38444d9807ae, type: 3}
+  m_Name: Nation_Joseon
+  m_EditorClassIdentifier: Game::Game.Data.NationData
+  nationId: nation.joseon
+  displayNameKo: "\uC870\uC120"
+  displayNameOriginal: "\u671D\u9BAE"
+  flagIcon: {fileID: 0}
+  accentColor: {r: 0.6, g: 0.85, b: 0.9, a: 1}
+  startingPort: {fileID: 11400000, guid: 79006b120a9b7ee449e7d079b682a591, type: 2}
+  startingYear: 1450
+  shortIntro: "\uB3D9\uCABD \uBC14\uB2E4 \uC791\uC740 \uBC18\uB3C4\uC5D0\uC11C \uC774\uC6C3
+    \uB098\uB77C\uB85C \uB5A0\uB098\uB294 \uB098\uB77C\uC608\uC694."
+  greeting: "\uC5B4\uC11C \uC640\uC694, \uC5B4\uB9B0 \uD56D\uD574\uC0AC! \uC6B0\uB9AC
+    \uC870\uC120\uC740 \uB3D9\uCABD\uC758 \uC791\uC740 \uBC18\uB3C4\uC608\uC694.
+    \uC774\uC6C3 \uB098\uB77C\uB85C \uAC00\uC11C \uBB34\uC5C7\uC774 \uC788\uB294\uC9C0
+    \uD568\uAED8 \uC0B4\uD3B4\uBCFC\uAE4C\uC694?"
+  designerNotes: "\uD55C\uAE00 \uCC3D\uC81C \uC2DC\uAE30, \uC77C\uBCF8\xB7\uBA85\uB098\uB77C
+    \uD1B5\uC2E0\uC0AC, \uCCAD\uC790, \uC778\uC0BC."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC870\uC120"

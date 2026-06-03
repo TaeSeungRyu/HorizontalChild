@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a28157625267b6847b2a38444d9807ae, type: 3}
+  m_Name: Nation_Ottoman
+  m_EditorClassIdentifier: Game::Game.Data.NationData
+  nationId: nation.ottoman
+  displayNameKo: "\uC624\uC2A4\uB9CC"
+  displayNameOriginal: "Osmanl\u0131"
+  flagIcon: {fileID: 0}
+  accentColor: {r: 0, g: 0.55, b: 0.55, a: 1}
+  startingPort: {fileID: 11400000, guid: 0c812b37aed16004189c4427c168140a, type: 2}
+  startingYear: 1470
+  shortIntro: "\uB450 \uB300\uB959\uC774 \uB9CC\uB098\uB294 \uD56D\uAD6C\uB97C \uAC00\uC9C4
+    \uD070 \uB098\uB77C\uC608\uC694."
+  greeting: "\uC5B4\uC11C \uC624\uC138\uC694! \uC6B0\uB9AC \uC624\uC2A4\uB9CC\uC740
+    \uB3D9\uCABD\uACFC \uC11C\uCABD\uC774 \uB9CC\uB098\uB294 \uACF3\uC5D0 \uC788\uC5B4\uC694.
+    \uC5B4\uB5A4 \uC2E0\uAE30\uD55C \uBB3C\uAC74\uB4E4\uC744 \uBCF4\uB7EC \uAC08\uAE4C\uC694?"
+  designerNotes: "\uCF58\uC2A4\uD0C4\uD2F0\uB178\uD3F4\uB9AC\uC2A4 \uC815\uBCF5,
+    \uB3D9\uC9C0\uC911\uD574\xB7\uD751\uD574 \uBB34\uC5ED, \uD5A5\uC2E0\uB8CC \uC721\uB85C."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC624\uC2A4\uB9CC_\uC81C\uAD6D"

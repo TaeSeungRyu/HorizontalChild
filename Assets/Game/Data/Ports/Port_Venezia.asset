@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Venezia
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.venezia
+  displayNameKo: "\uBCA0\uB124\uCE58\uC544"
+  displayNameOriginal: Venezia
+  nation: {fileID: 11400000, guid: 50ff5fa2e6c3f1044ba3d1c4585f47d3, type: 2}
+  latitude: 45.4
+  longitude: 12.3
+  shortDescription: "\uBB3C\uAE38\uC774 \uAC70\uB9AC\uAC00 \uB41C \uC2E0\uAE30\uD55C
+    \uB3C4\uC2DC."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 2d8aa613b213b8f4493b6cd0752e0ddb, type: 2}
+  - {fileID: 11400000, guid: 7caf0c7f974dcfe43a6485a837514e6e, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uBCA0\uB124\uCE58\uC544"

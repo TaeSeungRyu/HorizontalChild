@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_London
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.london
+  displayNameKo: "\uB7F0\uB358"
+  displayNameOriginal: London
+  nation: {fileID: 11400000, guid: 804e011f398380d449247e5c259e623a, type: 2}
+  latitude: 51.5
+  longitude: -0.1
+  shortDescription: "\uC548\uAC1C \uB080 \uD070 \uAC15\uAC00\uC5D0\uC11C \uBC30\uB4E4\uC774
+    \uCD9C\uBC1C\uD558\uB294 \uB3C4\uC2DC."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 666b6d75aa424ad42b870ccd9b7470a3, type: 2}
+  - {fileID: 11400000, guid: 707e1200403a82346bc9cb407c11e1eb, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uB7F0\uB358"

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27e49de8f35219c44a63185efbb0dde3, type: 3}
+  m_Name: Product_Ginseng
+  m_EditorClassIdentifier: Game::Game.Data.ProductData
+  productId: product.ginseng
+  displayNameKo: "\uC778\uC0BC"
+  icon: {fileID: 0}
+  basePrice: 150
+  isSpecial: 0
+  originPort: {fileID: 11400000, guid: 79006b120a9b7ee449e7d079b682a591, type: 2}
+  shortDescription: "\uBAB8\uC5D0 \uC88B\uB2E4\uACE0 \uC54C\uB824\uC9C4 \uC6B0\uB9AC\uB098\uB77C
+    \uC57D\uCD08\uC608\uC694."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC778\uC0BC"

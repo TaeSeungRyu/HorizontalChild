@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Busan
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.busan
+  displayNameKo: "\uBD80\uC0B0"
+  displayNameOriginal: "\u91DC\u5C71"
+  nation: {fileID: 11400000, guid: eb895b40b2897d649806972105641d59, type: 2}
+  latitude: 35.1
+  longitude: 129
+  shortDescription: "\uB3D9\uCABD \uBC14\uB2E4\uB85C \uB098\uAC00\uB294 \uC6B0\uB9AC\uB098\uB77C
+    \uD070 \uD56D\uAD6C."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: ddf7252a7b7d9f04180357f415da5fd7, type: 2}
+  - {fileID: 11400000, guid: ecd8ab52be57f8c4489921ee28cbb6d0, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uBD80\uC0B0\uAD11\uC5ED\uC2DC"

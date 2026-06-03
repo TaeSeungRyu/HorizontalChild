@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a28157625267b6847b2a38444d9807ae, type: 3}
+  m_Name: Nation_Italy
+  m_EditorClassIdentifier: Game::Game.Data.NationData
+  nationId: nation.italy
+  displayNameKo: "\uC774\uD0C8\uB9AC\uC544"
+  displayNameOriginal: Italia
+  flagIcon: {fileID: 0}
+  accentColor: {r: 0.35, g: 0.1, b: 0.55, a: 1}
+  startingPort: {fileID: 11400000, guid: 223af44ca8b9b0143a7c488e46acc2f7, type: 2}
+  startingYear: 1450
+  shortIntro: "\uBB3C \uC704\uC5D0 \uB5A0 \uC788\uB294 \uC2E0\uAE30\uD55C \uB3C4\uC2DC\uC5D0\uC11C
+    \uBC14\uB2E4\uB85C \uB098\uAC00\uB294 \uB098\uB77C\uC608\uC694."
+  greeting: "\uC548\uB155\uD558\uC138\uC694! \uC6B0\uB9AC \uBCA0\uB124\uCE58\uC544\uB294
+    \uBB3C\uAE38\uC774 \uAC70\uB9AC\uAC00 \uB41C \uB3C4\uC2DC\uB78D\uB2C8\uB2E4.
+    \uD568\uAED8 \uB3D9\uCABD\uC73C\uB85C \uAC00\uB294 \uAE38\uC744 \uCC3E\uC544\uBCFC\uAE4C\uC694?"
+  designerNotes: "\uBCA0\uB124\uCE58\uC544 \uACF5\uD654\uAD6D, \uC9C0\uC911\uD574
+    \uD5A5\uC2E0\uB8CC \uBB34\uC5ED, \uAC24\uB9AC\uC120, \uB9C8\uB974\uCF54 \uD3F4\uB85C."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uBCA0\uB124\uCE58\uC544_\uACF5\uD654\uAD6D"
