@@ -1912,7 +1912,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game::Game.Missions.MissionService
   allMissions:
+  - {fileID: 11400000, guid: da3ef7bfa0dd9404ba71a43158eb9a62, type: 2}
+  - {fileID: 11400000, guid: a8cdbe7adc1035c4b8f7a744f46dd5b8, type: 2}
+  - {fileID: 11400000, guid: 21346c8355b12aa41b014ba306acbbe5, type: 2}
+  - {fileID: 11400000, guid: aa9930293ef91ad4bb66626fb6489a56, type: 2}
+  - {fileID: 11400000, guid: 70026171e03592c468679706811fcfba, type: 2}
   - {fileID: 11400000, guid: 9ef5aef536b94f44a9805b16914bca5c, type: 2}
+  - {fileID: 11400000, guid: fc75d7bbae9691e47b7124a4e577ab54, type: 2}
+  - {fileID: 11400000, guid: 3fd5d1ff884a9d542b747a073b89640f, type: 2}
+  - {fileID: 11400000, guid: c435222e4380bc041b976f6f8edd812e, type: 2}
   onMissionAccepted:
     m_PersistentCalls:
       m_Calls: []
@@ -4798,7 +4806,15 @@ MonoBehaviour:
   entryListText: {fileID: 1570686065}
   closeButton: {fileID: 1971054657}
   allDiscoveries:
+  - {fileID: 11400000, guid: 41d423760415021469bda9cb3bca8bab, type: 2}
+  - {fileID: 11400000, guid: 4059b6f0f327b91438ae0c38f723a268, type: 2}
+  - {fileID: 11400000, guid: 4f900ddcc6c76a84b8e2f38e33f61b4f, type: 2}
+  - {fileID: 11400000, guid: 12a8998993dfc9c4b80ee348ed1f8cd9, type: 2}
   - {fileID: 11400000, guid: 89dd2279aec6e2246b0e0140f66a78b0, type: 2}
+  - {fileID: 11400000, guid: f0e3687cf3565f64eacf176660d2e7e4, type: 2}
+  - {fileID: 11400000, guid: 53cc4f53a62e1cc4c893f02bcac29514, type: 2}
+  - {fileID: 11400000, guid: 1549831da67528243b2b9271d812ce80, type: 2}
+  - {fileID: 11400000, guid: a3f6563c13308fb4f9e0dfd51a14cfa5, type: 2}
   missionService: {fileID: 0}
 --- !u!1 &1288175867
 GameObject:
