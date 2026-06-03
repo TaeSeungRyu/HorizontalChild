@@ -175,12 +175,8 @@ namespace Game.Editor
                 m =>
                 {
                     m.missionId = "mission.disc.lisbon.gibraltar";
-                    m.type = MissionType.Discovery;
                     m.issuerPort = lisbon;
                     m.targetDiscovery = gibraltar;
-                    m.targetProduct = null;
-                    m.targetPort = null;
-                    m.targetProductQuantity = 0;
                     m.rewardMoney = 1000;
                     m.rewardGoodReputation = 100;
                     m.title = "두 바다가 만나는 좁은 길을 찾아봐요";

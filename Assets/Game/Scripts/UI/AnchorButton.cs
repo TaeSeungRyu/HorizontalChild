@@ -120,11 +120,9 @@ namespace Game.UI
             // 항해 중에 자동 정지 (어린이 친화 — 일단 멈추고 결과 보기)
             playerShip.HardStop();
 
-            // 의뢰 확인
+            // 의뢰 확인 (모든 의뢰는 발견물 의뢰 — 2026-05-31 단순화)
             var mission = missionService.CurrentMission;
-            if (mission == null ||
-                mission.type != MissionType.Discovery ||
-                mission.targetDiscovery == null)
+            if (mission == null || mission.targetDiscovery == null)
             {
                 ShowStatus("지금은 정박해도 찾을 게 없어요.\n먼저 의뢰를 받아 보세요.");
                 return;

@@ -2,21 +2,20 @@ using UnityEngine;
 
 namespace Game.Data
 {
+    /// <summary>
+    /// 발견물 의뢰 템플릿. 2026-05-31 단순화: 교역 의뢰 제거 → 모든 의뢰는 발견물 의뢰.
+    /// </summary>
     [CreateAssetMenu(fileName = "Mission_", menuName = "Game/Data/Mission Template")]
     public class MissionTemplate : ScriptableObject
     {
         [Header("Identity")]
         public string missionId;
-        public MissionType type;
 
-        [Header("Issuer")]
+        [Header("Issuer & Target")]
+        [Tooltip("의뢰 발급 항구. 발견물 가지고 이 항구로 돌아오면 완료.")]
         public PortData issuerPort;
-
-        [Header("Target — Discovery 의뢰는 targetDiscovery만, Trade 의뢰는 targetProduct + targetPort만 채움")]
+        [Tooltip("찾아야 하는 발견물.")]
         public DiscoveryData targetDiscovery;
-        public ProductData targetProduct;
-        public PortData targetPort;
-        [Min(1)] public int targetProductQuantity = 5;
 
         [Header("Rewards")]
         public int rewardMoney = 500;
@@ -25,7 +24,7 @@ namespace Game.Data
         [Header("UI Texts (어린이용)")]
         public string title;
         [TextArea(2, 4)] public string description;
-        [Tooltip("Discovery 의뢰 전용 — 지도 아이템 이름")]
+        [Tooltip("지도 아이템 이름 (예: '지브롤터로 가는 지도')")]
         public string mapItemName;
     }
 }

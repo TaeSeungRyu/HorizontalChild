@@ -122,9 +122,10 @@ public enum CharacterRole { Adventurer, Townsperson }  // §8.17 옵션 A
 
 ### 2.2 모험가 조합 (Adventurers' Guild)
 
-- **발견물 의뢰** 또는 **교역 의뢰** 를 받는 곳.
+- **발견물 의뢰** 만 발급하는 곳 (2026-05-31 단순화). 교역은 시장에서 자유 매매로 분리.
 - **발견물 의뢰**: 좌표가 그려진 지도 아이템을 함께 받음. 발견물에 대한 짧은 정보 제공.
-- **교역 의뢰**: "특정 지역에서 특정 특산물을 사 와라" 또는 "특정 지역에 특정 특산물을 가져다 주어라".
+
+> ⚠ **기획 변경 (2026-05-31)**: 원래 교역 의뢰(TradeBuy/TradeDeliver) 도 있었으나 게임 단순화를 위해 **발견물 의뢰 단일 타입** 으로 통일. MissionType enum 자체 제거. 특산물 매매는 시장(Market) 에서 자유롭게 가능(§4) — 의뢰로 묶지 않음.
 - **동시 보유 의뢰는 최대 1개.** 수행 중이면 다른 의뢰는 받을 수 없다.
 - 의뢰 성공 시: 돈 + 좋은 명성. (실패/포기 정책은 *[해석 결정 필요 — §8.7]*)
 
@@ -324,7 +325,7 @@ public class NpcPool : MonoBehaviour {
 
 - 각 도시의 각 특산물은 **기준 가격(basePrice)** 보강.
 - 입항 시점에 **−20% ~ +20%** 사이에서 임의 결정 (균등 분포 가정. *[해석 결정 필요 — §8.6]*).
-- 같은 특산물의 시세가 **항구 A에서 −20%, 항구 B에서 +20%** 이면 차익 거래로 돈 벌이 가능 → 교역 미션의 동기.
+- 같은 특산물의 시세가 **항구 A에서 −20%, 항구 B에서 +20%** 이면 차익 거래로 돈 벌이 가능 → 시장 매매로 수익. (교역 의뢰는 제거됨, 자유 매매만)
 
 ### 4.4 데이터 모델
 
@@ -386,18 +387,20 @@ public class NpcPool : MonoBehaviour {
 
 ### 5.6 데이터 모델
 
-```csharp
-public enum MissionType { Discovery, TradeBuy, TradeDeliver }
+> 2026-05-31 단순화: MissionType enum 제거. 모든 의뢰는 발견물 의뢰. targetProduct / targetPortId / targetProductQuantity 같은 교역 전용 필드도 제거.
 
+```csharp
 [CreateAssetMenu] public class MissionTemplate : ScriptableObject {
     public string missionId;
-    public MissionType type;
-    public string issuerPortId;
-    public string targetPortId;        // for Trade
-    public ProductData targetProduct;  // for Trade
-    public DiscoveryData targetDiscovery; // for Discovery
+    public PortData issuerPort;             // 의뢰 발급 항구 (복귀처 겸용)
+    public DiscoveryData targetDiscovery;   // 찾아야 하는 발견물
     public int rewardMoney;
     public int rewardGoodReputation;
+
+    // UI 텍스트 (어린이용)
+    public string title;
+    public string description;
+    public string mapItemName;
 }
 
 [Serializable] public class MapItem {

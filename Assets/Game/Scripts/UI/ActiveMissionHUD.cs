@@ -104,7 +104,8 @@ namespace Game.UI
             if (missionTitleText != null) missionTitleText.text = m.title;
             if (progressText == null) return;
 
-            if (m.type == MissionType.Discovery && m.targetDiscovery != null)
+            // 2026-05-31 단순화: 모든 의뢰는 발견물 의뢰
+            if (m.targetDiscovery != null)
             {
                 bool discovered = missionService.DiscoveredIds.Contains(m.targetDiscovery.discoveryId);
                 if (discovered)
@@ -117,11 +118,6 @@ namespace Game.UI
                 {
                     progressText.text = $"{m.targetDiscovery.displayNameKo} 을(를) 찾아보세요.";
                 }
-            }
-            else if (m.type == MissionType.TradeBuy || m.type == MissionType.TradeDeliver)
-            {
-                // M2 이후 교역 의뢰에서 상세 진행도 채움
-                progressText.text = m.description;
             }
             else
             {

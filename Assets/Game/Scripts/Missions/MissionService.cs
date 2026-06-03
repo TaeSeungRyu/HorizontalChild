@@ -82,8 +82,8 @@ namespace Game.Missions
                 if (mission == null) continue;
                 if (mission.issuerPort != port) continue;
                 if (CompletedMissionIds.Contains(mission.missionId)) continue;
-                if (mission.type == MissionType.Discovery &&
-                    mission.targetDiscovery != null &&
+                // 이미 발견한 발견물의 의뢰는 발급 X
+                if (mission.targetDiscovery != null &&
                     DiscoveredIds.Contains(mission.targetDiscovery.discoveryId)) continue;
 
                 result.Add(mission);
@@ -149,16 +149,12 @@ namespace Game.Missions
             if (CurrentMission.issuerPort != port) return null;
 
             // 발견물 의뢰 — 도감에 해당 발견물이 있는지 확인
-            if (CurrentMission.type == MissionType.Discovery)
+            if (CurrentMission.targetDiscovery == null) return null;
+            if (!DiscoveredIds.Contains(CurrentMission.targetDiscovery.discoveryId))
             {
-                if (CurrentMission.targetDiscovery == null) return null;
-                if (!DiscoveredIds.Contains(CurrentMission.targetDiscovery.discoveryId))
-                {
-                    Debug.Log("[MissionService] 의뢰 완료 조건 미충족 — 발견물 미발견");
-                    return null;
-                }
+                Debug.Log("[MissionService] 의뢰 완료 조건 미충족 — 발견물 미발견");
+                return null;
             }
-            // TODO M2: 교역 의뢰 (TradeBuy / TradeDeliver) 완료 조건 — 인벤토리/화물 시스템 필요
 
             var completed = CurrentMission;
             CompletedMissionIds.Add(completed.missionId);

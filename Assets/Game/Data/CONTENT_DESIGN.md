@@ -806,38 +806,25 @@ _(위 양식을 복사해서 발견물 추가)_
 
 ### 2.7 의뢰 시드 (MissionTemplate)
 
-> `GAME_MECHANICS.md` §5 (발견물 미션) + §2.2 (모험가 조합) 모델 기준. 각 시작 항구에서 발급할 **첫 의뢰 1쌍씩(발견물 1 + 교역 1) = 18개** 시드.
+> ⚠ **2026-05-31 기획 변경**: 교역 의뢰(TradeBuy/TradeDeliver) 모두 제거. **발견물 의뢰 단일 타입**. 특산물 매매는 시장(Market)에서 자유 매매로만.
 >
-> 보상 수치는 잠정 — 게임 밸런싱 시 조정. ID 명명: `mission.<type>.<항구>.<목표키워드>`.
-
-#### 의뢰 타입
-
-- **Discovery** (발견물): 의뢰 항구에서 받음 → 지도 아이템 → 좌표 ±3% 도달 → 정박 및 탐색 → 의뢰 항구 복귀.
-- **TradeBuy** (사 오기): 다른 항구에서 특정 특산물을 사 와서 의뢰 항구로 돌아옴.
-- **TradeDeliver** (가져다 주기): 의뢰 항구에서 화물을 받아 다른 항구로 전달.
+> `GAME_MECHANICS.md` §5 (발견물 미션) + §2.2 (모험가 조합) 모델 기준. 각 시작 항구에서 발급할 **발견물 의뢰 1개씩 = 9개** 시드.
+>
+> 보상 수치는 잠정 — 게임 밸런싱 시 조정. ID 명명: `mission.disc.<항구>.<발견물키워드>`.
 
 #### 의뢰 시드 요약 표
 
-| ID                                        | 발급 항구        | 타입         | 목표 (발견물 또는 특산물)    | 목표 항구        | 보상 돈 | 좋은 명성 | 거리            |
-| ----------------------------------------- | ---------------- | ------------ | ---------------------------- | ---------------- | ------- | --------- | --------------- |
-| `mission.disc.lisbon.gibraltar` ⭐ M1     | `port.lisbon`    | Discovery    | `disc.gibraltar_strait`      | (현지 복귀)      | 1,000   | +100      | 단거리          |
-| `mission.trade.lisbon.ceuta_salt_cod`     | `port.lisbon`    | TradeDeliver | `product.salt_cod` 5개       | `port.ceuta`     | 500     | +50       | 단거리          |
-| `mission.disc.ceuta.cape_bojador`         | `port.ceuta`     | Discovery    | `disc.cape_bojador`          | (현지 복귀)      | 1,500   | +150      | 중거리          |
-| `mission.trade.ceuta.lisbon_cork`         | `port.ceuta`     | TradeBuy     | `product.cork` 5개           | `port.lisbon`    | 500     | +50       | 단거리          |
-| `mission.disc.sevilla.canary`             | `port.sevilla`   | Discovery    | `disc.canary_islands`        | (현지 복귀)      | 1,500   | +150      | 중거리          |
-| `mission.trade.sevilla.lisbon_madeira` ⭐ | `port.sevilla`   | TradeBuy     | `product.madeira_wine` 3통   | `port.lisbon`    | 3,000   | +200      | 중거리 (스페셜) |
-| `mission.disc.venezia.blue_grotto`        | `port.venezia`   | Discovery    | `disc.blue_grotto`           | (현지 복귀)      | 1,500   | +150      | 중거리          |
-| `mission.trade.venezia.istanbul_clove`    | `port.venezia`   | TradeBuy     | `product.spice_clove` 5개    | `port.istanbul`  | 1,500   | +100      | 중거리          |
-| `mission.disc.amsterdam.texel_seals`      | `port.amsterdam` | Discovery    | `disc.texel_seals`           | (현지 복귀)      | 1,000   | +100      | 단거리          |
-| `mission.trade.amsterdam.london_cheese`   | `port.amsterdam` | TradeDeliver | `product.dutch_cheese` 5개   | `port.london`    | 500     | +50       | 단거리          |
-| `mission.disc.london.dover`               | `port.london`    | Discovery    | `disc.white_cliffs_of_dover` | (현지 복귀)      | 1,000   | +100      | 단거리          |
-| `mission.trade.london.amsterdam_tulip`    | `port.london`    | TradeBuy     | `product.tulip` 5개          | `port.amsterdam` | 500     | +50       | 단거리          |
-| `mission.disc.istanbul.bosphorus`         | `port.istanbul`  | Discovery    | `disc.bosphorus_strait`      | (현지 복귀)      | 1,000   | +100      | 단거리          |
-| `mission.trade.istanbul.venezia_clove`    | `port.istanbul`  | TradeDeliver | `product.spice_clove` 5개    | `port.venezia`   | 1,500   | +100      | 중거리          |
-| `mission.disc.busan.hallasan`             | `port.busan`     | Discovery    | `disc.hallasan_mountain`     | (현지 복귀)      | 1,500   | +150      | 중거리          |
-| `mission.trade.busan.guangzhou_silk`      | `port.busan`     | TradeBuy     | `product.silk` 5개           | `port.guangzhou` | 2,000   | +150      | 장거리          |
-| `mission.disc.guangzhou.pearl_river`      | `port.guangzhou` | Discovery    | `disc.pearl_river_delta`     | (현지 복귀)      | 1,000   | +100      | 단거리          |
-| `mission.trade.guangzhou.busan_porcelain` | `port.guangzhou` | TradeDeliver | `product.porcelain` 5개      | `port.busan`     | 2,000   | +150      | 장거리          |
+| ID                                        | 발급 항구        | 목표 발견물                  | 보상 돈 | 좋은 명성 | 거리            |
+| ----------------------------------------- | ---------------- | ---------------------------- | ------- | --------- | --------------- |
+| `mission.disc.lisbon.gibraltar` ⭐ M1     | `port.lisbon`    | `disc.gibraltar_strait`      | 1,000   | +100      | 단거리          |
+| `mission.disc.ceuta.cape_bojador`         | `port.ceuta`     | `disc.cape_bojador`          | 1,500   | +150      | 중거리          |
+| `mission.disc.sevilla.canary`             | `port.sevilla`   | `disc.canary_islands`        | 1,500   | +150      | 중거리          |
+| `mission.disc.venezia.blue_grotto`        | `port.venezia`   | `disc.blue_grotto`           | 1,500   | +150      | 중거리          |
+| `mission.disc.amsterdam.texel_seals`      | `port.amsterdam` | `disc.texel_seals`           | 1,000   | +100      | 단거리          |
+| `mission.disc.london.dover`               | `port.london`    | `disc.white_cliffs_of_dover` | 1,000   | +100      | 단거리          |
+| `mission.disc.istanbul.bosphorus`         | `port.istanbul`  | `disc.bosphorus_strait`      | 1,000   | +100      | 단거리          |
+| `mission.disc.busan.hallasan`             | `port.busan`     | `disc.hallasan_mountain`     | 1,500   | +150      | 중거리          |
+| `mission.disc.guangzhou.pearl_river`      | `port.guangzhou` | `disc.pearl_river_delta`     | 1,000   | +100      | 단거리          |
 
 #### 의뢰별 어린이용 텍스트 (모험가 조합 UI)
 
@@ -849,21 +836,11 @@ _(위 양식을 복사해서 발견물 추가)_
 - **설명**: "리스본 남쪽 바다 어딘가에, 큰 바다와 잔잔한 바다를 잇는 좁은 바닷길이 있대요. 그곳을 찾아 지도에 점을 찍어 주세요."
 - **지도 아이템 이름**: "지브롤터로 가는 지도"
 
-##### `mission.trade.lisbon.ceuta_salt_cod`
-
-- **제목**: "세우타로 소금 대구를 전해 주세요"
-- **설명**: "북아프리카의 작은 항구 세우타에서 소금 대구를 기다리고 있어요. 우리 리스본에서 다섯 상자 가져다 주세요."
-
 ##### `mission.disc.ceuta.cape_bojador`
 
 - **제목**: "남쪽 바다의 알 수 없는 곶을 알아봐 주세요"
 - **설명**: "세우타에서 더 남쪽으로 내려가면, 옛 뱃사람들이 잘 모르던 곶이 있다고 해요. 직접 가서 어떤 곳인지 살펴봐 주세요."
 - **지도 아이템 이름**: "보자도르 곶의 지도"
-
-##### `mission.trade.ceuta.lisbon_cork`
-
-- **제목**: "리스본에서 코르크 다섯 상자를 사 오세요"
-- **설명**: "세우타에는 코르크가 부족하답니다. 리스본에 가서 다섯 상자만 사 오면 좋겠어요."
 
 ##### `mission.disc.sevilla.canary`
 
@@ -871,21 +848,11 @@ _(위 양식을 복사해서 발견물 추가)_
 - **설명**: "세비야에서 남서쪽 큰 바다로 나가면 일곱 개의 따뜻한 섬이 있다고 해요. 그곳을 직접 가 봐 주세요."
 - **지도 아이템 이름**: "카나리아 제도로 가는 지도"
 
-##### `mission.trade.sevilla.lisbon_madeira` ⭐ 스페셜
-
-- **제목**: "리스본에서 귀한 마데이라 와인을 구해 와요"
-- **설명**: "리스본 사람들이 햇볕에 잘 익힌 마데이라 와인을 구해 와 주실 수 있나요? 세 통이면 충분해요. (어른용 화물)"
-
 ##### `mission.disc.venezia.blue_grotto`
 
 - **제목**: "남쪽 바다의 푸른 동굴을 찾아봐요"
 - **설명**: "베네치아 남쪽 작은 섬 옆에 빛이 푸르게 빛나는 동굴이 있대요. 그곳을 직접 보고 와 주세요."
 - **지도 아이템 이름**: "푸른 동굴의 지도"
-
-##### `mission.trade.venezia.istanbul_clove`
-
-- **제목**: "이스탄불에서 향기로운 정향을 사 오세요"
-- **설명**: "베네치아 시장에서 정향이 떨어졌어요. 이스탄불에 가서 다섯 봉지만 사 오세요."
 
 ##### `mission.disc.amsterdam.texel_seals`
 
@@ -893,21 +860,11 @@ _(위 양식을 복사해서 발견물 추가)_
 - **설명**: "암스테르담 북쪽 바다의 작은 섬에 바다표범 가족이 산다고 해요. 멀리서 살짝 인사하고 와 주세요."
 - **지도 아이템 이름**: "텍셀 섬의 지도"
 
-##### `mission.trade.amsterdam.london_cheese`
-
-- **제목**: "런던에 네덜란드 치즈를 전해 주세요"
-- **설명**: "바다 건너 런던 사람들이 네덜란드 치즈를 기다리고 있어요. 다섯 덩이만 전해 주세요."
-
 ##### `mission.disc.london.dover`
 
 - **제목**: "남쪽 바닷가의 흰 절벽을 만나 봐요"
 - **설명**: "런던 남쪽 바다 끝에 새하얀 절벽이 우뚝 솟아 있다고 해요. 멀리서 그 모습을 보고 와 주세요."
 - **지도 아이템 이름**: "도버 절벽의 지도"
-
-##### `mission.trade.london.amsterdam_tulip`
-
-- **제목**: "암스테르담의 튤립을 사 오세요"
-- **설명**: "런던 정원사들이 봄에 피는 큰 꽃 튤립을 구하고 있어요. 암스테르담에서 다섯 화분만 가져와 주세요."
 
 ##### `mission.disc.istanbul.bosphorus`
 
@@ -915,21 +872,11 @@ _(위 양식을 복사해서 발견물 추가)_
 - **설명**: "이스탄불 한가운데를 지나는 좁은 바닷길이 있대요. 그곳에 점을 찍어 주세요."
 - **지도 아이템 이름**: "보스포루스 해협의 지도"
 
-##### `mission.trade.istanbul.venezia_clove`
-
-- **제목**: "베네치아에 정향을 전해 주세요"
-- **설명**: "베네치아 시장에서 정향이 떨어졌다는 소식이 들렸어요. 이스탄불의 향신료를 다섯 봉지 챙겨 전해 주세요."
-
 ##### `mission.disc.busan.hallasan`
 
 - **제목**: "남쪽 바다 끝 큰 산을 찾아봐요"
 - **설명**: "부산에서 남쪽으로 내려가면 큰 산이 있는 섬이 있어요. 그 산을 직접 보고 돌아와 주세요."
 - **지도 아이템 이름**: "한라산 가는 지도"
-
-##### `mission.trade.busan.guangzhou_silk`
-
-- **제목**: "광저우에서 비단을 사 오세요"
-- **설명**: "조선의 양반 댁에서 광저우 비단을 찾아요. 다섯 필만 사 오면 좋겠어요. 길이 멀지만 무사히 다녀와 주세요."
 
 ##### `mission.disc.guangzhou.pearl_river`
 
@@ -937,15 +884,10 @@ _(위 양식을 복사해서 발견물 추가)_
 - **설명**: "광저우의 큰 강이 바다와 만나는 곳을 직접 살펴보고 와 주세요."
 - **지도 아이템 이름**: "주강 삼각주 지도"
 
-##### `mission.trade.guangzhou.busan_porcelain`
-
-- **제목**: "조선의 부산에 도자기를 전해 주세요"
-- **설명**: "조선 부산에서 광저우 도자기를 기다리고 있다는 소식이 들려왔어요. 다섯 상자만 잘 포장해 전해 주세요."
-
 #### 다음 단계
 
 - 의뢰 텍스트 사용자 검수 후 SO 인스턴스로 옮긴다.
-- M3 확장 항구 13개의 의뢰는 후속 작업.
+- M3 확장 항구 13개의 의뢰는 후속 작업 (전부 발견물 의뢰).
 - 의뢰 실패/포기 정책 (`GAME_MECHANICS.md` §8.7) 결정 후 시간 제한·페널티 필드 추가.
 
 ---
@@ -1137,7 +1079,7 @@ _(위 양식을 복사해서 발견물 추가)_
 | 발견물 (`DiscoveryData`) | 1                     | 20                     | 100     | **26 ✅ (M3 목표 초과)** — 랜드마크 9 · 동식물 **8** · 유적 6 · 사건 3 |
 | 지역 (`RegionData`)      | 5                     | 8                      | 10~12   | **5 ✅ (M2)** — M3 확장 후보 3개 시드 표시                             |
 | 캐릭터 (`CharacterData`) | 8                     | 16~20                  | 30+     | **16 ✅ (M3 하한 달성)** — 실존 8명 + 가상 8명, 성별 균형              |
-| 의뢰 (`MissionTemplate`) | 18 (각 시작 항구 1쌍) | 44 (M3 항구 13개 추가) | 100+    | **18 ✅ (M2 목표 달성)** — 발견물 9 + 교역 9                           |
+| 의뢰 (`MissionTemplate`) | 9 (시작 항구당 발견물 1)| 22 (M3 항구 13개 추가) | 50+     | **9 ✅ (M2 목표 달성)** — 발견물 의뢰만 (교역 의뢰 제거됨, 2026-05-31) |
 | 선박 (`ShipData`)        | 5~10                  | 10~15                  | 15+     | **11 ✅ (M2 목표 달성)** — 캐러벨~보선 + 빠른 약탈선                   |
 
 > 각 행을 채워나갈 때마다 "현재" 칸을 수동 갱신.

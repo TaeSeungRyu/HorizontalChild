@@ -159,7 +159,7 @@
 - **`ProductData`** (특산물): 이름, 아이콘, basePrice, **`isSpecial` 플래그**(미션 전용), 원산지 항구.
 - **`ShipData`** (배): 이름, cannonPower(1~30), speed(1~10), cargoCapacity(10~1000), maxDurability(10~200), basePrice, 명성 게이트.
 - **`DiscoveryData`** (발견물): 이름, 카테고리, 좌표, 일러스트, 해설, 관련 국가, **미션 전용 발견 가능**.
-- **`MissionTemplate`** (의뢰): 타입(Discovery/TradeBuy/TradeDeliver), 발급 항구, 목표(특산물 또는 발견물), 보상.
+- **`MissionTemplate`** (의뢰): 발급 항구, 목표 발견물, 보상. **2026-05-31 단순화 — 발견물 의뢰만. 교역 의뢰는 기획에서 제거.** 특산물 매매는 시장(Market)에서 자유 매매로만.
 - **`RegionData`**: 여러 항구/발견물을 묶는 지역. 잠금/해제 상태.
 
 캐릭터·NPC SO:
