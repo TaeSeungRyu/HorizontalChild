@@ -31,6 +31,7 @@ namespace Game.Editor
             total += RefreshCatalogOfType<MissionCatalog, MissionTemplate>(c => c.all, (c, arr) => c.all = arr);
             total += RefreshCatalogOfType<PortCatalog, PortData>(c => c.all, (c, arr) => c.all = arr);
             total += RefreshCatalogOfType<NationCatalog, NationData>(c => c.all, (c, arr) => c.all = arr);
+            total += RefreshCatalogOfType<LandmassCatalog, LandmassData>(c => c.all, (c, arr) => c.all = arr);
 
             AssetDatabase.SaveAssets();
             Debug.Log($"[CatalogRefresher] 완료. 총 {total}개 SO 가 카탈로그에 등록됨.");
@@ -51,6 +52,10 @@ namespace Game.Editor
         [MenuItem("Game/Refresh Nation Catalog")]
         public static void RefreshNation() =>
             RunSingle<NationCatalog, NationData>(c => c.all, (c, arr) => c.all = arr);
+
+        [MenuItem("Game/Refresh Landmass Catalog")]
+        public static void RefreshLandmass() =>
+            RunSingle<LandmassCatalog, LandmassData>(c => c.all, (c, arr) => c.all = arr);
 
         private static void RunSingle<TCatalog, TItem>(
             System.Func<TCatalog, TItem[]> getter,

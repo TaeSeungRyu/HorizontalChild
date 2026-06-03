@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 450504fc685147246a7287917fcdb960, type: 3}
+  m_Name: LandmassCatalog
+  m_EditorClassIdentifier: Game::Game.Data.LandmassCatalog
+  all:
+  - {fileID: 11400000, guid: 4e5b037b1b989294dac01cf5c9780580, type: 2}
+  - {fileID: 11400000, guid: 1738db4de0c8e324991f492d2b67bcb5, type: 2}
+  - {fileID: 11400000, guid: f5a6b6d26ded3a444a1ec674919d3269, type: 2}
+  - {fileID: 11400000, guid: 629c7f110c5ee7e4f823c76898bb20f7, type: 2}
+  - {fileID: 11400000, guid: 406615c8c42034d47bea889f6621c098, type: 2}
+  - {fileID: 11400000, guid: dde1d5a07302e6642954022d672525ed, type: 2}
+  - {fileID: 11400000, guid: 954be31f08fc78147ae707e18e8af63c, type: 2}
+  - {fileID: 11400000, guid: eb4e7e777922fab41a7f157d75ecda3c, type: 2}
+  - {fileID: 11400000, guid: 500e4c6ab8cebcf48901b57079b79257, type: 2}
+  - {fileID: 11400000, guid: 5361906770b30ee42934138ef9735c39, type: 2}
+  - {fileID: 11400000, guid: 9cd0df03f2ac77942b15587d87781c83, type: 2}
+  - {fileID: 11400000, guid: 6304c1ad737b73642a4917af45601c14, type: 2}

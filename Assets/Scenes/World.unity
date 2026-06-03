@@ -1835,6 +1835,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game::Game.World.SeaWorldManager
   playerShip: {fileID: 1690041783}
+  portCatalog: {fileID: 0}
   activePorts:
   - {fileID: 11400000, guid: b09782d33c0ce4e43999e0b9badc47a5, type: 2}
   - {fileID: 11400000, guid: 3f72a76a28a4d8f42b4c3332002d28fa, type: 2}
@@ -1845,6 +1846,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0c812b37aed16004189c4427c168140a, type: 2}
   - {fileID: 11400000, guid: 79006b120a9b7ee449e7d079b682a591, type: 2}
   - {fileID: 11400000, guid: f54cafdbf47aabd449efdecdefe34c9c, type: 2}
+  discoveryCatalog: {fileID: 0}
   activeDiscoveries:
   - {fileID: 11400000, guid: 41d423760415021469bda9cb3bca8bab, type: 2}
   - {fileID: 11400000, guid: 4059b6f0f327b91438ae0c38f723a268, type: 2}
@@ -1911,6 +1913,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82c902aa54e30374ca87a574348765f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game::Game.Missions.MissionService
+  missionCatalog: {fileID: 0}
   allMissions:
   - {fileID: 11400000, guid: da3ef7bfa0dd9404ba71a43158eb9a62, type: 2}
   - {fileID: 11400000, guid: a8cdbe7adc1035c4b8f7a744f46dd5b8, type: 2}
@@ -4012,6 +4015,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1173055747}
   m_CullTransparentMesh: 1
+--- !u!1 &1174671206
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1174671207}
+  - component: {fileID: 1174671208}
+  m_Layer: 0
+  m_Name: LandmassRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1174671207
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1174671206}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 582, y: 228.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1174671208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1174671206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cb49dc22740adc4cbb6fb44ea76e984, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game::Game.World.LandmassPlacer
+  landmassCatalog: {fileID: 11400000, guid: 3f129698d4c79aa49afa6ad0734137c3, type: 2}
+  landmasses: []
+  defaultMaterial: {fileID: 0}
+  landmassesParent: {fileID: 0}
 --- !u!1 &1195015913
 GameObject:
   m_ObjectHideFlags: 0
@@ -4805,6 +4856,7 @@ MonoBehaviour:
   countText: {fileID: 1574801177}
   entryListText: {fileID: 1570686065}
   closeButton: {fileID: 1971054657}
+  discoveryCatalog: {fileID: 0}
   allDiscoveries:
   - {fileID: 11400000, guid: 41d423760415021469bda9cb3bca8bab, type: 2}
   - {fileID: 11400000, guid: 4059b6f0f327b91438ae0c38f723a268, type: 2}
@@ -7997,6 +8049,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game::Game.UI.NationSelectionPanel
   panelRoot: {fileID: 0}
   autoShowOnStart: 1
+  nationCatalog: {fileID: 0}
   nations:
   - {fileID: 11400000, guid: eb895b40b2897d649806972105641d59, type: 2}
   - {fileID: 11400000, guid: 804e011f398380d449247e5c259e623a, type: 2}
@@ -8233,6 +8286,8 @@ MonoBehaviour:
   activeDeceleration: 3
   steerAction: {fileID: 1340970961}
   throttleAction: {fileID: 1314964416}
+  collisionCheckRadius: 2
+  blockMovementOnLand: 1
 --- !u!4 &1690041786 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5c9ad7a665eb406438ee1b1c10ac8165, type: 3}
@@ -10928,3 +10983,4 @@ SceneRoots:
   - {fileID: 600646455}
   - {fileID: 224066306}
   - {fileID: 247510710}
+  - {fileID: 1174671207}

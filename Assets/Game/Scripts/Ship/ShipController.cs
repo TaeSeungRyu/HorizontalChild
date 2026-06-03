@@ -50,6 +50,13 @@ namespace Game.Ship
         [Tooltip("가속/감속 — float 액션 (-1 ~ +1).")]
         public InputActionReference throttleAction;
 
+        [Header("Collision")]
+        [Tooltip("육지(Landmass) 와의 충돌 검사 반경 (Unity Unit). 배 너비 정도.")]
+        [Range(0.5f, 10f)] public float collisionCheckRadius = 2f;
+
+        [Tooltip("육지에 부딪힐 때 즉시 정지할지. 기획상 어린이 친화 — 데미지 X, 멈춤만.")]
+        public bool blockMovementOnLand = true;
+
         // ─── 런타임 상태 ─────────────────────────────────────────────────────
 
         public float CurrentSpeed { get; private set; }
@@ -138,8 +145,38 @@ namespace Game.Ship
 
             if (_currentSpeed > 0.0001f)
             {
-                transform.position += transform.forward * (_currentSpeed * Time.deltaTime);
+                var moveDelta = transform.forward * (_currentSpeed * Time.deltaTime);
+                var newPos = transform.position + moveDelta;
+
+                if (blockMovementOnLand && IsLandAt(newPos))
+                {
+                    // 어린이 친화 — 데미지 없이 그냥 멈춤 (튕기지 않음)
+                    _currentSpeed = 0f;
+                    CurrentSpeed = 0f;
+                    return;
+                }
+
+                transform.position = newPos;
             }
+        }
+
+        /// <summary>
+        /// 주어진 월드 위치가 육지(Landmass) 안인지 검사.
+        /// Physics.OverlapSphere 결과에 Landmass 컴포넌트가 있으면 true.
+        /// </summary>
+        private static readonly Collider[] _overlapBuffer = new Collider[8];
+        private bool IsLandAt(Vector3 worldPos)
+        {
+            int count = Physics.OverlapSphereNonAlloc(worldPos, collisionCheckRadius, _overlapBuffer);
+            for (int i = 0; i < count; i++)
+            {
+                if (_overlapBuffer[i] == null) continue;
+                if (_overlapBuffer[i].GetComponentInParent<World.Landmass>() != null)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>
