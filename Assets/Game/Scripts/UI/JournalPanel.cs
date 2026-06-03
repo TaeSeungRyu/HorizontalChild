@@ -33,9 +33,15 @@ namespace Game.UI
         public TMP_Text entryListText;
         public Button closeButton;
 
-        [Header("Catalog")]
-        [Tooltip("게임에 등장하는 모든 발견물. 인스펙터에서 등록.")]
+        [Header("Catalog — DiscoveryCatalog 우선, 비어 있으면 배열 fallback")]
+        [Tooltip("DiscoveryCatalog SO. Game ▸ Refresh All Catalogs 로 자동 채워짐. 우선 사용.")]
+        public DiscoveryCatalog discoveryCatalog;
+        [Tooltip("Fallback: 카탈로그 없을 때 직접 등록할 발견물 배열.")]
         public DiscoveryData[] allDiscoveries;
+
+        private DiscoveryData[] EffectiveDiscoveries =>
+            (discoveryCatalog != null && discoveryCatalog.all != null && discoveryCatalog.all.Length > 0)
+                ? discoveryCatalog.all : allDiscoveries;
 
         [Header("Service")]
         public MissionService missionService;
@@ -66,11 +72,12 @@ namespace Game.UI
         {
             if (titleText != null) titleText.text = "도감";
 
-            int total = allDiscoveries?.Length ?? 0;
+            var discoveries = EffectiveDiscoveries;
+            int total = discoveries?.Length ?? 0;
             int found = 0;
-            if (missionService != null && allDiscoveries != null)
+            if (missionService != null && discoveries != null)
             {
-                foreach (var disc in allDiscoveries)
+                foreach (var disc in discoveries)
                 {
                     if (disc == null) continue;
                     if (missionService.DiscoveredIds.Contains(disc.discoveryId)) found++;
@@ -90,7 +97,8 @@ namespace Game.UI
 
         private string BuildEntryList()
         {
-            if (allDiscoveries == null || allDiscoveries.Length == 0)
+            var discoveries = EffectiveDiscoveries;
+            if (discoveries == null || discoveries.Length == 0)
             {
                 return "아직 등록된 항목이 없어요.";
             }
@@ -98,7 +106,7 @@ namespace Game.UI
             var sb = new StringBuilder();
             bool service = missionService != null;
 
-            foreach (var disc in allDiscoveries)
+            foreach (var disc in discoveries)
             {
                 if (disc == null) continue;
                 bool isFound = service && missionService.DiscoveredIds.Contains(disc.discoveryId);

@@ -25,9 +25,15 @@ namespace Game.Missions
     {
         public static MissionService Instance { get; private set; }
 
-        [Header("Catalog (Inspector 에서 할당)")]
-        [Tooltip("게임에 등장하는 모든 의뢰 템플릿. CONTENT_DESIGN.md §2.7 시드 사용.")]
+        [Header("Catalog — MissionCatalog 우선, 비어 있으면 배열 fallback")]
+        [Tooltip("MissionCatalog SO. Game ▸ Refresh All Catalogs 로 자동 채워짐. 우선 사용.")]
+        public MissionCatalog missionCatalog;
+        [Tooltip("Fallback: 카탈로그 없을 때 직접 등록할 의뢰 배열.")]
         public MissionTemplate[] allMissions;
+
+        public MissionTemplate[] EffectiveMissions =>
+            (missionCatalog != null && missionCatalog.all != null && missionCatalog.all.Length > 0)
+                ? missionCatalog.all : allMissions;
 
         [Header("Events")]
         public UnityEvent<MissionTemplate> onMissionAccepted;
@@ -75,9 +81,10 @@ namespace Game.Missions
         public List<MissionTemplate> GetAvailableMissionsForPort(PortData port)
         {
             var result = new List<MissionTemplate>();
-            if (port == null || allMissions == null) return result;
+            var missions = EffectiveMissions;
+            if (port == null || missions == null) return result;
 
-            foreach (var mission in allMissions)
+            foreach (var mission in missions)
             {
                 if (mission == null) continue;
                 if (mission.issuerPort != port) continue;

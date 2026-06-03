@@ -32,9 +32,15 @@ namespace Game.UI
         [Tooltip("시작 시 자동으로 표시할지. 게임 시작 → 국적 선택 흐름이면 true.")]
         public bool autoShowOnStart = true;
 
-        [Header("Catalog")]
-        [Tooltip("선택 가능한 8개국 NationData. 인스펙터에서 드래그.")]
+        [Header("Catalog — NationCatalog 우선, 비어 있으면 배열 fallback")]
+        [Tooltip("NationCatalog SO. Game ▸ Refresh All Catalogs 로 자동 채워짐. 우선 사용.")]
+        public NationCatalog nationCatalog;
+        [Tooltip("Fallback: 카탈로그 없을 때 직접 등록할 국가 배열.")]
         public NationData[] nations;
+
+        private NationData[] EffectiveNations =>
+            (nationCatalog != null && nationCatalog.all != null && nationCatalog.all.Length > 0)
+                ? nationCatalog.all : nations;
 
         [Header("Button Generation")]
         public Transform buttonContainer;
@@ -94,7 +100,8 @@ namespace Game.UI
 
         private void BuildButtons()
         {
-            if (buttonContainer == null || nationButtonPrefab == null || nations == null) return;
+            var nationsArr = EffectiveNations;
+            if (buttonContainer == null || nationButtonPrefab == null || nationsArr == null) return;
 
             // 기존 자식 모두 제거 (Show 재호출 대비)
             for (int i = buttonContainer.childCount - 1; i >= 0; i--)
@@ -102,7 +109,7 @@ namespace Game.UI
                 Destroy(buttonContainer.GetChild(i).gameObject);
             }
 
-            foreach (var nation in nations)
+            foreach (var nation in nationsArr)
             {
                 if (nation == null) continue;
                 var go = Instantiate(nationButtonPrefab, buttonContainer);

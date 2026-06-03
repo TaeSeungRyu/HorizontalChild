@@ -26,12 +26,25 @@ namespace Game.World
         [Tooltip("씬의 플레이어 배. 위치를 받아 정박 위치 계산.")]
         public ShipController playerShip;
 
-        [Header("Database (M1: SeederContent 로 채워 둔 SO 들)")]
-        [Tooltip("월드에 배치할 항구 목록.")]
+        [Header("Database — 카탈로그 우선, 비어 있으면 배열 fallback")]
+        [Tooltip("PortCatalog SO. Game ▸ Refresh All Catalogs 로 자동 채워짐. 우선 사용.")]
+        public PortCatalog portCatalog;
+        [Tooltip("Fallback: 카탈로그 없을 때 직접 등록할 항구 배열.")]
         public PortData[] activePorts;
 
-        [Tooltip("탐색 가능한 발견물 목록. 의뢰 수행 중일 때만 검출되게 하는 것은 별도 시스템에서 처리.")]
+        [Tooltip("DiscoveryCatalog SO. 우선 사용.")]
+        public DiscoveryCatalog discoveryCatalog;
+        [Tooltip("Fallback: 카탈로그 없을 때 직접 등록할 발견물 배열.")]
         public DiscoveryData[] activeDiscoveries;
+
+        // 카탈로그가 채워져 있으면 그것을 우선, 아니면 인스펙터 배열
+        public PortData[] EffectivePorts =>
+            (portCatalog != null && portCatalog.all != null && portCatalog.all.Length > 0)
+                ? portCatalog.all : activePorts;
+
+        public DiscoveryData[] EffectiveDiscoveries =>
+            (discoveryCatalog != null && discoveryCatalog.all != null && discoveryCatalog.all.Length > 0)
+                ? discoveryCatalog.all : activeDiscoveries;
 
         [Header("Visuals")]
         [Tooltip("항구 아이콘 프리팹. 비어 있으면 아이콘 생성을 건너뜀.")]
@@ -85,11 +98,12 @@ namespace Game.World
         /// </summary>
         private void CheckPortArrival()
         {
-            if (playerShip == null || activePorts == null) return;
+            var ports = EffectivePorts;
+            if (playerShip == null || ports == null) return;
 
             var shipPos = playerShip.transform.position;
 
-            foreach (var port in activePorts)
+            foreach (var port in ports)
             {
                 if (port == null) continue;
 
@@ -129,11 +143,12 @@ namespace Game.World
 
         private void SpawnPortIcons()
         {
-            if (activePorts == null || activePorts.Length == 0) return;
+            var ports = EffectivePorts;
+            if (ports == null || ports.Length == 0) return;
             if (portIconPrefab == null) return;
             if (portIconsParent == null) portIconsParent = transform;
 
-            foreach (var port in activePorts)
+            foreach (var port in ports)
             {
                 if (port == null) continue;
 
@@ -165,7 +180,8 @@ namespace Game.World
         public bool TryAnchorAndSearch(out DiscoveryData found)
         {
             found = null;
-            if (playerShip == null || activeDiscoveries == null) return false;
+            var discoveries = EffectiveDiscoveries;
+            if (playerShip == null || discoveries == null) return false;
 
             var anchorPos = playerShip.transform.position;
             int keenEye = playerShip.captain != null ? playerShip.captain.keenEye : 50;
@@ -173,7 +189,7 @@ namespace Game.World
             float closestDist = float.MaxValue;
             DiscoveryData closest = null;
 
-            foreach (var disc in activeDiscoveries)
+            foreach (var disc in discoveries)
             {
                 if (disc == null) continue;
 
