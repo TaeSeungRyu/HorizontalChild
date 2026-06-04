@@ -42,33 +42,6 @@ namespace Game.Editor
         // 작을수록 정점 ↑ / 충돌 안정성 ↑.
         private const float MaxEdgeWorldUnits = 200f;
 
-        // ─── 해협 강제 개방 (Strait Carves) ─────────────────────────────────
-        // 1:50m 데이터에서 좁은 해협이 단순화로 거의 닫혀버린 곳을 국지적으로 강제로 열어줌.
-        // 실제 세계지도와 살짝 다르지만 게임 플레이를 위한 의도적 변형.
-        //
-        // 동작: carve.center 의 carve.radiusKm 반경 안에 들어오는 폴리곤 정점을
-        //       반경 밖으로 밀어냄 (코스트라인이 카브 영역을 비켜가게).
-        //
-        // 추가 카브 필요하면 배열에 한 줄 더 추가.
-        private struct StraitCarve
-        {
-            public string name;
-            public Vector2 center;   // (lng, lat)
-            public float radiusKm;   // 카브 반경
-        }
-
-        private static readonly StraitCarve[] StraitCarves = new[]
-        {
-            // 지브롤터 해협 — 원래 30km (전체 코스트 영향 적음)
-            new StraitCarve { name = "Gibraltar Strait", center = new Vector2(-5.6f, 35.95f), radiusKm = 30f },
-            // Ceuta 항구 핀포인트 — 항구 좌표 주위만 작게. Tangier (lng -5.8) 까지 50km 라 영향 없음.
-            new StraitCarve { name = "Ceuta Port", center = new Vector2(-5.3f, 35.89f), radiusKm = 15f },
-        };
-
-        // 해협 근처는 더 촘촘하게 (Edge 가 카브 영역을 가로지를 때 중간점 추가).
-        // 카브 반경의 1/6 정도면 카브 경계를 충분히 따라감.
-        private const float StraitFineEdgeKm = 5f;
-
         [MenuItem("Game/Bake World Land Mesh from GeoJSON")]
         public static void Bake()
         {
@@ -93,7 +66,7 @@ namespace Game.Editor
                 }
 
                 EditorUtility.DisplayProgressBar("Bake World Land", "삼각화 + 메쉬 생성...", 0.5f);
-                var mesh = BuildExtrudedMesh(rings, out int carveAffected);
+                var mesh = BuildExtrudedMesh(rings);
 
                 EditorUtility.DisplayProgressBar("Bake World Land", "Asset 저장 중...", 0.85f);
                 SaveMeshAsset(mesh);
@@ -103,18 +76,14 @@ namespace Game.Editor
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
 
-                string carveNames = StraitCarves.Length > 0
-                    ? string.Join(", ", System.Array.ConvertAll(StraitCarves, c => $"{c.name}({c.radiusKm}km)"))
-                    : "(없음)";
-
                 Debug.Log(
                     $"[M3WorldMeshBaker] 완료.\n" +
                     $"  • Features 읽음: {featureCount} (Dateline 스킵 {skipped})\n" +
                     $"  • 폴리곤 ring: {rings.Count}\n" +
-                    $"  • 해협 카브: {carveNames}, 변경된 정점 {carveAffected}개\n" +
                     $"  • 정점: {mesh.vertexCount}, 삼각형: {mesh.triangles.Length / 3}\n" +
                     $"  • Asset: {MeshPath} / {MaterialPath} / {PrefabPath}\n" +
-                    $"  • 다음 단계: Prefab 을 씬에 드래그.");
+                    $"  • 다음 단계: Prefab 을 씬에 드래그.\n" +
+                    $"  • 항해 카브(Ceuta 등) 는 런타임 WorldCarves 에서 처리 — 메쉬 변형 없음.");
             }
             finally
             {
@@ -214,22 +183,15 @@ namespace Game.Editor
 
         // ─── Mesh 빌드 ─────────────────────────────────────────────────────
 
-        private static Mesh BuildExtrudedMesh(List<Vector2[]> rings, out int carveAffected)
+        private static Mesh BuildExtrudedMesh(List<Vector2[]> rings)
         {
             var verts = new List<Vector3>();
             var tris = new List<int>();
 
-            carveAffected = 0;
             foreach (var ring in rings)
             {
                 // 1) 폴리곤 경계 변을 MaxEdgeWorldUnits 이내로 분할 (Side wall 도 작게 유지)
                 var subRing = SubdividePolygonEdges(ring, MaxEdgeWorldUnits);
-
-                // 1.5) 해협 카브 근처 변을 더 촘촘하게 분할 (카브 경계 따라가도록)
-                subRing = SubdivideEdgesNearCarves(subRing, StraitCarves, StraitFineEdgeKm);
-
-                // 1.6) 카브 영역 안의 정점을 반경 밖으로 밀어냄 (해협 강제 개방)
-                subRing = ApplyStraitCarves(subRing, StraitCarves, ref carveAffected);
 
                 int n = subRing.Length;
 
@@ -315,96 +277,6 @@ namespace Game.Editor
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
             return mesh;
-        }
-
-        // ─── 해협 강제 개방 ─────────────────────────────────────────────────
-
-        /// <summary>
-        /// 해협 카브 근처를 가로지르는 폴리곤 변을 fineKm 이내로 잘게 분할.
-        /// 변 자체가 카브 영역을 지나면 그 사이에 점을 박아 카브 적용 시 코스트라인이
-        /// 카브 경계를 자연스럽게 따라가게.
-        /// </summary>
-        private static Vector2[] SubdivideEdgesNearCarves(Vector2[] ring, StraitCarve[] carves, float fineKm)
-        {
-            if (ring == null || ring.Length < 3) return ring;
-            if (carves == null || carves.Length == 0) return ring;
-
-            const float kmPerDeg = 111f;
-            float fineDeg = fineKm / kmPerDeg;
-            var result = new List<Vector2>(ring.Length * 2);
-            int n = ring.Length;
-
-            for (int i = 0; i < n; i++)
-            {
-                var p = ring[i];
-                var q = ring[(i + 1) % n];
-                result.Add(p);
-
-                // 변이 어느 카브에든 가까이 가는가
-                var mid = (p + q) * 0.5f;
-                float halfEdge = (q - p).magnitude * 0.5f;
-                bool nearCarve = false;
-                foreach (var carve in carves)
-                {
-                    float carveDeg = carve.radiusKm / kmPerDeg;
-                    if ((mid - carve.center).magnitude < carveDeg + halfEdge)
-                    {
-                        nearCarve = true;
-                        break;
-                    }
-                }
-
-                if (!nearCarve) continue;
-
-                float edgeLen = (q - p).magnitude;
-                if (edgeLen <= fineDeg) continue;
-
-                int splits = Mathf.CeilToInt(edgeLen / fineDeg) - 1;
-                for (int s = 1; s <= splits; s++)
-                {
-                    float t = (float)s / (splits + 1);
-                    result.Add(Vector2.Lerp(p, q, t));
-                }
-            }
-            return result.ToArray();
-        }
-
-        /// <summary>
-        /// 카브 영역 안에 들어온 폴리곤 정점을 카브 경계 밖으로 밀어냄.
-        /// affected 에 변경된 정점 수 누적.
-        /// </summary>
-        private static Vector2[] ApplyStraitCarves(Vector2[] ring, StraitCarve[] carves, ref int affected)
-        {
-            if (ring == null || ring.Length == 0) return ring;
-            if (carves == null || carves.Length == 0) return ring;
-
-            const float kmPerDeg = 111f;
-            int n = ring.Length;
-            var result = new Vector2[n];
-            for (int i = 0; i < n; i++)
-            {
-                var pt = ring[i];
-                bool moved = false;
-                foreach (var carve in carves)
-                {
-                    float carveDeg = carve.radiusKm / kmPerDeg;
-                    var delta = pt - carve.center;
-                    float dist = delta.magnitude;
-                    if (dist < carveDeg)
-                    {
-                        if (dist < 1e-6f)
-                        {
-                            delta = new Vector2(0f, 1f); // 정확히 중심이면 임의 방향 (북쪽)
-                            dist = 1f;
-                        }
-                        pt = carve.center + delta.normalized * carveDeg;
-                        moved = true;
-                    }
-                }
-                if (moved) affected++;
-                result[i] = pt;
-            }
-            return result;
         }
 
         // ─── 테셀레이션 ────────────────────────────────────────────────────
