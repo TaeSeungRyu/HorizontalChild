@@ -162,11 +162,15 @@ namespace Game.Ship
 
         /// <summary>
         /// 주어진 월드 위치가 육지(Landmass) 안인지 검사.
-        /// Physics.OverlapSphere 결과에 Landmass 컴포넌트가 있으면 true.
+        /// 우선 WorldCarves 의 "개방 영역" 안이면 항상 false (해협 강제 통과).
+        /// 그렇지 않으면 Physics.OverlapSphere 결과에 Landmass 컴포넌트가 있으면 true.
         /// </summary>
         private static readonly Collider[] _overlapBuffer = new Collider[8];
         private bool IsLandAt(Vector3 worldPos)
         {
+            // 항해 카브(지브롤터 등) — 메쉬가 어떻든 무조건 통과 가능
+            if (World.WorldCarves.IsInOpenArea(worldPos)) return false;
+
             int count = Physics.OverlapSphereNonAlloc(worldPos, collisionCheckRadius, _overlapBuffer);
             for (int i = 0; i < count; i++)
             {
