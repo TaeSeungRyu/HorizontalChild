@@ -8255,7 +8255,6 @@ GameObject:
   - component: {fileID: 1604811035}
   - component: {fileID: 1604811039}
   - component: {fileID: 1604811038}
-  - component: {fileID: 1604811040}
   m_Layer: 5
   m_Name: JournalButton
   m_TagString: Untagged
@@ -8378,7 +8377,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game::Game.UI.JournalButton
   button: {fileID: 0}
-  journalPanel: {fileID: 0}
+  journalPanel: {fileID: 1270019605}
   hideWhileAnyActive:
   - {fileID: 1755955772}
   - {fileID: 1456863947}
@@ -8400,22 +8399,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &1604811040
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1604811033}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd0f62762015d164fb41fcbc7a865c86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Game::Game.UI.JournalButton
-  button: {fileID: 0}
-  journalPanel: {fileID: 1270019605}
-  hideWhileAnyActive: []
-  hideUntilNationSelected: 1
 --- !u!1 &1613668465
 GameObject:
   m_ObjectHideFlags: 0
