@@ -4616,7 +4616,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.14231043, g: 0.16905352, b: 0.24528301, a: 0.392}
+  m_Color: {r: 0.14231043, g: 0.16905352, b: 0.24528301, a: 0.94509804}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5747,7 +5747,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8396226, g: 0.2891153, b: 0.2891153, a: 0.5686275}
+  m_Color: {r: 0.26890355, g: 0.18823424, b: 0.8490566, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5815,6 +5815,7 @@ MonoBehaviour:
   countText: {fileID: 1574801177}
   entryListText: {fileID: 1570686065}
   closeButton: {fileID: 1971054657}
+  reopenPanel: {fileID: 1082307442}
   discoveryCatalog: {fileID: 0}
   allDiscoveries:
   - {fileID: 11400000, guid: 41d423760415021469bda9cb3bca8bab, type: 2}
