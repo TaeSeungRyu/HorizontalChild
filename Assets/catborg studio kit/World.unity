@@ -819,6 +819,7 @@ GameObject:
   - component: {fileID: 330585547}
   - component: {fileID: 330585548}
   - component: {fileID: 330585549}
+  - component: {fileID: 330585550}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -980,6 +981,22 @@ MonoBehaviour:
   positionLerpSpeed: 5
   rotationLerpSpeed: 4
   followYaw: 1
+--- !u!114 &330585550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c49b4cc203aa6414fae5c798d1d0e7d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.EventSystems.PhysicsRaycaster
+  m_EventMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_MaxRayIntersections: 0
 --- !u!1 &341539238
 GameObject:
   m_ObjectHideFlags: 0
@@ -1275,6 +1292,57 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!1 &403584446
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 403584447}
+  - component: {fileID: 403584448}
+  m_Layer: 0
+  m_Name: DiscoveryMarkers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &403584447
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 403584446}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &403584448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 403584446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d26019a4d92ba7f4e92eedf7636c306d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game::Game.World.DiscoveryMarkerSpawner
+  discoveryCatalog: {fileID: 11400000, guid: d8e1e77fa1fceeb4e85017e6d1b0c5ca, type: 2}
+  reopenPanel: {fileID: 0}
+  markersParent: {fileID: 0}
+  markerPrefab: {fileID: 919132149155446097, guid: a7ff09b50ec167b44ac7c66ec22da8f5, type: 3}
+  markerHeight: 3
+  markerScale: 2
+  tintByCategory: 1
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -8077,6 +8145,7 @@ MonoBehaviour:
   - {fileID: 1362403261}
   - {fileID: 1613668465}
   - {fileID: 1270019600}
+  hideUntilNationSelected: 1
 --- !u!225 &1604811039
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -8104,6 +8173,7 @@ MonoBehaviour:
   button: {fileID: 0}
   journalPanel: {fileID: 1270019605}
   hideWhileAnyActive: []
+  hideUntilNationSelected: 1
 --- !u!1 &1613668465
 GameObject:
   m_ObjectHideFlags: 0
@@ -11022,3 +11092,4 @@ SceneRoots:
   - {fileID: 1174671207}
   - {fileID: 120943599}
   - {fileID: 948628355}
+  - {fileID: 403584447}

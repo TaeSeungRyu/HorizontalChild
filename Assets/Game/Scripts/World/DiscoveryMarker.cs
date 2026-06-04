@@ -1,38 +1,39 @@
 using Game.Data;
 using Game.UI;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace Game.World
 {
     /// <summary>
-    /// 발견 후 영구 표시되는 마커. World-Space Canvas + Button 으로 구성.
+    /// 발견 후 영구 표시되는 3D 마커 (보물상자 같은 모델).
     /// 탭하면 DiscoveryFoundPanel 을 다시 띄움 (보상 없이 정보 열람 전용).
     ///
-    /// DiscoveryMarkerSpawner 가 런타임에 자동 spawn → Bind() 호출.
-    /// 사용자가 prefab 을 만들 필요 없음 — Spawner 가 GameObject 통째로 생성.
+    /// 클릭 처리는 IPointerClickHandler — Main Camera 에 Physics Raycaster 필요.
+    /// (없으면 DiscoveryMarkerSpawner 가 콘솔에 경고 출력.)
     /// </summary>
-    public class DiscoveryMarker : MonoBehaviour
+    public class DiscoveryMarker : MonoBehaviour, IPointerClickHandler
     {
         public DiscoveryData Data { get; private set; }
         private DiscoveryFoundPanel _reopenPanel;
 
-        public void Bind(DiscoveryData discovery, Button button, Image icon, DiscoveryFoundPanel panel)
+        public void Bind(DiscoveryData discovery, DiscoveryFoundPanel panel)
         {
             Data = discovery;
             _reopenPanel = panel;
-
-            if (button != null) button.onClick.AddListener(OnClicked);
-            if (icon != null && discovery != null) icon.color = ColorFor(discovery.category);
             if (discovery != null) name = $"DiscoveryMarker_{discovery.discoveryId}";
         }
 
-        private void OnClicked()
+        public void OnPointerClick(PointerEventData eventData)
         {
-            if (_reopenPanel != null && Data != null)
+            Debug.Log($"[DiscoveryMarker] Click on {(Data != null ? Data.discoveryId : "null")}");
+            if (_reopenPanel == null)
             {
-                _reopenPanel.Show(Data);
+                Debug.LogWarning("[DiscoveryMarker] reopenPanel 이 null — Spawner 의 Reopen Panel 필드 확인하세요.");
+                return;
             }
+            if (Data == null) return;
+            _reopenPanel.Show(Data);
         }
 
         public static Color ColorFor(DiscoveryCategory category) => category switch
