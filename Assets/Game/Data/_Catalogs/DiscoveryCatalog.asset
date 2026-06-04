@@ -13,12 +13,27 @@ MonoBehaviour:
   m_Name: DiscoveryCatalog
   m_EditorClassIdentifier: Game::Game.Data.DiscoveryCatalog
   all:
+  - {fileID: 11400000, guid: ad4bd6d18f2e5f74eb16d01365efdcab, type: 2}
   - {fileID: 11400000, guid: 41d423760415021469bda9cb3bca8bab, type: 2}
   - {fileID: 11400000, guid: 4059b6f0f327b91438ae0c38f723a268, type: 2}
   - {fileID: 11400000, guid: 4f900ddcc6c76a84b8e2f38e33f61b4f, type: 2}
   - {fileID: 11400000, guid: 12a8998993dfc9c4b80ee348ed1f8cd9, type: 2}
+  - {fileID: 11400000, guid: c7b6bc0676fc74e42bee7e871356831b, type: 2}
+  - {fileID: 11400000, guid: 64d7afce460b84441889229ceee6a364, type: 2}
+  - {fileID: 11400000, guid: 666db9cafdd27bf49bf334cece9c117b, type: 2}
+  - {fileID: 11400000, guid: 36f32f401373351498e0a1f368c49833, type: 2}
+  - {fileID: 11400000, guid: e010cd7ccd7ed9a4992d5bcf6edf8c5a, type: 2}
   - {fileID: 11400000, guid: 89dd2279aec6e2246b0e0140f66a78b0, type: 2}
   - {fileID: 11400000, guid: f0e3687cf3565f64eacf176660d2e7e4, type: 2}
+  - {fileID: 11400000, guid: 3ff0ee4a25c780d49b0ba344aeb3d3d9, type: 2}
+  - {fileID: 11400000, guid: b33de216530b1a343a4ee38a61438473, type: 2}
+  - {fileID: 11400000, guid: 301c7c9d6be840646a27db08bc2818b4, type: 2}
+  - {fileID: 11400000, guid: 67072b3ac47e26c49a02a1351aea5c59, type: 2}
+  - {fileID: 11400000, guid: 0a4e0f7ced2608649868a291a174d7b2, type: 2}
   - {fileID: 11400000, guid: 53cc4f53a62e1cc4c893f02bcac29514, type: 2}
+  - {fileID: 11400000, guid: 60911ba68fba72b40810a3b76f040958, type: 2}
+  - {fileID: 11400000, guid: 9ff957d808df58647b543571d941a0b1, type: 2}
+  - {fileID: 11400000, guid: 6d8b532cbb3b2864c86273dde5156971, type: 2}
   - {fileID: 11400000, guid: 1549831da67528243b2b9271d812ce80, type: 2}
   - {fileID: 11400000, guid: a3f6563c13308fb4f9e0dfd51a14cfa5, type: 2}
+  - {fileID: 11400000, guid: 31339e7cc26cec64db64d7007f0badf3, type: 2}

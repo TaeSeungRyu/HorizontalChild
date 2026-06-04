@@ -96,6 +96,8 @@ namespace Game.UI
                 }
             }
 
+            // 다른 패널(도감 등) 위에 떠야 하므로 같은 부모 안에서 마지막 형제로
+            panelRoot.transform.SetAsLastSibling();
             panelRoot.SetActive(true);
         }
 

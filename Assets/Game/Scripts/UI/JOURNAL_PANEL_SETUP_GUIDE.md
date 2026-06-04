@@ -45,10 +45,19 @@ M1 에는 발견물 1~몇 개이므로 스크롤 없이도 OK.
 | Count Text | 자식 CountText 드래그 |
 | Entry List Text | 자식 EntryListText 드래그 |
 | Close Button | 자식 CloseButton 드래그 |
-| **All Discoveries** | **배열에 모든 DiscoveryData 등록** — M1 은 `Discovery_GibraltarStrait` 한 개만 |
+| **Reopen Panel** | 씬의 `DiscoveryFoundPanel` 드래그 (비워두면 자동 검색) |
+| **Discovery Catalog** | `DiscoveryCatalog` SO 드래그 — Catalog 우선 사용 |
+| All Discoveries | 비워둠 (Catalog 가 채워주므로) — Catalog 없을 때만 fallback |
 | Mission Service | 비워둠 (런타임 자동) |
 
-> M3 이후 발견물이 늘어나면 All Discoveries 배열에 추가만 하면 됨. 또는 시더가 자동 채우는 컴포넌트 추가 가능.
+### M3 추가 기능 — 발견 항목 탭 시 상세 패널 재실행
+
+- 발견한 항목은 이름이 밑줄·굵게 표시되고 클릭 가능
+- 탭 시 `DiscoveryFoundPanel` 이 재실행 (일러스트 + 해설 다시 표시)
+- 보상 없는 정보 열람 전용 — 발견 시 보상은 이미 처음에만 지급됨
+- 카테고리별 그룹화 + 진행도 표시 (예: "[랜드마크] 2/8 발견")
+
+> `Reopen Panel` 필드를 채워두면 즉시 작동. 비워두면 Show() 시 자동으로 씬에서 검색.
 
 ---
 
