@@ -39,6 +39,9 @@ namespace Game.UI
         [Tooltip("Fallback: 카탈로그 없을 때 직접 등록할 발견물 배열.")]
         public DiscoveryData[] allDiscoveries;
 
+        [Tooltip("RegionCatalog SO — 지역 진행도 표시에 사용. 비어 있으면 지역 정보 표시 생략.")]
+        public RegionCatalog regionCatalog;
+
         private DiscoveryData[] EffectiveDiscoveries =>
             (discoveryCatalog != null && discoveryCatalog.all != null && discoveryCatalog.all.Length > 0)
                 ? discoveryCatalog.all : allDiscoveries;
@@ -115,7 +118,22 @@ namespace Game.UI
 
             if (countText != null)
             {
-                countText.text = $"발견 {found} / 모두 {total}";
+                string txt = $"발견 {found} / 모두 {total}";
+                // 지역 진행도 추가
+                if (regionCatalog != null && regionCatalog.all != null && missionService != null)
+                {
+                    int regionTotal = regionCatalog.all.Length;
+                    int regionUnlocked = 0;
+                    foreach (var r in regionCatalog.all)
+                    {
+                        if (r != null && missionService.UnlockedRegionIds.Contains(r.regionId)) regionUnlocked++;
+                    }
+                    if (regionTotal > 0)
+                    {
+                        txt += $"     지역 {regionUnlocked} / 모두 {regionTotal}";
+                    }
+                }
+                countText.text = txt;
             }
 
             if (entryListText != null)
