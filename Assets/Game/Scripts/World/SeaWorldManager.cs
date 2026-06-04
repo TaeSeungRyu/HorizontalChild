@@ -61,7 +61,7 @@ namespace Game.World
         [Range(0f, 200f)] public float rearmRadiusUnits = 60f;
 
         [Tooltip("항구를 직접 클릭했을 때 입항 가능한 거리. 자동 도착보다 살짝 넓게 설정 가능.")]
-        [Range(10f, 200f)] public float clickEnterRadiusUnits = 30f;
+        [Range(10f, 200f)] public float clickEnterRadiusUnits = 15f;
 
         [Header("Events")]
         public UnityEvent<PortData> onPortArrived;

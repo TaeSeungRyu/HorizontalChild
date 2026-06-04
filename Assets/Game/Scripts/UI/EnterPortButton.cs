@@ -122,10 +122,12 @@ namespace Game.UI
         {
             distance = float.MaxValue;
             PortData closest = null;
-            if (worldManager.activePorts == null) return null;
+            // Catalog 우선 — activePorts 는 fallback (보통 비어있음)
+            var ports = worldManager.EffectivePorts;
+            if (ports == null) return null;
 
             var shipPos = playerShip.transform.position;
-            foreach (var port in worldManager.activePorts)
+            foreach (var port in ports)
             {
                 if (port == null) continue;
                 var portPos = GeoCoordinate.LatLngToWorld(port.latitude, port.longitude);
