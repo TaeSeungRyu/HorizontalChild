@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Plymouth
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.plymouth
+  displayNameKo: "\uD50C\uB9AC\uBA38\uC2A4"
+  displayNameOriginal: Plymouth
+  nation: {fileID: 0}
+  latitude: 50.37
+  longitude: -4.14
+  shortDescription: "\uC6A9\uAC10\uD55C \uBC43\uC0AC\uB78C\uB4E4\uC774 \uC0C8 \uB545\uC744
+    \uD5A5\uD574 \uB5A0\uB098\uB294 \uC791\uC740 \uD56D\uAD6C."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 666b6d75aa424ad42b870ccd9b7470a3, type: 2}
+  - {fileID: 11400000, guid: 707e1200403a82346bc9cb407c11e1eb, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uD50C\uB9AC\uBA38\uC2A4_(\uC789\uAE00\uB79C\uB4DC)"

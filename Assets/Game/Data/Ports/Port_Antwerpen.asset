@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Antwerpen
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.antwerpen
+  displayNameKo: "\uC548\uD2B8\uBCA0\uB974\uD39C"
+  displayNameOriginal: Antwerpen
+  nation: {fileID: 0}
+  latitude: 51.22
+  longitude: 4.4
+  shortDescription: "\uBCF4\uC11D\uC744 \uB2E4\uB4EC\uB294 \uC7A5\uC778\uC774 \uBAA8\uC778
+    \uAC15\uAC00\uC758 \uB3C4\uC2DC."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 4ef8977694032234cba986b439bec619, type: 2}
+  - {fileID: 11400000, guid: 461bb0707aa9dec4385d7de685794da0, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC548\uD2B8\uBCA0\uB974\uD39C"
