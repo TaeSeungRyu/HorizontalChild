@@ -16,9 +16,20 @@ MonoBehaviour:
   displayNameKo: "\uC774\uBCA0\uB9AC\uC544 \uBC18\uB3C4"
   ports:
   - {fileID: 11400000, guid: 3f72a76a28a4d8f42b4c3332002d28fa, type: 2}
+  - {fileID: 11400000, guid: e0ab868248a4942409e74310557dc141, type: 2}
+  - {fileID: 11400000, guid: 7b15815832b174d4fb3a888b3b3908b8, type: 2}
+  - {fileID: 11400000, guid: b09782d33c0ce4e43999e0b9badc47a5, type: 2}
+  - {fileID: 11400000, guid: 01c0d4eed19057141a44a72133fad18d, type: 2}
+  - {fileID: 11400000, guid: 2dcf7dd034401f74eb856337075a882a, type: 2}
   discoveries:
   - {fileID: 11400000, guid: 89dd2279aec6e2246b0e0140f66a78b0, type: 2}
+  - {fileID: 11400000, guid: 12a8998993dfc9c4b80ee348ed1f8cd9, type: 2}
+  - {fileID: 11400000, guid: 4f900ddcc6c76a84b8e2f38e33f61b4f, type: 2}
+  - {fileID: 11400000, guid: 6d8b532cbb3b2864c86273dde5156971, type: 2}
+  - {fileID: 11400000, guid: 666db9cafdd27bf49bf334cece9c117b, type: 2}
+  - {fileID: 11400000, guid: b33de216530b1a343a4ee38a61438473, type: 2}
   unlockedAtStartFor:
   - {fileID: 11400000, guid: d3ae184577970864a8cffd9371bb3569, type: 2}
+  - {fileID: 11400000, guid: 576aa432306abcb4fbefe0a30f1c3254, type: 2}
   unlockHint: "\uD3EC\uB974\uD22C\uAC08\xB7\uC2A4\uD398\uC778 \uAD6D\uC801 \uC120\uD0DD
     \uC2DC \uC2DC\uC791\uBD80\uD130 \uD574\uC81C."
