@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_IberianLynx
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.iberian_lynx
+  displayNameKo: "\uC2A4\uB77C\uC18C\uB2C8"
+  category: 1
+  latitude: 37
+  longitude: -6.5
+  searchToleranceBase: 0.04
+  mainDescription: "\uC774\uBCA0\uB9AC\uC544 \uBC18\uB3C4 \uB0A8\uCABD \uAC08\uB300\uBC2D\uC5D0
+    \uC0AC\uB294 \uC904\uBB34\uB2AC \uB4E4\uACE0\uC591\uC774\uC608\uC694. \uBFB0\uC871\uD55C
+    \uADC0\uB05D \uD138\uACFC \uC9E7\uC740 \uAF2C\uB9AC\uAC00 \uD2B9\uC9D5\uC774\uC5D0\uC694.
+    \uD1A0\uB07C\uB97C \uC798 \uC7A1\uB294\uB2E4\uACE0 \uC61B\uB0A0 \uC0AC\uB78C\uB4E4
+    \uC0AC\uC774\uC5D0\uC11C \uC774\uB984\uC774 \uB0AC\uB2F5\uB2C8\uB2E4."
+  moreInfo: "\uC9C0\uAE08\uC740 \uC138\uACC4\uC5D0\uC11C \uAC00\uC7A5 \uBCF4\uAE30
+    \uD798\uB4E0 \uB4E4\uACE0\uC591\uC774 \uC911 \uD558\uB098\uB798\uC694."
+  eraLabel: "\uC5ED\uC0AC \uB0B4\uB0B4"
+  relatedNation: {fileID: 11400000, guid: 576aa432306abcb4fbefe0a30f1c3254, type: 2}
+  illustration: {fileID: 0}
+  relatedFigures: 
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC774\uBCA0\uB9AC\uC544\uC2A4\uB77C\uC18C\uB2C8"
+  sensitiveExpressionChecked: 1
