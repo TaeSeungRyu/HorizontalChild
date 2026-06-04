@@ -2788,16 +2788,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game::Game.Missions.MissionService
   missionCatalog: {fileID: 11400000, guid: f5fcf05387bdbd94dbd1625eddc73067, type: 2}
-  allMissions:
-  - {fileID: 11400000, guid: da3ef7bfa0dd9404ba71a43158eb9a62, type: 2}
-  - {fileID: 11400000, guid: a8cdbe7adc1035c4b8f7a744f46dd5b8, type: 2}
-  - {fileID: 11400000, guid: 21346c8355b12aa41b014ba306acbbe5, type: 2}
-  - {fileID: 11400000, guid: aa9930293ef91ad4bb66626fb6489a56, type: 2}
-  - {fileID: 11400000, guid: 70026171e03592c468679706811fcfba, type: 2}
-  - {fileID: 11400000, guid: 9ef5aef536b94f44a9805b16914bca5c, type: 2}
-  - {fileID: 11400000, guid: fc75d7bbae9691e47b7124a4e577ab54, type: 2}
-  - {fileID: 11400000, guid: 3fd5d1ff884a9d542b747a073b89640f, type: 2}
-  - {fileID: 11400000, guid: c435222e4380bc041b976f6f8edd812e, type: 2}
+  allMissions: []
   regionCatalog: {fileID: 11400000, guid: bae669d235d881041b45cdc38c55dd6a, type: 2}
   onMissionAccepted:
     m_PersistentCalls:
