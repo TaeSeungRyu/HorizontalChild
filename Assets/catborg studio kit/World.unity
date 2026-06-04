@@ -2727,28 +2727,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game::Game.World.SeaWorldManager
   playerShip: {fileID: 1690041783}
-  portCatalog: {fileID: 0}
-  activePorts:
-  - {fileID: 11400000, guid: b09782d33c0ce4e43999e0b9badc47a5, type: 2}
-  - {fileID: 11400000, guid: 3f72a76a28a4d8f42b4c3332002d28fa, type: 2}
-  - {fileID: 11400000, guid: 01c0d4eed19057141a44a72133fad18d, type: 2}
-  - {fileID: 11400000, guid: 223af44ca8b9b0143a7c488e46acc2f7, type: 2}
-  - {fileID: 11400000, guid: a970c5aab4ff46c45b99ac86db221b90, type: 2}
-  - {fileID: 11400000, guid: 385c67c80e950c34083d95589919088d, type: 2}
-  - {fileID: 11400000, guid: 0c812b37aed16004189c4427c168140a, type: 2}
-  - {fileID: 11400000, guid: 79006b120a9b7ee449e7d079b682a591, type: 2}
-  - {fileID: 11400000, guid: f54cafdbf47aabd449efdecdefe34c9c, type: 2}
-  discoveryCatalog: {fileID: 0}
-  activeDiscoveries:
-  - {fileID: 11400000, guid: 41d423760415021469bda9cb3bca8bab, type: 2}
-  - {fileID: 11400000, guid: 4059b6f0f327b91438ae0c38f723a268, type: 2}
-  - {fileID: 11400000, guid: 4f900ddcc6c76a84b8e2f38e33f61b4f, type: 2}
-  - {fileID: 11400000, guid: 12a8998993dfc9c4b80ee348ed1f8cd9, type: 2}
-  - {fileID: 11400000, guid: 89dd2279aec6e2246b0e0140f66a78b0, type: 2}
-  - {fileID: 11400000, guid: f0e3687cf3565f64eacf176660d2e7e4, type: 2}
-  - {fileID: 11400000, guid: 53cc4f53a62e1cc4c893f02bcac29514, type: 2}
-  - {fileID: 11400000, guid: 1549831da67528243b2b9271d812ce80, type: 2}
-  - {fileID: 11400000, guid: a3f6563c13308fb4f9e0dfd51a14cfa5, type: 2}
+  portCatalog: {fileID: 11400000, guid: abc59b2d20370ee4bafc4bd64c7d47f6, type: 2}
+  activePorts: []
+  discoveryCatalog: {fileID: 11400000, guid: d8e1e77fa1fceeb4e85017e6d1b0c5ca, type: 2}
+  activeDiscoveries: []
   portIconPrefab: {fileID: 8893140149326885892, guid: 63d1d7a40bbdade429fd41d729d77f73, type: 3}
   portIconsParent: {fileID: 0}
   arrivalRadiusUnits: 5
@@ -2805,7 +2787,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82c902aa54e30374ca87a574348765f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game::Game.Missions.MissionService
-  missionCatalog: {fileID: 0}
+  missionCatalog: {fileID: 11400000, guid: f5fcf05387bdbd94dbd1625eddc73067, type: 2}
   allMissions:
   - {fileID: 11400000, guid: da3ef7bfa0dd9404ba71a43158eb9a62, type: 2}
   - {fileID: 11400000, guid: a8cdbe7adc1035c4b8f7a744f46dd5b8, type: 2}
@@ -9420,16 +9402,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game::Game.UI.NationSelectionPanel
   panelRoot: {fileID: 0}
   autoShowOnStart: 1
-  nationCatalog: {fileID: 0}
-  nations:
-  - {fileID: 11400000, guid: eb895b40b2897d649806972105641d59, type: 2}
-  - {fileID: 11400000, guid: 804e011f398380d449247e5c259e623a, type: 2}
-  - {fileID: 11400000, guid: 50ff5fa2e6c3f1044ba3d1c4585f47d3, type: 2}
-  - {fileID: 11400000, guid: 03b98d79c2b87574dbaf3a294bbf70b8, type: 2}
-  - {fileID: 11400000, guid: 2d79142ca971e694780252aed30ee891, type: 2}
-  - {fileID: 11400000, guid: d3ae184577970864a8cffd9371bb3569, type: 2}
-  - {fileID: 11400000, guid: 576aa432306abcb4fbefe0a30f1c3254, type: 2}
-  - {fileID: 11400000, guid: cbc1844d13557d44d902828645768cd5, type: 2}
+  nationCatalog: {fileID: 11400000, guid: 411000c7f91f7b04aacabce2d1e35f30, type: 2}
+  nations: []
   buttonContainer: {fileID: 1833931878}
   nationButtonPrefab: {fileID: 2316312935931388042, guid: f09c3ac7d1cec334f87c6ee808c0c61c, type: 3}
   selectedNameText: {fileID: 117899744}
