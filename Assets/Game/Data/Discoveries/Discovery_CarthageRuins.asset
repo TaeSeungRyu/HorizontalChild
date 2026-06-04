@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_CarthageRuins
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.carthage_ruins
+  displayNameKo: "\uCE74\uB974\uD0C0\uACE0 \uC720\uC801"
+  category: 2
+  latitude: 36.85
+  longitude: 10.32
+  searchToleranceBase: 0.04
+  mainDescription: "\uC61B \uBD81\uC544\uD504\uB9AC\uCE74 \uBC14\uB2F7\uAC00\uC5D0
+    \uC788\uB358 \uD070 \uB3C4\uC2DC\uC758 \uD754\uC801\uC774\uC5D0\uC694. \uD55C\uB54C
+    \uB85C\uB9C8\uC640 \uB2E4\uD22C\uB358 \uAC15\uD55C \uB098\uB77C\uC600\uC5B4\uC694.
+    \uC9C0\uAE08\uC740 \uBB34\uB108\uC9C4 \uB3CC\uAE30\uB465\uACFC \uC2E0\uC804 \uC790\uB9AC\uAC00
+    \uB0A8\uC544 \uC788\uB2F5\uB2C8\uB2E4."
+  moreInfo: "\uCF54\uB07C\uB9AC\uB97C \uD0C0\uACE0 \uC0B0\uC744 \uB118\uC740 \uD55C\uB2C8\uBC1C
+    \uC7A5\uAD70\uC774 \uC0B4\uB358 \uACF3\uC774\uB798\uC694."
+  eraLabel: "\uAE30\uC6D0\uC804 814\uB144 ~ \uAE30\uC6D0\uC804 146\uB144"
+  relatedNation: {fileID: 0}
+  illustration: {fileID: 0}
+  relatedFigures: "\uD55C\uB2C8\uBC1C (Hannibal)"
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uCE74\uB974\uD0C0\uACE0"
+  sensitiveExpressionChecked: 1

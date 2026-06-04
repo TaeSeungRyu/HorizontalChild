@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_ChineseAlligator
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.chinese_alligator
+  displayNameKo: "\uC591\uCBD4\uAC15 \uC545\uC5B4"
+  category: 1
+  latitude: 30.7
+  longitude: 121.4
+  searchToleranceBase: 0.04
+  mainDescription: "\uC911\uAD6D \uD070 \uAC15 \uC5B4\uADC0\uC758 \uAC08\uB300\uBC2D\uC5D0
+    \uC228\uC5B4 \uC0AC\uB294 \uC9E7\uC740 \uC545\uC5B4\uC608\uC694. \uB2E4\uB978
+    \uB098\uB77C \uC545\uC5B4\uB4E4\uBCF4\uB2E4 \uC791\uACE0, \uCC28\uAC00\uC6B4
+    \uACA8\uC6B8\uC5D4 \uAD74 \uC18D\uC5D0\uC11C \uC7A0\uB4E4\uC5B4\uC694."
+  moreInfo: "\uC61B \uC0AC\uB78C\uB4E4\uC740 '\uC6A9\uC758 \uC0C8\uB07C' \uB77C\uACE0
+    \uBD80\uB974\uAE30\uB3C4 \uD588\uB2F5\uB2C8\uB2E4."
+  eraLabel: "\uC5ED\uC0AC \uB0B4\uB0B4"
+  relatedNation: {fileID: 11400000, guid: cbc1844d13557d44d902828645768cd5, type: 2}
+  illustration: {fileID: 0}
+  relatedFigures: 
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC591\uCBD4\uAC15\uC545\uC5B4"
+  sensitiveExpressionChecked: 1

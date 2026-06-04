@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_PyramidsGiza
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.pyramids_giza
+  displayNameKo: "\uAE30\uC790 \uD53C\uB77C\uBBF8\uB4DC"
+  category: 2
+  latitude: 30.05
+  longitude: 31
+  searchToleranceBase: 0.03
+  mainDescription: "\uC774\uC9D1\uD2B8\uC758 \uBAA8\uB798 \uC704\uC5D0 \uC6B0\uB69D
+    \uC19F\uC740 \uAC70\uB300\uD55C \uB3CC\uBB34\uB364\uC774\uC5D0\uC694. 4500\uB144
+    \uC804 \uC61B \uC655\uB4E4\uC744 \uC704\uD574 \uB9CC\uB4E0 \uAC70\uC608\uC694.
+    \uBA40\uB9AC\uC11C\uB3C4 \uD55C\uB208\uC5D0 \uBCF4\uC77C \uB9CC\uD07C \uCEE4\uC694."
+  moreInfo: "\uC5B4\uB5BB\uAC8C \uADF8\uB807\uAC8C \uD070 \uB3CC\uC744 \uC313\uC558\uB294\uC9C0
+    \uC9C0\uAE08\uB3C4 \uC2E0\uAE30\uD574\uC694."
+  eraLabel: "\uAE30\uC6D0\uC804 2500\uB144\uACBD"
+  relatedNation: {fileID: 11400000, guid: 2d79142ca971e694780252aed30ee891, type: 2}
+  illustration: {fileID: 0}
+  relatedFigures: "\uCFE0\uD478 \uC655"
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uAE30\uC790_\uD53C\uB77C\uBBF8\uB4DC"
+  sensitiveExpressionChecked: 1
