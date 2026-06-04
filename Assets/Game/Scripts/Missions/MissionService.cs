@@ -35,11 +35,15 @@ namespace Game.Missions
             (missionCatalog != null && missionCatalog.all != null && missionCatalog.all.Length > 0)
                 ? missionCatalog.all : allMissions;
 
+        [Tooltip("RegionCatalog SO — 지역 잠금 해제에 사용. 비어 있으면 지역 시스템 비활성.")]
+        public RegionCatalog regionCatalog;
+
         [Header("Events")]
         public UnityEvent<MissionTemplate> onMissionAccepted;
         public UnityEvent<MissionTemplate> onMissionCancelled;
         public UnityEvent<MissionTemplate> onMissionCompleted;
         public UnityEvent<DiscoveryData> onDiscoveryRegistered;
+        public UnityEvent<RegionData> onRegionUnlocked;
 
         // ─── 런타임 상태 ─────────────────────────────────────────────────────
 
@@ -51,6 +55,9 @@ namespace Game.Missions
 
         /// <summary>이미 완료한 의뢰 ID 집합 (중복 발급 방지).</summary>
         public readonly HashSet<string> CompletedMissionIds = new();
+
+        /// <summary>해제된 지역 ID 집합 (시작 국가 지역 + 방문한 항구의 지역).</summary>
+        public readonly HashSet<string> UnlockedRegionIds = new();
 
         public bool HasActiveMission => CurrentMission != null;
 
@@ -143,6 +150,69 @@ namespace Game.Missions
             DiscoveredIds.Add(discovery.discoveryId);
             onDiscoveryRegistered?.Invoke(discovery);
             Debug.Log($"[MissionService] 발견물 등록: {discovery.discoveryId} ({discovery.displayNameKo})");
+        }
+
+        // ─── 지역 잠금 해제 ──────────────────────────────────────────────────
+
+        /// <summary>지역이 해제됐는지 확인.</summary>
+        public bool IsRegionUnlocked(RegionData region)
+        {
+            return region != null && UnlockedRegionIds.Contains(region.regionId);
+        }
+
+        /// <summary>
+        /// 항구 방문 시 호출 — 그 항구가 속한 지역을 자동 해제.
+        /// SeaWorldManager.NotifyPortArrival 에서 연결.
+        /// </summary>
+        public void RegisterPortVisit(PortData port)
+        {
+            if (port == null) return;
+            var region = FindRegionForPort(port);
+            if (region != null) RegisterRegionUnlock(region);
+        }
+
+        /// <summary>
+        /// 국가 선택 시 호출 — 해당 국가가 시작부터 가지고 있는 지역들을 자동 해제.
+        /// NationSelectionPanel.OnConfirmClicked 에서 연결.
+        /// </summary>
+        public void RegisterStartingNation(NationData nation)
+        {
+            if (nation == null || regionCatalog == null || regionCatalog.all == null) return;
+            foreach (var region in regionCatalog.all)
+            {
+                if (region == null || region.unlockedAtStartFor == null) continue;
+                foreach (var n in region.unlockedAtStartFor)
+                {
+                    if (n == nation)
+                    {
+                        RegisterRegionUnlock(region);
+                        break;
+                    }
+                }
+            }
+        }
+
+        public void RegisterRegionUnlock(RegionData region)
+        {
+            if (region == null) return;
+            if (UnlockedRegionIds.Contains(region.regionId)) return;
+            UnlockedRegionIds.Add(region.regionId);
+            onRegionUnlocked?.Invoke(region);
+            Debug.Log($"[MissionService] 새 지역 해제: {region.regionId} ({region.displayNameKo})");
+        }
+
+        private RegionData FindRegionForPort(PortData port)
+        {
+            if (port == null || regionCatalog == null || regionCatalog.all == null) return null;
+            foreach (var region in regionCatalog.all)
+            {
+                if (region == null || region.ports == null) continue;
+                foreach (var p in region.ports)
+                {
+                    if (p == port) return region;
+                }
+            }
+            return null;
         }
 
         /// <summary>

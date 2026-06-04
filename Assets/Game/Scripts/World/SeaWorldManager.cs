@@ -124,7 +124,7 @@ namespace Game.World
                     if (dist <= arrivalRadiusUnits)
                     {
                         _suppressedPortIds.Add(port.portId);
-                        onPortArrived?.Invoke(port);
+                        PublishPortArrival(port);
                     }
                 }
             }
@@ -225,7 +225,21 @@ namespace Game.World
         /// </summary>
         public void NotifyPortArrival(PortData port)
         {
+            PublishPortArrival(port);
+        }
+
+        /// <summary>
+        /// 항구 도착 시 통합 처리 — 지역 잠금 해제 + onPortArrived 이벤트 발행.
+        /// 세 경로(자동/직접 호출/클릭) 가 모두 본 메서드로 합류.
+        /// </summary>
+        private void PublishPortArrival(PortData port)
+        {
             if (port == null) return;
+
+            // 지역 잠금 해제 (MissionService 가 있으면)
+            var ms = Game.Missions.MissionService.Instance;
+            ms?.RegisterPortVisit(port);
+
             onPortArrived?.Invoke(port);
         }
 
@@ -245,7 +259,7 @@ namespace Game.World
             if (dist <= clickEnterRadiusUnits)
             {
                 _suppressedPortIds.Add(port.portId);
-                onPortArrived?.Invoke(port);
+                PublishPortArrival(port);
             }
             else
             {

@@ -152,6 +152,10 @@ namespace Game.UI
             if (gameSession == null) gameSession = GameSession.Instance;
             gameSession?.SetSelectedNation(_selected);
 
+            // 1.5) 시작 국가의 지역 자동 해제 (RegionData.unlockedAtStartFor 참조)
+            var missionService = Game.Missions.MissionService.Instance;
+            missionService?.RegisterStartingNation(_selected);
+
             // 2) PlayerShip 위치를 시작 항구 + 바다 쪽 offset 으로 이동
             if (playerShip != null && _selected.startingPort != null)
             {
