@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Funchal
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.funchal
+  displayNameKo: "\uD47C\uC0EC"
+  displayNameOriginal: Funchal
+  nation: {fileID: 0}
+  latitude: 32.65
+  longitude: -16.91
+  shortDescription: "\uD478\uB978 \uBC14\uB2E4 \uD55C\uAC00\uC6B4\uB370 \uC788\uB294
+    \uB9C8\uB370\uC774\uB77C \uC12C\uC758 \uD56D\uAD6C."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 8fc62d479a98f6a4e934a6fbc2260a58, type: 2}
+  - {fileID: 11400000, guid: cc1a4cd03c4eac5459365100f0e4bc10, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uD47C\uC0EC"

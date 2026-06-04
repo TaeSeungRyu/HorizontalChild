@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27e49de8f35219c44a63185efbb0dde3, type: 3}
+  m_Name: Product_Velvet
+  m_EditorClassIdentifier: Game::Game.Data.ProductData
+  productId: product.velvet
+  displayNameKo: "\uBCA8\uBCB3"
+  icon: {fileID: 0}
+  basePrice: 110
+  isSpecial: 0
+  originPort: {fileID: 0}
+  shortDescription: "\uB9CC\uC9C0\uBA74 \uBCF4\uB4E4\uBCF4\uB4E4\uD55C \uAD11\uD0DD
+    \uB098\uB294 \uACE0\uAE09 \uCC9C\uC774\uC5D0\uC694."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uBCA8\uBCB3"

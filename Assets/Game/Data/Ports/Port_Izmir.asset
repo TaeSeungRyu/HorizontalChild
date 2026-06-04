@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Izmir
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.izmir
+  displayNameKo: "\uC774\uC988\uBBF8\uB974"
+  displayNameOriginal: "\u0130zmir"
+  nation: {fileID: 0}
+  latitude: 38.42
+  longitude: 27.14
+  shortDescription: "\uC5D0\uAC8C\uD574\uB97C \uB9C8\uC8FC \uBCF4\uB294 \uB530\uB73B\uD55C
+    \uC624\uC2A4\uB9CC\uC758 \uD56D\uAD6C."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 7e2910aeff447084c9277da6f3d1ff8d, type: 2}
+  - {fileID: 11400000, guid: 32dc6dbd3aada7a4b919794be3f125bd, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC774\uC988\uBBF8\uB974"

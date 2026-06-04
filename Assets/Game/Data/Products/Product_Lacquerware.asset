@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27e49de8f35219c44a63185efbb0dde3, type: 3}
+  m_Name: Product_Lacquerware
+  m_EditorClassIdentifier: Game::Game.Data.ProductData
+  productId: product.lacquerware
+  displayNameKo: "\uCE60\uAE30"
+  icon: {fileID: 0}
+  basePrice: 95
+  isSpecial: 0
+  originPort: {fileID: 0}
+  shortDescription: "\uC63B\uB098\uBB34 \uC999\uC744 \uC5EC\uB7EC \uBC88 \uBC1C\uB77C
+    \uBC18\uB4E4\uBC18\uB4E4\uD558\uAC8C \uB9CC\uB4E0 \uADF8\uB987\uC774\uC5D0\uC694."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uCE60\uAE30"

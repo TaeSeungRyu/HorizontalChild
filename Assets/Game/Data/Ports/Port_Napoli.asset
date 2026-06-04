@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Napoli
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.napoli
+  displayNameKo: "\uB098\uD3F4\uB9AC"
+  displayNameOriginal: Napoli
+  nation: {fileID: 0}
+  latitude: 40.84
+  longitude: 14.25
+  shortDescription: "\uD070 \uC0B0\uC774 \uC606\uC5D0 \uC6B0\uB69D \uC120, \uB530\uB73B\uD55C
+    \uB0A8\uCABD \uD56D\uAD6C."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: fdfbe8ad9642c3b499ed388fa4180e85, type: 2}
+  - {fileID: 11400000, guid: c79296dcb4f0e8a4389a48ef587f2b6c, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uB098\uD3F4\uB9AC"

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Alexandria
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.alexandria
+  displayNameKo: "\uC54C\uB809\uC0B0\uB4DC\uB9AC\uC544"
+  displayNameOriginal: Iskenderiye
+  nation: {fileID: 0}
+  latitude: 31.2
+  longitude: 29.92
+  shortDescription: "\uC774\uC9D1\uD2B8 \uD070 \uAC15 \uC5B4\uADC0\uC5D0 \uC790\uB9AC\uD55C
+    \uC61B \uD559\uBB38\uC758 \uB3C4\uC2DC."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 3e2dd0dc803649a49b69a4d442a0bb1f, type: 2}
+  - {fileID: 11400000, guid: 7caf0c7f974dcfe43a6485a837514e6e, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC54C\uB809\uC0B0\uB4DC\uB9AC\uC544"
