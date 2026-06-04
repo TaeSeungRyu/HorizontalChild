@@ -37,6 +37,38 @@ namespace Game.Editor
         // Date line 처리 — 한 변이 경도로 이만큼 이상 점프하면 폴리곤 스킵
         private const float DatelineEdgeThresholdDeg = 180f;
 
+        // 테셀레이션 — 삼각형 변 길이가 이 값(Unity Unit) 을 넘으면 분할.
+        // PhysX 경고가 500 이상에서 발생하므로 200~300 사이가 안전.
+        // 작을수록 정점 ↑ / 충돌 안정성 ↑.
+        private const float MaxEdgeWorldUnits = 200f;
+
+        // ─── 해협 강제 개방 (Strait Carves) ─────────────────────────────────
+        // 1:50m 데이터에서 좁은 해협이 단순화로 거의 닫혀버린 곳을 국지적으로 강제로 열어줌.
+        // 실제 세계지도와 살짝 다르지만 게임 플레이를 위한 의도적 변형.
+        //
+        // 동작: carve.center 의 carve.radiusKm 반경 안에 들어오는 폴리곤 정점을
+        //       반경 밖으로 밀어냄 (코스트라인이 카브 영역을 비켜가게).
+        //
+        // 추가 카브 필요하면 배열에 한 줄 더 추가.
+        private struct StraitCarve
+        {
+            public string name;
+            public Vector2 center;   // (lng, lat)
+            public float radiusKm;   // 카브 반경
+        }
+
+        private static readonly StraitCarve[] StraitCarves = new[]
+        {
+            // 지브롤터 해협 — 원래 30km (전체 코스트 영향 적음)
+            new StraitCarve { name = "Gibraltar Strait", center = new Vector2(-5.6f, 35.95f), radiusKm = 30f },
+            // Ceuta 항구 핀포인트 — 항구 좌표 주위만 작게. Tangier (lng -5.8) 까지 50km 라 영향 없음.
+            new StraitCarve { name = "Ceuta Port", center = new Vector2(-5.3f, 35.89f), radiusKm = 15f },
+        };
+
+        // 해협 근처는 더 촘촘하게 (Edge 가 카브 영역을 가로지를 때 중간점 추가).
+        // 카브 반경의 1/6 정도면 카브 경계를 충분히 따라감.
+        private const float StraitFineEdgeKm = 5f;
+
         [MenuItem("Game/Bake World Land Mesh from GeoJSON")]
         public static void Bake()
         {
@@ -61,7 +93,7 @@ namespace Game.Editor
                 }
 
                 EditorUtility.DisplayProgressBar("Bake World Land", "삼각화 + 메쉬 생성...", 0.5f);
-                var mesh = BuildExtrudedMesh(rings);
+                var mesh = BuildExtrudedMesh(rings, out int carveAffected);
 
                 EditorUtility.DisplayProgressBar("Bake World Land", "Asset 저장 중...", 0.85f);
                 SaveMeshAsset(mesh);
@@ -71,10 +103,15 @@ namespace Game.Editor
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
 
+                string carveNames = StraitCarves.Length > 0
+                    ? string.Join(", ", System.Array.ConvertAll(StraitCarves, c => $"{c.name}({c.radiusKm}km)"))
+                    : "(없음)";
+
                 Debug.Log(
                     $"[M3WorldMeshBaker] 완료.\n" +
-                    $"  • Features 읽음: {featureCount} (스킵 {skipped})\n" +
+                    $"  • Features 읽음: {featureCount} (Dateline 스킵 {skipped})\n" +
                     $"  • 폴리곤 ring: {rings.Count}\n" +
+                    $"  • 해협 카브: {carveNames}, 변경된 정점 {carveAffected}개\n" +
                     $"  • 정점: {mesh.vertexCount}, 삼각형: {mesh.triangles.Length / 3}\n" +
                     $"  • Asset: {MeshPath} / {MaterialPath} / {PrefabPath}\n" +
                     $"  • 다음 단계: Prefab 을 씬에 드래그.");
@@ -177,56 +214,86 @@ namespace Game.Editor
 
         // ─── Mesh 빌드 ─────────────────────────────────────────────────────
 
-        private static Mesh BuildExtrudedMesh(List<Vector2[]> rings)
+        private static Mesh BuildExtrudedMesh(List<Vector2[]> rings, out int carveAffected)
         {
             var verts = new List<Vector3>();
             var tris = new List<int>();
 
+            carveAffected = 0;
             foreach (var ring in rings)
             {
-                var triIdx = EarClippingTriangulator.Triangulate(ring);
-                if (triIdx.Count == 0) continue;
+                // 1) 폴리곤 경계 변을 MaxEdgeWorldUnits 이내로 분할 (Side wall 도 작게 유지)
+                var subRing = SubdividePolygonEdges(ring, MaxEdgeWorldUnits);
 
+                // 1.5) 해협 카브 근처 변을 더 촘촘하게 분할 (카브 경계 따라가도록)
+                subRing = SubdivideEdgesNearCarves(subRing, StraitCarves, StraitFineEdgeKm);
+
+                // 1.6) 카브 영역 안의 정점을 반경 밖으로 밀어냄 (해협 강제 개방)
+                subRing = ApplyStraitCarves(subRing, StraitCarves, ref carveAffected);
+
+                int n = subRing.Length;
+
+                // 2) Top vertices 만 우선 만들기 (이후 interior 분할로 더 추가됨)
+                var topLocal = new List<Vector3>(n);
+                for (int i = 0; i < n; i++)
+                {
+                    var w = GeoCoordinate.LatLngToWorld(subRing[i].y, subRing[i].x);
+                    topLocal.Add(new Vector3(w.x, BaseY + ExtrudeHeight, w.z));
+                }
+
+                // 3) Ear-clipping 으로 top 삼각화
+                var topTris = EarClippingTriangulator.Triangulate(subRing);
+                if (topTris.Count == 0) continue;
+
+                // 4) Interior 큰 삼각형 분할 (topLocal 에 새 정점 추가, topTris 인덱스 재배치)
+                SubdivideLargeTriangles(topLocal, topTris, MaxEdgeWorldUnits);
+
+                int topCount = topLocal.Count;
                 int baseIndex = verts.Count;
-                int n = ring.Length;
 
-                // Top vertices (y = BaseY + ExtrudeHeight)
+                // 5) Top layer 정점
+                for (int i = 0; i < topCount; i++) verts.Add(topLocal[i]);
+                // 6) Bottom layer 정점 (Y 만 BaseY 로)
+                for (int i = 0; i < topCount; i++)
+                {
+                    var v = topLocal[i];
+                    verts.Add(new Vector3(v.x, BaseY, v.z));
+                }
+
+                // 7) Top triangles (CCW 위에서)
+                for (int i = 0; i < topTris.Count; i++)
+                {
+                    tris.Add(baseIndex + topTris[i]);
+                }
+
+                // 8) Bottom triangles (winding 반전 → 아래쪽 노멀)
+                for (int i = 0; i < topTris.Count; i += 3)
+                {
+                    tris.Add(baseIndex + topCount + topTris[i]);
+                    tris.Add(baseIndex + topCount + topTris[i + 2]);
+                    tris.Add(baseIndex + topCount + topTris[i + 1]);
+                }
+
+                // 9) Side walls — boundary 정점을 별도 복제해서 사용
+                //    top/bottom 면과 정점을 공유하면 RecalculateNormals 가 법선을 평균내서
+                //    경계에 사선 normal → 조명이 밝기 띠처럼 보임 ("경계선이 솟아 보이는" 현상).
+                //    별도 복제하면 각 면이 자기 normal 을 유지 → 깔끔한 직각 모서리.
+                int sideTopStart = verts.Count;
+                for (int i = 0; i < n; i++) verts.Add(topLocal[i]);
+                int sideBotStart = verts.Count;
                 for (int i = 0; i < n; i++)
                 {
-                    var world = GeoCoordinate.LatLngToWorld(ring[i].y, ring[i].x);
-                    verts.Add(new Vector3(world.x, BaseY + ExtrudeHeight, world.z));
+                    var v = topLocal[i];
+                    verts.Add(new Vector3(v.x, BaseY, v.z));
                 }
-                // Bottom vertices (y = BaseY)
+
                 for (int i = 0; i < n; i++)
                 {
-                    var world = GeoCoordinate.LatLngToWorld(ring[i].y, ring[i].x);
-                    verts.Add(new Vector3(world.x, BaseY, world.z));
-                }
-
-                // Top triangles (CCW from above)
-                for (int i = 0; i < triIdx.Count; i++)
-                {
-                    tris.Add(baseIndex + triIdx[i]);
-                }
-
-                // Bottom triangles (reverse winding so normal faces down)
-                for (int i = 0; i < triIdx.Count; i += 3)
-                {
-                    tris.Add(baseIndex + n + triIdx[i]);
-                    tris.Add(baseIndex + n + triIdx[i + 2]);
-                    tris.Add(baseIndex + n + triIdx[i + 1]);
-                }
-
-                // Side walls — for each edge of the ring, two triangles outward
-                // Top is CCW from above; outward normal is to the right when walking CCW.
-                for (int i = 0; i < n; i++)
-                {
-                    int curr = i;
                     int next = (i + 1) % n;
-                    int tCurr = baseIndex + curr;
-                    int tNext = baseIndex + next;
-                    int bCurr = baseIndex + n + curr;
-                    int bNext = baseIndex + n + next;
+                    int tCurr = sideTopStart + i;
+                    int tNext = sideTopStart + next;
+                    int bCurr = sideBotStart + i;
+                    int bNext = sideBotStart + next;
 
                     tris.Add(tCurr);
                     tris.Add(bCurr);
@@ -248,6 +315,186 @@ namespace Game.Editor
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
             return mesh;
+        }
+
+        // ─── 해협 강제 개방 ─────────────────────────────────────────────────
+
+        /// <summary>
+        /// 해협 카브 근처를 가로지르는 폴리곤 변을 fineKm 이내로 잘게 분할.
+        /// 변 자체가 카브 영역을 지나면 그 사이에 점을 박아 카브 적용 시 코스트라인이
+        /// 카브 경계를 자연스럽게 따라가게.
+        /// </summary>
+        private static Vector2[] SubdivideEdgesNearCarves(Vector2[] ring, StraitCarve[] carves, float fineKm)
+        {
+            if (ring == null || ring.Length < 3) return ring;
+            if (carves == null || carves.Length == 0) return ring;
+
+            const float kmPerDeg = 111f;
+            float fineDeg = fineKm / kmPerDeg;
+            var result = new List<Vector2>(ring.Length * 2);
+            int n = ring.Length;
+
+            for (int i = 0; i < n; i++)
+            {
+                var p = ring[i];
+                var q = ring[(i + 1) % n];
+                result.Add(p);
+
+                // 변이 어느 카브에든 가까이 가는가
+                var mid = (p + q) * 0.5f;
+                float halfEdge = (q - p).magnitude * 0.5f;
+                bool nearCarve = false;
+                foreach (var carve in carves)
+                {
+                    float carveDeg = carve.radiusKm / kmPerDeg;
+                    if ((mid - carve.center).magnitude < carveDeg + halfEdge)
+                    {
+                        nearCarve = true;
+                        break;
+                    }
+                }
+
+                if (!nearCarve) continue;
+
+                float edgeLen = (q - p).magnitude;
+                if (edgeLen <= fineDeg) continue;
+
+                int splits = Mathf.CeilToInt(edgeLen / fineDeg) - 1;
+                for (int s = 1; s <= splits; s++)
+                {
+                    float t = (float)s / (splits + 1);
+                    result.Add(Vector2.Lerp(p, q, t));
+                }
+            }
+            return result.ToArray();
+        }
+
+        /// <summary>
+        /// 카브 영역 안에 들어온 폴리곤 정점을 카브 경계 밖으로 밀어냄.
+        /// affected 에 변경된 정점 수 누적.
+        /// </summary>
+        private static Vector2[] ApplyStraitCarves(Vector2[] ring, StraitCarve[] carves, ref int affected)
+        {
+            if (ring == null || ring.Length == 0) return ring;
+            if (carves == null || carves.Length == 0) return ring;
+
+            const float kmPerDeg = 111f;
+            int n = ring.Length;
+            var result = new Vector2[n];
+            for (int i = 0; i < n; i++)
+            {
+                var pt = ring[i];
+                bool moved = false;
+                foreach (var carve in carves)
+                {
+                    float carveDeg = carve.radiusKm / kmPerDeg;
+                    var delta = pt - carve.center;
+                    float dist = delta.magnitude;
+                    if (dist < carveDeg)
+                    {
+                        if (dist < 1e-6f)
+                        {
+                            delta = new Vector2(0f, 1f); // 정확히 중심이면 임의 방향 (북쪽)
+                            dist = 1f;
+                        }
+                        pt = carve.center + delta.normalized * carveDeg;
+                        moved = true;
+                    }
+                }
+                if (moved) affected++;
+                result[i] = pt;
+            }
+            return result;
+        }
+
+        // ─── 테셀레이션 ────────────────────────────────────────────────────
+
+        /// <summary>
+        /// 폴리곤 경계의 각 변을 maxWorldEdge(Unity Unit) 이내로 분할.
+        /// lat/lng 좌표에서 작업하므로 1° = 15 unit 환산 적용.
+        /// </summary>
+        private static Vector2[] SubdividePolygonEdges(Vector2[] ring, float maxWorldEdge)
+        {
+            const float unitsPerDegree = 15f; // GeoCoordinate.WorldWidthUnits / 360
+            var result = new List<Vector2>(ring.Length * 2);
+            int n = ring.Length;
+
+            for (int i = 0; i < n; i++)
+            {
+                var p = ring[i];
+                var q = ring[(i + 1) % n];
+                result.Add(p);
+
+                float dx = (q.x - p.x) * unitsPerDegree;
+                float dz = (q.y - p.y) * unitsPerDegree;
+                float worldDist = Mathf.Sqrt(dx * dx + dz * dz);
+
+                if (worldDist > maxWorldEdge)
+                {
+                    int splits = Mathf.CeilToInt(worldDist / maxWorldEdge) - 1;
+                    for (int s = 1; s <= splits; s++)
+                    {
+                        float t = (float)s / (splits + 1);
+                        result.Add(Vector2.Lerp(p, q, t));
+                    }
+                }
+            }
+            return result.ToArray();
+        }
+
+        /// <summary>
+        /// Top 삼각형 중 변 길이가 maxEdgeLength 를 넘는 것을 재귀 분할.
+        /// 가장 긴 변의 중점을 새 정점으로 추가해 삼각형 1개를 2개로 쪼갬.
+        /// CCW winding 유지.
+        /// </summary>
+        private static void SubdivideLargeTriangles(List<Vector3> verts, List<int> tris, float maxEdgeLength)
+        {
+            float sqMax = maxEdgeLength * maxEdgeLength;
+            int safety = 200000; // 무한 루프 방어
+            int i = 0;
+            while (i < tris.Count && safety-- > 0)
+            {
+                int ia = tris[i], ib = tris[i + 1], ic = tris[i + 2];
+                var a = verts[ia]; var b = verts[ib]; var c = verts[ic];
+
+                // XZ 거리만 (Y 는 동일)
+                float dxab = b.x - a.x, dzab = b.z - a.z;
+                float dxbc = c.x - b.x, dzbc = c.z - b.z;
+                float dxca = a.x - c.x, dzca = a.z - c.z;
+                float dab = dxab * dxab + dzab * dzab;
+                float dbc = dxbc * dxbc + dzbc * dzbc;
+                float dca = dxca * dxca + dzca * dzca;
+
+                if (dab <= sqMax && dbc <= sqMax && dca <= sqMax)
+                {
+                    i += 3;
+                    continue;
+                }
+
+                int newIdx = verts.Count;
+                if (dab >= dbc && dab >= dca)
+                {
+                    // Split AB midpoint → (ia, newIdx, ic) + (newIdx, ib, ic)
+                    verts.Add(new Vector3((a.x + b.x) * 0.5f, a.y, (a.z + b.z) * 0.5f));
+                    tris[i + 1] = newIdx;
+                    tris.Add(newIdx); tris.Add(ib); tris.Add(ic);
+                }
+                else if (dbc >= dca)
+                {
+                    // Split BC midpoint → (ia, ib, newIdx) + (ia, newIdx, ic)
+                    verts.Add(new Vector3((b.x + c.x) * 0.5f, b.y, (b.z + c.z) * 0.5f));
+                    tris[i + 2] = newIdx;
+                    tris.Add(ia); tris.Add(newIdx); tris.Add(ic);
+                }
+                else
+                {
+                    // Split CA midpoint → (ia, ib, newIdx) + (newIdx, ib, ic)
+                    verts.Add(new Vector3((c.x + a.x) * 0.5f, c.y, (c.z + a.z) * 0.5f));
+                    tris[i + 2] = newIdx;
+                    tris.Add(newIdx); tris.Add(ib); tris.Add(ic);
+                }
+                // 현재 인덱스 그대로 — 분할된 삼각형도 재검사
+            }
         }
 
         // ─── Asset 저장 ────────────────────────────────────────────────────
