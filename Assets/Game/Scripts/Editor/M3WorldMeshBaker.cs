@@ -30,8 +30,12 @@ namespace Game.Editor
         private const string PrefabPath  = "Assets/Game/Art/Map/WorldLand.prefab";
 
         // 추천 기본값 (사용자 결정 사항)
-        private const float ExtrudeHeight = 2.5f;            // 살짝 솟은 두께
-        private const float BaseY = 0.15f;                    // 대륙 바닥 (SeaPlane y = -0.05 보다 살짝 위)
+        // ExtrudeHeight 가 크면 해안선이 "벽" 처럼 보임 (side wall 이 또렷).
+        // 0.2 = 거의 평면 / 0.5 = 살짝 입체감 (권장) / 1.5+ = 벽 느낌.
+        private const float ExtrudeHeight = 0.5f;
+        // BaseY = 땅의 바닥 Y 좌표. 높을수록 땅이 바다 위로 떠 보임.
+        // 0.15 = 바다 (-0.05) 바로 위 / 1.0 = 살짝 솟은 대륙 / 2.0+ = 둥둥 떠있는 섬 느낌.
+        private const float BaseY = 1.25f;
         private static readonly Color LandColor = new Color(0.62f, 0.54f, 0.38f); // 부드러운 갈색
 
         // Date line 처리 — 한 변이 경도로 이만큼 이상 점프하면 폴리곤 스킵
