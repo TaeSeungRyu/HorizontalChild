@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df3615adeb91ddb4f83708399f230476, type: 3}
+  m_Name: Region_NorthSea
+  m_EditorClassIdentifier: Game::Game.Data.RegionData
+  regionId: region.north_sea
+  displayNameKo: "\uBD81\uD574"
+  ports:
+  - {fileID: 11400000, guid: a970c5aab4ff46c45b99ac86db221b90, type: 2}
+  - {fileID: 11400000, guid: 76712c26f55cb634f95fdae621df3d4c, type: 2}
+  - {fileID: 11400000, guid: f9f0ee9511521874e94ebe5e85f8783d, type: 2}
+  - {fileID: 11400000, guid: 385c67c80e950c34083d95589919088d, type: 2}
+  - {fileID: 11400000, guid: edb3f21ae7814334e839616ddff83b09, type: 2}
+  - {fileID: 11400000, guid: 98ab8708dd73a464dacd7ea943cd9c01, type: 2}
+  discoveries:
+  - {fileID: 11400000, guid: 1549831da67528243b2b9271d812ce80, type: 2}
+  - {fileID: 11400000, guid: a3f6563c13308fb4f9e0dfd51a14cfa5, type: 2}
+  - {fileID: 11400000, guid: ad4bd6d18f2e5f74eb16d01365efdcab, type: 2}
+  unlockedAtStartFor:
+  - {fileID: 11400000, guid: 03b98d79c2b87574dbaf3a294bbf70b8, type: 2}
+  - {fileID: 11400000, guid: 804e011f398380d449247e5c259e623a, type: 2}
+  unlockHint: "\uB124\uB35C\uB780\uB4DC\xB7\uC601\uAD6D \uAD6D\uC801 \uC120\uD0DD
+    \uC2DC \uC2DC\uC791\uBD80\uD130 \uD574\uC81C."

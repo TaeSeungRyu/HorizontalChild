@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df3615adeb91ddb4f83708399f230476, type: 3}
+  m_Name: Region_Mediterranean
+  m_EditorClassIdentifier: Game::Game.Data.RegionData
+  regionId: region.mediterranean
+  displayNameKo: "\uC9C0\uC911\uD574 \uC11C\uBD80"
+  ports:
+  - {fileID: 11400000, guid: 223af44ca8b9b0143a7c488e46acc2f7, type: 2}
+  - {fileID: 11400000, guid: a176e8e4c546bc34b8ecf7f12fac5e1d, type: 2}
+  - {fileID: 11400000, guid: 37bc7c7ae22be024a9c43e2493466c45, type: 2}
+  - {fileID: 11400000, guid: c9172c0442f53dc449d31c832d6f7f50, type: 2}
+  discoveries:
+  - {fileID: 11400000, guid: 41d423760415021469bda9cb3bca8bab, type: 2}
+  - {fileID: 11400000, guid: 60911ba68fba72b40810a3b76f040958, type: 2}
+  - {fileID: 11400000, guid: c7b6bc0676fc74e42bee7e871356831b, type: 2}
+  unlockedAtStartFor:
+  - {fileID: 11400000, guid: 50ff5fa2e6c3f1044ba3d1c4585f47d3, type: 2}
+  unlockHint: "\uC774\uD0C8\uB9AC\uC544 \uAD6D\uC801 \uC120\uD0DD \uC2DC \uC2DC\uC791\uBD80\uD130
+    \uD574\uC81C / \uB2E4\uB978 \uAD6D\uAC00\uB294 \uD56D\uAD6C \uBC29\uBB38 \uC2DC
+    \uD574\uC81C."
