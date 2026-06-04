@@ -30,6 +30,10 @@ namespace Game.World
         [Tooltip("☑ 하면 큐브의 MeshRenderer 를 끔. 충돌(BoxCollider)은 유지. 세계지도 텍스처를 사용할 때 큐브가 지도를 가리지 않게.")]
         public bool hideVisuals = false;
 
+        [Tooltip("☑ 하면 큐브의 BoxCollider 도 제거. WorldLand 메쉬가 해안선 충돌을 담당할 때 켬. " +
+                 "큐브 충돌은 사각 박스라 정확도 ↓ — 새 메쉬 콜라이더가 더 정확.")]
+        public bool disableCollision = false;
+
         private LandmassData[] EffectiveLandmasses =>
             (landmassCatalog != null && landmassCatalog.all != null && landmassCatalog.all.Length > 0)
                 ? landmassCatalog.all : landmasses;
@@ -82,7 +86,12 @@ namespace Game.World
                     }
                 }
 
-                // BoxCollider (Cube primitive 가 기본 부착) 는 그대로 — Static
+                // BoxCollider (Cube primitive 가 기본 부착) — disableCollision 이면 제거
+                if (disableCollision)
+                {
+                    var col = cube.GetComponent<Collider>();
+                    if (col != null) Destroy(col);
+                }
                 cube.isStatic = true;
 
                 // Landmass 컴포넌트 — ShipController 가 인식

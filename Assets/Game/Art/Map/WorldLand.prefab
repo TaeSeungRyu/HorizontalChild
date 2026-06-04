@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 1357828122296230040}
   - component: {fileID: 7895816138934867000}
   - component: {fileID: 6932008231222741052}
+  - component: {fileID: 8141423255093879579}
+  - component: {fileID: 6122906969445152745}
   m_Layer: 0
   m_Name: WorldLand
   m_TagString: Untagged
@@ -90,3 +92,37 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &8141423255093879579
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8225278189897900561}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 512f1201e81d0c7479185d591a82e429, type: 2}
+--- !u!114 &6122906969445152745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8225278189897900561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b4212b85319e944ab6a58fe7764a92f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game::Game.World.Landmass

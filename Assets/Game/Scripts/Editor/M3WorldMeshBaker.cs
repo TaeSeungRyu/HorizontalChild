@@ -302,13 +302,24 @@ namespace Game.Editor
         {
             // 임시 GameObject 만들고 Prefab 저장 후 파괴
             var go = new GameObject("WorldLand");
-            var mf = go.AddComponent<MeshFilter>();
             var meshAsset = AssetDatabase.LoadAssetAtPath<Mesh>(MeshPath);
-            mf.sharedMesh = meshAsset != null ? meshAsset : mesh;
+            var sharedMesh = meshAsset != null ? meshAsset : mesh;
+
+            var mf = go.AddComponent<MeshFilter>();
+            mf.sharedMesh = sharedMesh;
+
             var mr = go.AddComponent<MeshRenderer>();
             mr.sharedMaterial = material;
             mr.shadowCastingMode = ShadowCastingMode.Off;
             mr.receiveShadows = false;
+
+            // 진짜 해안선 충돌 — ShipController 의 OverlapSphere 가 이 콜라이더를 잡음
+            var mc = go.AddComponent<MeshCollider>();
+            mc.sharedMesh = sharedMesh;
+            mc.convex = false; // 비-볼록 — 정적 메쉬에서 OK
+
+            // ShipController.IsLandAt 가 GetComponentInParent<Landmass>() 로 검사 — 단일 컴포넌트면 충분
+            go.AddComponent<Game.World.Landmass>();
 
             PrefabUtility.SaveAsPrefabAsset(go, PrefabPath);
             Object.DestroyImmediate(go);
