@@ -88,6 +88,9 @@ namespace Game.Editor
                     $"  • Asset: {MeshPath} / {MaterialPath} / {PrefabPath}\n" +
                     $"  • 다음 단계: Prefab 을 씬에 드래그.\n" +
                     $"  • 항해 카브(Ceuta 등) 는 런타임 WorldCarves 에서 처리 — 메쉬 변형 없음.");
+
+                // BuildExtrudedMesh 안에서 카운트 한 skippedByTriangulation 는 로컬이라
+                // 본 로그에선 접근 불가 — 위 LogWarning 으로 개별 표시됨
             }
             finally
             {
@@ -191,6 +194,7 @@ namespace Game.Editor
         {
             var verts = new List<Vector3>();
             var tris = new List<int>();
+            int skippedByTriangulation = 0;
 
             foreach (var ring in rings)
             {
@@ -209,7 +213,27 @@ namespace Game.Editor
 
                 // 3) Ear-clipping 으로 top 삼각화
                 var topTris = EarClippingTriangulator.Triangulate(subRing);
-                if (topTris.Count == 0) continue;
+                if (topTris.Count == 0)
+                {
+                    skippedByTriangulation++;
+                    // 누락 위치 확인용 — 폴리곤 bbox 출력
+                    if (skippedByTriangulation <= 10)
+                    {
+                        float minLat = float.MaxValue, maxLat = float.MinValue;
+                        float minLng = float.MaxValue, maxLng = float.MinValue;
+                        foreach (var p in ring)
+                        {
+                            if (p.y < minLat) minLat = p.y;
+                            if (p.y > maxLat) maxLat = p.y;
+                            if (p.x < minLng) minLng = p.x;
+                            if (p.x > maxLng) maxLng = p.x;
+                        }
+                        Debug.LogWarning(
+                            $"[M3WorldMeshBaker] 삼각화 실패 — vertices={ring.Length}, " +
+                            $"lat[{minLat:F1}~{maxLat:F1}], lng[{minLng:F1}~{maxLng:F1}]");
+                    }
+                    continue;
+                }
 
                 // 4) Interior 큰 삼각형 분할 (topLocal 에 새 정점 추가, topTris 인덱스 재배치)
                 SubdivideLargeTriangles(topLocal, topTris, MaxEdgeWorldUnits);

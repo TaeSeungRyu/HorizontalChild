@@ -31,7 +31,9 @@ namespace Game.Editor
         // 세계 크기 — GeoCoordinate.WorldWidthUnits 와 일치
         private const float WorldHalfWidth = 2700f;   // x ∈ [-2700, 2700]
         private const float WorldHalfDepth = 1350f;   // z ∈ [-1350, 1350]
-        private const float SeaY = -0.1f;             // WorldLand 보다 아래
+        // 99_Sea 메쉬의 파도 정점이 위로 솟아 있어서 충분히 낮춰야 WorldLand(BaseY=1.25)를 안 덮음.
+        // -5 = 파도가 위로 솟아도 y=0 근처에서 마무리.
+        private const float SeaY = -5f;
 
         [MenuItem("Game/Apply CatBorg Sea")]
         public static void ApplyCatBorgSea()
