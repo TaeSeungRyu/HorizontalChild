@@ -51980,10 +51980,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game::Game.World.LandPatchSpawner
   patches:
   - name: Gangwon
-    latitude: 37.85
-    longitude: 128.5
-    sizeLatitudeDeg: 1.6
-    sizeLongitudeDeg: 1
+    latitude: 38
+    longitude: 128
+    sizeLatitudeDeg: 2.5
+    sizeLongitudeDeg: 2.5
   baseY: 1.25
   extrudeHeight: 0.5
   patchColor: {r: 0.62, g: 0.54, b: 0.38, a: 1}
