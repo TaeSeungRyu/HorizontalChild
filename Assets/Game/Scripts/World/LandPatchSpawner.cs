@@ -39,13 +39,14 @@ namespace Game.World
         public Patch[] patches =
         {
             // 강원도 — 1:50m 에서 동쪽 해안선이 안쪽으로 깎임
+            // 기존 한반도 메쉬와 겹치도록 폭 키움 (떠 있는 박스로 보이지 않게)
             new Patch
             {
                 name = "Gangwon",
-                latitude = 37.85f,
-                longitude = 128.5f,
-                sizeLatitudeDeg = 1.6f,
-                sizeLongitudeDeg = 1.0f,
+                latitude = 38.0f,
+                longitude = 128.0f,
+                sizeLatitudeDeg = 2.5f,  // lat 36.75~39.25
+                sizeLongitudeDeg = 2.5f, // lng 126.75~129.25 (기존 한반도 서쪽 메쉬와 겹침)
             },
         };
 
