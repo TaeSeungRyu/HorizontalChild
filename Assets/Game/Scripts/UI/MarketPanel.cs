@@ -45,7 +45,37 @@ namespace Game.UI
         {
             if (panelRoot == null) panelRoot = gameObject;
             panelRoot.SetActive(false);
-            if (closeButton != null) closeButton.onClick.AddListener(Close);
+            // 방어적 — Awake 가 안 불릴 경우 OpenForPort 에서 다시 등록
+            BindCloseButton();
+        }
+
+        private void BindCloseButton()
+        {
+            if (closeButton == null)
+            {
+                Debug.LogWarning(
+                    "[MarketPanel] closeButton 필드가 비어있음 — " +
+                    "Inspector 에서 Close Button 필드에 버튼 드래그 필요.");
+                return;
+            }
+            closeButton.onClick.RemoveListener(Close);
+            closeButton.onClick.AddListener(Close);
+            Debug.Log(
+                $"[MarketPanel] Close listener 등록: {closeButton.name} " +
+                $"(Button 활성={closeButton.interactable}, Image raycast={(closeButton.image != null ? closeButton.image.raycastTarget : false)})");
+        }
+
+        /// <summary>인스펙터 ⋮ → "Test Close" 로 호출. CloseButton 이 정상 바인딩됐는지 검증.</summary>
+        [ContextMenu("Test Close")]
+        private void TestClose()
+        {
+            if (closeButton == null)
+            {
+                Debug.LogError("[MarketPanel] closeButton 필드 비어있음");
+                return;
+            }
+            Debug.Log($"[MarketPanel] Test — {closeButton.name} onClick 호출");
+            closeButton.onClick.Invoke();
         }
 
         public void OpenForPort(PortData port)
@@ -58,16 +88,23 @@ namespace Game.UI
             _cargo = PlayerCargo.Instance;
             _state = PlayerState.Instance;
 
+            // 안전망 — CloseButton listener 재등록 (Awake 가 비활성 상태에서 안 불렸을 수 있음)
+            BindCloseButton();
+
             // 이벤트 연결 — 거래 후 자동 갱신
             if (_cargo != null) _cargo.onCargoChanged.AddListener(Refresh);
             if (_state != null) _state.onMoneyChanged.AddListener(_ => Refresh());
 
             Refresh();
             panelRoot.SetActive(true);
+
+            // CloseButton 이 최상위에 보이도록 (Auto Layout 으로 만든 ScrollView 가 가리지 못하게)
+            if (closeButton != null) closeButton.transform.SetAsLastSibling();
         }
 
         public void Close()
         {
+            Debug.Log("[MarketPanel] Close clicked");
             if (_cargo != null) _cargo.onCargoChanged.RemoveListener(Refresh);
             if (_state != null) _state.onMoneyChanged.RemoveListener(_ => Refresh());
             if (panelRoot != null) panelRoot.SetActive(false);
@@ -259,35 +296,51 @@ namespace Game.UI
             var panelRT = panelRoot.GetComponent<RectTransform>();
             if (panelRT == null) return;
 
-            // 패널 — 화면 중앙 1800x900
-            panelRT.anchorMin = new Vector2(0.5f, 0.5f);
-            panelRT.anchorMax = new Vector2(0.5f, 0.5f);
+            // 1) 패널 — 화면 전체 stretch
+            panelRT.anchorMin = Vector2.zero;
+            panelRT.anchorMax = Vector2.one;
             panelRT.pivot = new Vector2(0.5f, 0.5f);
-            panelRT.sizeDelta = new Vector2(1800f, 900f);
+            panelRT.sizeDelta = Vector2.zero;
             panelRT.anchoredPosition = Vector2.zero;
+            panelRT.offsetMin = Vector2.zero;
+            panelRT.offsetMax = Vector2.zero;
 
+            // 2) 불투명 배경 Image 추가
+            var bgImg = panelRoot.GetComponent<Image>();
+            if (bgImg == null) bgImg = panelRoot.AddComponent<Image>();
+            bgImg.color = new Color(0.10f, 0.13f, 0.18f, 1f); // 진한 남색, opaque
+            bgImg.raycastTarget = true; // 뒤쪽 클릭 차단
+
+            // 3) Title — 상단
             if (titleText != null) SetRect(titleText.rectTransform,
                 new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f),
                 new Vector2(0f, -40f), new Vector2(1720f, 70f));
 
+            // 4) Money — 상단 좌
             if (moneyText != null) SetRect(moneyText.rectTransform,
                 new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f),
                 new Vector2(-400f, -120f), new Vector2(800f, 40f));
 
+            // 5) Cargo — 상단 우
             if (cargoText != null) SetRect(cargoText.rectTransform,
                 new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f),
                 new Vector2(400f, -120f), new Vector2(800f, 40f));
 
+            // 6) ScrollView — Title 아래 ~ Close 위 사이를 stretch
             EnsureRowsScrollView(panelRT);
 
+            // 7) CloseButton — 하단 중앙, 최상위 (다른 UI 가 가리지 못하게)
             if (closeButton != null)
             {
                 SetRect(closeButton.GetComponent<RectTransform>(),
                     new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f),
                     new Vector2(0f, 40f), new Vector2(240f, 80f));
+                closeButton.transform.SetAsLastSibling();
+                // 안전망 — 리스너 재등록
+                BindCloseButton();
             }
 
-            Debug.Log("[MarketPanel] Auto Layout 적용 완료.");
+            Debug.Log("[MarketPanel] Auto Layout 적용 완료 (풀스크린·불투명).");
         }
 
         private static void SetRect(RectTransform rt, Vector2 aMin, Vector2 aMax,
@@ -309,9 +362,7 @@ namespace Game.UI
                 var scroll = rowsContainer.GetComponentInParent<ScrollRect>();
                 if (scroll != null)
                 {
-                    SetRect(scroll.GetComponent<RectTransform>(),
-                        new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-                        new Vector2(0f, -20f), new Vector2(1720f, 540f));
+                    StretchScroll(scroll.GetComponent<RectTransform>());
                     return;
                 }
             }
@@ -322,7 +373,7 @@ namespace Game.UI
             scrollGO.transform.SetParent(panelRoot.transform, false);
             var scrollRT = scrollGO.GetComponent<RectTransform>();
             var bg = scrollGO.GetComponent<Image>();
-            bg.color = new Color(0f, 0f, 0f, 0.15f);
+            bg.color = new Color(0.05f, 0.07f, 0.10f, 1f); // 더 진한 색, 불투명
             bg.raycastTarget = true;
             var scrollRect = scrollGO.GetComponent<ScrollRect>();
             scrollRect.horizontal = false;
@@ -371,9 +422,20 @@ namespace Game.UI
 
             rowsContainer = contentRT;
 
-            SetRect(scrollRT,
-                new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-                new Vector2(0f, -20f), new Vector2(1720f, 540f));
+            StretchScroll(scrollRT);
+        }
+
+        // ScrollView 를 풀스크린 패널에 stretch — Title 아래 ~ Close 위 사이
+        private static void StretchScroll(RectTransform scrollRT)
+        {
+            scrollRT.anchorMin = Vector2.zero;
+            scrollRT.anchorMax = Vector2.one;
+            scrollRT.pivot = new Vector2(0.5f, 0.5f);
+            scrollRT.anchoredPosition = Vector2.zero;
+            scrollRT.sizeDelta = Vector2.zero;
+            // 상단 170px (Title + Money/Cargo 공간) / 하단 160px (Close 버튼 공간) / 좌우 80px 마진
+            scrollRT.offsetMin = new Vector2(80f, 160f);
+            scrollRT.offsetMax = new Vector2(-80f, -170f);
         }
     }
 }
