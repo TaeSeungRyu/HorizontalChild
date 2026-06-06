@@ -8,14 +8,14 @@
 
 ## 시스템 구성
 
-| 컴포넌트 | 위치 | 역할 |
-|---|---|---|
-| `NpcDefinition` | SO (기존) | NPC 정의 — character + type + homePort |
-| `NpcCatalog` | SO (신규) | 모든 NPC 모음 |
-| `CombatService` | GameManager 싱글톤 | 전투 공식 + 보상 적용 |
-| `NpcSpawner` | 빈 GameObject 에 부착 | 게임 시작 시 NPC 풀 spawn |
-| `NpcShip` | 자동 (spawner 가 부착) | 클릭 시 전투 트리거 |
-| `CombatResultPanel` | Canvas UI | 결과 표시 |
+| 컴포넌트            | 위치                   | 역할                                   |
+| ------------------- | ---------------------- | -------------------------------------- |
+| `NpcDefinition`     | SO (기존)              | NPC 정의 — character + type + homePort |
+| `NpcCatalog`        | SO (신규)              | 모든 NPC 모음                          |
+| `CombatService`     | GameManager 싱글톤     | 전투 공식 + 보상 적용                  |
+| `NpcSpawner`        | 빈 GameObject 에 부착  | 게임 시작 시 NPC 풀 spawn              |
+| `NpcShip`           | 자동 (spawner 가 부착) | 클릭 시 전투 트리거                    |
+| `CombatResultPanel` | Canvas UI              | 결과 표시                              |
 
 ---
 
@@ -28,11 +28,13 @@ playerPower ≥ npcPower → 승리
 ```
 
 **보상 (승리)**:
+
 - 해적: +돈 100~500, 좋은 명성 +10
 - 상선: +돈 100~500, 나쁜 명성 +10 (약탈)
 - 호위선: +돈 100~500
 
 **패널티 (패배)**:
+
 - 돈 -50 ~ -200
 
 ---
@@ -45,6 +47,7 @@ playerPower ≥ npcPower → 승리
 4. `Assets/Game/Data/Characters/` 에 새 캐릭터 6개
 
 생성된 NPC:
+
 - 해적 4: 검은수염 / 은빛 잭 / 선장 마야 / 붉은 왜구
 - 상선 1: 상인 마르코
 - 호위선 1: 호위병 한스
@@ -110,25 +113,25 @@ playerPower ≥ npcPower → 승리
 
 ## 자주 발생하는 문제
 
-| 증상 | 해결 |
-|---|---|
-| NPC 큐브 안 보임 | NpcSpawner 의 Npc Catalog 필드 채워졌나 / Catalog 비어있나 (Refresh All Catalogs) |
-| 큐브 탭해도 반응 없음 | Main Camera 의 Physics Raycaster 컴포넌트 있나 |
-| 전투 결과 패널 안 뜸 | CombatResultPanel 필드 필드 채워졌나 (Result Panel) |
-| Console 에 "CombatService 없음" | GameManager 에 CombatService 컴포넌트 부착 |
-| 승리·패배 결과 너무 한쪽에 치우침 | CombatService Inspector 의 보상 범위 조정 / 무작위 폭 조정 |
+| 증상                              | 해결                                                                              |
+| --------------------------------- | --------------------------------------------------------------------------------- |
+| NPC 큐브 안 보임                  | NpcSpawner 의 Npc Catalog 필드 채워졌나 / Catalog 비어있나 (Refresh All Catalogs) |
+| 큐브 탭해도 반응 없음             | Main Camera 의 Physics Raycaster 컴포넌트 있나                                    |
+| 전투 결과 패널 안 뜸              | CombatResultPanel 필드 필드 채워졌나 (Result Panel)                               |
+| Console 에 "CombatService 없음"   | GameManager 에 CombatService 컴포넌트 부착                                        |
+| 승리·패배 결과 너무 한쪽에 치우침 | CombatService Inspector 의 보상 범위 조정 / 무작위 폭 조정                        |
 
 ---
 
 ## 추후 폴리시
 
-| 작업 | 효과 |
-|---|---|
-| NPC 이동 AI (random walk) | 살아있는 바다 느낌 |
-| NPC 동적 재스폰 | 영구 콘텐츠 |
-| 호위선이 플레이어 도와줌 | 협력 전투 |
-| 해적이 플레이어 추적 | 긴장감 |
-| ShipData.prefab3D 사용 | 큐브 → 진짜 배 모델 |
-| 명성 게이트 — 명성 낮으면 강한 NPC 못 이김 | 진행 게이팅 |
-| 전투 일시정지·애니메이션 | 시각 완성도 |
-| 화물 약탈 (상선 승리 시 cargo 일부 획득) | 전리품 시스템 |
+| 작업                                       | 효과                |
+| ------------------------------------------ | ------------------- |
+| NPC 이동 AI (random walk)                  | 살아있는 바다 느낌  |
+| NPC 동적 재스폰                            | 영구 콘텐츠         |
+| 호위선이 플레이어 도와줌                   | 협력 전투           |
+| 해적이 플레이어 추적                       | 긴장감              |
+| ShipData.prefab3D 사용                     | 큐브 → 진짜 배 모델 |
+| 명성 게이트 — 명성 낮으면 강한 NPC 못 이김 | 진행 게이팅         |
+| 전투 일시정지·애니메이션                   | 시각 완성도         |
+| 화물 약탈 (상선 승리 시 cargo 일부 획득)   | 전리품 시스템       |

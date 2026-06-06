@@ -86,5 +86,101 @@ namespace Game.UI
         {
             if (panelRoot != null) panelRoot.SetActive(false);
         }
+
+        // ─── 자동 레이아웃 — JournalPanel / MarketPanel 패턴 ────────────────
+
+        [ContextMenu("Auto Layout")]
+        private void AutoLayout()
+        {
+            if (panelRoot == null) panelRoot = gameObject;
+            var panelRT = panelRoot.GetComponent<RectTransform>();
+            if (panelRT == null) return;
+
+            // 1) 패널 — 화면 중앙 1200x700 (전투 결과는 풀스크린보다 모달이 자연스러움)
+            panelRT.anchorMin = new Vector2(0.5f, 0.5f);
+            panelRT.anchorMax = new Vector2(0.5f, 0.5f);
+            panelRT.pivot = new Vector2(0.5f, 0.5f);
+            panelRT.sizeDelta = new Vector2(1200f, 700f);
+            panelRT.anchoredPosition = Vector2.zero;
+
+            // 불투명 배경
+            var bgImg = panelRoot.GetComponent<Image>();
+            if (bgImg == null) bgImg = panelRoot.AddComponent<Image>();
+            bgImg.color = new Color(0.10f, 0.13f, 0.18f, 1f);
+            bgImg.raycastTarget = true;
+
+            // 2) Header — 상단 중앙
+            if (headerText != null)
+            {
+                SetRect(headerText.rectTransform,
+                    new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f),
+                    new Vector2(0f, -40f), new Vector2(1120f, 100f));
+                headerText.alignment = TextAlignmentOptions.Center;
+                headerText.fontSize = 64f;
+            }
+
+            // 3) PlayerInfo — 중앙 좌측
+            if (playerInfoText != null)
+            {
+                SetRect(playerInfoText.rectTransform,
+                    new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                    new Vector2(-300f, 100f), new Vector2(440f, 140f));
+                playerInfoText.alignment = TextAlignmentOptions.Center;
+                playerInfoText.fontSize = 32f;
+            }
+
+            // 4) NpcInfo — 중앙 우측
+            if (npcInfoText != null)
+            {
+                SetRect(npcInfoText.rectTransform,
+                    new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                    new Vector2(300f, 100f), new Vector2(440f, 140f));
+                npcInfoText.alignment = TextAlignmentOptions.Center;
+                npcInfoText.fontSize = 32f;
+            }
+
+            // 5) Reward — Player/Npc 아래
+            if (rewardText != null)
+            {
+                SetRect(rewardText.rectTransform,
+                    new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                    new Vector2(0f, -50f), new Vector2(1000f, 120f));
+                rewardText.alignment = TextAlignmentOptions.Center;
+                rewardText.fontSize = 28f;
+            }
+
+            // 6) Message — Reward 아래
+            if (messageText != null)
+            {
+                SetRect(messageText.rectTransform,
+                    new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                    new Vector2(0f, -180f), new Vector2(1000f, 80f));
+                messageText.alignment = TextAlignmentOptions.Center;
+                messageText.fontSize = 26f;
+                messageText.enableWordWrapping = true;
+            }
+
+            // 7) OK Button — 하단 중앙, 최상위
+            if (okButton != null)
+            {
+                SetRect(okButton.GetComponent<RectTransform>(),
+                    new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f),
+                    new Vector2(0f, 40f), new Vector2(240f, 80f));
+                okButton.transform.SetAsLastSibling();
+            }
+
+            Debug.Log("[CombatResultPanel] Auto Layout 적용 완료.");
+        }
+
+        private static void SetRect(RectTransform rt, Vector2 aMin, Vector2 aMax,
+            Vector2 pivot, Vector2 pos, Vector2 size)
+        {
+            if (rt == null) return;
+            rt.anchorMin = aMin;
+            rt.anchorMax = aMax;
+            rt.pivot = pivot;
+            rt.sizeDelta = size;
+            rt.anchoredPosition = pos;
+        }
     }
 }
