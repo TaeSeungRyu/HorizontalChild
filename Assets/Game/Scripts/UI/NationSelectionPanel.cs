@@ -71,6 +71,14 @@ namespace Game.UI
 
             ClearSelectedDisplay();
 
+            // SaveService 가 이미 국가를 복원했으면 패널 안 띄움
+            bool nationAlreadySet = gameSession != null && gameSession.SelectedNation != null;
+            if (nationAlreadySet)
+            {
+                panelRoot.SetActive(false);
+                return;
+            }
+
             if (autoShowOnStart)
             {
                 Show();
