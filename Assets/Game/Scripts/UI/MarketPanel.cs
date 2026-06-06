@@ -4,6 +4,7 @@ using Game.Market;
 using Game.Player;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Game.UI
@@ -91,9 +92,17 @@ namespace Game.UI
             // 안전망 — CloseButton listener 재등록 (Awake 가 비활성 상태에서 안 불렸을 수 있음)
             BindCloseButton();
 
-            // 이벤트 연결 — 거래 후 자동 갱신
-            if (_cargo != null) _cargo.onCargoChanged.AddListener(Refresh);
-            if (_state != null) _state.onMoneyChanged.AddListener(_ => Refresh());
+            // 이벤트 연결 — 거래 후 자동 갱신 (named 메서드로 중복 등록 방지)
+            if (_cargo != null)
+            {
+                _cargo.onCargoChanged.RemoveListener(Refresh);
+                _cargo.onCargoChanged.AddListener(Refresh);
+            }
+            if (_state != null)
+            {
+                _state.onMoneyChanged.RemoveListener(OnMoneyChanged);
+                _state.onMoneyChanged.AddListener(OnMoneyChanged);
+            }
 
             Refresh();
             panelRoot.SetActive(true);
@@ -106,9 +115,12 @@ namespace Game.UI
         {
             Debug.Log("[MarketPanel] Close clicked");
             if (_cargo != null) _cargo.onCargoChanged.RemoveListener(Refresh);
-            if (_state != null) _state.onMoneyChanged.RemoveListener(_ => Refresh());
+            if (_state != null) _state.onMoneyChanged.RemoveListener(OnMoneyChanged);
             if (panelRoot != null) panelRoot.SetActive(false);
         }
+
+        // money change → Refresh — named 메서드여야 RemoveListener 가 정상 동작
+        private void OnMoneyChanged(int _) => Refresh();
 
         // ─── UI 갱신 ──────────────────────────────────────────────────────
 
@@ -129,8 +141,15 @@ namespace Game.UI
 
         private void BuildRows()
         {
-            // 기존 행 제거
-            foreach (var go in _spawnedRows) if (go != null) Destroy(go);
+            // 기존 행 제거 — VerticalLayoutGroup 이 일시적으로 양쪽 모두 layout 하지 않도록
+            // SetParent(null) 로 detach 후 Destroy. EventSystem selection 도 초기화.
+            if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(null);
+            foreach (var go in _spawnedRows)
+            {
+                if (go == null) continue;
+                go.transform.SetParent(null);
+                Destroy(go);
+            }
             _spawnedRows.Clear();
 
             if (rowsContainer == null || _currentPort == null) return;
@@ -267,6 +286,16 @@ namespace Game.UI
 
             var btn = go.GetComponent<Button>();
             btn.targetGraphic = img;
+
+            // ColorBlock 명시 — highlighted/selected 가 normal 과 같아야 옆 버튼 색이 안 변함
+            var cb = btn.colors;
+            cb.normalColor = Color.white;
+            cb.highlightedColor = Color.white;
+            cb.pressedColor = new Color(0.7f, 0.7f, 0.7f); // 누를 때만 살짝 어둡게
+            cb.selectedColor = Color.white;
+            cb.disabledColor = new Color(0.4f, 0.4f, 0.4f);
+            cb.fadeDuration = 0f; // 색 전환 보간 끔 (깜빡임 방지)
+            btn.colors = cb;
 
             var le = go.GetComponent<LayoutElement>();
             le.preferredWidth = width;
