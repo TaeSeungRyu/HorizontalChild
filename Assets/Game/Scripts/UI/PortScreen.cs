@@ -38,6 +38,10 @@ namespace Game.UI
         [Tooltip("의뢰 완료 시 표시할 패널. 비어 있으면 Console 로그만 남고 UI 알림 없음.")]
         public MissionCompletedPanel missionCompletedPanel;
 
+        [Tooltip("시장 버튼 클릭 시 열릴 패널. 비어 있으면 버튼이 비활성화됨.")]
+        public MarketPanel marketPanel;
+        public Button marketButton;
+
         private PortData _currentPort;
         private PortArrivalDialog _arrivalDialog;
 
@@ -48,6 +52,13 @@ namespace Game.UI
 
             if (leaveButton != null) leaveButton.onClick.AddListener(OnLeaveClicked);
             if (guildButton != null) guildButton.onClick.AddListener(OnGuildClicked);
+            if (marketButton != null) marketButton.onClick.AddListener(OnMarketClicked);
+        }
+
+        private void OnMarketClicked()
+        {
+            if (_currentPort == null || marketPanel == null) return;
+            marketPanel.OpenForPort(_currentPort);
         }
 
         /// <summary>외부(PortArrivalDialog)에서 호출 — 항구 화면 열기.</summary>
