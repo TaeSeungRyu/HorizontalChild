@@ -9731,7 +9731,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 100}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &428773627
@@ -13869,6 +13869,7 @@ GameObject:
   - component: {fileID: 600646458}
   - component: {fileID: 600646459}
   - component: {fileID: 600646460}
+  - component: {fileID: 600646461}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -14042,6 +14043,30 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onSold:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &600646461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 600646453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21622658b9cbb3f4cac3ae9e548c198f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game::Game.Save.SaveService
+  nationCatalog: {fileID: 11400000, guid: 411000c7f91f7b04aacabce2d1e35f30, type: 2}
+  discoveryCatalog: {fileID: 11400000, guid: d8e1e77fa1fceeb4e85017e6d1b0c5ca, type: 2}
+  missionCatalog: {fileID: 11400000, guid: f5fcf05387bdbd94dbd1625eddc73067, type: 2}
+  regionCatalog: {fileID: 11400000, guid: bae669d235d881041b45cdc38c55dd6a, type: 2}
+  productCatalog: {fileID: 11400000, guid: 15a1ae52a9fb58944ad2db654f426074, type: 2}
+  playerShip: {fileID: 1690041783}
+  onSaved:
+    m_PersistentCalls:
+      m_Calls: []
+  onLoaded:
     m_PersistentCalls:
       m_Calls: []
 --- !u!4 &603868068 stripped
