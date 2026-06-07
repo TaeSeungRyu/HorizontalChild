@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f673533686edc14e9e607386aac7bb9, type: 3}
+  m_Name: Ship_Fluyt
+  m_EditorClassIdentifier: Game::Game.Data.ShipData
+  shipId: ship.fluyt
+  displayName: "\uD50C\uB77C\uC774\uD2B8\uC120"
+  icon: {fileID: 0}
+  prefab3D: {fileID: 0}
+  cannonPower: 4
+  speed: 6
+  cargoCapacity: 350
+  maxDurability: 80
+  basePrice: 4000
+  gate:
+    requiredGoodReputation: 0
+    requiredBadReputation: 0
+  shortDescription: "\uB124\uB35C\uB780\uB4DC\uC758 \uC9D0\uC744 \uB9CE\uC774 \uC2E3\uB294
+    \uBE60\uB978 \uBC30\uC608\uC694."
+  longDescription: "\uC120\uCCB4\uAC00 \uB465\uAE00\uACE0 \uC801\uC740 \uC0AC\uB78C\uC73C\uB85C
+    \uC6B4\uD56D\uD574\uC11C \uBB34\uC5ED\uC5D0 \uC720\uB9AC\uD588\uC5B4\uC694."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uD50C\uB77C\uC774\uD2B8\uC120"
