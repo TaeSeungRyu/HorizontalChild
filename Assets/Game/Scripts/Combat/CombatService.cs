@@ -9,16 +9,28 @@ namespace Game.Combat
     /// <summary>
     /// 해상 전투 서비스 — 자동 전투 (어린이 친화: 즉시 해결, 데미지 없음).
     ///
-    /// 공식:
-    ///   playerPower = ship.cannonPower × 10 + captain.bravery + 무작위(0~50)
-    ///   npcPower    = npcChar.bravery + npcChar.seamanship + 무작위(0~50)
+    /// 공식 (어린이 친화 ~70% 승률 목표):
+    ///   playerPower = ship.cannonPower × 15 + captain.bravery + 무작위(0~30)
+    ///   npcPower    = npcChar.bravery + 무작위(0~30)
     ///   playerPower ≥ npcPower → 승리
+    ///
+    /// 예시 (ship.cannonPower=3, captain.bravery=60):
+    ///   playerPower 평균 ≈ 45 + 60 + 15 = 120
+    ///   해적(검은수염, bravery=85) 평균 ≈ 85 + 15 = 100  → 플레이어 우세
+    ///   해적(약함, bravery=50) 평균 ≈ 65                  → 압도
+    ///   강한 해적(bravery=100) 평균 ≈ 115                 → 박빙
     ///
     /// 보상·패널티 (GAME_MECHANICS §6.3):
     ///   해적 격파: +돈 +좋은명성
     ///   상선 약탈: +돈 +나쁜명성
     ///   호위선 승리: +돈
     ///   패배: −돈 (durability 손실은 추후 ShipDurabilityService 도입 시)
+    ///
+    /// 추후 확장 (MVP → 풀세트):
+    ///   - NPC 이동 AI (random walk / chase / flee)
+    ///   - 실시간 전투 — 양측 turn 으로 공격, ship.durability 차감
+    ///   - 전투 중 도주 옵션 (속도 비교)
+    ///   - 명성 게이트 — 낮으면 약한 NPC, 높으면 강한 NPC 만남
     /// </summary>
     public class CombatService : MonoBehaviour
     {
@@ -54,12 +66,11 @@ namespace Game.Combat
             var pCaptain = player != null ? player.captain : null;
             var npcChar = npc != null ? npc.character : null;
 
-            int playerPower = (ship != null ? ship.cannonPower : 3) * 10
+            int playerPower = (ship != null ? ship.cannonPower : 3) * 15
                               + (pCaptain != null ? pCaptain.bravery : 50)
-                              + Random.Range(0, 50);
+                              + Random.Range(0, 30);
             int npcPower = (npcChar != null ? npcChar.bravery : 50)
-                           + (npcChar != null ? npcChar.seamanship : 50)
-                           + Random.Range(0, 50);
+                           + Random.Range(0, 30);
             bool win = playerPower >= npcPower;
 
             var result = new CombatResult

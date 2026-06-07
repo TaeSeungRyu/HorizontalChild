@@ -42,6 +42,14 @@ namespace Game.UI
         public MarketPanel marketPanel;
         public Button marketButton;
 
+        [Tooltip("조선소 버튼 클릭 시 열릴 패널. 비어 있으면 버튼이 비활성화됨.")]
+        public ShipyardPanel shipyardPanel;
+        public Button shipyardButton;
+
+        [Tooltip("광장 버튼 클릭 시 열릴 패널. 비어 있으면 버튼이 비활성화됨.")]
+        public PlazaPanel plazaPanel;
+        public Button plazaButton;
+
         private PortData _currentPort;
         private PortArrivalDialog _arrivalDialog;
 
@@ -53,12 +61,26 @@ namespace Game.UI
             if (leaveButton != null) leaveButton.onClick.AddListener(OnLeaveClicked);
             if (guildButton != null) guildButton.onClick.AddListener(OnGuildClicked);
             if (marketButton != null) marketButton.onClick.AddListener(OnMarketClicked);
+            if (shipyardButton != null) shipyardButton.onClick.AddListener(OnShipyardClicked);
+            if (plazaButton != null) plazaButton.onClick.AddListener(OnPlazaClicked);
         }
 
         private void OnMarketClicked()
         {
             if (_currentPort == null || marketPanel == null) return;
             marketPanel.OpenForPort(_currentPort);
+        }
+
+        private void OnShipyardClicked()
+        {
+            if (_currentPort == null || shipyardPanel == null) return;
+            shipyardPanel.OpenForPort(_currentPort);
+        }
+
+        private void OnPlazaClicked()
+        {
+            if (_currentPort == null || plazaPanel == null) return;
+            plazaPanel.OpenForPort(_currentPort);
         }
 
         /// <summary>외부(PortArrivalDialog)에서 호출 — 항구 화면 열기.</summary>
