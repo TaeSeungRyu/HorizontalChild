@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f673533686edc14e9e607386aac7bb9, type: 3}
+  m_Name: Ship_Galleon
+  m_EditorClassIdentifier: Game::Game.Data.ShipData
+  shipId: ship.galleon
+  displayName: "\uAC08\uB808\uC628\uC120"
+  icon: {fileID: 0}
+  prefab3D: {fileID: 0}
+  cannonPower: 14
+  speed: 5
+  cargoCapacity: 180
+  maxDurability: 150
+  basePrice: 6000
+  gate:
+    requiredGoodReputation: 0
+    requiredBadReputation: 0
+  shortDescription: "\uB300\uD3EC\uAC00 \uB9CE\uC740 \uD070 \uC804\uD22C\uC6A9 \uBC30\uC608\uC694."
+  longDescription: "\uC2A4\uD398\uC778\uC774 \uC2E0\uB300\uB959 \uBB34\uC5ED\uACFC
+    \uD568\uB300 \uD638\uC704\uC5D0 \uC4F0\uB358 \uAC15\uD55C \uBC30. \uBB34\uAC81\uC9C0\uB9CC
+    \uB4E0\uB4E0\uD574\uC694."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uAC08\uB808\uC628"

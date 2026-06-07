@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f673533686edc14e9e607386aac7bb9, type: 3}
+  m_Name: Ship_Geobukseon
+  m_EditorClassIdentifier: Game::Game.Data.ShipData
+  shipId: ship.geobukseon
+  displayName: "\uAC70\uBD81\uC120"
+  icon: {fileID: 0}
+  prefab3D: {fileID: 0}
+  cannonPower: 18
+  speed: 5
+  cargoCapacity: 120
+  maxDurability: 180
+  basePrice: 8000
+  gate:
+    requiredGoodReputation: 0
+    requiredBadReputation: 0
+  shortDescription: "\uC870\uC120\uC758 \uAC70\uBD81 \uBAA8\uC591 \uCCA0\uAC11\uC120.
+    \uB2E8\uB2E8\uD558\uACE0 \uB300\uD3EC\uAC00 \uB9CE\uC544\uC694."
+  longDescription: "\uC774\uC21C\uC2E0 \uC7A5\uAD70\uC774 \uD55C\uC0B0\uB3C4 \uB300\uCCA9\uC5D0\uC11C
+    \uD65C\uC6A9\uD55C \uC870\uC120\uC758 \uC790\uB791\uC2A4\uB7EC\uC6B4 \uBC30.
+    \uB4F1\uC5D0 \uAC00\uC2DC\uAC00 \uBC15\uD78C \uAC70\uBD81\uC774 \uBAA8\uC591\uC774\uC5D0\uC694."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uAC70\uBD81\uC120"
