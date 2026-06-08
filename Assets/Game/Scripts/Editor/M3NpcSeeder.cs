@@ -148,23 +148,35 @@ namespace Game.Editor
             var busan = LoadPort("Port_Busan");
             var amsterdam = LoadPort("Port_Amsterdam");
 
-            CreateOrLoadNpc("Npc_Blackbeard.asset", blackbeard, NpcType.Pirate, ceuta);
-            CreateOrLoadNpc("Npc_SilverJack.asset", silverJack, NpcType.Pirate, lisbon);
-            CreateOrLoadNpc("Npc_CaptainMaya.asset", captainMaya, NpcType.Pirate, istanbul);
-            CreateOrLoadNpc("Npc_WokouRed.asset", wokouRed, NpcType.Pirate, busan);
-            CreateOrLoadNpc("Npc_MerchantMarco.asset", merchantMarco, NpcType.Merchant, venezia);
-            CreateOrLoadNpc("Npc_EscortHans.asset", escortHans, NpcType.Escort, amsterdam);
-
-            // 추가 NPC 6명 — 시작 항구 다양한 곳에 상선·호위선 배치
+            // 추가 항구 로드 — 무역 항로용
             var sevilla = LoadPort("Port_Sevilla");
             var london = LoadPort("Port_London");
             var guangzhou = LoadPort("Port_Guangzhou");
-            CreateOrLoadNpc("Npc_MerchantSofia.asset", merchantSofia, NpcType.Merchant, lisbon);
-            CreateOrLoadNpc("Npc_MerchantOmar.asset", merchantOmar, NpcType.Merchant, istanbul);
-            CreateOrLoadNpc("Npc_MerchantWang.asset", merchantWang, NpcType.Merchant, guangzhou);
-            CreateOrLoadNpc("Npc_EscortDrake.asset", escortDrake, NpcType.Escort, london);
-            CreateOrLoadNpc("Npc_EscortKim.asset", escortKim, NpcType.Escort, busan);
-            CreateOrLoadNpc("Npc_PirateMurad.asset", pirateMurad, NpcType.Pirate, sevilla);
+            var alexandria = LoadPort("Port_Alexandria");
+            var funchal = LoadPort("Port_Funchal");
+            var quanzhou = LoadPort("Port_Quanzhou");
+
+            // 해적 4 (영역 순찰)
+            CreateOrLoadPirate("Npc_Blackbeard.asset", "npc.blackbeard", blackbeard, ceuta, range: 180f);
+            CreateOrLoadPirate("Npc_SilverJack.asset", "npc.silver_jack", silverJack, lisbon, range: 200f);
+            CreateOrLoadPirate("Npc_CaptainMaya.asset", "npc.captain_maya", captainMaya, istanbul, range: 200f);
+            CreateOrLoadPirate("Npc_WokouRed.asset", "npc.wokou_red", wokouRed, busan, range: 200f);
+            CreateOrLoadPirate("Npc_PirateMurad.asset", "npc.pirate_murad", pirateMurad, sevilla, range: 180f);
+
+            // 상선 4 (왕복 무역 항로)
+            CreateOrLoadMerchant("Npc_MerchantMarco.asset", "npc.merchant_marco", merchantMarco, venezia,
+                new[] { venezia, istanbul });               // 지중해
+            CreateOrLoadMerchant("Npc_MerchantSofia.asset", "npc.merchant_sofia", merchantSofia, lisbon,
+                new[] { lisbon, funchal });                  // 마데이라 항로
+            CreateOrLoadMerchant("Npc_MerchantOmar.asset", "npc.merchant_omar", merchantOmar, istanbul,
+                new[] { istanbul, alexandria });             // 동지중해
+            CreateOrLoadMerchant("Npc_MerchantWang.asset", "npc.merchant_wang", merchantWang, guangzhou,
+                new[] { guangzhou, quanzhou });              // 중국 해안
+
+            // 호위선 3 (좁은 영역 순찰)
+            CreateOrLoadEscort("Npc_EscortHans.asset", "npc.escort_hans", escortHans, amsterdam, range: 120f);
+            CreateOrLoadEscort("Npc_EscortDrake.asset", "npc.escort_drake", escortDrake, london, range: 120f);
+            CreateOrLoadEscort("Npc_EscortKim.asset", "npc.escort_kim", escortKim, busan, range: 120f);
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -197,16 +209,61 @@ namespace Game.Editor
             return so;
         }
 
-        private static NpcDefinition CreateOrLoadNpc(string fileName, CharacterData character, NpcType type, PortData homePort)
+        private static NpcDefinition CreateOrLoadPirate(string fileName, string npcId, CharacterData character,
+            PortData homePort, float range)
+        {
+            return CreateOrUpdateNpc(fileName, n =>
+            {
+                n.npcId = npcId;
+                n.character = character;
+                n.type = NpcType.Pirate;
+                n.homePort = homePort;
+                n.patrolRange = range;
+                n.patrolPorts = System.Array.Empty<PortData>();
+            });
+        }
+
+        private static NpcDefinition CreateOrLoadEscort(string fileName, string npcId, CharacterData character,
+            PortData homePort, float range)
+        {
+            return CreateOrUpdateNpc(fileName, n =>
+            {
+                n.npcId = npcId;
+                n.character = character;
+                n.type = NpcType.Escort;
+                n.homePort = homePort;
+                n.patrolRange = range;
+                n.patrolPorts = System.Array.Empty<PortData>();
+            });
+        }
+
+        private static NpcDefinition CreateOrLoadMerchant(string fileName, string npcId, CharacterData character,
+            PortData homePort, PortData[] route)
+        {
+            return CreateOrUpdateNpc(fileName, n =>
+            {
+                n.npcId = npcId;
+                n.character = character;
+                n.type = NpcType.Merchant;
+                n.homePort = homePort;
+                n.patrolRange = 0f;
+                n.patrolPorts = route ?? System.Array.Empty<PortData>();
+            });
+        }
+
+        /// <summary>이미 존재하면 필드만 갱신 (참조 보존). 없으면 새로 생성.</summary>
+        private static NpcDefinition CreateOrUpdateNpc(string fileName, System.Action<NpcDefinition> setup)
         {
             var path = $"{DataRoot}/Npcs/{fileName}";
             var existing = AssetDatabase.LoadAssetAtPath<NpcDefinition>(path);
-            if (existing != null) return existing;
-
+            if (existing != null)
+            {
+                setup(existing);
+                EditorUtility.SetDirty(existing);
+                return existing;
+            }
             var so = ScriptableObject.CreateInstance<NpcDefinition>();
-            so.character = character;
-            so.type = type;
-            so.homePort = homePort;
+            setup(so);
             AssetDatabase.CreateAsset(so, path);
             return so;
         }
