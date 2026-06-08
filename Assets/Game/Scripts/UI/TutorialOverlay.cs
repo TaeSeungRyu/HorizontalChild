@@ -14,11 +14,15 @@ namespace Game.UI
     ///   - 4단계 메시지 — "다음" 으로 진행, "넘기기" 로 즉시 종료
     ///   - 마지막 단계 → "시작!" 버튼
     ///
+    /// 표시는 CanvasGroup 으로 제어 — GameObject 는 항상 active 상태로
+    /// Update 가 SelectedNation 변화를 감지할 수 있게.
+    ///
     /// 다시 보기: 컨텍스트 메뉴 또는 PlayerPrefs.DeleteKey 호출.
     /// </summary>
+    [RequireComponent(typeof(CanvasGroup))]
     public class TutorialOverlay : MonoBehaviour
     {
-        [Header("Panel")]
+        [Header("Panel — CanvasGroup 자동 부착, GameObject 는 항상 active")]
         public GameObject panelRoot;
 
         [Header("Refs — Auto Layout 가능")]
@@ -48,11 +52,16 @@ namespace Game.UI
 
         private int _stepIndex;
         private bool _checking;
+        private CanvasGroup _canvasGroup;
 
         private void Awake()
         {
             if (panelRoot == null) panelRoot = gameObject;
-            panelRoot.SetActive(false);
+
+            // CanvasGroup 으로 hide — GameObject 는 active 유지하여 Update 가 작동
+            _canvasGroup = GetComponent<CanvasGroup>();
+            if (_canvasGroup == null) _canvasGroup = gameObject.AddComponent<CanvasGroup>();
+            HideViaCanvasGroup();
 
             if (nextButton != null)
             {
@@ -64,6 +73,22 @@ namespace Game.UI
                 skipButton.onClick.RemoveListener(OnSkip);
                 skipButton.onClick.AddListener(OnSkip);
             }
+        }
+
+        private void HideViaCanvasGroup()
+        {
+            if (_canvasGroup == null) return;
+            _canvasGroup.alpha = 0f;
+            _canvasGroup.interactable = false;
+            _canvasGroup.blocksRaycasts = false;
+        }
+
+        private void ShowViaCanvasGroup()
+        {
+            if (_canvasGroup == null) return;
+            _canvasGroup.alpha = 1f;
+            _canvasGroup.interactable = true;
+            _canvasGroup.blocksRaycasts = true;
         }
 
         private void Update()
@@ -85,11 +110,9 @@ namespace Game.UI
         {
             _stepIndex = 0;
             ApplyStep();
-            if (panelRoot != null)
-            {
-                panelRoot.transform.SetAsLastSibling();
-                panelRoot.SetActive(true);
-            }
+            if (panelRoot != null) panelRoot.transform.SetAsLastSibling();
+            ShowViaCanvasGroup();
+            Debug.Log("[TutorialOverlay] 튜토리얼 표시 시작");
         }
 
         private void ApplyStep()
@@ -130,7 +153,7 @@ namespace Game.UI
                 PlayerPrefs.SetInt(PrefKey, 1);
                 PlayerPrefs.Save();
             }
-            if (panelRoot != null) panelRoot.SetActive(false);
+            HideViaCanvasGroup();
             _checking = true; // 다시 자동 표시 안 함
         }
 
