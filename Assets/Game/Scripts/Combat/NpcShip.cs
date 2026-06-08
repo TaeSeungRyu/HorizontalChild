@@ -35,7 +35,7 @@ namespace Game.Combat
         public float directionChangeInterval = 4f;
 
         [Header("AI — 타입별")]
-        public float pirateChaseRange = 27f;
+        public float pirateChaseRange = 22f;
         public float pirateChaseSpeed = 7f;
         public float merchantFleeRange = 60f;
         public float merchantFleeSpeed = 6f;
@@ -75,6 +75,29 @@ namespace Game.Combat
         // 외부 (SaveService) 가 사용
         public int RouteIndex { get => _routeIndex; set => _routeIndex = value; }
 
+        /// <summary>전투 연출 동안 NpcShip 의 자체 이동·자동전투를 막음. CombatSequence 가 set.</summary>
+        public bool LockMovement { get; set; }
+
+        // 전투용 — spawn 시 maxDurability 로 초기화, 매 전투 시작마다 재충전
+        // 기본값 fallback: 0 = 미직렬화된 옛 에셋 → 합리적 기본 적용 (인스펙터로 명시 설정한 값은 보존)
+        private int _currentDurability;
+        public int CurrentDurability => _currentDurability;
+        public int MaxDurability => (definition != null && definition.maxDurability >= 10) ? definition.maxDurability : 40;
+        public int CannonPower => (definition != null && definition.cannonPower >= 1) ? definition.cannonPower : 3;
+        public float AttackInterval => (definition != null && definition.attackInterval >= 0.3f) ? definition.attackInterval : 1.6f;
+
+        public void ResetDurabilityForCombat() => _currentDurability = MaxDurability;
+        public void ApplyDamage(int amount) => _currentDurability = Mathf.Max(0, _currentDurability - amount);
+
+        /// <summary>전투 연출에서 패배 처리. NpcSpawner 큐 등록 + 0.5초 후 파괴.</summary>
+        public void DefeatByCombat()
+        {
+            if (_engagementOver) return;
+            _engagementOver = true;
+            NpcSpawner.Instance?.OnNpcDefeated(definition);
+            Destroy(gameObject, 0.5f);
+        }
+
         public void Bind(NpcDefinition def, CombatResultPanel panel)
         {
             definition = def;
@@ -113,7 +136,7 @@ namespace Game.Combat
 
         private void Update()
         {
-            if (definition == null || _engagementOver) return;
+            if (definition == null || _engagementOver || LockMovement) return;
             UpdateMovement();
             if (definition.type == NpcType.Pirate) TryAutoEngage();
         }
@@ -297,15 +320,9 @@ namespace Game.Combat
             var renderer = disc.GetComponent<Renderer>();
             if (renderer != null)
             {
-                var mat = new Material(Shader.Find("Universal Render Pipeline/Unlit"));
-                mat.SetOverrideTag("RenderType", "Transparent");
-                mat.SetFloat("_Surface", 1f);
-                mat.SetFloat("_Blend", 0f);
-                mat.SetInt("_ZWrite", 0);
-                mat.DisableKeyword("_SURFACE_TYPE_OPAQUE");
-                mat.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
-                mat.renderQueue = 3000;
-                var color = new Color(1f, 0.1f, 0.1f, 0.5f);
+                // 불투명 — URP/Lit 기본(opaque) 으로 단색 빨강
+                var mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+                var color = new Color(0.9f, 0.15f, 0.15f, 1f);
                 if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", color);
                 else if (mat.HasProperty("_Color")) mat.SetColor("_Color", color);
                 renderer.material = mat;
@@ -356,18 +373,36 @@ namespace Game.Combat
 
         private void EngagePlayer()
         {
-            var service = CombatService.Instance;
-            if (service == null) return;
-            var result = service.Resolve(_playerShip, definition);
-            if (resultPanel != null) resultPanel.Show(result);
-            if (result.playerWon)
-            {
-                _engagementOver = true;
-                NpcSpawner.Instance?.OnNpcDefeated(definition);
-                Destroy(gameObject, 0.5f);
-            }
+            // 쿨다운 먼저 — 시퀀스 도중 다시 trigger 방지
             _nextEngageTime = Time.time + engagementCooldownSeconds;
-            Game.Save.SaveService.Instance?.SaveGame();
+            StartPlayerCombat();
+        }
+
+        /// <summary>
+        /// 플레이어 vs 이 NPC 전투 시작.
+        /// CombatSequence 가 있으면 시각 시퀀스(포탄·hit flash), 없으면 즉시 결과.
+        /// 클릭 트리거(OnPointerClick) 와 자동 트리거(EngagePlayer) 가 공유.
+        /// </summary>
+        private void StartPlayerCombat()
+        {
+            if (_playerShip == null) _playerShip = FindAnyObjectByType<ShipController>(FindObjectsInactive.Include);
+            if (_playerShip == null) return;
+
+            var sequence = CombatSequence.Instance;
+            if (sequence == null)
+            {
+                // 씬에 컴포넌트가 없으면 기본값으로 자동 생성 (사용자 셋업 누락 방지)
+                var go = new GameObject("CombatSequence (auto)");
+                sequence = go.AddComponent<CombatSequence>();
+                Debug.LogWarning("[NpcShip] CombatSequence 컴포넌트가 씬에 없어 자동 생성. " +
+                    "수동으로 GameObject 추가하면 인스펙터에서 튜닝 가능.");
+            }
+
+            // busy 중일 땐 skip — 진행 중인 시퀀스의 결과 패널을 덮어쓰지 않음
+            if (!sequence.IsBusy)
+            {
+                sequence.Begin(_playerShip, this, resultPanel);
+            }
         }
 
         private void EngageNpc(NpcShip target)
@@ -391,26 +426,8 @@ namespace Game.Combat
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (definition == null) return;
-            if (_playerShip == null) _playerShip = FindAnyObjectByType<ShipController>(FindObjectsInactive.Include);
-            if (_playerShip == null) return;
-            var service = CombatService.Instance;
-            if (service == null)
-            {
-                Debug.LogWarning("[NpcShip] CombatService 없음 — 전투 불가");
-                return;
-            }
-            var result = service.Resolve(_playerShip, definition);
-            if (resultPanel != null) resultPanel.Show(result);
-            if (result.playerWon)
-            {
-                // 풀에서 잠시 빼고 재추첨 큐로 — Destroy 전에 실행 (Save 가 큐를 반영하도록)
-                NpcSpawner.Instance?.OnNpcDefeated(definition);
-                Destroy(gameObject, 0.5f);
-            }
-
-            // 전투 종료 직후 명시적 저장 — 위치 · 돈 · 명성 · NPC 풀 즉시 기억
-            SaveService.Instance?.SaveGame();
+            if (definition == null || _engagementOver || LockMovement) return;
+            StartPlayerCombat();
         }
     }
 }

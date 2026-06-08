@@ -29,5 +29,11 @@ namespace Game.Data
         [Tooltip("x = 용기, y = 항해, z = 눈썰미. 음수 가능. GAME_MECHANICS §1.4")]
         public Vector3Int hireBonus;
         public int hireBasePrice = 1000;
+
+        [Header("Combat Stats (M3.5 Phase 2)")]
+        [Range(1, 30)] public int cannonPower = 3;
+        [Range(10, 200)] public int maxDurability = 40;
+        [Tooltip("포탄 발사 간격(초). 작을수록 빠른 연사.")]
+        [Range(0.3f, 4f)] public float attackInterval = 1.6f;
     }
 }

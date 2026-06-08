@@ -59,11 +59,14 @@ namespace Game.Combat
             if (Instance == this) Instance = null;
         }
 
-        /// <summary>전투 해결 + 보상 적용. CombatResult 반환.</summary>
+        /// <summary>
+        /// 전투 사전 결정 — 공식으로 승자 산출 + 보상 적용. CombatResult 반환.
+        /// Phase 2 시뮬레이션 미사용 fallback / 단순 즉시 전투 경로용.
+        /// </summary>
         public CombatResult Resolve(ShipController player, NpcDefinition npc)
         {
-            var ship = player != null ? player.shipData : null;
             var pCaptain = player != null ? player.captain : null;
+            var ship = player != null ? player.shipData : null;
             var npcChar = npc != null ? npc.character : null;
 
             int playerPower = (ship != null ? ship.cannonPower : 3) * 15
@@ -71,7 +74,18 @@ namespace Game.Combat
                               + Random.Range(0, 30);
             int npcPower = (npcChar != null ? npcChar.bravery : 50)
                            + Random.Range(0, 30);
-            bool win = playerPower >= npcPower;
+            return ApplyResult(player, npc, playerPower >= npcPower, playerPower, npcPower);
+        }
+
+        /// <summary>
+        /// 시뮬레이션 결과를 받아 보상 적용 + 메시지 작성 + 이벤트 발화. CombatSequence 가 호출.
+        /// playerPower / npcPower 는 표시용 — 실제 결정은 외부에서 (durability 0 첫 도달).
+        /// </summary>
+        public CombatResult ApplyResult(ShipController player, NpcDefinition npc, bool playerWon,
+            int playerPower = 0, int npcPower = 0)
+        {
+            var pCaptain = player != null ? player.captain : null;
+            var npcChar = npc != null ? npc.character : null;
 
             var result = new CombatResult
             {
@@ -79,10 +93,10 @@ namespace Game.Combat
                 npcName = npcChar != null ? npcChar.displayNameKo : "낯선 배",
                 playerPower = playerPower,
                 npcPower = npcPower,
-                playerWon = win,
+                playerWon = playerWon,
             };
 
-            if (win)
+            if (playerWon)
             {
                 result.moneyDelta = Random.Range(winMoneyMin, winMoneyMax);
                 if (npc != null && npc.type == NpcType.Pirate)
@@ -106,7 +120,6 @@ namespace Game.Combat
                 result.message = "전투에 졌어요. 잔돈을 조금 잃었어요.";
             }
 
-            // 적용
             var state = PlayerState.Instance;
             if (state != null)
             {
@@ -117,9 +130,9 @@ namespace Game.Combat
 
             onCombatResolved?.Invoke(result);
             Debug.Log(
-                $"[CombatService] {result.playerName}({result.playerPower}) vs " +
-                $"{result.npcName}({result.npcPower}) — {(win ? "승리" : "패배")} " +
-                $"돈 {result.moneyDelta:+#;-#;0}, 좋은명성 +{result.repGoodDelta}, 나쁜명성 +{result.repBadDelta}");
+                $"[CombatService] {result.playerName} vs {result.npcName} — " +
+                $"{(playerWon ? "승리" : "패배")} 돈 {result.moneyDelta:+#;-#;0}, " +
+                $"좋은명성 +{result.repGoodDelta}, 나쁜명성 +{result.repBadDelta}");
             return result;
         }
     }

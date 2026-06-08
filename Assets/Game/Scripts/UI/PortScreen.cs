@@ -50,6 +50,10 @@ namespace Game.UI
         public PlazaPanel plazaPanel;
         public Button plazaButton;
 
+        [Tooltip("배 수리 버튼 클릭 시 열릴 패널. 비어 있으면 버튼이 비활성화됨.")]
+        public ShipRepairPanel shipRepairPanel;
+        public Button shipRepairButton;
+
         private PortData _currentPort;
         private PortArrivalDialog _arrivalDialog;
 
@@ -63,6 +67,7 @@ namespace Game.UI
             if (marketButton != null) marketButton.onClick.AddListener(OnMarketClicked);
             if (shipyardButton != null) shipyardButton.onClick.AddListener(OnShipyardClicked);
             if (plazaButton != null) plazaButton.onClick.AddListener(OnPlazaClicked);
+            if (shipRepairButton != null) shipRepairButton.onClick.AddListener(OnShipRepairClicked);
         }
 
         private void OnMarketClicked()
@@ -81,6 +86,12 @@ namespace Game.UI
         {
             if (_currentPort == null || plazaPanel == null) return;
             plazaPanel.OpenForPort(_currentPort);
+        }
+
+        private void OnShipRepairClicked()
+        {
+            if (_currentPort == null || shipRepairPanel == null) return;
+            shipRepairPanel.OpenForPort(_currentPort);
         }
 
         /// <summary>외부(PortArrivalDialog)에서 호출 — 항구 화면 열기.</summary>

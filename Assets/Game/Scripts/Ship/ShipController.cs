@@ -63,6 +63,37 @@ namespace Game.Ship
         public float ThrottleInput => _throttleValue;
         public float SteerInput => _steerValue;
 
+        /// <summary>전투 연출 중 등 외부에서 입력을 잠그고 싶을 때.
+        /// true 면 ReadInput 이 스킵되어 _steer/_throttle 가 점차 0 으로 감속.</summary>
+        public bool LockInput { get; set; }
+
+        /// <summary>현재 내구도 — 전투 중 차감, 항구에서 수리. 0 이면 게임 패배.</summary>
+        public int CurrentDurability { get; private set; }
+        // 0 = 옛 에셋 미직렬화 → fallback 50. Range(10,200) 이라 정상 설정값은 >= 10
+        public int MaxDurability => (shipData != null && shipData.maxDurability >= 10) ? shipData.maxDurability : 50;
+
+        public void SetDurability(int value)
+        {
+            CurrentDurability = Mathf.Clamp(value, 0, MaxDurability);
+        }
+
+        public void ApplyDamage(int amount)
+        {
+            if (amount <= 0) return;
+            CurrentDurability = Mathf.Max(0, CurrentDurability - amount);
+        }
+
+        public void RestoreDurability()
+        {
+            CurrentDurability = MaxDurability;
+        }
+
+        private void Start()
+        {
+            // 첫 진입 시 내구도 초기화 (저장 데이터가 있으면 SaveService 가 SetDurability 로 덮어씀)
+            if (CurrentDurability <= 0) CurrentDurability = MaxDurability;
+        }
+
         private float _currentSpeed;
         private float _throttleValue;
         private float _steerValue;
@@ -92,6 +123,13 @@ namespace Game.Ship
 
         private void ReadInput()
         {
+            if (LockInput)
+            {
+                _steerValue = 0f;
+                _throttleValue = 0f;
+                return;
+            }
+
             if (steerAction != null && steerAction.action != null)
             {
                 _steerValue = steerAction.action.ReadValue<Vector2>().x;
