@@ -17630,6 +17630,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game::Game.Combat.NpcSpawner
   npcCatalog: {fileID: 11400000, guid: 95ba034250389534499374a2be35d065, type: 2}
+  portCatalog: {fileID: 11400000, guid: abc59b2d20370ee4bafc4bd64c7d47f6, type: 2}
   resultPanel: {fileID: 1134557095}
   npcsParent: {fileID: 0}
   spawnCount: 12
@@ -17638,6 +17639,7 @@ MonoBehaviour:
   worldHalfDepth: 1350
   npcSize: 6
   npcY: 0
+  respawnDelaySeconds: 60
 --- !u!1 &658662419
 GameObject:
   m_ObjectHideFlags: 0
@@ -19662,6 +19664,20 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 928b7ab55e4c640469989d2fad85c7d7, type: 3}
+--- !u!114 &729499613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
+  m_Name: Ship/Steer
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
+  m_Asset: {fileID: -944628639613478452, guid: 96a2feac4191f82429ba71c599a8cc24, type: 3}
+  m_ActionId: a0000001-aaaa-bbbb-cccc-100000000001
 --- !u!1001 &734673180
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -36002,20 +36018,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 615010652040901257, guid: 928b7ab55e4c640469989d2fad85c7d7, type: 3}
   m_PrefabInstance: {fileID: 1308578726}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1314964416
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
-  m_Name: Ship/Throttle
-  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
-  m_Asset: {fileID: -944628639613478452, guid: 96a2feac4191f82429ba71c599a8cc24, type: 3}
-  m_ActionId: a0000001-aaaa-bbbb-cccc-100000000002
 --- !u!4 &1317866838 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 615010652040901257, guid: 928b7ab55e4c640469989d2fad85c7d7, type: 3}
@@ -36624,20 +36626,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 615010652040901257, guid: 928b7ab55e4c640469989d2fad85c7d7, type: 3}
   m_PrefabInstance: {fileID: 721402907}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1340970961
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
-  m_Name: Ship/Steer
-  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
-  m_Asset: {fileID: -944628639613478452, guid: 96a2feac4191f82429ba71c599a8cc24, type: 3}
-  m_ActionId: a0000001-aaaa-bbbb-cccc-100000000001
 --- !u!4 &1342586818 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 615010652040901257, guid: 928b7ab55e4c640469989d2fad85c7d7, type: 3}
@@ -48749,8 +48737,8 @@ MonoBehaviour:
   acceleration: 2
   passiveDeceleration: 0.5
   activeDeceleration: 3
-  steerAction: {fileID: 1340970961}
-  throttleAction: {fileID: 1314964416}
+  steerAction: {fileID: 729499613}
+  throttleAction: {fileID: 1805192983}
   collisionCheckRadius: 2
   blockMovementOnLand: 1
 --- !u!4 &1690041786 stripped
@@ -52523,6 +52511,20 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 928b7ab55e4c640469989d2fad85c7d7, type: 3}
+--- !u!114 &1805192983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
+  m_Name: Ship/Throttle
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
+  m_Asset: {fileID: -944628639613478452, guid: 96a2feac4191f82429ba71c599a8cc24, type: 3}
+  m_ActionId: a0000001-aaaa-bbbb-cccc-100000000002
 --- !u!1001 &1805589934
 PrefabInstance:
   m_ObjectHideFlags: 0

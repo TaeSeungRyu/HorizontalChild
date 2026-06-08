@@ -47,12 +47,21 @@ namespace Game.Combat
         [Tooltip("NPC 배 Y 좌표 (배와 같은 높이).")]
         public float npcY = 0f;
 
+        [Tooltip("spawn 위치 land 검사 반경. 이 안에 Landmass 있으면 다른 각도/거리 재시도.")]
+        public float spawnLandCheckRadius = 4f;
+
+        [Tooltip("항구 주위 spawn 시도 각도 수. 모두 막혔으면 거리 늘려 재시도.")]
+        public int spawnAngleSamples = 16;
+
         [Header("Respawn (M3.5 Step A)")]
         [Tooltip("격침 후 재추첨까지 대기 시간(초). 게임일 시스템 도입 전 임시 실시간 값.")]
         public float respawnDelaySeconds = 60f;
 
         // npcId → 인스턴스. 파괴되면 Unity가 fake-null 처리 → CollectStates 에서 건너뜀.
         private readonly Dictionary<string, NpcShip> _spawned = new();
+
+        /// <summary>해적의 자동 전투 탐색용. 살아있는 NPC 인스턴스 순회.</summary>
+        public IEnumerable<NpcShip> AllSpawned => _spawned.Values;
 
         // npcId → Time.time 기준 재spawn 예정 시각. GAME_MECHANICS §3.4 (격침 후 랜덤 항구 재배치).
         private readonly Dictionary<string, float> _respawnAt = new();
@@ -100,7 +109,66 @@ namespace Game.Combat
                 SpawnFresh();
             }
 
+            // 격침 후 재추첨 대기 큐 복원
+            if (loaded != null && loaded.npcRespawnQueue != null)
+            {
+                foreach (var entry in loaded.npcRespawnQueue)
+                {
+                    if (entry == null || string.IsNullOrEmpty(entry.npcId)) continue;
+                    _respawnAt[entry.npcId] = Time.time + Mathf.Max(0f, entry.secondsRemaining);
+                }
+            }
+
             HasSpawned = true;
+        }
+
+        private void Update()
+        {
+            if (_respawnAt.Count == 0) return;
+            _respawnReadyBuffer.Clear();
+            foreach (var kvp in _respawnAt)
+            {
+                if (Time.time >= kvp.Value) _respawnReadyBuffer.Add(kvp.Key);
+            }
+            for (int i = 0; i < _respawnReadyBuffer.Count; i++)
+            {
+                var id = _respawnReadyBuffer[i];
+                _respawnAt.Remove(id);
+                RespawnAtRandomPort(id);
+            }
+        }
+
+        /// <summary>전투 패배 NPC 를 풀에서 잠시 빼고 재추첨 큐에 등록. NpcShip 이 호출.</summary>
+        public void OnNpcDefeated(NpcDefinition def)
+        {
+            if (def == null || string.IsNullOrEmpty(def.npcId)) return;
+            _respawnAt[def.npcId] = Time.time + Mathf.Max(0f, respawnDelaySeconds);
+            _spawned.Remove(def.npcId);   // 다음 CollectStates 에서 빠지도록
+        }
+
+        private void RespawnAtRandomPort(string npcId)
+        {
+            var def = FindDefById(npcId);
+            if (def == null) return;
+
+            Vector3 pos;
+            if (portCatalog != null && portCatalog.all != null && portCatalog.all.Length > 0)
+            {
+                PortData port = null;
+                for (int i = 0; i < 4 && port == null; i++)
+                {
+                    var p = portCatalog.all[Random.Range(0, portCatalog.all.Length)];
+                    if (p != null) port = p;
+                }
+                pos = port != null ? FindSeaPositionNearPort(port) : ComputeFreshPosition(def);
+            }
+            else
+            {
+                pos = ComputeFreshPosition(def);
+            }
+
+            var ship = SpawnNpc(def, pos);
+            if (ship != null) ship.RouteIndex = 0;
         }
 
         private void SpawnFromSave(List<NpcStateData> states)
@@ -140,17 +208,61 @@ namespace Game.Combat
         {
             if (def.homePort != null)
             {
-                var portPos = GeoCoordinate.LatLngToWorld(def.homePort.latitude, def.homePort.longitude);
-                float angle = Random.Range(0f, Mathf.PI * 2f);
-                return new Vector3(
-                    portPos.x + Mathf.Cos(angle) * homePortSpawnDistance,
+                return FindSeaPositionNearPort(def.homePort);
+            }
+            // homePort 없으면 무작위 해상 — 몇 번 재추첨 후 land 면 마지막값 그대로 사용
+            for (int i = 0; i < 8; i++)
+            {
+                var p = new Vector3(
+                    Random.Range(-worldHalfWidth, worldHalfWidth),
                     npcY,
-                    portPos.z + Mathf.Sin(angle) * homePortSpawnDistance);
+                    Random.Range(-worldHalfDepth, worldHalfDepth));
+                if (!IsLandAtSpawnPos(p)) return p;
             }
             return new Vector3(
                 Random.Range(-worldHalfWidth, worldHalfWidth),
                 npcY,
                 Random.Range(-worldHalfDepth, worldHalfDepth));
+        }
+
+        /// <summary>
+        /// 항구 주위 N 각도 시도 → 첫 바다 위치 반환. 모두 land 면 거리 1.5배·2배로 늘려 재시도.
+        /// 끝까지 실패하면 마지막 후보 (land 위라도) 반환.
+        /// </summary>
+        private Vector3 FindSeaPositionNearPort(PortData port)
+        {
+            var portPos = GeoCoordinate.LatLngToWorld(port.latitude, port.longitude);
+            float startAngle = Random.Range(0f, Mathf.PI * 2f);
+            float[] distances = { homePortSpawnDistance, homePortSpawnDistance * 1.5f, homePortSpawnDistance * 2.2f };
+
+            Vector3 lastTry = portPos;
+            int samples = Mathf.Max(4, spawnAngleSamples);
+            for (int d = 0; d < distances.Length; d++)
+            {
+                for (int i = 0; i < samples; i++)
+                {
+                    float angle = startAngle + (Mathf.PI * 2f * i / samples);
+                    var p = new Vector3(
+                        portPos.x + Mathf.Cos(angle) * distances[d],
+                        npcY,
+                        portPos.z + Mathf.Sin(angle) * distances[d]);
+                    lastTry = p;
+                    if (!IsLandAtSpawnPos(p)) return p;
+                }
+            }
+            return lastTry;
+        }
+
+        private static readonly Collider[] _spawnLandBuffer = new Collider[8];
+        private bool IsLandAtSpawnPos(Vector3 worldPos)
+        {
+            int count = Physics.OverlapSphereNonAlloc(worldPos, spawnLandCheckRadius, _spawnLandBuffer);
+            for (int i = 0; i < count; i++)
+            {
+                if (_spawnLandBuffer[i] == null) continue;
+                if (_spawnLandBuffer[i].GetComponentInParent<Landmass>() != null) return true;
+            }
+            return false;
         }
 
         private NpcShip SpawnNpc(NpcDefinition def, Vector3 worldPos)
@@ -175,6 +287,21 @@ namespace Game.Combat
             script.Bind(def, resultPanel);
             if (!string.IsNullOrEmpty(def.npcId)) _spawned[def.npcId] = script;
             return script;
+        }
+
+        /// <summary>격침 후 재추첨 대기 중인 NPC 큐 — secondsRemaining 으로 직렬화.</summary>
+        public List<NpcRespawnEntry> CollectRespawnQueue()
+        {
+            var list = new List<NpcRespawnEntry>();
+            foreach (var kvp in _respawnAt)
+            {
+                list.Add(new NpcRespawnEntry
+                {
+                    npcId = kvp.Key,
+                    secondsRemaining = Mathf.Max(0f, kvp.Value - Time.time),
+                });
+            }
+            return list;
         }
 
         /// <summary>현재 살아있는 NPC 들의 위치·routeIndex 수집. SaveService 가 호출.</summary>

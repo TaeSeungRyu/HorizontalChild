@@ -1,4 +1,5 @@
 using Game.Data;
+using Game.Save;
 using Game.Ship;
 using Game.UI;
 using Game.World;
@@ -34,7 +35,7 @@ namespace Game.Combat
         public float directionChangeInterval = 4f;
 
         [Header("AI — 타입별")]
-        public float pirateChaseRange = 80f;
+        public float pirateChaseRange = 27f;
         public float pirateChaseSpeed = 7f;
         public float merchantFleeRange = 60f;
         public float merchantFleeSpeed = 6f;
@@ -57,6 +58,20 @@ namespace Game.Combat
         private ShipController _playerShip;
         private static readonly Collider[] _landBuffer = new Collider[8];
 
+        // 육지 회피 — 충돌 시 수직 방향으로 잠깐 미끄러져 우회
+        private Vector3 _deflectDir;
+        private float _deflectUntil;
+
+        // 해적 자동 전투 — 시각 인디케이터 + 쿨다운
+        [Header("Pirate Auto-Engage")]
+        [Tooltip("이 시간(초) 이전엔 자동 전투 안 함. spawn 직후 즉시 도발 방지.")]
+        public float engagementGraceSeconds = 2f;
+        [Tooltip("전투 한 번 후 다음 자동 전투까지 쿨다운(초).")]
+        public float engagementCooldownSeconds = 5f;
+        private GameObject _chaseIndicator;
+        private float _nextEngageTime;
+        private bool _engagementOver;   // 전투 후 destroy 대기 중 — 추가 행동 차단
+
         // 외부 (SaveService) 가 사용
         public int RouteIndex { get => _routeIndex; set => _routeIndex = value; }
 
@@ -74,12 +89,33 @@ namespace Game.Combat
         {
             _playerShip = FindAnyObjectByType<ShipController>(FindObjectsInactive.Include);
             PickNewWanderDirection();
+            _nextEngageTime = Time.time + engagementGraceSeconds;
+            if (definition != null && definition.type == NpcType.Pirate)
+            {
+                CreateChaseIndicator();
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (_chaseIndicator != null) Destroy(_chaseIndicator);
+        }
+
+        private void LateUpdate()
+        {
+            // 인디케이터가 해적 위치 따라가도록 (parent 안 시킴 — 부모 scale 영향 회피)
+            if (_chaseIndicator != null)
+            {
+                var p = transform.position;
+                _chaseIndicator.transform.position = new Vector3(p.x, p.y - 2.5f, p.z);
+            }
         }
 
         private void Update()
         {
-            if (definition == null) return;
+            if (definition == null || _engagementOver) return;
             UpdateMovement();
+            if (definition.type == NpcType.Pirate) TryAutoEngage();
         }
 
         // ─── AI ──────────────────────────────────────────────────────────
@@ -99,8 +135,14 @@ namespace Game.Combat
                 playerDist = playerOffset.magnitude;
             }
 
+            // 0) 육지 회피 — 충돌 직후 일정 시간 deflect 방향 유지 (route 무시)
+            if (Time.time < _deflectUntil)
+            {
+                desiredDir = _deflectDir;
+                speed = wanderSpeed;
+            }
             // 1) 해적 추적 / 상선 도주
-            if (definition.type == NpcType.Pirate && playerDist <= pirateChaseRange && playerDist > 1f)
+            else if (definition.type == NpcType.Pirate && playerDist <= pirateChaseRange && playerDist > 1f)
             {
                 desiredDir = playerOffset.normalized;
                 speed = pirateChaseSpeed;
@@ -115,12 +157,11 @@ namespace Game.Combat
                 desiredDir = ComputeRouteOrPatrolDirection(out speed);
             }
 
-            // 2) 이동 + 육지 충돌 검사
+            // 2) 이동 + 육지 충돌 검사 — 막히면 수직 방향으로 미끄러져 우회
             var nextPos = transform.position + desiredDir * speed * Time.deltaTime;
             if (IsLandAt(nextPos))
             {
-                _wanderDirection = -desiredDir;
-                _nextDirectionChange = Time.time + 1f;
+                ChooseDeflectDirection(desiredDir, speed);
                 return;
             }
 
@@ -211,6 +252,141 @@ namespace Game.Combat
             return false;
         }
 
+        /// <summary>
+        /// 막힌 desiredDir 에 대해 수직 방향(좌/우) 중 바다 쪽을 골라
+        /// _deflectDir 로 설정. 1.5초간 route 무시하고 옆으로 미끄러짐.
+        /// 양쪽 다 막혔으면 후진.
+        /// </summary>
+        private void ChooseDeflectDirection(Vector3 desiredDir, float speed)
+        {
+            var perpLeft = new Vector3(-desiredDir.z, 0f, desiredDir.x);
+            var perpRight = new Vector3(desiredDir.z, 0f, -desiredDir.x);
+            float step = Mathf.Max(speed * Time.deltaTime * 4f, landCheckRadius * 1.5f);
+            var testLeft = transform.position + perpLeft * step;
+            var testRight = transform.position + perpRight * step;
+
+            if (!IsLandAt(testLeft) && !IsLandAt(testRight))
+                _deflectDir = (Random.value < 0.5f) ? perpLeft : perpRight;
+            else if (!IsLandAt(testLeft))
+                _deflectDir = perpLeft;
+            else if (!IsLandAt(testRight))
+                _deflectDir = perpRight;
+            else
+                _deflectDir = -desiredDir;   // 양쪽 다 막힘 — 후진
+
+            _deflectUntil = Time.time + 1.5f;
+        }
+
+        // ─── 해적 자동 전투 ──────────────────────────────────────────────
+
+        private void CreateChaseIndicator()
+        {
+            var disc = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            disc.name = $"ChaseRange_{name}";
+            disc.transform.SetParent(transform.parent, worldPositionStays: true);
+            var p = transform.position;
+            disc.transform.position = new Vector3(p.x, p.y - 2.5f, p.z);
+            float dia = pirateChaseRange * 2f;
+            // Cylinder primitive 메시 높이=2, 직경=1 → world scale 그대로 (dia, height/2, dia)
+            disc.transform.localScale = new Vector3(dia, 0.05f, dia);
+
+            // Collider 제거 — 클릭/이동 방해 X
+            var col = disc.GetComponent<Collider>();
+            if (col != null) Destroy(col);
+
+            var renderer = disc.GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                var mat = new Material(Shader.Find("Universal Render Pipeline/Unlit"));
+                mat.SetOverrideTag("RenderType", "Transparent");
+                mat.SetFloat("_Surface", 1f);
+                mat.SetFloat("_Blend", 0f);
+                mat.SetInt("_ZWrite", 0);
+                mat.DisableKeyword("_SURFACE_TYPE_OPAQUE");
+                mat.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
+                mat.renderQueue = 3000;
+                var color = new Color(1f, 0.1f, 0.1f, 0.5f);
+                if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", color);
+                else if (mat.HasProperty("_Color")) mat.SetColor("_Color", color);
+                renderer.material = mat;
+                renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                renderer.receiveShadows = false;
+            }
+
+            _chaseIndicator = disc;
+        }
+
+        private void TryAutoEngage()
+        {
+            if (Time.time < _nextEngageTime) return;
+
+            // 1) 플레이어 우선
+            if (_playerShip != null)
+            {
+                var d = _playerShip.transform.position - transform.position;
+                d.y = 0f;
+                if (d.magnitude <= pirateChaseRange)
+                {
+                    EngagePlayer();
+                    return;
+                }
+            }
+
+            // 2) 비-해적 NPC 탐색 (가장 가까운 1명)
+            var spawner = NpcSpawner.Instance;
+            if (spawner == null) return;
+            NpcShip closest = null;
+            float closestDist = pirateChaseRange;
+            foreach (var ship in spawner.AllSpawned)
+            {
+                if (ship == null || ship == this || ship._engagementOver) continue;
+                if (ship.definition == null) continue;
+                if (ship.definition.type == NpcType.Pirate) continue;   // 해적끼리는 안 싸움
+                var dd = ship.transform.position - transform.position;
+                dd.y = 0f;
+                float dist = dd.magnitude;
+                if (dist < closestDist)
+                {
+                    closestDist = dist;
+                    closest = ship;
+                }
+            }
+            if (closest != null) EngageNpc(closest);
+        }
+
+        private void EngagePlayer()
+        {
+            var service = CombatService.Instance;
+            if (service == null) return;
+            var result = service.Resolve(_playerShip, definition);
+            if (resultPanel != null) resultPanel.Show(result);
+            if (result.playerWon)
+            {
+                _engagementOver = true;
+                NpcSpawner.Instance?.OnNpcDefeated(definition);
+                Destroy(gameObject, 0.5f);
+            }
+            _nextEngageTime = Time.time + engagementCooldownSeconds;
+            Game.Save.SaveService.Instance?.SaveGame();
+        }
+
+        private void EngageNpc(NpcShip target)
+        {
+            int myBravery = (definition.character != null) ? definition.character.bravery : 50;
+            int theirBravery = (target.definition.character != null) ? target.definition.character.bravery : 50;
+            int myRoll = myBravery + Random.Range(0, 30);
+            int theirRoll = theirBravery + Random.Range(0, 30);
+
+            NpcShip loser = (myRoll >= theirRoll) ? target : this;
+            loser._engagementOver = true;
+            NpcSpawner.Instance?.OnNpcDefeated(loser.definition);
+            Destroy(loser.gameObject, 0.5f);
+
+            _nextEngageTime = Time.time + engagementCooldownSeconds;
+            if (target != null) target._nextEngageTime = Time.time + engagementCooldownSeconds;
+            Game.Save.SaveService.Instance?.SaveGame();
+        }
+
         // ─── 클릭 → 전투 ─────────────────────────────────────────────────
 
         public void OnPointerClick(PointerEventData eventData)
@@ -226,7 +402,15 @@ namespace Game.Combat
             }
             var result = service.Resolve(_playerShip, definition);
             if (resultPanel != null) resultPanel.Show(result);
-            if (result.playerWon) Destroy(gameObject, 0.5f);
+            if (result.playerWon)
+            {
+                // 풀에서 잠시 빼고 재추첨 큐로 — Destroy 전에 실행 (Save 가 큐를 반영하도록)
+                NpcSpawner.Instance?.OnNpcDefeated(definition);
+                Destroy(gameObject, 0.5f);
+            }
+
+            // 전투 종료 직후 명시적 저장 — 위치 · 돈 · 명성 · NPC 풀 즉시 기억
+            SaveService.Instance?.SaveGame();
         }
     }
 }

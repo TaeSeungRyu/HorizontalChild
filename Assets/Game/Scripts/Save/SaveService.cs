@@ -97,9 +97,9 @@ namespace Game.Save
             var cargo = PlayerCargo.Instance;
             if (cargo != null) cargo.onCargoChanged.AddListener(SaveGame);
 
-            // 전투 종료 직후 자동 저장 — 배 위치·돈·명성·NPC 상태 즉시 기억
-            var combat = CombatService.Instance;
-            if (combat != null) combat.onCombatResolved.AddListener(_ => SaveGame());
+            // 전투 종료 후 저장은 NpcShip.OnPointerClick 가 명시적으로 호출함 —
+            // NpcSpawner.OnNpcDefeated(재추첨 큐 등록) 이후에 저장되어야 하므로
+            // 여기서 onCombatResolved 를 직접 구독하지 않음 (순서 보장).
         }
 
         private void OnApplicationPause(bool paused)
@@ -199,10 +199,14 @@ namespace Game.Save
             if (spawner != null && spawner.HasSpawned)
             {
                 data.npcs = spawner.CollectStates();
+                data.npcRespawnQueue = spawner.CollectRespawnQueue();
             }
-            else if (LastLoaded != null && LastLoaded.npcs != null)
+            else if (LastLoaded != null)
             {
-                data.npcs = new List<NpcStateData>(LastLoaded.npcs);
+                if (LastLoaded.npcs != null)
+                    data.npcs = new List<NpcStateData>(LastLoaded.npcs);
+                if (LastLoaded.npcRespawnQueue != null)
+                    data.npcRespawnQueue = new List<NpcRespawnEntry>(LastLoaded.npcRespawnQueue);
             }
 
             return data;
