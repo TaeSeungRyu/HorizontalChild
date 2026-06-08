@@ -10,14 +10,19 @@ namespace Game.Combat
     /// <summary>
     /// 해상 NPC 배 — 이동 AI + 클릭 시 전투.
     ///
-    /// M3.5 Phase 1: 이동 AI 추가
-    ///   - 기본: random walk (방향 주기적으로 변경)
-    ///   - 해적: 플레이어 일정 거리 안 들어오면 추적 가속
-    ///   - 상선: 플레이어 가까이 오면 도주
-    ///   - 호위선: 중립 random walk (해적 추격은 추후 폴리시)
-    ///   - 세계 경계 안에서만 (간단 clamp), 육지 충돌 시 방향 반전
+    /// M3.5 Phase 1 행동:
+    ///   - 해적 (patrolRange 안에서):
+    ///     • 플레이어 근접 → 추적
+    ///     • 평소 → random walk
+    ///     • homePort 에서 patrolRange 초과 시 → 복귀
+    ///   - 상선 (patrolPorts 2개 이상):
+    ///     • 플레이어 근접 → 도주
+    ///     • 평소 → 다음 항구 향해 항해, 도착 시 다음 항구
+    ///   - 호위선:
+    ///     • homePort 주변 순찰 (좁은 patrolRange)
     ///
-    /// 클릭 처리: Physics Raycaster + IPointerClickHandler. Discovery Marker 와 동일 패턴.
+    /// 저장 가능 상태: Position + currentRouteIndex.
+    /// SaveService 가 NpcSpawner 를 통해 일괄 수집·복원.
     /// </summary>
     public class NpcShip : MonoBehaviour, IPointerClickHandler
     {
@@ -25,36 +30,35 @@ namespace Game.Combat
         public CombatResultPanel resultPanel;
 
         [Header("AI — 공통")]
-        [Tooltip("기본 random walk 속도 (unit/sec). 1 unit ≈ 7.4 km.")]
         public float wanderSpeed = 4f;
-
-        [Tooltip("방향 바꾸는 주기 (초). 약간의 랜덤 ± 적용.")]
         public float directionChangeInterval = 4f;
 
         [Header("AI — 타입별")]
-        [Tooltip("해적이 플레이어를 추적하기 시작하는 거리.")]
         public float pirateChaseRange = 80f;
-        [Tooltip("해적 추적 속도.")]
         public float pirateChaseSpeed = 7f;
-
-        [Tooltip("상선이 플레이어를 발견하고 도주하기 시작하는 거리.")]
         public float merchantFleeRange = 60f;
-        [Tooltip("상선 도주 속도.")]
         public float merchantFleeSpeed = 6f;
+        public float tradeCruiseSpeed = 5f;
 
         [Header("World Bounds")]
         public float worldHalfWidth = 2700f;
         public float worldHalfDepth = 1350f;
 
         [Header("Land Avoidance")]
-        [Tooltip("육지 충돌 검사 반경 (unit).")]
         public float landCheckRadius = 3f;
 
-        // 런타임
+        [Tooltip("항구 도착 인정 거리.")]
+        public float portArriveDistance = 12f;
+
+        // 런타임 — 저장 가능
         private Vector3 _wanderDirection;
         private float _nextDirectionChange;
+        private int _routeIndex;
         private ShipController _playerShip;
         private static readonly Collider[] _landBuffer = new Collider[8];
+
+        // 외부 (SaveService) 가 사용
+        public int RouteIndex { get => _routeIndex; set => _routeIndex = value; }
 
         public void Bind(NpcDefinition def, CombatResultPanel panel)
         {
@@ -85,61 +89,108 @@ namespace Game.Combat
             Vector3 desiredDir = Vector3.zero;
             float speed = wanderSpeed;
 
-            // 1) 타입별 행동 결정
+            // 플레이어 상호작용 우선
+            float playerDist = float.MaxValue;
+            Vector3 playerOffset = Vector3.zero;
             if (_playerShip != null)
             {
-                var toPlayer = _playerShip.transform.position - transform.position;
-                toPlayer.y = 0f;
-                float dist = toPlayer.magnitude;
-
-                if (definition.type == NpcType.Pirate && dist <= pirateChaseRange && dist > 1f)
-                {
-                    desiredDir = toPlayer.normalized;
-                    speed = pirateChaseSpeed;
-                }
-                else if (definition.type == NpcType.Merchant && dist <= merchantFleeRange && dist > 1f)
-                {
-                    desiredDir = -toPlayer.normalized;
-                    speed = merchantFleeSpeed;
-                }
+                playerOffset = _playerShip.transform.position - transform.position;
+                playerOffset.y = 0f;
+                playerDist = playerOffset.magnitude;
             }
 
-            // 2) 추적·도주 아니면 wander
-            if (desiredDir.sqrMagnitude < 0.01f)
+            // 1) 해적 추적 / 상선 도주
+            if (definition.type == NpcType.Pirate && playerDist <= pirateChaseRange && playerDist > 1f)
             {
-                if (Time.time >= _nextDirectionChange) PickNewWanderDirection();
-                desiredDir = _wanderDirection;
+                desiredDir = playerOffset.normalized;
+                speed = pirateChaseSpeed;
+            }
+            else if (definition.type == NpcType.Merchant && playerDist <= merchantFleeRange && playerDist > 1f)
+            {
+                desiredDir = -playerOffset.normalized;
+                speed = merchantFleeSpeed;
+            }
+            else
+            {
+                desiredDir = ComputeRouteOrPatrolDirection(out speed);
             }
 
-            // 3) 이동 적용 — 육지 충돌 검사
+            // 2) 이동 + 육지 충돌 검사
             var nextPos = transform.position + desiredDir * speed * Time.deltaTime;
             if (IsLandAt(nextPos))
             {
-                // 충돌 — 방향 반전 + 다음 방향 재추첨
                 _wanderDirection = -desiredDir;
                 _nextDirectionChange = Time.time + 1f;
                 return;
             }
 
-            // 4) 세계 경계 clamp (Wrapping 아님)
+            // 3) 세계 경계 clamp
             nextPos.x = Mathf.Clamp(nextPos.x, -worldHalfWidth, worldHalfWidth);
             nextPos.z = Mathf.Clamp(nextPos.z, -worldHalfDepth, worldHalfDepth);
-
-            // 경계 끝에 닿으면 새 방향
             if (Mathf.Abs(nextPos.x) >= worldHalfWidth - 0.1f ||
                 Mathf.Abs(nextPos.z) >= worldHalfDepth - 0.1f)
             {
                 PickNewWanderDirection();
             }
-
             transform.position = nextPos;
 
-            // 5) 진행 방향 바라보기 (큐브 회전)
+            // 4) 회전
             if (desiredDir.sqrMagnitude > 0.01f)
             {
                 var lookRot = Quaternion.LookRotation(new Vector3(desiredDir.x, 0f, desiredDir.z));
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookRot, 3f * Time.deltaTime);
             }
+        }
+
+        /// <summary>
+        /// 플레이어 우선 행동이 아닐 때 — 타입별 정상 행동.
+        /// 상선: 항로 다음 항구로 향함
+        /// 해적/호위선: patrolRange 밖이면 home 복귀, 안이면 random walk
+        /// </summary>
+        private Vector3 ComputeRouteOrPatrolDirection(out float speed)
+        {
+            speed = wanderSpeed;
+
+            // 상선 무역 항로
+            if (definition.type == NpcType.Merchant && definition.patrolPorts != null
+                && definition.patrolPorts.Length >= 2)
+            {
+                var port = definition.patrolPorts[_routeIndex % definition.patrolPorts.Length];
+                if (port != null)
+                {
+                    var targetPos = GeoCoordinate.LatLngToWorld(port.latitude, port.longitude);
+                    var offset = targetPos - transform.position;
+                    offset.y = 0f;
+                    float dist = offset.magnitude;
+                    if (dist <= portArriveDistance)
+                    {
+                        _routeIndex = (_routeIndex + 1) % definition.patrolPorts.Length;
+                    }
+                    else
+                    {
+                        speed = tradeCruiseSpeed;
+                        return offset.normalized;
+                    }
+                }
+            }
+
+            // 해적/호위선 — homePort 에서 멀어졌으면 복귀
+            if (definition.homePort != null && definition.patrolRange > 0f)
+            {
+                var homePos = GeoCoordinate.LatLngToWorld(
+                    definition.homePort.latitude, definition.homePort.longitude);
+                var toHome = homePos - transform.position;
+                toHome.y = 0f;
+                float distFromHome = toHome.magnitude;
+                if (distFromHome > definition.patrolRange)
+                {
+                    return toHome.normalized;
+                }
+            }
+
+            // 평소 — random walk
+            if (Time.time >= _nextDirectionChange) PickNewWanderDirection();
+            return _wanderDirection;
         }
 
         private void PickNewWanderDirection()
@@ -167,14 +218,12 @@ namespace Game.Combat
             if (definition == null) return;
             if (_playerShip == null) _playerShip = FindAnyObjectByType<ShipController>(FindObjectsInactive.Include);
             if (_playerShip == null) return;
-
             var service = CombatService.Instance;
             if (service == null)
             {
                 Debug.LogWarning("[NpcShip] CombatService 없음 — 전투 불가");
                 return;
             }
-
             var result = service.Resolve(_playerShip, definition);
             if (resultPanel != null) resultPanel.Show(result);
             if (result.playerWon) Destroy(gameObject, 0.5f);

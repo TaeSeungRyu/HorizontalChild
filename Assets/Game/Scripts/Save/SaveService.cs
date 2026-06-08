@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using Game.Combat;
 using Game.Data;
 using Game.Missions;
 using Game.Player;
@@ -49,6 +51,12 @@ namespace Game.Save
 
         public bool HasSave => File.Exists(FilePath);
 
+        /// <summary>
+        /// 마지막으로 로드된 데이터 — NpcSpawner 가 지연 spawn 시 참조.
+        /// CollectState 도 NpcSpawner 가 아직 준비 안됐을 때 fallback 으로 사용.
+        /// </summary>
+        public SaveData LastLoaded { get; private set; }
+
         private void Awake()
         {
             if (Instance != null && Instance != this) { Destroy(this); return; }
@@ -88,6 +96,10 @@ namespace Game.Save
             // 거래 후 자동 저장 — onCargoChanged / onMoneyChanged
             var cargo = PlayerCargo.Instance;
             if (cargo != null) cargo.onCargoChanged.AddListener(SaveGame);
+
+            // 전투 종료 직후 자동 저장 — 배 위치·돈·명성·NPC 상태 즉시 기억
+            var combat = CombatService.Instance;
+            if (combat != null) combat.onCombatResolved.AddListener(_ => SaveGame());
         }
 
         private void OnApplicationPause(bool paused)
@@ -181,6 +193,18 @@ namespace Game.Save
                 data.shipZ = playerShip.transform.position.z;
             }
 
+            // NPC 배 상태 — spawner 가 준비됐으면 현재 상태 수집,
+            // 아직 spawn 전이면 (예: 로드 직후 onCargoChanged 자동저장) 직전 로드값 유지
+            var spawner = NpcSpawner.Instance;
+            if (spawner != null && spawner.HasSpawned)
+            {
+                data.npcs = spawner.CollectStates();
+            }
+            else if (LastLoaded != null && LastLoaded.npcs != null)
+            {
+                data.npcs = new List<NpcStateData>(LastLoaded.npcs);
+            }
+
             return data;
         }
 
@@ -199,6 +223,7 @@ namespace Game.Save
                     Debug.LogError("[SaveService] JSON 파싱 실패");
                     return false;
                 }
+                LastLoaded = data;   // ApplyData 전에 set — NpcSpawner 가 한 프레임 뒤 읽음
                 ApplyData(data);
                 onLoaded?.Invoke();
                 Debug.Log($"[SaveService] 로드 완료. 저장 시각: {data.savedAtUtc}");
