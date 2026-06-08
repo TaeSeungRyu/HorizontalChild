@@ -20,8 +20,8 @@ namespace Game.Combat
         public Transform npcsParent;
 
         [Header("Spawn")]
-        [Tooltip("게임 시작 시 spawn 할 NPC 개수.")]
-        [Range(0, 30)] public int spawnCount = 8;
+        [Tooltip("게임 시작 시 spawn 할 NPC 개수. 카탈로그가 12명이면 12 권장.")]
+        [Range(0, 30)] public int spawnCount = 12;
 
         [Tooltip("homePort 가 있는 NPC 의 spawn 거리 (Unity Unit). 항구에서 이만큼 떨어진 곳.")]
         public float homePortSpawnDistance = 40f;
