@@ -39,6 +39,9 @@ namespace Game.Save
         public float shipX;
         public float shipZ;
 
+        // 플레이어 배 내구도 (M3.5 Phase 2 — 0 도달 시 항구 수리 필요)
+        public int playerDurability = -1;   // -1 = 미저장 → 로드 시 maxDurability 로 자동 초기화
+
         // NPC 배 상태 — 위치 + 무역 항로 인덱스 (M3.5 Phase 1)
         public List<NpcStateData> npcs = new();
 

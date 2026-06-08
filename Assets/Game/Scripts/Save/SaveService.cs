@@ -185,12 +185,13 @@ namespace Game.Save
                 }
             }
 
-            // 위치
+            // 위치 + 내구도
             if (playerShip == null) playerShip = FindAnyObjectByType<ShipController>(FindObjectsInactive.Include);
             if (playerShip != null)
             {
                 data.shipX = playerShip.transform.position.x;
                 data.shipZ = playerShip.transform.position.z;
+                data.playerDurability = playerShip.CurrentDurability;
             }
 
             // NPC 배 상태 — spawner 가 준비됐으면 현재 상태 수집,
@@ -304,12 +305,13 @@ namespace Game.Save
                 }
             }
 
-            // 위치
+            // 위치 + 내구도
             if (playerShip == null) playerShip = FindAnyObjectByType<ShipController>(FindObjectsInactive.Include);
             if (playerShip != null)
             {
                 var pos = playerShip.transform.position;
                 playerShip.transform.position = new Vector3(data.shipX, pos.y, data.shipZ);
+                if (data.playerDurability >= 0) playerShip.SetDurability(data.playerDurability);
             }
         }
 

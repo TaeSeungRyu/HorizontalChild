@@ -17,6 +17,9 @@ namespace Game.Data
         [Range(10, 1000)] public int cargoCapacity = 60;
         [Range(10, 200)] public int maxDurability = 50;
 
+        [Tooltip("포탄 발사 간격(초). 작을수록 빠른 연사. 0.5~3 권장.")]
+        [Range(0.3f, 4f)] public float attackInterval = 1.5f;
+
         [Header("Economy")]
         public int basePrice = 5000;
         public ReputationGate gate;
