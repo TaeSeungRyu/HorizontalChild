@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Game.Data;
 using Game.Save;
 using Game.Ship;
@@ -391,18 +392,33 @@ namespace Game.Combat
             var sequence = CombatSequence.Instance;
             if (sequence == null)
             {
-                // 씬에 컴포넌트가 없으면 기본값으로 자동 생성 (사용자 셋업 누락 방지)
                 var go = new GameObject("CombatSequence (auto)");
                 sequence = go.AddComponent<CombatSequence>();
                 Debug.LogWarning("[NpcShip] CombatSequence 컴포넌트가 씬에 없어 자동 생성. " +
                     "수동으로 GameObject 추가하면 인스펙터에서 튜닝 가능.");
             }
+            if (sequence.IsBusy) return;
 
-            // busy 중일 땐 skip — 진행 중인 시퀀스의 결과 패널을 덮어쓰지 않음
-            if (!sequence.IsBusy)
+            // 2:1 / N:1 — 같은 영역(각 해적의 pirateChaseRange) 안에 있는 다른 해적도 함께 전투
+            var attackers = new List<NpcShip> { this };
+            var spawner = NpcSpawner.Instance;
+            if (spawner != null)
             {
-                sequence.Begin(_playerShip, this, resultPanel);
+                Vector3 pp = _playerShip.transform.position;
+                foreach (var other in spawner.AllSpawned)
+                {
+                    if (other == null || other == this || other._engagementOver) continue;
+                    if (other.LockMovement) continue;
+                    if (other.definition == null || other.definition.type != NpcType.Pirate) continue;
+                    var d = pp - other.transform.position;
+                    d.y = 0f;
+                    if (d.magnitude <= other.pirateChaseRange)
+                    {
+                        attackers.Add(other);
+                    }
+                }
             }
+            sequence.Begin(_playerShip, attackers, resultPanel);
         }
 
         private void EngageNpc(NpcShip target)

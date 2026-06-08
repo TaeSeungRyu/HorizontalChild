@@ -63,9 +63,24 @@ namespace Game.Ship
         public float ThrottleInput => _throttleValue;
         public float SteerInput => _steerValue;
 
-        /// <summary>전투 연출 중 등 외부에서 입력을 잠그고 싶을 때.
-        /// true 면 ReadInput 이 스킵되어 _steer/_throttle 가 점차 0 으로 감속.</summary>
-        public bool LockInput { get; set; }
+        /// <summary>전투 중 등 외부에서 입력을 잠그고 싶을 때.
+        /// true 가 되는 순간 속도·입력값 즉시 0 — 관성 없이 그 자리에 정지.</summary>
+        public bool LockInput
+        {
+            get => _lockInput;
+            set
+            {
+                _lockInput = value;
+                if (value)
+                {
+                    _currentSpeed = 0f;
+                    CurrentSpeed = 0f;
+                    _steerValue = 0f;
+                    _throttleValue = 0f;
+                }
+            }
+        }
+        private bool _lockInput;
 
         /// <summary>현재 내구도 — 전투 중 차감, 항구에서 수리. 0 이면 게임 패배.</summary>
         public int CurrentDurability { get; private set; }
