@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Game.Data;
 using Game.Save;
 using Game.Ship;
@@ -9,21 +10,21 @@ using UnityEngine;
 namespace Game.Combat
 {
     /// <summary>
-    /// M3.5 Phase 2 — 실제 시뮬레이션 기반 시각 전투.
+    /// M3.5 Phase 2 — 실제 시뮬레이션 기반 시각 전투 (다중 NPC 지원).
     ///
-    /// 시뮬레이션:
-    ///   - 양측이 각자 attackInterval(초) 마다 포탄 1발 발사.
-    ///   - 포탄은 cannonballFlightSeconds 동안 parabolic arc 로 비행.
-    ///   - 명중 시 cannonPower 만큼 차감, hit flash. 명중 확률은 captain.seamanship / npc.bravery 보정.
-    ///   - 한쪽 currentDurability 가 먼저 0 도달 → 전투 종료. 이미 비행 중이던 반대측 포탄은
-    ///     도착 시점에 _combatOver==true 면 무효 (조용히 소멸).
-    ///
-    /// 결과:
-    ///   - 시뮬레이션 결과를 CombatService.ApplyResult(playerWon) 에 전달 → 보상 + 메시지.
-    ///   - 패배 NPC 는 NpcSpawner 재추첨 큐로.
-    ///   - 플레이어 패배 시: ShipController.CurrentDurability 가 0 인 채 유지 → 항구에서 수리 필요.
-    ///
-    /// 어린이 친화: 데미지 숫자 표시 X. 결과 패널 메시지로 톤 마무리.
+    /// 흐름:
+    ///   1) 시작 시점에 같은 영역의 모든 해적 NPC 가 attacker 리스트에 포함 (2:1, 3:1 ...).
+    ///   2) 양측 입력·이동 락 — ShipController.LockInput, NpcShip.LockMovement.
+    ///      ShipController 는 LockInput=true 순간 _currentSpeed 즉시 0.
+    ///   3) 발사 루프:
+    ///      - 플레이어 fire loop 1개 — 매 발 살아있는 NPC 중 가장 가까운 것 자동 타겟.
+    ///      - 각 NPC 별로 fire loop 1개 — 모두 플레이어 향해 발사.
+    ///   4) 종료 조건: player.durability ≤ 0 (패배) 또는 모든 NPC.durability ≤ 0 (승리) 또는 timeout.
+    ///   5) _combatOver=true → 비행 중인 마지막 포탄들은 도착 시 자기 소멸 (무효).
+    ///   6) 결과:
+    ///      - 승리 → 리스트 내 모든 NPC DefeatByCombat (재추첨 큐).
+    ///      - 패배 → 가장 가까운 항구로 즉시 텔레포트.
+    ///   7) 락 해제 + 결과 패널 + 저장.
     /// </summary>
     public class CombatSequence : MonoBehaviour
     {
@@ -52,15 +53,15 @@ namespace Game.Combat
         [Tooltip("parabolic 정점 높이.")]
         public float cannonballArcHeight = 4f;
 
-        public Color playerCannonColor = new Color(0.95f, 0.85f, 0.2f);   // 노란색
-        public Color npcCannonColor = new Color(0.15f, 0.15f, 0.15f);     // 검은색
+        public Color playerCannonColor = new Color(0.95f, 0.85f, 0.2f);
+        public Color npcCannonColor = new Color(0.15f, 0.15f, 0.15f);
 
         [Header("Tuning — Hit Flash")]
         public Color hitFlashColor = Color.white;
         public float hitFlashSeconds = 0.18f;
 
         public bool IsBusy { get; private set; }
-        private bool _combatOver;   // 한쪽 durability 0 도달 — 비행 중 포탄 무효화 신호
+        private bool _combatOver;
 
         private void Awake()
         {
@@ -73,77 +74,85 @@ namespace Game.Combat
             if (Instance == this) Instance = null;
         }
 
-        /// <summary>전투 시퀀스 시작. NpcShip 이 호출.</summary>
-        public void Begin(ShipController player, NpcShip npcShip, CombatResultPanel resultPanel)
+        /// <summary>전투 시퀀스 시작. attackers 는 1명 이상 (2:1 가능).</summary>
+        public void Begin(ShipController player, List<NpcShip> attackers, CombatResultPanel resultPanel)
         {
-            if (IsBusy || player == null || npcShip == null) return;
-            StartCoroutine(RunSequence(player, npcShip, resultPanel));
+            if (IsBusy || player == null || attackers == null || attackers.Count == 0) return;
+            StartCoroutine(RunSequence(player, attackers, resultPanel));
         }
 
-        private IEnumerator RunSequence(ShipController player, NpcShip npcShip, CombatResultPanel resultPanel)
+        private IEnumerator RunSequence(ShipController player, List<NpcShip> attackers, CombatResultPanel resultPanel)
         {
             IsBusy = true;
             _combatOver = false;
 
-            // 1) 양측 초기화
-            if (player.CurrentDurability <= 0) player.RestoreDurability();   // 안전장치 — 0 인데 전투 진입 막혔어야 함
-            npcShip.ResetDurabilityForCombat();
+            // 1) 초기화 — durability 재충전
+            if (player.CurrentDurability <= 0) player.RestoreDurability();
+            foreach (var npc in attackers)
+            {
+                if (npc != null) npc.ResetDurabilityForCombat();
+            }
 
-            // 2) 락
+            // 2) 락 — 즉시 정지 (ShipController.LockInput setter 가 속도 0 으로 리셋)
             player.LockInput = true;
-            npcShip.LockMovement = true;
+            foreach (var npc in attackers)
+            {
+                if (npc != null) npc.LockMovement = true;
+            }
 
-            // 3) 양측 발사 코루틴 동시 실행
-            // 옛 에셋 0 값 fallback — 인스펙터에서 명시 설정된 값은 그대로 사용
+            // 3) 발사 루프
             var ship = player.shipData;
             float playerInterval = (ship != null && ship.attackInterval >= 0.3f) ? ship.attackInterval : 1.5f;
             int playerDmg = (ship != null && ship.cannonPower >= 1) ? ship.cannonPower : 3;
             float playerHit = ComputePlayerHitChance(player);
-            StartCoroutine(FireLoop(player.transform, npcShip, playerInterval, playerDmg, playerHit,
-                playerCannonColor, attackerIsPlayer: true, player));
+            StartCoroutine(PlayerFireLoop(player, attackers, playerInterval, playerDmg, playerHit));
 
-            float npcInterval = npcShip.AttackInterval;
-            int npcDmg = npcShip.CannonPower;
-            float npcHit = ComputeNpcHitChance(npcShip);
-            StartCoroutine(FireLoop(npcShip.transform, null, npcInterval, npcDmg, npcHit,
-                npcCannonColor, attackerIsPlayer: false, player, npcShip));
+            for (int i = 0; i < attackers.Count; i++)
+            {
+                var npc = attackers[i];
+                if (npc == null) continue;
+                // NPC 들끼리 발사 타이밍 살짝 분산 — 동시 발사 부자연스러움 회피
+                StartCoroutine(NpcFireLoop(player, npc, ComputeNpcHitChance(npc), 0.55f + i * 0.25f));
+            }
 
-            // 4) 종료 대기 — durability 0 또는 timeout
+            // 4) 종료 대기
             float t = 0f;
-            while (t < maxCombatSeconds && player != null && npcShip != null
-                && player.CurrentDurability > 0 && npcShip.CurrentDurability > 0)
+            while (t < maxCombatSeconds && player != null && player.CurrentDurability > 0 && AnyAlive(attackers))
             {
                 t += Time.deltaTime;
                 yield return null;
             }
 
             _combatOver = true;
-
-            // 약간의 dwell 시간 — 마지막 비행 중인 포탄이 도착 후 자기 소멸할 시간
+            // 비행 중 포탄들이 도착 후 자기 무효화될 시간
             yield return new WaitForSeconds(cannonballFlightSeconds + 0.1f);
 
             // 5) 승자 판정
-            bool playerWon;
-            if (player == null || player.CurrentDurability <= 0) playerWon = false;
-            else if (npcShip == null || npcShip.CurrentDurability <= 0) playerWon = true;
-            else playerWon = player.CurrentDurability >= npcShip.CurrentDurability;   // timeout — 더 많이 남은 쪽
+            bool playerWon = player != null && player.CurrentDurability > 0;
 
-            // 6) 락 해제
+            // 6) 락 해제 — 이동 다시 가능
             if (player != null) player.LockInput = false;
-            if (npcShip != null) npcShip.LockMovement = false;
+            foreach (var npc in attackers)
+            {
+                if (npc != null) npc.LockMovement = false;
+            }
 
-            // 7) 보상 + 메시지
+            // 7) 보상 — primary NPC (리스트 첫 번째 또는 살아있던 마지막) 기준 메시지
+            NpcShip primary = attackers.Count > 0 ? attackers[0] : null;
             var result = CombatService.Instance != null
-                ? CombatService.Instance.ApplyResult(player, npcShip != null ? npcShip.definition : null, playerWon)
+                ? CombatService.Instance.ApplyResult(player, primary != null ? primary.definition : null, playerWon)
                 : default;
 
-            if (playerWon && npcShip != null)
+            if (playerWon)
             {
-                npcShip.DefeatByCombat();
+                // 승리 — 모든 NPC 격침 (잔여 HP 있어도 도주로 간주)
+                foreach (var npc in attackers)
+                {
+                    if (npc != null) npc.DefeatByCombat();
+                }
             }
-            else if (!playerWon && player != null)
+            else if (player != null)
             {
-                // 패배 — 가장 가까운 항구로 즉시 귀환
                 TeleportToNearestPort(player);
             }
 
@@ -153,35 +162,36 @@ namespace Game.Combat
             IsBusy = false;
         }
 
-        /// <summary>플레이어 위치 기준 가장 가까운 항구로 텔레포트.</summary>
-        private void TeleportToNearestPort(ShipController player)
+        // ─── 헬퍼 ───────────────────────────────────────────────────────────
+
+        private static bool AnyAlive(List<NpcShip> npcs)
         {
-            var spawner = NpcSpawner.Instance;
-            PortCatalog catalog = spawner != null ? spawner.portCatalog : null;
-            if (catalog == null || catalog.all == null || catalog.all.Length == 0) return;
-
-            Vector3 from = player.transform.position;
-            PortData nearest = null;
-            float bestSq = float.MaxValue;
-            foreach (var port in catalog.all)            {
-                if (port == null) continue;
-                var p = GeoCoordinate.LatLngToWorld(port.latitude, port.longitude);
-                float dx = p.x - from.x;
-                float dz = p.z - from.z;
-                float sq = dx * dx + dz * dz;
-                if (sq < bestSq) { bestSq = sq; nearest = port; }
+            for (int i = 0; i < npcs.Count; i++)
+            {
+                var n = npcs[i];
+                if (n != null && n.CurrentDurability > 0) return true;
             }
-            if (nearest == null) return;
+            return false;
+        }
 
-            var target = GeoCoordinate.LatLngToWorld(nearest.latitude, nearest.longitude);
-            player.transform.position = new Vector3(target.x, from.y, target.z);
-            Debug.Log($"[CombatSequence] 패배 — {nearest.displayNameKo} 항구로 강제 귀환");
+        private static NpcShip FindClosestAlive(List<NpcShip> npcs, Vector3 from)
+        {
+            NpcShip best = null;
+            float bestSq = float.MaxValue;
+            for (int i = 0; i < npcs.Count; i++)
+            {
+                var n = npcs[i];
+                if (n == null || n.CurrentDurability <= 0) continue;
+                var d = n.transform.position - from;
+                float sq = d.x * d.x + d.z * d.z;
+                if (sq < bestSq) { bestSq = sq; best = n; }
+            }
+            return best;
         }
 
         private float ComputePlayerHitChance(ShipController player)
         {
             int seamanship = (player != null && player.captain != null) ? player.captain.seamanship : 50;
-            // 1~100 seamanship → ±15% 보정
             return Mathf.Clamp(playerBaseHitChance + (seamanship - 50) * 0.003f, 0.2f, 0.95f);
         }
 
@@ -192,35 +202,44 @@ namespace Game.Combat
             return Mathf.Clamp(npcBaseHitChance + (bravery - 50) * 0.003f, 0.2f, 0.95f);
         }
 
-        /// <summary>
-        /// 한쪽 측의 발사 루프. attackInterval 마다 포탄 발사 코루틴 spawn.
-        /// _combatOver 가 true 가 되면 새 포탄 발사 중단.
-        /// </summary>
-        private IEnumerator FireLoop(Transform from, NpcShip targetNpc,
-            float interval, int damage, float hitChance, Color color,
-            bool attackerIsPlayer, ShipController playerRef, NpcShip selfNpc = null)
-        {
-            // 초기 약간 딜레이 — 양측 동시 발사 어색함 회피
-            yield return new WaitForSeconds(attackerIsPlayer ? 0.3f : 0.55f);
+        // ─── 발사 루프 ──────────────────────────────────────────────────────
 
+        private IEnumerator PlayerFireLoop(ShipController player, List<NpcShip> targets,
+            float interval, int damage, float hitChance)
+        {
+            yield return new WaitForSeconds(0.3f);
             while (!_combatOver)
             {
-                if (from == null) yield break;
-                Transform toTransform = attackerIsPlayer
-                    ? (targetNpc != null ? targetNpc.transform : null)
-                    : (playerRef != null ? playerRef.transform : null);
-                if (toTransform == null) yield break;
-
+                if (player == null) yield break;
+                var target = FindClosestAlive(targets, player.transform.position);
+                if (target == null) yield break;
                 bool willHit = Random.value <= hitChance;
-                StartCoroutine(FireCannonball(from, toTransform, color, damage, willHit,
-                    attackerIsPlayer, playerRef, targetNpc ?? selfNpc));
-
+                StartCoroutine(FireCannonball(player.transform, target.transform, playerCannonColor,
+                    damage, willHit, attackerIsPlayer: true, player, target));
                 yield return new WaitForSeconds(interval);
             }
         }
 
+        private IEnumerator NpcFireLoop(ShipController player, NpcShip npc, float hitChance, float initialDelay)
+        {
+            yield return new WaitForSeconds(initialDelay);
+            int damage = npc.CannonPower;
+            float interval = npc.AttackInterval;
+            while (!_combatOver)
+            {
+                if (npc == null || npc.CurrentDurability <= 0) yield break;
+                if (player == null) yield break;
+                bool willHit = Random.value <= hitChance;
+                StartCoroutine(FireCannonball(npc.transform, player.transform, npcCannonColor,
+                    damage, willHit, attackerIsPlayer: false, player, npc));
+                yield return new WaitForSeconds(interval);
+            }
+        }
+
+        // ─── 포탄·이펙트 ────────────────────────────────────────────────────
+
         private IEnumerator FireCannonball(Transform from, Transform to, Color color,
-            int damage, bool willHit, bool attackerIsPlayer, ShipController playerRef, NpcShip npcShipRef)
+            int damage, bool willHit, bool attackerIsPlayer, ShipController playerRef, NpcShip npcRef)
         {
             if (from == null || to == null) yield break;
 
@@ -258,10 +277,10 @@ namespace Game.Combat
             // 도착 — 무효화 검사
             if (!_combatOver && willHit)
             {
-                if (attackerIsPlayer && npcShipRef != null && npcShipRef.CurrentDurability > 0)
+                if (attackerIsPlayer && npcRef != null && npcRef.CurrentDurability > 0)
                 {
-                    npcShipRef.ApplyDamage(damage);
-                    StartCoroutine(HitFlash(npcShipRef.gameObject));
+                    npcRef.ApplyDamage(damage);
+                    StartCoroutine(HitFlash(npcRef.gameObject));
                 }
                 else if (!attackerIsPlayer && playerRef != null && playerRef.CurrentDurability > 0)
                 {
@@ -269,7 +288,6 @@ namespace Game.Combat
                     StartCoroutine(HitFlash(playerRef.gameObject));
                 }
             }
-            // _combatOver 면 그냥 ball 만 소멸 — 명중 무효
 
             if (ball != null) Destroy(ball);
         }
@@ -292,6 +310,33 @@ namespace Game.Combat
             {
                 renderer.material.SetColor(prop, original);
             }
+        }
+
+        // ─── 패배 텔레포트 ──────────────────────────────────────────────────
+
+        private void TeleportToNearestPort(ShipController player)
+        {
+            var spawner = NpcSpawner.Instance;
+            PortCatalog catalog = spawner != null ? spawner.portCatalog : null;
+            if (catalog == null || catalog.all == null || catalog.all.Length == 0) return;
+
+            Vector3 from = player.transform.position;
+            PortData nearest = null;
+            float bestSq = float.MaxValue;
+            foreach (var port in catalog.all)
+            {
+                if (port == null) continue;
+                var p = GeoCoordinate.LatLngToWorld(port.latitude, port.longitude);
+                float dx = p.x - from.x;
+                float dz = p.z - from.z;
+                float sq = dx * dx + dz * dz;
+                if (sq < bestSq) { bestSq = sq; nearest = port; }
+            }
+            if (nearest == null) return;
+
+            var target = GeoCoordinate.LatLngToWorld(nearest.latitude, nearest.longitude);
+            player.transform.position = new Vector3(target.x, from.y, target.z);
+            Debug.Log($"[CombatSequence] 패배 — {nearest.displayNameKo} 항구로 강제 귀환");
         }
     }
 }
