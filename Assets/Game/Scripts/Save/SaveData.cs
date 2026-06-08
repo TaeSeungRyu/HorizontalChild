@@ -61,4 +61,11 @@ namespace Game.Save
         public float z;
         public int routeIndex;
     }
+
+    [Serializable]
+    public class NpcRespawnEntry
+    {
+        public string npcId;
+        public float secondsRemaining;
+    }
 }
