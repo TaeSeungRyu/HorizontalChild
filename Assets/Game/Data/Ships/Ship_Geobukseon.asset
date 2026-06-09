@@ -15,7 +15,7 @@ MonoBehaviour:
   shipId: ship.geobukseon
   displayName: "\uAC70\uBD81\uC120"
   icon: {fileID: 0}
-  prefab3D: {fileID: 306638065523005604, guid: d301fe51e0bb5b34da2b41fbc5298fee, type: 3}
+  prefab3D: {fileID: 6499004895483131289, guid: d301fe51e0bb5b34da2b41fbc5298fee, type: 3}
   cannonPower: 18
   speed: 5
   cargoCapacity: 120
