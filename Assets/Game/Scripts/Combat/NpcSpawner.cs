@@ -461,25 +461,23 @@ namespace Game.Combat
 
         private NpcShip SpawnNpc(NpcDefinition def, Vector3 worldPos)
         {
-            var npc = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            // 빈 root + 클릭용 BoxCollider — 시각은 ProceduralShipBuilder 가 자식으로 배치
+            var npc = new GameObject($"NpcShip_{(def != null ? def.npcId : "?")}");
             npc.transform.SetParent(npcsParent);
             npc.transform.position = worldPos;
             npc.transform.localScale = Vector3.one * npcSize;
 
-            var renderer = npc.GetComponent<Renderer>();
-            if (renderer != null)
-            {
-                var mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
-                var color = ColorFor(def.type);
-                if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", color);
-                else if (mat.HasProperty("_Color")) mat.SetColor("_Color", color);
-                renderer.material = mat;
-            }
+            // 배 전체 영역 클릭 가능 — IPointerClickHandler 동작
+            var col = npc.AddComponent<BoxCollider>();
+            col.center = new Vector3(0f, 0f, 0f);
+            col.size = new Vector3(0.7f, 0.7f, 1.4f);   // hull + 약간 margin
 
-            // BoxCollider 가 Cube primitive 에 기본 부착 — IPointerClickHandler 동작
+            // 배 모양 시각 빌드 — 선체·갑판·돛대·돛·뱃머리
+            ProceduralShipBuilder.BuildShip(npc, def != null ? def.type : NpcType.Merchant);
+
             var script = npc.AddComponent<NpcShip>();
             script.Bind(def, resultPanel);
-            if (!string.IsNullOrEmpty(def.npcId)) _spawned[def.npcId] = script;
+            if (def != null && !string.IsNullOrEmpty(def.npcId)) _spawned[def.npcId] = script;
             return script;
         }
 
