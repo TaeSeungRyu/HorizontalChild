@@ -465,22 +465,24 @@ namespace Game.Combat
             var npc = new GameObject($"NpcShip_{(def != null ? def.npcId : "?")}");
             npc.transform.SetParent(npcsParent);
             npc.transform.position = worldPos;
-            npc.transform.localScale = Vector3.one * npcSize;
 
-            // 배 전체 영역 클릭 가능 — IPointerClickHandler 동작
             var col = npc.AddComponent<BoxCollider>();
-            col.center = new Vector3(0f, 0f, 0f);
-            col.size = new Vector3(0.7f, 0.7f, 1.4f);
+            col.center = Vector3.zero;
 
             // 시각: ShipData.prefab3D 우선 → 절차적 배 모양 fallback
             var prefab = def != null && def.shipData != null ? def.shipData.prefab3D : null;
             if (prefab != null)
             {
+                // prefab3D 사용 — parent scale 1 로 두고 prefab 자체 크기 그대로
+                // (PlayerShip 도 scale 1 이라 NPC 와 동일 크기로 보임)
+                npc.transform.localScale = Vector3.one;
+                // collider 는 절차적 빌더의 world collider 와 비슷한 크기로
+                col.size = new Vector3(0.7f * npcSize, 0.7f * npcSize, 1.4f * npcSize);
+
                 var visual = Instantiate(prefab, npc.transform);
                 visual.name = "ShipVisual";
                 visual.transform.localPosition = Vector3.zero;
                 visual.transform.localRotation = Quaternion.identity;
-                // visual 안의 콜라이더는 click 중복 막기 위해 비활성화
                 foreach (var visualCol in visual.GetComponentsInChildren<Collider>())
                 {
                     visualCol.enabled = false;
@@ -488,6 +490,9 @@ namespace Game.Combat
             }
             else
             {
+                // 절차적 빌더 — parent scale 6 (기존 동작 유지)
+                npc.transform.localScale = Vector3.one * npcSize;
+                col.size = new Vector3(0.7f, 0.7f, 1.4f);
                 ProceduralShipBuilder.BuildShip(npc, def != null ? def.type : NpcType.Merchant);
             }
 

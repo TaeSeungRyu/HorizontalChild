@@ -15,7 +15,7 @@ MonoBehaviour:
   shipId: ship.cog
   displayName: "\uCF54\uADF8\uC120"
   icon: {fileID: 0}
-  prefab3D: {fileID: 0}
+  prefab3D: {fileID: 7165417569658930574, guid: 21bba7900d68fab4099d2e866d23d4f6, type: 3}
   cannonPower: 3
   speed: 3
   cargoCapacity: 250
