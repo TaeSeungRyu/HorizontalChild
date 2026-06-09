@@ -15,11 +15,12 @@ MonoBehaviour:
   shipId: ship.carrack
   displayName: "\uCE90\uB9AD\uC120"
   icon: {fileID: 0}
-  prefab3D: {fileID: 0}
+  prefab3D: {fileID: 7551280638034007876, guid: ffd82136d607d564c8dd522a4cc3f045, type: 3}
   cannonPower: 6
   speed: 4
   cargoCapacity: 200
   maxDurability: 100
+  attackInterval: 1.5
   basePrice: 2500
   gate:
     requiredGoodReputation: 0
