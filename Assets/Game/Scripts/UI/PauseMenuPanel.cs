@@ -1,4 +1,5 @@
 using Game.Save;
+using Game.World;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -61,7 +62,8 @@ namespace Game.UI
             if (panelRoot == null) panelRoot = gameObject;
             if (titleText != null) titleText.text = "일시 정지";
 
-            if (pauseGameTime) Time.timeScale = 0f;
+            // 항구가 이미 pause 중이어도 충돌 없음 — 참조 카운팅
+            if (pauseGameTime) SeaSimulation.Pause(this);
 
             panelRoot.transform.SetAsLastSibling();
             panelRoot.SetActive(true);
@@ -69,7 +71,7 @@ namespace Game.UI
 
         public void Resume()
         {
-            if (pauseGameTime) Time.timeScale = 1f;
+            if (pauseGameTime) SeaSimulation.Resume(this);
             if (panelRoot != null) panelRoot.SetActive(false);
         }
 
@@ -88,8 +90,8 @@ namespace Game.UI
             var save = SaveService.Instance;
             if (save != null) save.DeleteSave();
 
-            // Time scale 복구 후 씬 재로드 (모든 런타임 상태 초기화)
-            Time.timeScale = 1f;
+            // 정적 pause 상태 정리 후 씬 재로드 (모든 런타임 상태 초기화)
+            SeaSimulation.Reset();
             var scene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(scene.buildIndex);
         }
@@ -97,6 +99,7 @@ namespace Game.UI
         public void QuitApp()
         {
             Debug.Log("[PauseMenuPanel] 종료");
+            SeaSimulation.Reset();   // editor 재진입 대비
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
 #else

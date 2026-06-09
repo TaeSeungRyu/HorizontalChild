@@ -70,5 +70,6 @@ namespace Game.Save
     {
         public string npcId;
         public float secondsRemaining;
+        public string portId;   // 광장 dwell 이면 항구 ID, 격침이면 빈 문자열
     }
 }

@@ -10,21 +10,15 @@ using UnityEngine.EventSystems;
 namespace Game.Combat
 {
     /// <summary>
-    /// 해상 NPC 배 — 이동 AI + 클릭 시 전투.
+    /// 해상 NPC 배 — 이동 AI + 클릭 시 전투. (M3.5 풀세트)
     ///
-    /// M3.5 Phase 1 행동:
-    ///   - 해적 (patrolRange 안에서):
-    ///     • 플레이어 근접 → 추적
-    ///     • 평소 → random walk
-    ///     • homePort 에서 patrolRange 초과 시 → 복귀
-    ///   - 상선 (patrolPorts 2개 이상):
-    ///     • 플레이어 근접 → 도주
-    ///     • 평소 → 다음 항구 향해 항해, 도착 시 다음 항구
-    ///   - 호위선:
-    ///     • homePort 주변 순찰 (좁은 patrolRange)
+    /// 행동 모델:
+    ///   - Merchant: ConfigureSailing 으로 받은 _sailingTarget 으로 직선 항해 → 도착 시 EnterDwell.
+    ///   - Pirate / Escort: ConfigureSailing 으로 받은 wander 시간 동안 random walk →
+    ///                      시간 끝나면 _sailingTarget = homePort 로 자동 전환 → 도착 시 EnterDwell.
+    ///   - 플레이어 근접: 해적 추적 / 상선 도주 (기존 유지).
     ///
-    /// 저장 가능 상태: Position + currentRouteIndex.
-    /// SaveService 가 NpcSpawner 를 통해 일괄 수집·복원.
+    /// NpcSpawner 가 NPC 의 dwell ↔ active 전환을 관리. NpcShip 은 active 동안의 항해만 담당.
     /// </summary>
     public class NpcShip : MonoBehaviour, IPointerClickHandler
     {
@@ -41,6 +35,12 @@ namespace Game.Combat
         public float merchantFleeRange = 60f;
         public float merchantFleeSpeed = 6f;
         public float tradeCruiseSpeed = 5f;
+
+        [Header("Patrol / Sailing")]
+        [Tooltip("본거지 / 목적지 도착 인정 거리.")]
+        public float homeArriveDistance = 25f;
+        [Tooltip("복귀(또는 목적지 항해) 시작 후 이 시간(초) 동안 도착 못 하면 텔레포트. 좁은 해협 안전장치.")]
+        public float homeReturnTimeoutSeconds = 60f;
 
         [Header("World Bounds")]
         public float worldHalfWidth = 2700f;
@@ -62,6 +62,11 @@ namespace Game.Combat
         // 육지 회피 — 충돌 시 수직 방향으로 잠깐 미끄러져 우회
         private Vector3 _deflectDir;
         private float _deflectUntil;
+
+        // 항해 상태
+        private PortData _sailingTarget;    // 항해할 목표 항구. 도착하면 EnterDwell(target).
+        private float _wanderEndsAt;        // 해적·호위선: wander 단계 종료 시각. 끝나면 _sailingTarget=homePort.
+        private float _returnStartedAt;     // 항해 시작 시각. 데드라인 계산용. 0 = 미진입
 
         // 해적 자동 전투 — 시각 인디케이터 + 쿨다운
         [Header("Pirate Auto-Engage")]
@@ -118,6 +123,18 @@ namespace Game.Combat
             {
                 CreateChaseIndicator();
             }
+        }
+
+        /// <summary>
+        /// NpcSpawner 가 spawn 직후 호출 — 항해 모드 설정.
+        /// target != null → 그 항구로 직선 항해 (상선·복귀 중인 해적/호위선).
+        /// target == null → wanderSeconds 동안 random walk → 자동으로 homePort 향해 복귀 (해적/호위선 첫 wander).
+        /// </summary>
+        public void ConfigureSailing(PortData target, float wanderSeconds)
+        {
+            _sailingTarget = target;
+            _wanderEndsAt = wanderSeconds > 0f ? Time.time + wanderSeconds : 0f;
+            _returnStartedAt = (target != null) ? Time.time : 0f;
         }
 
         private void OnDestroy()
@@ -216,46 +233,72 @@ namespace Game.Combat
         {
             speed = wanderSpeed;
 
-            // 상선 무역 항로
-            if (definition.type == NpcType.Merchant && definition.patrolPorts != null
-                && definition.patrolPorts.Length >= 2)
+            // 1) 목표 항구가 설정돼 있으면 그 항구로 직선 항해
+            if (_sailingTarget != null)
             {
-                var port = definition.patrolPorts[_routeIndex % definition.patrolPorts.Length];
-                if (port != null)
+                var targetPos = GeoCoordinate.LatLngToWorld(_sailingTarget.latitude, _sailingTarget.longitude);
+                var offset = targetPos - transform.position;
+                offset.y = 0f;
+                float dist = offset.magnitude;
+
+                if (dist <= homeArriveDistance)
                 {
-                    var targetPos = GeoCoordinate.LatLngToWorld(port.latitude, port.longitude);
-                    var offset = targetPos - transform.position;
-                    offset.y = 0f;
-                    float dist = offset.magnitude;
-                    if (dist <= portArriveDistance)
-                    {
-                        _routeIndex = (_routeIndex + 1) % definition.patrolPorts.Length;
-                    }
-                    else
-                    {
-                        speed = tradeCruiseSpeed;
-                        return offset.normalized;
-                    }
+                    EnterDwell(_sailingTarget);
+                    speed = 0f;
+                    return Vector3.zero;
                 }
+
+                // 데드라인 — 좁은 해협 / 반도 우회 실패 시 텔레포트
+                if (_returnStartedAt > 0f && Time.time - _returnStartedAt > homeReturnTimeoutSeconds)
+                {
+                    transform.position = new Vector3(targetPos.x, transform.position.y, targetPos.z);
+                    EnterDwell(_sailingTarget);
+                    speed = 0f;
+                    return Vector3.zero;
+                }
+
+                speed = (definition.type == NpcType.Merchant) ? tradeCruiseSpeed : wanderSpeed;
+                return offset.normalized;
             }
 
-            // 해적/호위선 — homePort 에서 멀어졌으면 복귀
+            // 2) wander 시간 끝나면 자동으로 본거지로 복귀 전환 (해적·호위선)
+            if (_wanderEndsAt > 0f && Time.time >= _wanderEndsAt && definition.homePort != null)
+            {
+                _sailingTarget = definition.homePort;
+                _wanderEndsAt = 0f;
+                _returnStartedAt = Time.time;
+                // 다음 프레임에 위 (1) 분기로 들어감
+            }
+
+            // 3) wander — patrolRange 벗어났으면 안전장치 복귀
             if (definition.homePort != null && definition.patrolRange > 0f)
             {
                 var homePos = GeoCoordinate.LatLngToWorld(
                     definition.homePort.latitude, definition.homePort.longitude);
                 var toHome = homePos - transform.position;
                 toHome.y = 0f;
-                float distFromHome = toHome.magnitude;
-                if (distFromHome > definition.patrolRange)
+                if (toHome.magnitude > definition.patrolRange)
                 {
                     return toHome.normalized;
                 }
             }
 
-            // 평소 — random walk
+            // 4) random walk
             if (Time.time >= _nextDirectionChange) PickNewWanderDirection();
             return _wanderDirection;
+        }
+
+        /// <summary>지정 항구 도착 → 항구로 들어감. GameObject 파괴 + NpcSpawner 광장 풀에 등록.
+        /// 광장에서의 dwell·재출항은 NpcSpawner 가 관리.</summary>
+        private void EnterDwell(PortData port)
+        {
+            if (_engagementOver) return;
+            _engagementOver = true;
+            _returnStartedAt = 0f;
+            _sailingTarget = null;
+
+            NpcSpawner.Instance?.SendNpcToPort(definition, 0f, port);
+            Destroy(gameObject);
         }
 
         private void PickNewWanderDirection()

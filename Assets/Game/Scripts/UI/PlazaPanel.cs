@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using Game.Combat;
 using Game.Data;
 using Game.Player;
+using Game.Save;
 using Game.Ship;
 using TMPro;
 using UnityEngine;
@@ -10,15 +12,15 @@ using UnityEngine.UI;
 namespace Game.UI
 {
     /// <summary>
-    /// 광장 (Plaza) 패널 — 새 선장 고용. MVP: CharacterRole.Adventurer 만 표시.
+    /// 광장 (Plaza) 패널 — 그 항구에 dwell 중인 NPC 만 고용 대상으로 표시 (§3.5).
     ///
     /// 동작:
+    ///   - NpcSpawner.GetNpcsAtPort(_currentPort) 로 현재 항구에 머무는 NPC 조회
     ///   - 각 행: 이름 + 능력치 (용기·항해·눈썰미) + 고용가 + [고용] 버튼
-    ///   - 고용 → 잔돈 차감 + playerShip.captain 교체
-    ///   - 현재 선장은 "현재 선장" 표시 (고용 비활성)
+    ///   - 고용 → 잔돈 차감 + playerShip.captain 교체 + NpcSpawner.HireNpcFromPort (풀 영구 제외)
+    ///   - 항구에 NPC 가 없으면 안내 메시지
     ///
-    /// 고용가: 단순 공식 = (bravery + seamanship + keenEye) × 10. 기본 ~1500~2500G.
-    /// 추후: NpcDefinition.hireBasePrice 우선, 없으면 공식 fallback.
+    /// 고용가: NpcDefinition.hireBasePrice 우선, 없으면 (용기+항해+눈썰미)×10 fallback.
     /// </summary>
     public class PlazaPanel : MonoBehaviour
     {
@@ -33,6 +35,7 @@ namespace Game.UI
         public Button closeButton;
 
         [Header("Data")]
+        [Tooltip("Legacy — 광장이 비어있을 때 fallback 으로 사용 (옵션). NpcSpawner 의 dwell 풀이 우선.")]
         public CharacterCatalog characterCatalog;
         public ShipController playerShip;
 
@@ -104,19 +107,45 @@ namespace Game.UI
             }
             _spawnedRows.Clear();
 
-            if (rowsContainer == null || characterCatalog == null || characterCatalog.all == null) return;
+            if (rowsContainer == null) return;
 
-            foreach (var ch in characterCatalog.all)
+            // 이 항구에 dwell 중인 NPC 들 (§3.5 비활동 풀)
+            var spawner = NpcSpawner.Instance
+                ?? FindAnyObjectByType<NpcSpawner>(FindObjectsInactive.Include);
+            var npcs = spawner != null ? spawner.GetNpcsAtPort(_currentPort) : null;
+
+            if (npcs == null || npcs.Count == 0)
             {
-                if (ch == null) continue;
-                if (ch.role != CharacterRole.Adventurer) continue; // 모험가만 고용 가능
-                _spawnedRows.Add(BuildCharacterRow(ch));
+                _spawnedRows.Add(BuildEmptyRow());
+                return;
+            }
+
+            foreach (var def in npcs)
+            {
+                if (def == null || def.character == null) continue;
+                _spawnedRows.Add(BuildNpcRow(def));
             }
         }
 
-        private GameObject BuildCharacterRow(CharacterData ch)
+        private GameObject BuildEmptyRow()
         {
-            var row = new GameObject($"Row_{ch.characterId}",
+            var row = new GameObject("Row_Empty",
+                typeof(RectTransform), typeof(LayoutElement));
+            row.transform.SetParent(rowsContainer, false);
+            row.GetComponent<LayoutElement>().preferredHeight = 80f;
+            var tmp = row.AddComponent<TextMeshProUGUI>();
+            tmp.text = "지금 광장에 머무는 모험가가 없어요. 잠시 후 다시 들러보세요.";
+            tmp.fontSize = 24f;
+            tmp.alignment = TextAlignmentOptions.Center;
+            tmp.color = new Color(0.8f, 0.8f, 0.8f);
+            tmp.enableWordWrapping = true;
+            return row;
+        }
+
+        private GameObject BuildNpcRow(NpcDefinition def)
+        {
+            var ch = def.character;
+            var row = new GameObject($"Row_{def.npcId}",
                 typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
             row.transform.SetParent(rowsContainer, false);
 
@@ -133,7 +162,7 @@ namespace Game.UI
             le.preferredHeight = 80f;
 
             bool isCurrent = playerShip != null && playerShip.captain == ch;
-            int price = HirePrice(ch);
+            int price = HirePrice(def);
             bool canAfford = _state != null && _state.Money >= price;
 
             AddText(row.transform, ch.displayNameKo, 220f, TextAlignmentOptions.Left);
@@ -144,28 +173,38 @@ namespace Game.UI
 
             var hireBtn = AddButton(row.transform, isCurrent ? "현재 선장" : "고용", 120f);
             hireBtn.interactable = !isCurrent && canAfford;
-            hireBtn.onClick.AddListener(() => OnHire(ch));
+            hireBtn.onClick.AddListener(() => OnHire(def));
 
             return row;
         }
 
-        private int HirePrice(CharacterData ch)
+        private int HirePrice(NpcDefinition def)
         {
-            return (ch.bravery + ch.seamanship + ch.keenEye) * 10;
+            if (def.hireBasePrice > 0) return def.hireBasePrice;
+            var ch = def.character;
+            return ch != null ? (ch.bravery + ch.seamanship + ch.keenEye) * 10 : 1500;
         }
 
-        private void OnHire(CharacterData ch)
+        private void OnHire(NpcDefinition def)
         {
-            if (ch == null || playerShip == null || _state == null) return;
+            if (def == null || def.character == null || playerShip == null || _state == null) return;
+            var ch = def.character;
             if (playerShip.captain == ch) return;
-            int price = HirePrice(ch);
+            int price = HirePrice(def);
             if (!_state.TrySpend(price))
             {
                 Debug.Log($"[PlazaPanel] 돈 부족: 필요 {price}");
                 return;
             }
             playerShip.captain = ch;
-            Debug.Log($"[PlazaPanel] 새 선장: {ch.displayNameKo} ({price}G)");
+
+            // 풀 영구 제외 (§3.5: 고용된 NPC 는 풀에서 영구 제외)
+            var spawner = NpcSpawner.Instance
+                ?? FindAnyObjectByType<NpcSpawner>(FindObjectsInactive.Include);
+            spawner?.HireNpcFromPort(def);
+
+            SaveService.Instance?.SaveGame();
+            Debug.Log($"[PlazaPanel] 새 선장: {ch.displayNameKo} ({price}G) — 풀에서 영구 제외");
             Refresh();
         }
 
