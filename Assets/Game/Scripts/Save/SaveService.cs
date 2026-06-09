@@ -316,17 +316,33 @@ namespace Game.Save
                 if (data.playerDurability >= 0) playerShip.SetDurability(data.playerDurability);
 
                 // 구매한 배 복원 — shipId 로 카탈로그 조회
-                if (!string.IsNullOrEmpty(data.shipId) && shipCatalog != null && shipCatalog.all != null)
+                if (!string.IsNullOrEmpty(data.shipId))
                 {
-                    ShipData saved = null;
-                    foreach (var s in shipCatalog.all)
+                    if (shipCatalog == null || shipCatalog.all == null)
                     {
-                        if (s != null && s.shipId == data.shipId) { saved = s; break; }
+                        Debug.LogWarning(
+                            $"[SaveService] shipId='{data.shipId}' 복원 실패: " +
+                            "Inspector 에 ShipCatalog 미할당. SaveService 컴포넌트에 ShipCatalog.asset 드래그 필요.");
                     }
-                    if (saved != null && playerShip.shipData != saved)
+                    else
                     {
-                        playerShip.shipData = saved;
-                        playerShip.RefreshVisual();   // 새 prefab3D 로 외형 즉시 갈아끼움
+                        ShipData saved = null;
+                        foreach (var s in shipCatalog.all)
+                        {
+                            if (s != null && s.shipId == data.shipId) { saved = s; break; }
+                        }
+                        if (saved == null)
+                        {
+                            Debug.LogWarning(
+                                $"[SaveService] shipId='{data.shipId}' 가 ShipCatalog 에 없음. " +
+                                "Game ▸ Refresh All Catalogs 실행 필요.");
+                        }
+                        else if (playerShip.shipData != saved)
+                        {
+                            playerShip.shipData = saved;
+                            playerShip.RefreshVisual();
+                            Debug.Log($"[SaveService] 배 복원: {saved.displayName} (id={saved.shipId})");
+                        }
                     }
                 }
             }

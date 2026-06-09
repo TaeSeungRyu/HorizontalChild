@@ -15,7 +15,7 @@ MonoBehaviour:
   shipId: ship.caravela_latina
   displayName: "\uB77C\uD2F4 \uCE74\uB77C\uBCA8"
   icon: {fileID: 0}
-  prefab3D: {fileID: 0}
+  prefab3D: {fileID: 3462726472720490077, guid: aa18890515db00d4b9ca4d72e0ed6608, type: 3}
   cannonPower: 2
   speed: 8
   cargoCapacity: 50
