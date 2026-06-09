@@ -29,6 +29,13 @@ namespace Game.Ship
         [Tooltip("회전 축 (로컬). 기본 X = 노가 앞뒤로 흔들림.")]
         public Vector3 axis = Vector3.right;
 
+        [Header("Movement Gate")]
+        [Tooltip("배 속도가 이 값(unit/sec) 이하면 노 정지. 0 으로 두면 항상 움직임.")]
+        public float stationarySpeedThreshold = 0.5f;
+
+        [Tooltip("움직임 ↔ 정지 전환을 얼마나 부드럽게 (초). 0 이면 즉시.")]
+        [Range(0f, 2f)] public float fadeSeconds = 0.5f;
+
         [Header("자동 검색")]
         [Tooltip("이 접두어로 시작하는 자식 GameObject 를 노로 인식. 콤마로 여러 개 가능 (예: 'Oar, 노').")]
         public string oarNamePrefixes = "Oar, 노, oar";
@@ -47,6 +54,10 @@ namespace Game.Ship
             public float phaseOffset;   // 라디안
         }
         private readonly List<OarEntry> _oars = new();
+
+        // 위치 변화 감지로 배 움직임 여부 판정
+        private Vector3 _lastPosition;
+        private float _movementBlend;   // 0 = 정지, 1 = 움직임
 
         private void Start()
         {
@@ -78,6 +89,7 @@ namespace Game.Ship
             {
                 Debug.Log($"[OarAnimator:{name}] 노 {_oars.Count} 개 인식.");
             }
+            _lastPosition = transform.position;
         }
 
         private bool AlreadyTracking(Transform t)
@@ -144,12 +156,38 @@ namespace Game.Ship
         private void Update()
         {
             if (_oars.Count == 0) return;
+
+            // 위치 변화로 배가 움직이는지 판정
+            float dt = Mathf.Max(Time.deltaTime, 0.0001f);
+            float speed = Vector3.Distance(transform.position, _lastPosition) / dt;
+            _lastPosition = transform.position;
+
+            float target = (stationarySpeedThreshold <= 0f || speed > stationarySpeedThreshold) ? 1f : 0f;
+            if (fadeSeconds > 0.001f)
+            {
+                _movementBlend = Mathf.MoveTowards(_movementBlend, target, Time.deltaTime / fadeSeconds);
+            }
+            else
+            {
+                _movementBlend = target;
+            }
+
+            // blend 0 이면 노는 base 자세 유지 — 움직임 없음
+            if (_movementBlend <= 0.001f)
+            {
+                for (int i = 0; i < _oars.Count; i++)
+                {
+                    if (_oars[i].tr != null) _oars[i].tr.localRotation = _oars[i].baseRotation;
+                }
+                return;
+            }
+
             float t = Time.time * swingSpeed * Mathf.PI * 2f;
             for (int i = 0; i < _oars.Count; i++)
             {
                 var e = _oars[i];
                 if (e.tr == null) continue;
-                float angle = Mathf.Sin(t + e.phaseOffset) * swingAngle;
+                float angle = Mathf.Sin(t + e.phaseOffset) * swingAngle * _movementBlend;
                 e.tr.localRotation = e.baseRotation * Quaternion.AngleAxis(angle, axis);
             }
         }

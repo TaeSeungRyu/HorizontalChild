@@ -15,7 +15,7 @@ MonoBehaviour:
   shipId: ship.galley
   displayName: "\uAC24\uB9AC\uC120"
   icon: {fileID: 0}
-  prefab3D: {fileID: 3866883907261293109, guid: e9afcc8b1d1710847adbb084751ecf0f, type: 3}
+  prefab3D: {fileID: 7114693343769411520, guid: e9afcc8b1d1710847adbb084751ecf0f, type: 3}
   cannonPower: 7
   speed: 7
   cargoCapacity: 60
