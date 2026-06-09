@@ -15,12 +15,13 @@ MonoBehaviour:
   npcId: npc.merchant095
   character: {fileID: 11400000, guid: e20db739138bd204bafd90a1655d1628, type: 2}
   type: 0
-  homePort: {fileID: 11400000, guid: d3a90f9e8c4472143b1f6d1e07e8906d, type: 2}
+  homePort: {fileID: 11400000, guid: 3f72a76a28a4d8f42b4c3332002d28fa, type: 2}
   patrolRange: 0
   patrolPorts: []
-  destinationPort: {fileID: 11400000, guid: 76712c26f55cb634f95fdae621df3d4c, type: 2}
+  destinationPort: {fileID: 11400000, guid: 98ab8708dd73a464dacd7ea943cd9c01, type: 2}
   hireBonus: {x: 0, y: 0, z: 0}
-  hireBasePrice: 1520
-  cannonPower: 3
-  maxDurability: 32
-  attackInterval: 1.8431575
+  hireBasePrice: 1710
+  cannonPower: 4
+  maxDurability: 50
+  attackInterval: 1.9329798
+  shipData: {fileID: 11400000, guid: 4fb335f7ae1ac0549a43cd1d4e564599, type: 2}

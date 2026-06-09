@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Game.Data;
 using Game.Player;
+using Game.Save;
 using Game.Ship;
 using TMPro;
 using UnityEngine;
@@ -156,6 +157,8 @@ namespace Game.UI
                 return;
             }
             playerShip.shipData = ship;
+            playerShip.RefreshVisual();   // prefab3D 갱신 — 인스펙터에 모델 할당돼 있으면 즉시 외형 교체
+            SaveService.Instance?.SaveGame();   // 구매 즉시 저장 — 다음 로드에서 이 배로 시작
             Debug.Log($"[ShipyardPanel] 새 배 구매: {ship.displayName} ({ship.basePrice}G)");
             Refresh();
         }

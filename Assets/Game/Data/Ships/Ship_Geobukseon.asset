@@ -15,11 +15,12 @@ MonoBehaviour:
   shipId: ship.geobukseon
   displayName: "\uAC70\uBD81\uC120"
   icon: {fileID: 0}
-  prefab3D: {fileID: 0}
+  prefab3D: {fileID: 1838423320867190296, guid: d301fe51e0bb5b34da2b41fbc5298fee, type: 3}
   cannonPower: 18
   speed: 5
   cargoCapacity: 120
   maxDurability: 180
+  attackInterval: 1.5
   basePrice: 8000
   gate:
     requiredGoodReputation: 0

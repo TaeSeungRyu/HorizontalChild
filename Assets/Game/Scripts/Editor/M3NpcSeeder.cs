@@ -36,6 +36,14 @@ namespace Game.Editor
                 return;
             }
 
+            // 타입별 ShipData 풀 로드 — 없으면 빈 배열 → 절차적 fallback
+            var pirateShips = LoadShips(new[] {
+                "Ship_Galleon", "Ship_Geobukseon", "Ship_Panokseon", "Ship_Galleass", "Ship_Carrack" });
+            var escortShips = LoadShips(new[] {
+                "Ship_Galleon", "Ship_Galleass", "Ship_Panokseon", "Ship_Carrack", "Ship_SantaMaria" });
+            var merchantShips = LoadShips(new[] {
+                "Ship_Fluyt", "Ship_Junk", "Ship_EastIndiaman", "Ship_Cog", "Ship_Dhow", "Ship_Carrack" });
+
             // 기존 NPC / 캐릭터(Char_Npc*) 정리
             CleanOldAssets();
 
@@ -46,11 +54,12 @@ namespace Game.Editor
             for (int i = 0; i < 20; i++)
             {
                 var home = allPorts[Random.Range(0, allPorts.Count)];
-                CreateNpc(NpcType.Pirate, home, null, idx++);
+                var ship = PickShip(pirateShips);
+                CreateNpc(NpcType.Pirate, home, null, ship, idx++);
                 created++;
             }
 
-            // 호위선 40명 — home + destination 사이 왕복 (상선과 동일한 cycle)
+            // 호위선 40명 — home + destination 사이 왕복
             for (int i = 0; i < 40; i++)
             {
                 var home = allPorts[Random.Range(0, allPorts.Count)];
@@ -60,7 +69,8 @@ namespace Game.Editor
                     var pick = allPorts[Random.Range(0, allPorts.Count)];
                     if (pick != home) dest = pick;
                 }
-                CreateNpc(NpcType.Escort, home, dest, idx++);
+                var ship = PickShip(escortShips);
+                CreateNpc(NpcType.Escort, home, dest, ship, idx++);
                 created++;
             }
 
@@ -74,7 +84,8 @@ namespace Game.Editor
                     var pick = allPorts[Random.Range(0, allPorts.Count)];
                     if (pick != home) dest = pick;
                 }
-                CreateNpc(NpcType.Merchant, home, dest, idx++);
+                var ship = PickShip(merchantShips);
+                CreateNpc(NpcType.Merchant, home, dest, ship, idx++);
                 created++;
             }
 
@@ -90,7 +101,7 @@ namespace Game.Editor
 
         // ─── 핵심 생성 ──────────────────────────────────────────────────────
 
-        private static void CreateNpc(NpcType type, PortData homePort, PortData destinationPort, int idx)
+        private static void CreateNpc(NpcType type, PortData homePort, PortData destinationPort, ShipData ship, int idx)
         {
             string typeTag = type switch
             {
@@ -144,8 +155,26 @@ namespace Game.Editor
                 _ => basePrice,
             };
             def.hireBonus = new Vector3Int(0, 0, 0);
+            def.shipData = ship;   // ShipData.prefab3D 가 있으면 NpcSpawner 가 그 모델로 spawn
 
             AssetDatabase.CreateAsset(def, $"{DataRoot}/Npcs/Npc_{typeTag}{idx:000}.asset");
+        }
+
+        private static List<ShipData> LoadShips(string[] names)
+        {
+            var list = new List<ShipData>();
+            foreach (var n in names)
+            {
+                var s = AssetDatabase.LoadAssetAtPath<ShipData>($"{DataRoot}/Ships/{n}.asset");
+                if (s != null) list.Add(s);
+            }
+            return list;
+        }
+
+        private static ShipData PickShip(List<ShipData> pool)
+        {
+            if (pool == null || pool.Count == 0) return null;
+            return pool[Random.Range(0, pool.Count)];
         }
 
         // ─── 능력치 ─────────────────────────────────────────────────────────

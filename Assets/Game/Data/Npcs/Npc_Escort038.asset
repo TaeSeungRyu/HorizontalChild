@@ -15,12 +15,13 @@ MonoBehaviour:
   npcId: npc.escort038
   character: {fileID: 11400000, guid: 7b19ed74b61da9349ba28dc33190f44b, type: 2}
   type: 1
-  homePort: {fileID: 11400000, guid: 79006b120a9b7ee449e7d079b682a591, type: 2}
+  homePort: {fileID: 11400000, guid: 385c67c80e950c34083d95589919088d, type: 2}
   patrolRange: 120
   patrolPorts: []
-  destinationPort: {fileID: 11400000, guid: 385c67c80e950c34083d95589919088d, type: 2}
+  destinationPort: {fileID: 11400000, guid: fdfca5d1a8f94394799fe6f64f846ace, type: 2}
   hireBonus: {x: 0, y: 0, z: 0}
-  hireBasePrice: 1958
-  cannonPower: 6
-  maxDurability: 45
-  attackInterval: 1.892685
+  hireBasePrice: 2266
+  cannonPower: 3
+  maxDurability: 52
+  attackInterval: 1.684468
+  shipData: {fileID: 11400000, guid: 9ddc02c5801deae46b4ca9ec0765cb1c, type: 2}

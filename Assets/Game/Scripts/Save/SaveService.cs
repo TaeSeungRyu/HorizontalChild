@@ -38,6 +38,7 @@ namespace Game.Save
         public MissionCatalog missionCatalog;
         public RegionCatalog regionCatalog;
         public ProductCatalog productCatalog;
+        public ShipCatalog shipCatalog;
 
         [Header("Refs")]
         public ShipController playerShip;
@@ -185,13 +186,14 @@ namespace Game.Save
                 }
             }
 
-            // 위치 + 내구도
+            // 위치 + 내구도 + 사용 중인 배
             if (playerShip == null) playerShip = FindAnyObjectByType<ShipController>(FindObjectsInactive.Include);
             if (playerShip != null)
             {
                 data.shipX = playerShip.transform.position.x;
                 data.shipZ = playerShip.transform.position.z;
                 data.playerDurability = playerShip.CurrentDurability;
+                data.shipId = playerShip.shipData != null ? playerShip.shipData.shipId : null;
             }
 
             // NPC 배 상태 — spawner 가 준비됐으면 현재 상태 수집,
@@ -305,13 +307,28 @@ namespace Game.Save
                 }
             }
 
-            // 위치 + 내구도
+            // 위치 + 내구도 + 사용 중인 배
             if (playerShip == null) playerShip = FindAnyObjectByType<ShipController>(FindObjectsInactive.Include);
             if (playerShip != null)
             {
                 var pos = playerShip.transform.position;
                 playerShip.transform.position = new Vector3(data.shipX, pos.y, data.shipZ);
                 if (data.playerDurability >= 0) playerShip.SetDurability(data.playerDurability);
+
+                // 구매한 배 복원 — shipId 로 카탈로그 조회
+                if (!string.IsNullOrEmpty(data.shipId) && shipCatalog != null && shipCatalog.all != null)
+                {
+                    ShipData saved = null;
+                    foreach (var s in shipCatalog.all)
+                    {
+                        if (s != null && s.shipId == data.shipId) { saved = s; break; }
+                    }
+                    if (saved != null && playerShip.shipData != saved)
+                    {
+                        playerShip.shipData = saved;
+                        playerShip.RefreshVisual();   // 새 prefab3D 로 외형 즉시 갈아끼움
+                    }
+                }
             }
         }
 

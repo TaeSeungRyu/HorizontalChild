@@ -18,9 +18,10 @@ MonoBehaviour:
   homePort: {fileID: 11400000, guid: a970c5aab4ff46c45b99ac86db221b90, type: 2}
   patrolRange: 0
   patrolPorts: []
-  destinationPort: {fileID: 11400000, guid: a8e73311ca3b7c343af53779e897c286, type: 2}
+  destinationPort: {fileID: 11400000, guid: 3f72a76a28a4d8f42b4c3332002d28fa, type: 2}
   hireBonus: {x: 0, y: 0, z: 0}
-  hireBasePrice: 1610
-  cannonPower: 4
-  maxDurability: 39
-  attackInterval: 2.43428
+  hireBasePrice: 1640
+  cannonPower: 2
+  maxDurability: 45
+  attackInterval: 2.1389756
+  shipData: {fileID: 11400000, guid: 4fb335f7ae1ac0549a43cd1d4e564599, type: 2}

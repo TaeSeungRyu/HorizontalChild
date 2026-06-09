@@ -20,7 +20,8 @@ MonoBehaviour:
   patrolPorts: []
   destinationPort: {fileID: 0}
   hireBonus: {x: 0, y: 0, z: 0}
-  hireBasePrice: 2532
+  hireBasePrice: 2388
   cannonPower: 7
-  maxDurability: 40
-  attackInterval: 1.5711519
+  maxDurability: 42
+  attackInterval: 1.6301051
+  shipData: {fileID: 11400000, guid: 01d6f53080eac994ba15bf41d4f26d49, type: 2}

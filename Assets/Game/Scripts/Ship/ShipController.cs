@@ -107,6 +107,60 @@ namespace Game.Ship
         {
             // 첫 진입 시 내구도 초기화 (저장 데이터가 있으면 SaveService 가 SetDurability 로 덮어씀)
             if (CurrentDurability <= 0) CurrentDurability = MaxDurability;
+            RefreshVisual();
+        }
+
+        /// <summary>
+        /// 현재 shipData.prefab3D 를 자식 "ShipVisual" 로 인스턴스화. 이전 ShipVisual 제거.
+        /// 동시에 PlayerShip GameObject 자체의 Renderer 또는 다른 자식 Renderer 들을 숨김
+        /// (기존 큐브 시각과 중첩 방지). prefab3D 가 null 이면 원본 시각 다시 복구.
+        /// </summary>
+        public void RefreshVisual()
+        {
+            bool hasPrefab = shipData != null && shipData.prefab3D != null;
+
+            // 기존 ShipVisual 제거
+            var existing = transform.Find("ShipVisual");
+            if (existing != null) Destroy(existing.gameObject);
+
+            if (hasPrefab)
+            {
+                var visual = Instantiate(shipData.prefab3D, transform);
+                visual.name = "ShipVisual";
+                visual.transform.localPosition = Vector3.zero;
+                visual.transform.localRotation = Quaternion.identity;
+                foreach (var col in visual.GetComponentsInChildren<Collider>())
+                {
+                    col.enabled = false;
+                }
+                SetOriginalVisualsEnabled(false, visual);
+            }
+            else
+            {
+                // prefab3D 없는 ShipData 로 교체 시엔 원본(씬에 있던 큐브 등) 복구
+                SetOriginalVisualsEnabled(true, null);
+            }
+        }
+
+        /// <summary>
+        /// 루트의 Renderer + ShipVisual 이외 자식 Renderer 들의 enabled 상태 설정.
+        /// PlayerShip GameObject 가 직접 Cube 메쉬를 갖고 있거나, 별도 자식 시각이 있을 때
+        /// prefab3D 와 중첩 안 되도록 자동 처리.
+        /// </summary>
+        private void SetOriginalVisualsEnabled(bool enabled, GameObject exclude)
+        {
+            var rootRenderer = GetComponent<Renderer>();
+            if (rootRenderer != null) rootRenderer.enabled = enabled;
+
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                var child = transform.GetChild(i);
+                if (exclude != null && child.gameObject == exclude) continue;
+                foreach (var r in child.GetComponentsInChildren<Renderer>())
+                {
+                    r.enabled = enabled;
+                }
+            }
         }
 
         private float _currentSpeed;

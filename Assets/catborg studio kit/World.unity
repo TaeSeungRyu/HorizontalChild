@@ -16292,7 +16292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15e69dfa76350e04b957c552c02350e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game::Game.Player.PlayerState
-  startingMoney: 5000
+  startingMoney: 55000
   minMoneyFloor: 100
   onMoneyChanged:
     m_PersistentCalls:
@@ -16374,6 +16374,7 @@ MonoBehaviour:
   missionCatalog: {fileID: 11400000, guid: f5fcf05387bdbd94dbd1625eddc73067, type: 2}
   regionCatalog: {fileID: 11400000, guid: bae669d235d881041b45cdc38c55dd6a, type: 2}
   productCatalog: {fileID: 11400000, guid: 15a1ae52a9fb58944ad2db654f426074, type: 2}
+  shipCatalog: {fileID: 0}
   playerShip: {fileID: 1690041783}
   onSaved:
     m_PersistentCalls:
@@ -48729,7 +48730,10 @@ PrefabInstance:
       value: PlayerShip
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 3588834308678477261, guid: 5c9ad7a665eb406438ee1b1c10ac8165, type: 3}
+    - {fileID: 9187308223039480452, guid: 5c9ad7a665eb406438ee1b1c10ac8165, type: 3}
+    - {fileID: -3306813550804760141, guid: 5c9ad7a665eb406438ee1b1c10ac8165, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 5c9ad7a665eb406438ee1b1c10ac8165, type: 3}
@@ -48753,7 +48757,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff0507cda465a6f4ebed37093e7c21c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game::Game.Ship.ShipController
-  shipData: {fileID: 11400000, guid: 75672760b1994f240bef89048e326c86, type: 2}
+  shipData: {fileID: 0}
   captain: {fileID: 11400000, guid: b4511fa2ecb090e4ab34ddb8c4637606, type: 2}
   maxTurnRate: 60
   acceleration: 2

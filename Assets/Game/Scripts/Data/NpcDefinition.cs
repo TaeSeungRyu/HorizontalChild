@@ -38,5 +38,9 @@ namespace Game.Data
         [Range(10, 200)] public int maxDurability = 40;
         [Tooltip("포탄 발사 간격(초). 작을수록 빠른 연사.")]
         [Range(0.3f, 4f)] public float attackInterval = 1.6f;
+
+        [Header("Visual")]
+        [Tooltip("이 NPC 가 타는 배. ShipData.prefab3D 가 있으면 그 모델로, 없으면 절차적 배 모양.")]
+        public ShipData shipData;
     }
 }

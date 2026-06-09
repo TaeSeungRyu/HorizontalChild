@@ -42,6 +42,9 @@ namespace Game.Save
         // 플레이어 배 내구도 (M3.5 Phase 2 — 0 도달 시 항구 수리 필요)
         public int playerDurability = -1;   // -1 = 미저장 → 로드 시 maxDurability 로 자동 초기화
 
+        // 플레이어가 구매·사용 중인 배 ID. 비어있으면 인스펙터 기본값 유지.
+        public string shipId;
+
         // NPC 배 상태 — 위치 + 무역 항로 인덱스 (M3.5 Phase 1)
         public List<NpcStateData> npcs = new();
 
