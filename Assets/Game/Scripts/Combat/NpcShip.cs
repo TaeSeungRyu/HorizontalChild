@@ -64,9 +64,11 @@ namespace Game.Combat
         private float _deflectUntil;
 
         // 항해 상태
-        private PortData _sailingTarget;    // 항해할 목표 항구. 도착하면 EnterDwell(target).
+        private PortData _sailingTarget;    // 최종 목표 항구. 마지막 waypoint 도착 시 EnterDwell.
         private float _wanderEndsAt;        // 해적·호위선: wander 단계 종료 시각. 끝나면 _sailingTarget=homePort.
-        private float _returnStartedAt;     // 항해 시작 시각. 데드라인 계산용. 0 = 미진입
+        private float _returnStartedAt;     // 항해 시작 시각. 데드라인 계산용. 0 = 미진입.
+        private List<Vector3> _waypoints;   // NavRouter 로 계산된 경유 점들 (마지막 = target). null = 직접 항해.
+        private int _waypointIdx;
 
         // 해적 자동 전투 — 시각 인디케이터 + 쿨다운
         [Header("Pirate Auto-Engage")]
@@ -127,14 +129,22 @@ namespace Game.Combat
 
         /// <summary>
         /// NpcSpawner 가 spawn 직후 호출 — 항해 모드 설정.
-        /// target != null → 그 항구로 직선 항해 (상선·복귀 중인 해적/호위선).
-        /// target == null → wanderSeconds 동안 random walk → 자동으로 homePort 향해 복귀 (해적/호위선 첫 wander).
+        /// target != null → NavRouter 로 waypoint 경로 계산 후 따라감.
+        /// target == null → wanderSeconds 동안 random walk → 자동으로 homePort 향해 복귀.
         /// </summary>
         public void ConfigureSailing(PortData target, float wanderSeconds)
         {
             _sailingTarget = target;
             _wanderEndsAt = wanderSeconds > 0f ? Time.time + wanderSeconds : 0f;
             _returnStartedAt = (target != null) ? Time.time : 0f;
+            RebuildWaypoints();
+        }
+
+        private void RebuildWaypoints()
+        {
+            if (_sailingTarget == null) { _waypoints = null; _waypointIdx = 0; return; }
+            _waypoints = NavRouter.ComputePath(transform.position, _sailingTarget);
+            _waypointIdx = 0;
         }
 
         private void OnDestroy()
@@ -233,32 +243,47 @@ namespace Game.Combat
         {
             speed = wanderSpeed;
 
-            // 1) 목표 항구가 설정돼 있으면 그 항구로 직선 항해
+            // 1) 목표 항구가 설정돼 있으면 NavRouter 가 만든 waypoint 들을 순서대로 따라감
             if (_sailingTarget != null)
             {
-                var targetPos = GeoCoordinate.LatLngToWorld(_sailingTarget.latitude, _sailingTarget.longitude);
-                var offset = targetPos - transform.position;
-                offset.y = 0f;
-                float dist = offset.magnitude;
+                // waypoint 미설정 시 안전장치
+                if (_waypoints == null || _waypoints.Count == 0) RebuildWaypoints();
 
-                if (dist <= homeArriveDistance)
+                // 현재 waypoint 도착 처리
+                while (_waypoints != null && _waypointIdx < _waypoints.Count)
                 {
-                    EnterDwell(_sailingTarget);
-                    speed = 0f;
-                    return Vector3.zero;
-                }
+                    Vector3 wpPos = _waypoints[_waypointIdx];
+                    var wpOffset = wpPos - transform.position;
+                    wpOffset.y = 0f;
+                    bool isLastWaypoint = (_waypointIdx == _waypoints.Count - 1);
+                    // 게이트웨이는 살짝 큰 도착 반경, 최종 항구는 homeArriveDistance
+                    float arriveDist = isLastWaypoint ? homeArriveDistance : (homeArriveDistance * 1.5f);
 
-                // 데드라인 — 좁은 해협 / 반도 우회 실패 시 텔레포트
-                if (_returnStartedAt > 0f && Time.time - _returnStartedAt > homeReturnTimeoutSeconds)
-                {
-                    transform.position = new Vector3(targetPos.x, transform.position.y, targetPos.z);
-                    EnterDwell(_sailingTarget);
-                    speed = 0f;
-                    return Vector3.zero;
-                }
+                    if (wpOffset.magnitude > arriveDist)
+                    {
+                        // 데드라인 — 너무 오래 걸리면 다음 waypoint 로 텔레포트
+                        if (_returnStartedAt > 0f && Time.time - _returnStartedAt > homeReturnTimeoutSeconds)
+                        {
+                            transform.position = new Vector3(wpPos.x, transform.position.y, wpPos.z);
+                            _waypointIdx++;
+                            _returnStartedAt = Time.time;   // 다음 구간 데드라인 리셋
+                            continue;
+                        }
 
-                speed = (definition.type == NpcType.Merchant) ? tradeCruiseSpeed : wanderSpeed;
-                return offset.normalized;
+                        speed = (definition.type == NpcType.Merchant) ? tradeCruiseSpeed : wanderSpeed;
+                        return wpOffset.normalized;
+                    }
+
+                    // 이 waypoint 도착 — 다음으로
+                    _waypointIdx++;
+                    _returnStartedAt = Time.time;   // 구간별 데드라인 리셋
+                    if (isLastWaypoint)
+                    {
+                        EnterDwell(_sailingTarget);
+                        speed = 0f;
+                        return Vector3.zero;
+                    }
+                }
             }
 
             // 2) wander 시간 끝나면 자동으로 본거지로 복귀 전환 (해적·호위선)
@@ -267,6 +292,7 @@ namespace Game.Combat
                 _sailingTarget = definition.homePort;
                 _wanderEndsAt = 0f;
                 _returnStartedAt = Time.time;
+                RebuildWaypoints();   // 현재 위치 기준 새 경로 계산
                 // 다음 프레임에 위 (1) 분기로 들어감
             }
 
@@ -310,6 +336,9 @@ namespace Game.Combat
 
         private bool IsLandAt(Vector3 worldPos)
         {
+            // 항해 카브 (지브롤터 등) — ShipController 와 동일 처리, NPC 도 통과 가능
+            if (WorldCarves.IsInOpenArea(worldPos)) return false;
+
             int count = Physics.OverlapSphereNonAlloc(worldPos, landCheckRadius, _landBuffer);
             for (int i = 0; i < count; i++)
             {
