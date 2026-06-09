@@ -295,20 +295,32 @@ namespace Game.Combat
         private IEnumerator HitFlash(GameObject target)
         {
             if (target == null) yield break;
-            var renderer = target.GetComponent<Renderer>();
-            if (renderer == null || renderer.material == null) yield break;
-            var mat = renderer.material;
+            // 절차적 배는 root 에 Renderer 없고 children 만 있음 → GetComponentsInChildren
+            var renderers = target.GetComponentsInChildren<Renderer>();
+            if (renderers == null || renderers.Length == 0) yield break;
 
-            string prop = mat.HasProperty("_BaseColor") ? "_BaseColor"
-                        : mat.HasProperty("_Color") ? "_Color" : null;
-            if (prop == null) yield break;
-
-            Color original = mat.GetColor(prop);
-            mat.SetColor(prop, hitFlashColor);
-            yield return new WaitForSeconds(hitFlashSeconds);
-            if (target != null && renderer != null && renderer.material != null)
+            // 원래 색 저장하고 hitFlashColor 로 모두 깜빡
+            var originalColors = new Color[renderers.Length];
+            var props = new string[renderers.Length];
+            for (int i = 0; i < renderers.Length; i++)
             {
-                renderer.material.SetColor(prop, original);
+                var mat = renderers[i] != null ? renderers[i].material : null;
+                if (mat == null) continue;
+                props[i] = mat.HasProperty("_BaseColor") ? "_BaseColor"
+                         : mat.HasProperty("_Color") ? "_Color" : null;
+                if (props[i] != null)
+                {
+                    originalColors[i] = mat.GetColor(props[i]);
+                    mat.SetColor(props[i], hitFlashColor);
+                }
+            }
+
+            yield return new WaitForSeconds(hitFlashSeconds);
+
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                if (renderers[i] == null || renderers[i].material == null || props[i] == null) continue;
+                renderers[i].material.SetColor(props[i], originalColors[i]);
             }
         }
 
