@@ -97,11 +97,14 @@ namespace Game.UI
             panelRoot.SetActive(true);
             BuildButtons();
             ClearSelectedDisplay();
+            // 국가 선택 동안 바다 정지 — NPC 이동/전투 트리거 차단
+            SeaSimulation.Pause(this);
         }
 
         public void Hide()
         {
             panelRoot.SetActive(false);
+            SeaSimulation.Resume(this);
         }
 
         // ─── 버튼 동적 생성 ──────────────────────────────────────────────────

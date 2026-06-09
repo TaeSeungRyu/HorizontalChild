@@ -9,16 +9,16 @@ using UnityEngine;
 namespace Game.Combat
 {
     /// <summary>
-    /// NPC 배 스폰너 — 게임 시작 시 N 개의 NPC 배를 해상에 배치.
+    /// NPC 배 스폰너 — 100명 풀세트 (해적 20 / 호위선 40 / 상선 40) 관리.
     ///
-    /// 저장 통합 (M3.5 Phase 1):
-    ///   - Start 가 한 프레임 지연 후 spawn → SaveService.TryLoad 가 먼저 완료
-    ///   - SaveService.LastLoaded.npcs 가 있으면 그 상태(위치+routeIndex)로 spawn
-    ///   - 없으면 카탈로그에서 신규 spawn (homePort 근처 or 무작위)
-    ///   - CollectStates() 로 현재 상태를 SaveService 에 노출.
+    /// 모델 (§3.5):
+    ///   - 각 NPC 는 광장에 dwell (in port) OR 바다에서 sailing (active) 둘 중 하나.
+    ///   - 광장 dwell 중: 일정 간격(rollInterval) 마다 활동률 주사위 → 통과 시 항해 시작.
+    ///   - 상선: 광장 → 목적지/본거지 향해 항해 → 도착 → 그 항구 광장 dwell → 반복.
+    ///   - 해적·호위선: 광장 → wander 30~50초 → 본거지 복귀 → 광장 dwell → 반복.
+    ///   - 전투 패배: 즉시 본거지 광장으로 (SendNpcToPort).
     ///
-    /// 위치: NpcDefinition.homePort 가 있으면 그 근처, 없으면 무작위 해상.
-    /// 시각: 작은 큐브 + 타입별 색상.
+    /// 저장: _nextRollAt + _inPort 상태 직렬화 (NpcRespawnEntry 의 portId + secondsRemaining).
     /// </summary>
     public class NpcSpawner : MonoBehaviour
     {
@@ -31,8 +31,8 @@ namespace Game.Combat
         public Transform npcsParent;
 
         [Header("Spawn")]
-        [Tooltip("게임 시작 시 spawn 할 NPC 개수. 카탈로그가 12명이면 12 권장.")]
-        [Range(0, 30)] public int spawnCount = 12;
+        [Tooltip("게임 시작 시 spawn 할 NPC 개수. 100명 풀세트면 100 권장.")]
+        [Range(0, 200)] public int spawnCount = 100;
 
         [Tooltip("homePort 가 있는 NPC 의 spawn 거리 (Unity Unit). 항구에서 이만큼 떨어진 곳.")]
         public float homePortSpawnDistance = 40f;
@@ -53,20 +53,23 @@ namespace Game.Combat
         [Tooltip("항구 주위 spawn 시도 각도 수. 모두 막혔으면 거리 늘려 재시도.")]
         public int spawnAngleSamples = 16;
 
-        [Header("Respawn (M3.5 Step A)")]
-        [Tooltip("격침 후 재추첨까지 대기 시간(초). 게임일 시스템 도입 전 임시 실시간 값.")]
-        public float respawnDelaySeconds = 60f;
+        [Header("Activity Rates (§3.5)")]
+        [Tooltip("해적 활동률 — 항해 중일 확률. 1 - 이 값 = 광장 dwell 비율.")]
+        [Range(0f, 1f)] public float pirateActivityRate = 0.5f;
+        [Tooltip("호위선 활동률.")]
+        [Range(0f, 1f)] public float escortActivityRate = 0.2f;
+        [Tooltip("상선 활동률.")]
+        [Range(0f, 1f)] public float merchantActivityRate = 0.2f;
 
-        [Header("Initial Distribution (§3.5)")]
-        [Tooltip("Spawn 시 해적이 본거지 광장에서 시작할 확률. 나머지는 바다 spawn.")]
-        [Range(0f, 1f)] public float startInPortChancePirate = 0.5f;
-        [Tooltip("Spawn 시 상선이 patrolPorts 중 한 곳 광장에서 시작할 확률.")]
-        [Range(0f, 1f)] public float startInPortChanceMerchant = 0.7f;
-        [Tooltip("Spawn 시 호위선이 본거지 광장에서 시작할 확률.")]
-        [Range(0f, 1f)] public float startInPortChanceEscort = 0.7f;
-        [Tooltip("초기 dwell 시간 범위(초). 게임 시작 직후 한꺼번에 출항하지 않도록 분산.")]
-        public float initialDwellMinSeconds = 15f;
-        public float initialDwellMaxSeconds = 90f;
+        [Header("Roll Interval (광장 dwell 주사위 주기)")]
+        [Tooltip("광장에 머무는 동안 활동 주사위 굴리는 간격(초). 통과 시 항해 시작.")]
+        public float rollIntervalMin = 12f;
+        public float rollIntervalMax = 25f;
+
+        [Header("Sailing Wander (해적·호위선 활동 시간)")]
+        [Tooltip("해적·호위선이 광장에서 출항해서 본거지로 돌아오기 전까지 wander 시간(초).")]
+        public float wanderDurationMin = 30f;
+        public float wanderDurationMax = 50f;
 
         // npcId → 인스턴스. 파괴되면 Unity가 fake-null 처리 → CollectStates 에서 건너뜀.
         private readonly Dictionary<string, NpcShip> _spawned = new();
@@ -74,11 +77,14 @@ namespace Game.Combat
         /// <summary>해적의 자동 전투 탐색용. 살아있는 NPC 인스턴스 순회.</summary>
         public IEnumerable<NpcShip> AllSpawned => _spawned.Values;
 
-        // npcId → Time.time 기준 재spawn 예정 시각. GAME_MECHANICS §3.4 (격침 후 랜덤 항구 재배치).
-        private readonly Dictionary<string, float> _respawnAt = new();
-        private readonly List<string> _respawnReadyBuffer = new();
+        // npcId → 다음 활동 주사위 시각. 광장 dwell NPC 만 등록.
+        private readonly Dictionary<string, float> _nextRollAt = new();
+        private readonly List<string> _rollReadyBuffer = new();
 
-        // portId → 그 항구의 광장에 머무는 NPC 정의들 (§3.5 비활동 풀). dwell 끝나면 자동 재출항.
+        // npcId → 현재 머물고 있는 portId. _inPort 의 역방향 인덱스.
+        private readonly Dictionary<string, string> _npcCurrentPort = new();
+
+        // portId → 그 항구의 광장에 머무는 NPC 정의들 (§3.5 비활동 풀).
         private readonly Dictionary<string, List<NpcDefinition>> _inPort = new();
 
         /// <summary>한 프레임 지연 후 spawn 완료되었는지. SaveService.CollectState 가 사용.</summary>
@@ -114,37 +120,45 @@ namespace Game.Combat
             }
 
             var loaded = SaveService.Instance != null ? SaveService.Instance.LastLoaded : null;
-            if (loaded != null && loaded.npcs != null && loaded.npcs.Count > 0)
+            int savedCount = (loaded != null && loaded.npcs != null) ? loaded.npcs.Count : 0;
+            int savedInPortCount = (loaded != null && loaded.npcRespawnQueue != null)
+                ? CountValidPortEntries(loaded.npcRespawnQueue) : 0;
+
+            if (savedCount > 0)
             {
-                SpawnFromSave(loaded.npcs);
+                int spawnedFromSave = SpawnFromSave(loaded.npcs);
+                // 옛 세이브 — npcId 가 모두 stale 이면 fresh 로 fallback
+                if (spawnedFromSave == 0 && savedInPortCount == 0)
+                {
+                    Debug.LogWarning("[NpcSpawner] 저장된 NPC IDs 가 현재 카탈로그와 매칭 안 됨 — fresh 분배로 전환.");
+                    SpawnFresh();
+                }
             }
             else
             {
                 SpawnFresh();
             }
 
-            // 재추첨/광장 dwell 대기 큐 복원
+            // 광장 dwell + 다음 roll 시각 복원 (저장된 entry 의 portId+secondsRemaining)
             if (loaded != null && loaded.npcRespawnQueue != null)
             {
                 foreach (var entry in loaded.npcRespawnQueue)
                 {
                     if (entry == null || string.IsNullOrEmpty(entry.npcId)) continue;
-                    _respawnAt[entry.npcId] = Time.time + Mathf.Max(0f, entry.secondsRemaining);
+                    if (string.IsNullOrEmpty(entry.portId)) continue;   // 옛 격침 큐는 무시
 
-                    // portId 가 있으면 광장 dwell 중 — _inPort 에도 복원
-                    if (!string.IsNullOrEmpty(entry.portId))
+                    var def = FindDefById(entry.npcId);
+                    if (def == null) continue;
+
+                    _nextRollAt[entry.npcId] = Time.time + Mathf.Max(0f, entry.secondsRemaining);
+                    _npcCurrentPort[entry.npcId] = entry.portId;
+
+                    if (!_inPort.TryGetValue(entry.portId, out var list))
                     {
-                        var def = FindDefById(entry.npcId);
-                        if (def != null)
-                        {
-                            if (!_inPort.TryGetValue(entry.portId, out var list))
-                            {
-                                list = new List<NpcDefinition>();
-                                _inPort[entry.portId] = list;
-                            }
-                            if (!list.Contains(def)) list.Add(def);
-                        }
+                        list = new List<NpcDefinition>();
+                        _inPort[entry.portId] = list;
                     }
+                    if (!list.Contains(def)) list.Add(def);
                 }
             }
 
@@ -153,38 +167,95 @@ namespace Game.Combat
 
         private void Update()
         {
-            if (_respawnAt.Count == 0) return;
-            _respawnReadyBuffer.Clear();
-            foreach (var kvp in _respawnAt)
+            if (_nextRollAt.Count == 0) return;
+            _rollReadyBuffer.Clear();
+            foreach (var kvp in _nextRollAt)
             {
-                if (Time.time >= kvp.Value) _respawnReadyBuffer.Add(kvp.Key);
+                if (Time.time >= kvp.Value) _rollReadyBuffer.Add(kvp.Key);
             }
-            for (int i = 0; i < _respawnReadyBuffer.Count; i++)
+            for (int i = 0; i < _rollReadyBuffer.Count; i++)
             {
-                var id = _respawnReadyBuffer[i];
-                _respawnAt.Remove(id);
-                RemoveFromInPort(id);   // dwell 중이었으면 광장에서 빠짐
-                RespawnAtRandomPort(id);
+                RollForUndock(_rollReadyBuffer[i]);
             }
         }
 
-        /// <summary>전투 패배 NPC 를 풀에서 잠시 빼고 재추첨 큐에 등록. NpcShip 이 호출.</summary>
+        /// <summary>광장 dwell NPC 의 활동 주사위. 통과 시 Undock, 실패 시 다음 roll 예약.</summary>
+        private void RollForUndock(string npcId)
+        {
+            if (!_nextRollAt.ContainsKey(npcId)) return;
+            var def = FindDefById(npcId);
+            if (def == null) { _nextRollAt.Remove(npcId); return; }
+
+            float rate = ActivityRateFor(def.type);
+            if (Random.value < rate)
+            {
+                Undock(npcId);
+            }
+            else
+            {
+                _nextRollAt[npcId] = Time.time + Random.Range(rollIntervalMin, rollIntervalMax);
+            }
+        }
+
+        private float ActivityRateFor(NpcType type) => type switch
+        {
+            NpcType.Pirate => pirateActivityRate,
+            NpcType.Escort => escortActivityRate,
+            NpcType.Merchant => merchantActivityRate,
+            _ => 0.3f,
+        };
+
+        /// <summary>주사위 통과 → 항구에서 출항. 상선은 반대편 항구로, 해적·호위선은 wander 모드.</summary>
+        private void Undock(string npcId)
+        {
+            var def = FindDefById(npcId);
+            if (def == null) return;
+            if (!_npcCurrentPort.TryGetValue(npcId, out var fromPortId)) return;
+
+            // 광장에서 빼기
+            _nextRollAt.Remove(npcId);
+            _npcCurrentPort.Remove(npcId);
+            if (_inPort.TryGetValue(fromPortId, out var list)) list.Remove(def);
+
+            // 항해 목표 결정 — destinationPort 가 있으면 cycle, 없으면 wander
+            PortData fromPort = FindPortById(fromPortId);
+            PortData target = null;
+            float wanderSeconds = 0f;
+            if (def.destinationPort != null && def.homePort != null)
+            {
+                // 현재 항구의 반대편 (home ↔ destination) — 상선·호위선
+                target = (fromPort == def.homePort) ? def.destinationPort : def.homePort;
+            }
+            else
+            {
+                // wander 30~50초 후 자동 본거지 복귀 — 해적
+                wanderSeconds = Random.Range(wanderDurationMin, wanderDurationMax);
+            }
+
+            // 바다 spawn + sailing 설정
+            Vector3 spawnPos = fromPort != null ? FindSeaPositionNearPort(fromPort) : ComputeFreshPosition(def);
+            var ship = SpawnNpc(def, spawnPos);
+            if (ship != null) ship.ConfigureSailing(target, wanderSeconds);
+        }
+
+        /// <summary>전투 패배 NPC → 본거지 광장으로 즉시 이동. NpcShip 이 호출.</summary>
         public void OnNpcDefeated(NpcDefinition def)
         {
             if (def == null || string.IsNullOrEmpty(def.npcId)) return;
-            _respawnAt[def.npcId] = Time.time + Mathf.Max(0f, respawnDelaySeconds);
             _spawned.Remove(def.npcId);
+            SendNpcToPort(def, 0f, def.homePort);   // 본거지 광장에 즉시 노출
         }
 
-        /// <summary>NPC 항구 진입 + 광장 등록. dwell 끝나면 자동 재출항. port == null 이면 def.homePort 사용.</summary>
-        public void SendNpcToPort(NpcDefinition def, float dwellSeconds, PortData port = null)
+        /// <summary>NPC 항구 진입 + 광장 등록. 즉시 다음 roll 예약.</summary>
+        public void SendNpcToPort(NpcDefinition def, float unused, PortData port = null)
         {
             if (def == null || string.IsNullOrEmpty(def.npcId)) return;
             if (port == null) port = def.homePort;
             if (port == null || string.IsNullOrEmpty(port.portId)) return;
 
             _spawned.Remove(def.npcId);
-            _respawnAt[def.npcId] = Time.time + Mathf.Max(1f, dwellSeconds);
+            _nextRollAt[def.npcId] = Time.time + Random.Range(rollIntervalMin, rollIntervalMax);
+            _npcCurrentPort[def.npcId] = port.portId;
 
             if (!_inPort.TryGetValue(port.portId, out var list))
             {
@@ -192,6 +263,16 @@ namespace Game.Combat
                 _inPort[port.portId] = list;
             }
             if (!list.Contains(def)) list.Add(def);
+        }
+
+        private PortData FindPortById(string portId)
+        {
+            if (string.IsNullOrEmpty(portId) || portCatalog == null || portCatalog.all == null) return null;
+            foreach (var p in portCatalog.all)
+            {
+                if (p != null && p.portId == portId) return p;
+            }
+            return null;
         }
 
         /// <summary>해당 항구의 광장에 머무는 NPC 목록 (고용 대상). PlazaPanel 이 호출.</summary>
@@ -210,62 +291,41 @@ namespace Game.Combat
             {
                 if (kv.Value.Remove(def)) removed = true;
             }
-            if (!string.IsNullOrEmpty(def.npcId)) _respawnAt.Remove(def.npcId);
+            if (!string.IsNullOrEmpty(def.npcId))
+            {
+                _nextRollAt.Remove(def.npcId);
+                _npcCurrentPort.Remove(def.npcId);
+            }
             return removed;
         }
 
-        private void RemoveFromInPort(string npcId)
+        private int SpawnFromSave(List<NpcStateData> states)
         {
-            foreach (var kv in _inPort)
-            {
-                var list = kv.Value;
-                for (int i = list.Count - 1; i >= 0; i--)
-                {
-                    if (list[i] != null && list[i].npcId == npcId) list.RemoveAt(i);
-                }
-            }
-        }
-
-        private void RespawnAtRandomPort(string npcId)
-        {
-            var def = FindDefById(npcId);
-            if (def == null) return;
-
-            Vector3 pos;
-            // 해적은 항상 본거지에서 재spawn — 본거지 예측 가능 + 순찰 사이클 일관성
-            if (def.type == NpcType.Pirate && def.homePort != null)
-            {
-                pos = FindSeaPositionNearPort(def.homePort);
-            }
-            else if (portCatalog != null && portCatalog.all != null && portCatalog.all.Length > 0)
-            {
-                PortData port = null;
-                for (int i = 0; i < 4 && port == null; i++)
-                {
-                    var p = portCatalog.all[Random.Range(0, portCatalog.all.Length)];
-                    if (p != null) port = p;
-                }
-                pos = port != null ? FindSeaPositionNearPort(port) : ComputeFreshPosition(def);
-            }
-            else
-            {
-                pos = ComputeFreshPosition(def);
-            }
-
-            var ship = SpawnNpc(def, pos);
-            if (ship != null) ship.RouteIndex = 0;
-        }
-
-        private void SpawnFromSave(List<NpcStateData> states)
-        {
+            int spawned = 0;
             foreach (var s in states)
             {
                 if (s == null) continue;
                 var def = FindDefById(s.npcId);
                 if (def == null) continue;
                 var ship = SpawnNpc(def, new Vector3(s.x, npcY, s.z));
-                if (ship != null) ship.RouteIndex = s.routeIndex;
+                if (ship != null)
+                {
+                    ship.RouteIndex = s.routeIndex;
+                    spawned++;
+                }
             }
+            return spawned;
+        }
+
+        private int CountValidPortEntries(List<NpcRespawnEntry> entries)
+        {
+            int n = 0;
+            foreach (var e in entries)
+            {
+                if (e == null || string.IsNullOrEmpty(e.npcId) || string.IsNullOrEmpty(e.portId)) continue;
+                if (FindDefById(e.npcId) != null) n++;
+            }
+            return n;
         }
 
         private void SpawnFresh()
@@ -275,43 +335,52 @@ namespace Game.Combat
             {
                 var def = npcCatalog.all[i];
                 if (def == null) continue;
-
-                // 일부 NPC 는 항구에서 시작 → 광장에 즉시 노출. 나머지는 바다 spawn.
-                if (TryStartInPort(def)) continue;
-                SpawnNpc(def, ComputeFreshPosition(def));
+                PlaceInitial(def);
             }
         }
 
-        /// <summary>NPC 타입별 확률로 항구 시작 결정. 성공 시 SendNpcToPort 호출 후 true.</summary>
-        private bool TryStartInPort(NpcDefinition def)
+        /// <summary>NPC 초기 배치 — 활동률 주사위로 항해 시작 vs 광장 시작 결정.</summary>
+        private void PlaceInitial(NpcDefinition def)
         {
-            float chance = def.type switch
+            float rate = ActivityRateFor(def.type);
+            bool startSailing = Random.value < rate;
+
+            if (!startSailing)
             {
-                NpcType.Pirate => startInPortChancePirate,
-                NpcType.Merchant => startInPortChanceMerchant,
-                NpcType.Escort => startInPortChanceEscort,
-                _ => 0f,
-            };
-            if (Random.value > chance) return false;
+                // 광장에서 시작 — 상선은 home/destination 50:50
+                var port = PickStartPortFor(def);
+                if (port != null)
+                {
+                    SendNpcToPort(def, 0f, port);
+                    return;
+                }
+            }
 
-            var port = PickStartPortFor(def);
-            if (port == null) return false;
+            // 항해 중 시작 — 적절한 출발 항구 골라 sailing 설정
+            var origin = PickStartPortFor(def);
+            Vector3 spawnPos = origin != null ? FindSeaPositionNearPort(origin) : ComputeFreshPosition(def);
 
-            float dwell = Random.Range(initialDwellMinSeconds, initialDwellMaxSeconds);
-            SendNpcToPort(def, dwell, port);
-            return true;
+            PortData target = null;
+            float wanderSeconds = 0f;
+            if (def.destinationPort != null && def.homePort != null)
+            {
+                target = (origin == def.homePort) ? def.destinationPort : def.homePort;
+            }
+            else
+            {
+                wanderSeconds = Random.Range(wanderDurationMin, wanderDurationMax);
+            }
+
+            var ship = SpawnNpc(def, spawnPos);
+            if (ship != null) ship.ConfigureSailing(target, wanderSeconds);
         }
 
-        /// <summary>NPC 의 초기 dwell 항구 선택. 해적·호위선 = homePort, 상선 = patrolPorts 중 무작위.</summary>
+        /// <summary>NPC 의 시작 항구 선택 — destinationPort 있으면 home/destination 50:50, 없으면 homePort.</summary>
         private PortData PickStartPortFor(NpcDefinition def)
         {
-            if (def.type == NpcType.Merchant && def.patrolPorts != null && def.patrolPorts.Length > 0)
+            if (def.homePort != null && def.destinationPort != null)
             {
-                for (int i = 0; i < 4; i++)
-                {
-                    var p = def.patrolPorts[Random.Range(0, def.patrolPorts.Length)];
-                    if (p != null) return p;
-                }
+                return Random.value < 0.5f ? def.homePort : def.destinationPort;
             }
             return def.homePort;
         }
@@ -378,6 +447,9 @@ namespace Game.Combat
         private static readonly Collider[] _spawnLandBuffer = new Collider[8];
         private bool IsLandAtSpawnPos(Vector3 worldPos)
         {
+            // 카브 영역(지브롤터 등) 은 land 아님 — Ceuta 처럼 협소한 항구도 spawn 가능
+            if (WorldCarves.IsInOpenArea(worldPos)) return false;
+
             int count = Physics.OverlapSphereNonAlloc(worldPos, spawnLandCheckRadius, _spawnLandBuffer);
             for (int i = 0; i < count; i++)
             {
@@ -411,32 +483,21 @@ namespace Game.Combat
             return script;
         }
 
-        /// <summary>재추첨/광장 dwell 대기 NPC 큐 — secondsRemaining + portId(광장 dwell) 직렬화.</summary>
+        /// <summary>광장 dwell 중인 NPC 직렬화 — nextRoll 까지 남은 시간 + portId.</summary>
         public List<NpcRespawnEntry> CollectRespawnQueue()
         {
             var list = new List<NpcRespawnEntry>();
-            foreach (var kvp in _respawnAt)
+            foreach (var kvp in _nextRollAt)
             {
+                _npcCurrentPort.TryGetValue(kvp.Key, out var portId);
                 list.Add(new NpcRespawnEntry
                 {
                     npcId = kvp.Key,
                     secondsRemaining = Mathf.Max(0f, kvp.Value - Time.time),
-                    portId = FindPortIdForNpc(kvp.Key) ?? string.Empty,
+                    portId = portId ?? string.Empty,
                 });
             }
             return list;
-        }
-
-        private string FindPortIdForNpc(string npcId)
-        {
-            foreach (var kv in _inPort)
-            {
-                foreach (var def in kv.Value)
-                {
-                    if (def != null && def.npcId == npcId) return kv.Key;
-                }
-            }
-            return null;
         }
 
         /// <summary>현재 살아있는 NPC 들의 위치·routeIndex 수집. SaveService 가 호출.</summary>

@@ -17633,13 +17633,21 @@ MonoBehaviour:
   portCatalog: {fileID: 11400000, guid: abc59b2d20370ee4bafc4bd64c7d47f6, type: 2}
   resultPanel: {fileID: 1134557095}
   npcsParent: {fileID: 0}
-  spawnCount: 12
+  spawnCount: 100
   homePortSpawnDistance: 40
   worldHalfWidth: 2700
   worldHalfDepth: 1350
   npcSize: 6
   npcY: 0
-  respawnDelaySeconds: 60
+  spawnLandCheckRadius: 4
+  spawnAngleSamples: 16
+  pirateActivityRate: 0.5
+  escortActivityRate: 0.2
+  merchantActivityRate: 0.2
+  rollIntervalMin: 12
+  rollIntervalMax: 25
+  wanderDurationMin: 30
+  wanderDurationMax: 50
 --- !u!1 &658662419
 GameObject:
   m_ObjectHideFlags: 0
@@ -39931,6 +39939,8 @@ MonoBehaviour:
   shipyardButton: {fileID: 84848306}
   plazaPanel: {fileID: 32356919}
   plazaButton: {fileID: 515574252}
+  shipRepairPanel: {fileID: 0}
+  shipRepairButton: {fileID: 0}
 --- !u!4 &1458424235 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 615010652040901257, guid: 928b7ab55e4c640469989d2fad85c7d7, type: 3}

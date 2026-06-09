@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c22b2b3d903bcce41821fa5777939276, type: 3}
+  m_Name: Npc_Escort023
+  m_EditorClassIdentifier: Game::Game.Data.NpcDefinition
+  npcId: npc.escort023
+  character: {fileID: 11400000, guid: adf2c4adb20e34e4dbfcfe465dbd3564, type: 2}
+  type: 1
+  homePort: {fileID: 11400000, guid: a8e73311ca3b7c343af53779e897c286, type: 2}
+  patrolRange: 120
+  patrolPorts: []
+  destinationPort: {fileID: 11400000, guid: a176e8e4c546bc34b8ecf7f12fac5e1d, type: 2}
+  hireBonus: {x: 0, y: 0, z: 0}
+  hireBasePrice: 2002
+  cannonPower: 4
+  maxDurability: 58
+  attackInterval: 1.510359

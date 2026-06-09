@@ -27,13 +27,14 @@ namespace Game.World
         // 카브 추가하려면 배열에 한 줄 추가. radiusKm 은 카브 반경.
         private static readonly Carve[] Carves =
         {
-            // 지브롤터 해협 + Ceuta 항구 — 한 카브로 묶어서 둘 다 진입 가능
+            // 지브롤터 해협 + Ceuta 항구 — 한 카브로 묶어서 둘 다 진입 가능.
+            // 반경 키워 Algarve 해안 / 모로코 북부 접근로까지 포함 (NPC 우회 데드락 방지).
             new Carve
             {
                 name = "Gibraltar / Ceuta",
                 latitude = 35.92f,
                 longitude = -5.45f,
-                radiusKm = 50f,
+                radiusKm = 110f,
             },
         };
 

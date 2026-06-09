@@ -50,11 +50,17 @@ namespace Game.Editor
                 created++;
             }
 
-            // 호위선 40명
+            // 호위선 40명 — home + destination 사이 왕복 (상선과 동일한 cycle)
             for (int i = 0; i < 40; i++)
             {
                 var home = allPorts[Random.Range(0, allPorts.Count)];
-                CreateNpc(NpcType.Escort, home, null, idx++);
+                PortData dest = null;
+                for (int t = 0; t < 8 && dest == null; t++)
+                {
+                    var pick = allPorts[Random.Range(0, allPorts.Count)];
+                    if (pick != home) dest = pick;
+                }
+                CreateNpc(NpcType.Escort, home, dest, idx++);
                 created++;
             }
 

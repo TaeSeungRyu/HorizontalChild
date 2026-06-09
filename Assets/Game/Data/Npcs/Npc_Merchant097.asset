@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c22b2b3d903bcce41821fa5777939276, type: 3}
+  m_Name: Npc_Merchant097
+  m_EditorClassIdentifier: Game::Game.Data.NpcDefinition
+  npcId: npc.merchant097
+  character: {fileID: 11400000, guid: 1d9a12e356a83a347ad92bcb7c71c7e7, type: 2}
+  type: 0
+  homePort: {fileID: 11400000, guid: c9172c0442f53dc449d31c832d6f7f50, type: 2}
+  patrolRange: 0
+  patrolPorts: []
+  destinationPort: {fileID: 11400000, guid: 337b3e921fd7f394994b5090b55c9215, type: 2}
+  hireBonus: {x: 0, y: 0, z: 0}
+  hireBasePrice: 1790
+  cannonPower: 2
+  maxDurability: 42
+  attackInterval: 2.13629
