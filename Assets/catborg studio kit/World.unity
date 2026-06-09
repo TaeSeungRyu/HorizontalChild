@@ -16374,7 +16374,7 @@ MonoBehaviour:
   missionCatalog: {fileID: 11400000, guid: f5fcf05387bdbd94dbd1625eddc73067, type: 2}
   regionCatalog: {fileID: 11400000, guid: bae669d235d881041b45cdc38c55dd6a, type: 2}
   productCatalog: {fileID: 11400000, guid: 15a1ae52a9fb58944ad2db654f426074, type: 2}
-  shipCatalog: {fileID: 0}
+  shipCatalog: {fileID: 11400000, guid: 42f85b0d85ef85b4d898a55900e04d81, type: 2}
   playerShip: {fileID: 1690041783}
   onSaved:
     m_PersistentCalls:

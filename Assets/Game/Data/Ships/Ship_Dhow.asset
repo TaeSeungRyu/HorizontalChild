@@ -15,7 +15,7 @@ MonoBehaviour:
   shipId: ship.dhow
   displayName: "\uB2E4\uC6B0\uC120"
   icon: {fileID: 0}
-  prefab3D: {fileID: 0}
+  prefab3D: {fileID: 4218356506414511831, guid: 3bec034a0704eae43af2e08e004595b1, type: 3}
   cannonPower: 2
   speed: 7
   cargoCapacity: 80

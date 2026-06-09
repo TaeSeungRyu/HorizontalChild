@@ -15,7 +15,7 @@ MonoBehaviour:
   shipId: ship.east_indiaman
   displayName: "\uB3D9\uC778\uB3C4\uBB34\uC5ED\uC120"
   icon: {fileID: 0}
-  prefab3D: {fileID: 0}
+  prefab3D: {fileID: 2172203690796607753, guid: a5fc334c389928746bbf4626218f478f, type: 3}
   cannonPower: 16
   speed: 5
   cargoCapacity: 500
