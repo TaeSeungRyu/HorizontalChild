@@ -39810,7 +39810,19 @@ MonoBehaviour:
   button: {fileID: 1455512555}
   pauseMenuPanel: {fileID: 1771398277}
   hideUntilNationSelected: 1
-  hideWhileAnyActive: []
+  hideWhileAnyActive:
+  - {fileID: 1755955772}
+  - {fileID: 1456863947}
+  - {fileID: 322249804}
+  - {fileID: 1082307438}
+  - {fileID: 1362403261}
+  - {fileID: 1613668465}
+  - {fileID: 1270019600}
+  - {fileID: 954085540}
+  - {fileID: 2145323700}
+  - {fileID: 71366104}
+  - {fileID: 32356917}
+  - {fileID: 1771398275}
   listenBackKey: 1
 --- !u!225 &1455512559
 CanvasGroup:
