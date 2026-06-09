@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f673533686edc14e9e607386aac7bb9, type: 3}
+  m_Name: Ship_CaravelaLatina
+  m_EditorClassIdentifier: Game::Game.Data.ShipData
+  shipId: ship.caravela_latina
+  displayName: "\uB77C\uD2F4 \uCE74\uB77C\uBCA8"
+  icon: {fileID: 0}
+  prefab3D: {fileID: 0}
+  cannonPower: 2
+  speed: 8
+  cargoCapacity: 50
+  maxDurability: 50
+  attackInterval: 1.4
+  basePrice: 800
+  gate:
+    requiredGoodReputation: 0
+    requiredBadReputation: 0
+  shortDescription: "\uC0BC\uAC01 \uB3DB\uC774 \uB2EC\uB9B0 \uC791\uACE0 \uBE60\uB978
+    \uD0D0\uD5D8\uC120\uC774\uC5D0\uC694."
+  longDescription: "\uD3EC\uB974\uD22C\uAC08 \uD0D0\uD5D8\uAC00\uB4E4\uC774 \uC544\uD504\uB9AC\uCE74
+    \uD574\uC548\uC744 \uB354\uB4EC\uC744 \uB54C \uC990\uACA8 \uD0D4\uC5B4\uC694.
+    \uC791\uC544\uB3C4 \uBC14\uB78C\uC744 \uC798 \uC7A1\uC544 \uBE68\uB77C\uC694."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uCE74\uB77C\uBCA8"

@@ -14,7 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game::Game.Data.ShipCatalog
   all:
   - {fileID: 11400000, guid: 75672760b1994f240bef89048e326c86, type: 2}
+  - {fileID: 11400000, guid: 5d3d104d2183da541b1801876b0321a7, type: 2}
   - {fileID: 11400000, guid: 9ddc02c5801deae46b4ca9ec0765cb1c, type: 2}
+  - {fileID: 11400000, guid: af0c4e0f01d0230448eeae5e53c9ef33, type: 2}
+  - {fileID: 11400000, guid: 92af4b939be230e438764dbb2123d9ed, type: 2}
+  - {fileID: 11400000, guid: 4fb335f7ae1ac0549a43cd1d4e564599, type: 2}
+  - {fileID: 11400000, guid: df4b5bcf0ee1c9747a14e857f3d91906, type: 2}
   - {fileID: 11400000, guid: ba086db77b1085f4c80b88aefb6bcd27, type: 2}
+  - {fileID: 11400000, guid: db22cd24a3946f34bbad0223d09064e9, type: 2}
   - {fileID: 11400000, guid: b03f3f9ca4840034ca37e7d7ce5f618d, type: 2}
+  - {fileID: 11400000, guid: 6fe3b362bf8a72746b58b783b8456d8f, type: 2}
   - {fileID: 11400000, guid: 3c933fdf3e38f1b4ea4c2436eb14ce83, type: 2}
+  - {fileID: 11400000, guid: e5b135bbaec696245a377908ee2b4b25, type: 2}
+  - {fileID: 11400000, guid: 01d6f53080eac994ba15bf41d4f26d49, type: 2}
+  - {fileID: 11400000, guid: a0d64ae8011dc444cbadc77d7e303376, type: 2}

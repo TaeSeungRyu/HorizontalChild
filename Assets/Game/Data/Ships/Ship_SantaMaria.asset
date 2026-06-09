@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f673533686edc14e9e607386aac7bb9, type: 3}
+  m_Name: Ship_SantaMaria
+  m_EditorClassIdentifier: Game::Game.Data.ShipData
+  shipId: ship.santa_maria
+  displayName: "\uC0B0\uD0C0\uB9C8\uB9AC\uC544\uD638"
+  icon: {fileID: 0}
+  prefab3D: {fileID: 0}
+  cannonPower: 7
+  speed: 5
+  cargoCapacity: 180
+  maxDurability: 110
+  attackInterval: 1.9
+  basePrice: 5000
+  gate:
+    requiredGoodReputation: 0
+    requiredBadReputation: 0
+  shortDescription: "\uCF5C\uB7FC\uBC84\uC2A4\uAC00 \uC2E0\uB300\uB959\uC744 \uD5A5\uD574
+    \uD0D4\uB358 \uC720\uBA85\uD55C \uBC30\uC608\uC694."
+  longDescription: "1492\uB144 \uB300\uC11C\uC591\uC744 \uAC74\uB108 \uC544\uBA54\uB9AC\uCE74\uC5D0
+    \uB3C4\uCC29\uD55C \uCE74\uB77D\uC120. \uD0D0\uD5D8\uACFC \uBB34\uC5ED\uC5D0
+    \uB450\uB8E8 \uC801\uB2F9\uD588\uC5B4\uC694."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC0B0\uD0C0_\uB9C8\uB9AC\uC544\uD638"

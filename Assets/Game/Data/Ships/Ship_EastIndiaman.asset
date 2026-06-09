@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f673533686edc14e9e607386aac7bb9, type: 3}
+  m_Name: Ship_EastIndiaman
+  m_EditorClassIdentifier: Game::Game.Data.ShipData
+  shipId: ship.east_indiaman
+  displayName: "\uB3D9\uC778\uB3C4\uBB34\uC5ED\uC120"
+  icon: {fileID: 0}
+  prefab3D: {fileID: 0}
+  cannonPower: 16
+  speed: 5
+  cargoCapacity: 500
+  maxDurability: 170
+  attackInterval: 1.7
+  basePrice: 12000
+  gate:
+    requiredGoodReputation: 0
+    requiredBadReputation: 0
+  shortDescription: "\uD070 \uD654\uBB3C\uACFC \uB4E0\uB4E0\uD55C \uB300\uD3EC\uB97C
+    \uD568\uAED8 \uAC16\uCD98 \uBB34\uC5ED\uC120\uC774\uC5D0\uC694."
+  longDescription: "\uB124\uB35C\uB780\uB4DC\xB7\uC601\uAD6D \uB3D9\uC778\uB3C4\uD68C\uC0AC\uAC00
+    \uC778\uB3C4\uC591\xB7\uB3D9\uB0A8\uC544 \uBB34\uC5ED\uC5D0 \uB744\uC6B4 \uAC70\uB300
+    \uC0C1\uC120. \uD574\uC801\uB3C4 \uB9CC\uB9CC\uD558\uAC8C \uBABB \uBD10\uC694."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uB3D9\uC778\uB3C4\uD68C\uC0AC"

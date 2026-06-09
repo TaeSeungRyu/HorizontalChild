@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f673533686edc14e9e607386aac7bb9, type: 3}
+  m_Name: Ship_Junk
+  m_EditorClassIdentifier: Game::Game.Data.ShipData
+  shipId: ship.junk
+  displayName: "\uC815\uD06C\uC120"
+  icon: {fileID: 0}
+  prefab3D: {fileID: 0}
+  cannonPower: 5
+  speed: 5
+  cargoCapacity: 280
+  maxDurability: 110
+  attackInterval: 1.7
+  basePrice: 3500
+  gate:
+    requiredGoodReputation: 0
+    requiredBadReputation: 0
+  shortDescription: "\uBC29\uC218 \uACA9\uBCBD\uC774 \uB4E4\uC5B4\uAC04 \uD2BC\uD2BC\uD55C
+    \uC911\uAD6D \uBB34\uC5ED\uC120\uC774\uC5D0\uC694."
+  longDescription: "\uC815\uD654 \uD568\uB300\uAC00 \uC778\uB3C4\uC591\uAE4C\uC9C0
+    \uC655\uB798\uD560 \uB54C \uD0C4 \uBC30. \uD070 \uD654\uBB3C\uCE78\uACFC \uC88B\uC740
+    \uC548\uC815\uC131\uC774 \uC790\uB791\uC774\uC5D0\uC694."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC815\uD06C\uC120"

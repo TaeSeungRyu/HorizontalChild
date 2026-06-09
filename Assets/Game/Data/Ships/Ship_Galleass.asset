@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f673533686edc14e9e607386aac7bb9, type: 3}
+  m_Name: Ship_Galleass
+  m_EditorClassIdentifier: Game::Game.Data.ShipData
+  shipId: ship.galleass
+  displayName: "\uAC24\uB9AC\uC5B4\uC2A4"
+  icon: {fileID: 0}
+  prefab3D: {fileID: 0}
+  cannonPower: 12
+  speed: 6
+  cargoCapacity: 140
+  maxDurability: 130
+  attackInterval: 1.6
+  basePrice: 6500
+  gate:
+    requiredGoodReputation: 0
+    requiredBadReputation: 0
+  shortDescription: "\uAC24\uB9AC\uC120\uC5D0 \uB300\uD3EC\uB97C \uB4EC\uBFCD \uB2E8
+    \uD070 \uAD70\uD568\uC774\uC5D0\uC694."
+  longDescription: "\uBCA0\uB124\uCE58\uC544\uAC00 \uB808\uD310\uD1A0 \uD574\uC804\uC5D0\uC11C
+    \uC4F4 \uBB35\uC9C1\uD55C \uC804\uC120. \uBE60\uB974\uACE0 \uAC15\uD574\uC11C
+    \uBB34\uC11C\uC6B4 \uC0C1\uB300\uC600\uC5B4\uC694."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uAC08\uB808\uC544\uC2A4"
