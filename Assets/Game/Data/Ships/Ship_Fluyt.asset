@@ -15,11 +15,12 @@ MonoBehaviour:
   shipId: ship.fluyt
   displayName: "\uD50C\uB77C\uC774\uD2B8\uC120"
   icon: {fileID: 0}
-  prefab3D: {fileID: 0}
+  prefab3D: {fileID: 545417162512923278, guid: 1e30b695e7f262b47be0485a71bc23c5, type: 3}
   cannonPower: 4
   speed: 6
   cargoCapacity: 350
   maxDurability: 80
+  attackInterval: 1.5
   basePrice: 4000
   gate:
     requiredGoodReputation: 0
