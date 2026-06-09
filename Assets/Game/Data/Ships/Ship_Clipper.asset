@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f673533686edc14e9e607386aac7bb9, type: 3}
+  m_Name: Ship_Clipper
+  m_EditorClassIdentifier: Game::Game.Data.ShipData
+  shipId: ship.clipper
+  displayName: "\uD074\uB9AC\uD37C"
+  icon: {fileID: 0}
+  prefab3D: {fileID: 0}
+  cannonPower: 6
+  speed: 9
+  cargoCapacity: 110
+  maxDurability: 90
+  attackInterval: 1.5
+  basePrice: 10000
+  gate:
+    requiredGoodReputation: 0
+    requiredBadReputation: 0
+  shortDescription: "\uBC14\uB78C\uC744 \uAC00\uB974\uBA70 \uAC00\uC7A5 \uBE60\uB974\uAC8C
+    \uB2EC\uB9AC\uB294 \uBC30\uC608\uC694."
+  longDescription: "\uAE34 \uC120\uCCB4\uC640 \uD070 \uB3DB\uC73C\uB85C \uCC28(\u8336)\xB7\uD5A5\uC2E0\uB8CC
+    \uAC19\uC740 \uADC0\uD55C \uD654\uBB3C\uC744 \uBE68\uB9AC \uC62E\uAE30\uB824\uACE0
+    \uB9CC\uB4E0 \uBC30. \uC18D\uB3C4 \uD558\uB098\uB294 \uCD5C\uACE0\uC608\uC694."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uD074\uB9AC\uD37C"

@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f673533686edc14e9e607386aac7bb9, type: 3}
+  m_Name: Ship_Galley
+  m_EditorClassIdentifier: Game::Game.Data.ShipData
+  shipId: ship.galley
+  displayName: "\uAC24\uB9AC\uC120"
+  icon: {fileID: 0}
+  prefab3D: {fileID: 0}
+  cannonPower: 7
+  speed: 7
+  cargoCapacity: 60
+  maxDurability: 70
+  attackInterval: 1.4
+  basePrice: 3000
+  gate:
+    requiredGoodReputation: 0
+    requiredBadReputation: 0
+  shortDescription: "\uB178\uC640 \uB3DB\uC744 \uD568\uAED8 \uC4F0\uB294 \uBE60\uB978
+    \uC9C0\uC911\uD574 \uBC30\uC608\uC694."
+  longDescription: "\uBCA0\uB124\uCE58\uC544\xB7\uC81C\uB178\uBC14 \uAC19\uC740 \uC9C0\uC911\uD574
+    \uB3C4\uC2DC\uAD6D\uAC00\uC758 \uD568\uB300. \uBC14\uB78C\uC774 \uC5C6\uC5B4\uB3C4
+    \uB178\uB85C \uC6C0\uC9C1\uC5EC\uC694."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uAC24\uB9AC\uC120"

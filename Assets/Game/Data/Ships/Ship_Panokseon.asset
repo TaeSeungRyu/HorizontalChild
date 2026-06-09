@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f673533686edc14e9e607386aac7bb9, type: 3}
+  m_Name: Ship_Panokseon
+  m_EditorClassIdentifier: Game::Game.Data.ShipData
+  shipId: ship.panokseon
+  displayName: "\uD310\uC625\uC120"
+  icon: {fileID: 0}
+  prefab3D: {fileID: 0}
+  cannonPower: 15
+  speed: 4
+  cargoCapacity: 100
+  maxDurability: 160
+  attackInterval: 1.7
+  basePrice: 6500
+  gate:
+    requiredGoodReputation: 0
+    requiredBadReputation: 0
+  shortDescription: "\uC870\uC120 \uC218\uAD70\uC758 \uC8FC\uB825 \uC804\uD22C\uC120\uC774\uC5D0\uC694."
+  longDescription: "\uC704\uC5D0 \uD310\uC790\uB85C \uB9CC\uB4E0 \uC625(\u5C4B)\uC774
+    \uC788\uC5B4 \uB178 \uC813\uB294 \uBCD1\uC0AC\uB97C \uBCF4\uD638\uD574\uC694.
+    \uD3C9\uC800\uC120\uC774\uB77C \uC6B0\uB9AC \uBC14\uB2E4\uC5D0 \uC798 \uC5B4\uC6B8\uB824\uC694."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uD310\uC625\uC120"

@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f673533686edc14e9e607386aac7bb9, type: 3}
+  m_Name: Ship_Dhow
+  m_EditorClassIdentifier: Game::Game.Data.ShipData
+  shipId: ship.dhow
+  displayName: "\uB2E4\uC6B0\uC120"
+  icon: {fileID: 0}
+  prefab3D: {fileID: 0}
+  cannonPower: 2
+  speed: 7
+  cargoCapacity: 80
+  maxDurability: 55
+  attackInterval: 1.5
+  basePrice: 1200
+  gate:
+    requiredGoodReputation: 0
+    requiredBadReputation: 0
+  shortDescription: "\uC544\uB77C\uBE44\uC544 \uC0C1\uC778\uB4E4\uC758 \uBE60\uB978
+    \uBB34\uC5ED\uC120\uC774\uC5D0\uC694."
+  longDescription: "\uC778\uB3C4\uC591\uC5D0\uC11C \uD5A5\uC2E0\uB8CC\uB97C \uC62E\uAE30\uB358
+    \uBC30. \uC0BC\uAC01 \uB3DB\uC73C\uB85C \uACC4\uC808\uD48D\uC744 \uC798 \uD0C0\uACE0
+    \uB2E4\uB140\uC694."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uB2E4\uC6B0\uC120"
