@@ -1,6 +1,7 @@
 using System.Text;
 using Game.Data;
 using Game.Missions;
+using Game.World;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -103,6 +104,9 @@ namespace Game.UI
             _currentPort = port;
             _arrivalDialog = arrivalDialog;
 
+            // 항구 진입 — 바다 시뮬레이션 일시정지 (NPC 이동 / 타이머 / 플레이어 입력 모두 멈춤)
+            SeaSimulation.Pause(this);
+
             FillUI();
             panelRoot.SetActive(true);
 
@@ -180,6 +184,9 @@ namespace Game.UI
         private void OnLeaveClicked()
         {
             panelRoot.SetActive(false);
+
+            // 바다 시뮬레이션 재개
+            SeaSimulation.Resume(this);
 
             // 떠난 직후 같은 항구를 다시 트리거하지 않도록 PortArrivalDialog 에 알림
             if (_arrivalDialog != null)

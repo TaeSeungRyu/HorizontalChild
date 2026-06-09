@@ -22,8 +22,11 @@ namespace Game.Data
         public float patrolRange = 200f;
 
         [Header("Trade Route — 상선용")]
-        [Tooltip("두 항구 이상 등록 시 순차 왕복. 1개 이하면 일반 wander.")]
+        [Tooltip("[Deprecated 다중 항로] 두 항구 이상 등록 시 순차 왕복. 신규는 destinationPort 사용.")]
         public PortData[] patrolPorts;
+
+        [Tooltip("상선의 무역 목적지 항구. home ↔ destination 왕복.")]
+        public PortData destinationPort;
 
         [Header("Hire Bonuses")]
         [Tooltip("x = 용기, y = 항해, z = 눈썰미. 음수 가능. GAME_MECHANICS §1.4")]
