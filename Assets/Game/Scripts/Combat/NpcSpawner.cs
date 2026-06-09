@@ -461,7 +461,7 @@ namespace Game.Combat
 
         private NpcShip SpawnNpc(NpcDefinition def, Vector3 worldPos)
         {
-            // 빈 root + 클릭용 BoxCollider — 시각은 ProceduralShipBuilder 가 자식으로 배치
+            // 빈 root + 클릭용 BoxCollider — 시각은 prefab3D 또는 ProceduralShipBuilder 가 자식으로
             var npc = new GameObject($"NpcShip_{(def != null ? def.npcId : "?")}");
             npc.transform.SetParent(npcsParent);
             npc.transform.position = worldPos;
@@ -470,10 +470,26 @@ namespace Game.Combat
             // 배 전체 영역 클릭 가능 — IPointerClickHandler 동작
             var col = npc.AddComponent<BoxCollider>();
             col.center = new Vector3(0f, 0f, 0f);
-            col.size = new Vector3(0.7f, 0.7f, 1.4f);   // hull + 약간 margin
+            col.size = new Vector3(0.7f, 0.7f, 1.4f);
 
-            // 배 모양 시각 빌드 — 선체·갑판·돛대·돛·뱃머리
-            ProceduralShipBuilder.BuildShip(npc, def != null ? def.type : NpcType.Merchant);
+            // 시각: ShipData.prefab3D 우선 → 절차적 배 모양 fallback
+            var prefab = def != null && def.shipData != null ? def.shipData.prefab3D : null;
+            if (prefab != null)
+            {
+                var visual = Instantiate(prefab, npc.transform);
+                visual.name = "ShipVisual";
+                visual.transform.localPosition = Vector3.zero;
+                visual.transform.localRotation = Quaternion.identity;
+                // visual 안의 콜라이더는 click 중복 막기 위해 비활성화
+                foreach (var visualCol in visual.GetComponentsInChildren<Collider>())
+                {
+                    visualCol.enabled = false;
+                }
+            }
+            else
+            {
+                ProceduralShipBuilder.BuildShip(npc, def != null ? def.type : NpcType.Merchant);
+            }
 
             var script = npc.AddComponent<NpcShip>();
             script.Bind(def, resultPanel);

@@ -15,12 +15,13 @@ MonoBehaviour:
   npcId: npc.pirate006
   character: {fileID: 11400000, guid: 52db3d2da0d298c4f945e09e30be7f4e, type: 2}
   type: 2
-  homePort: {fileID: 11400000, guid: a176e8e4c546bc34b8ecf7f12fac5e1d, type: 2}
+  homePort: {fileID: 11400000, guid: f54cafdbf47aabd449efdecdefe34c9c, type: 2}
   patrolRange: 180
   patrolPorts: []
   destinationPort: {fileID: 0}
   hireBonus: {x: 0, y: 0, z: 0}
-  hireBasePrice: 2292
-  cannonPower: 5
-  maxDurability: 44
-  attackInterval: 1.5465931
+  hireBasePrice: 2004
+  cannonPower: 7
+  maxDurability: 50
+  attackInterval: 1.56796
+  shipData: {fileID: 11400000, guid: 9ddc02c5801deae46b4ca9ec0765cb1c, type: 2}
