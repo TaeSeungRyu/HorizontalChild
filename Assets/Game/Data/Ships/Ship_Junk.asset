@@ -15,7 +15,7 @@ MonoBehaviour:
   shipId: ship.junk
   displayName: "\uC815\uD06C\uC120"
   icon: {fileID: 0}
-  prefab3D: {fileID: 0}
+  prefab3D: {fileID: 3371644616565773004, guid: 30c6a00e7e6e4124098ba2d0668e1a50, type: 3}
   cannonPower: 5
   speed: 5
   cargoCapacity: 280
