@@ -15,7 +15,7 @@ MonoBehaviour:
   shipId: ship.clipper
   displayName: "\uD074\uB9AC\uD37C"
   icon: {fileID: 0}
-  prefab3D: {fileID: 0}
+  prefab3D: {fileID: 3005332708986712297, guid: 91e5917a4098d414cb39998c9737fe9d, type: 3}
   cannonPower: 6
   speed: 9
   cargoCapacity: 110
