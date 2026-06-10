@@ -29,9 +29,15 @@ namespace Game.Data
         public PortData destinationPort;
 
         [Header("Hire Bonuses")]
-        [Tooltip("x = 용기, y = 항해, z = 눈썰미. 음수 가능. GAME_MECHANICS §1.4")]
+        [Tooltip("x = 용기, y = 항해, z = 눈썰미. 음수 가능. 고용 시 플레이어 능력치에 합산.")]
         public Vector3Int hireBonus;
         public int hireBasePrice = 1000;
+
+        [Header("Hire Gate")]
+        [Tooltip("고용에 필요한 최소 좋은 명성.")]
+        public int requiredGoodReputation = 0;
+        [Tooltip("고용에 필요한 최소 나쁜 명성 (해적 영입 등).")]
+        public int requiredBadReputation = 0;
 
         [Header("Combat Stats (M3.5 Phase 2)")]
         [Range(1, 30)] public int cannonPower = 3;

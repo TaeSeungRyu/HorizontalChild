@@ -45,6 +45,9 @@ namespace Game.Save
         // 플레이어가 구매·사용 중인 배 ID. 비어있으면 인스펙터 기본값 유지.
         public string shipId;
 
+        // 고용한 선원 NPC id 목록 (최대 10)
+        public List<string> crewNpcIds = new();
+
         // NPC 배 상태 — 위치 + 무역 항로 인덱스 (M3.5 Phase 1)
         public List<NpcStateData> npcs = new();
 

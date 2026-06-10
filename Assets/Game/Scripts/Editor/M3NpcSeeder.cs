@@ -154,8 +154,27 @@ namespace Game.Editor
                 NpcType.Escort => (int)(basePrice * 1.1f),
                 _ => basePrice,
             };
-            def.hireBonus = new Vector3Int(0, 0, 0);
-            def.shipData = ship;   // ShipData.prefab3D 가 있으면 NpcSpawner 가 그 모델로 spawn
+
+            // 보너스 — 능력치가 평균 이상이면 +값, 이하면 0/음수. (stat - 50) / 10, -2~+5 클램프
+            def.hireBonus = new Vector3Int(
+                Mathf.Clamp((character.bravery - 50) / 10, -2, 5),
+                Mathf.Clamp((character.seamanship - 50) / 10, -2, 5),
+                Mathf.Clamp((character.keenEye - 50) / 10, -2, 5));
+
+            // 명성 게이트 — 타입별
+            def.requiredGoodReputation = type switch
+            {
+                NpcType.Escort => 5,        // 호위병은 약간의 신뢰 필요
+                NpcType.Merchant => 0,      // 상인은 누구나
+                _ => 0,
+            };
+            def.requiredBadReputation = type switch
+            {
+                NpcType.Pirate => 10,       // 해적은 나쁜 명성 있어야 영입 가능
+                _ => 0,
+            };
+
+            def.shipData = ship;
 
             AssetDatabase.CreateAsset(def, $"{DataRoot}/Npcs/Npc_{typeTag}{idx:000}.asset");
         }
