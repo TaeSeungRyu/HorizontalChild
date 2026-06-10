@@ -15,7 +15,7 @@ MonoBehaviour:
   shipId: ship.panokseon
   displayName: "\uD310\uC625\uC120"
   icon: {fileID: 0}
-  prefab3D: {fileID: 0}
+  prefab3D: {fileID: 829558940575917580, guid: ccae284ef96d1dc40ad6867f7f6b0417, type: 3}
   cannonPower: 15
   speed: 4
   cargoCapacity: 100
