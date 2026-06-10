@@ -15,11 +15,12 @@ MonoBehaviour:
   shipId: ship.caravel
   displayName: "\uCE90\uB7EC\uBCA8"
   icon: {fileID: 0}
-  prefab3D: {fileID: 0}
+  prefab3D: {fileID: 9040847407943036435, guid: 0c6e37474b353b64ebdec50bd74b94a7, type: 3}
   cannonPower: 3
   speed: 8
   cargoCapacity: 60
   maxDurability: 50
+  attackInterval: 1.5
   basePrice: 5000
   gate:
     requiredGoodReputation: 0
