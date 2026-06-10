@@ -15,7 +15,7 @@ MonoBehaviour:
   shipId: ship.santa_maria
   displayName: "\uC0B0\uD0C0\uB9C8\uB9AC\uC544\uD638"
   icon: {fileID: 0}
-  prefab3D: {fileID: 0}
+  prefab3D: {fileID: 4063564029593226386, guid: 941eacf3ac2632342a8b62a2410331a1, type: 3}
   cannonPower: 7
   speed: 5
   cargoCapacity: 180
