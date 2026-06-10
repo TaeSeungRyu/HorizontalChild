@@ -19,8 +19,10 @@ MonoBehaviour:
   patrolRange: 0
   patrolPorts: []
   destinationPort: {fileID: 11400000, guid: d3a90f9e8c4472143b1f6d1e07e8906d, type: 2}
-  hireBonus: {x: 0, y: 0, z: 0}
+  hireBonus: {x: 0, y: 0, z: 3}
   hireBasePrice: 1860
+  requiredGoodReputation: 0
+  requiredBadReputation: 0
   cannonPower: 3
   maxDurability: 40
   attackInterval: 2.2531145
