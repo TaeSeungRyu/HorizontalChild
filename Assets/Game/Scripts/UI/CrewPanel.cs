@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game.Combat;
 using Game.Data;
 using Game.Player;
 using Game.Save;
@@ -168,8 +169,16 @@ namespace Game.UI
             if (crew == null) return;
             if (crew.Dismiss(def))
             {
+                // 해고된 선원은 본거지 광장으로 복귀 — 다시 고용 가능
+                var spawner = NpcSpawner.Instance
+                    ?? FindAnyObjectByType<NpcSpawner>(FindObjectsInactive.Include);
+                if (spawner != null && def.homePort != null)
+                {
+                    spawner.SendNpcToPort(def, 0f, def.homePort);
+                }
+
                 SaveService.Instance?.SaveGame();
-                Debug.Log($"[CrewPanel] 해고: {def.character.displayNameKo}");
+                Debug.Log($"[CrewPanel] 해고: {def.character.displayNameKo} → {(def.homePort != null ? def.homePort.displayNameKo : "고향 없음")} 광장 복귀");
                 Refresh();
             }
         }
