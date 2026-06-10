@@ -183,20 +183,68 @@ namespace Game.UI
             bg.color = new Color(0.07f, 0.1f, 0.15f, 0.95f);
             bg.raycastTarget = true;
 
-            if (titleText != null)
-                LayoutText(titleText.rectTransform, new Vector2(0.5f, 1f), new Vector2(0f, -100f),
-                    new Vector2(1000f, 100f), 56f, TextAlignmentOptions.Center, Color.white);
+            // 자식 자동 생성
+            if (titleText == null) titleText = CreateTMP("Title", panelRoot.transform);
+            if (contentText == null) contentText = CreateTMP("Content", panelRoot.transform);
+            if (closeButton == null) closeButton = CreateCloseButton(panelRoot.transform);
 
-            if (contentText != null)
-                LayoutText(contentText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, 0f),
-                    new Vector2(1200f, 700f), 28f, TextAlignmentOptions.TopLeft,
-                    new Color(0.9f, 0.9f, 0.9f));
+            // 레이아웃 + 스타일
+            LayoutText(titleText.rectTransform, new Vector2(0.5f, 1f), new Vector2(0f, -100f),
+                new Vector2(1000f, 100f), 56f, TextAlignmentOptions.Center, Color.white);
 
-            if (closeButton != null)
-                LayoutRect(closeButton.GetComponent<RectTransform>(), new Vector2(0.5f, 0f),
-                    new Vector2(0f, 100f), new Vector2(260f, 80f));
+            LayoutText(contentText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, 0f),
+                new Vector2(1200f, 700f), 28f, TextAlignmentOptions.TopLeft,
+                new Color(0.9f, 0.9f, 0.9f));
 
-            Debug.Log("[PlayerInfoPanel] Auto Layout 완료.");
+            LayoutRect(closeButton.GetComponent<RectTransform>(), new Vector2(0.5f, 0f),
+                new Vector2(0f, 100f), new Vector2(260f, 80f));
+
+            // 초기 텍스트 (Play 전 시각적 확인용)
+            titleText.text = "내 정보";
+            contentText.text = "Play 시 채워집니다.";
+
+            Debug.Log("[PlayerInfoPanel] Auto Layout 완료 (자식 자동 생성).");
+        }
+
+        private static TMP_Text CreateTMP(string name, Transform parent)
+        {
+            var go = new GameObject(name, typeof(RectTransform));
+            go.transform.SetParent(parent, false);
+            return go.AddComponent<TextMeshProUGUI>();
+        }
+
+        private static Button CreateCloseButton(Transform parent)
+        {
+            var go = new GameObject("CloseButton",
+                typeof(RectTransform), typeof(Image), typeof(Button));
+            go.transform.SetParent(parent, false);
+            var img = go.GetComponent<Image>();
+            img.color = new Color(0.3f, 0.4f, 0.5f, 1f);
+            var btn = go.GetComponent<Button>();
+            btn.targetGraphic = img;
+            var cb = btn.colors;
+            cb.normalColor = Color.white;
+            cb.highlightedColor = Color.white;
+            cb.pressedColor = new Color(0.7f, 0.7f, 0.7f);
+            cb.selectedColor = Color.white;
+            cb.fadeDuration = 0f;
+            btn.colors = cb;
+
+            // 라벨
+            var labelGO = new GameObject("Label", typeof(RectTransform));
+            labelGO.transform.SetParent(go.transform, false);
+            var label = labelGO.AddComponent<TextMeshProUGUI>();
+            label.text = "닫기";
+            label.fontSize = 28f;
+            label.alignment = TextAlignmentOptions.Center;
+            label.color = Color.white;
+            var labelRT = label.rectTransform;
+            labelRT.anchorMin = Vector2.zero;
+            labelRT.anchorMax = Vector2.one;
+            labelRT.sizeDelta = Vector2.zero;
+            labelRT.anchoredPosition = Vector2.zero;
+
+            return btn;
         }
 
         private static void LayoutText(RectTransform rt, Vector2 anchor, Vector2 pos, Vector2 size,
