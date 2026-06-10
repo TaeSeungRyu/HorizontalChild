@@ -300,7 +300,10 @@ namespace Game.Ship
         {
             float baseSpeed = shipData != null ? shipData.speed : 5f;
             int seamanship = captain != null ? captain.seamanship : 50;
-            float bonus = 1f + (Mathf.Clamp(seamanship, 1, 100) / 100f) * 0.5f;
+            // 선원 보너스 합산
+            var crew = Game.Player.PlayerCrew.Instance;
+            if (crew != null) seamanship += crew.SeamanshipBonus;
+            float bonus = 1f + (Mathf.Clamp(seamanship, 1, 200) / 100f) * 0.5f;
             return baseSpeed * bonus;
         }
 

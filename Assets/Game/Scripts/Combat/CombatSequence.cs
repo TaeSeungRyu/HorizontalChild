@@ -192,6 +192,8 @@ namespace Game.Combat
         private float ComputePlayerHitChance(ShipController player)
         {
             int seamanship = (player != null && player.captain != null) ? player.captain.seamanship : 50;
+            if (Game.Player.PlayerCrew.Instance != null)
+                seamanship += Game.Player.PlayerCrew.Instance.SeamanshipBonus;
             return Mathf.Clamp(playerBaseHitChance + (seamanship - 50) * 0.003f, 0.2f, 0.95f);
         }
 

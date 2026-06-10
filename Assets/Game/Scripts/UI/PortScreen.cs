@@ -55,6 +55,10 @@ namespace Game.UI
         public ShipRepairPanel shipRepairPanel;
         public Button shipRepairButton;
 
+        [Tooltip("선원 명부 버튼 클릭 시 열릴 패널. 비어 있으면 버튼이 비활성화됨.")]
+        public CrewPanel crewPanel;
+        public Button crewButton;
+
         private PortData _currentPort;
         private PortArrivalDialog _arrivalDialog;
 
@@ -69,6 +73,7 @@ namespace Game.UI
             if (shipyardButton != null) shipyardButton.onClick.AddListener(OnShipyardClicked);
             if (plazaButton != null) plazaButton.onClick.AddListener(OnPlazaClicked);
             if (shipRepairButton != null) shipRepairButton.onClick.AddListener(OnShipRepairClicked);
+            if (crewButton != null) crewButton.onClick.AddListener(OnCrewClicked);
         }
 
         private void OnMarketClicked()
@@ -93,6 +98,12 @@ namespace Game.UI
         {
             if (_currentPort == null || shipRepairPanel == null) return;
             shipRepairPanel.OpenForPort(_currentPort);
+        }
+
+        private void OnCrewClicked()
+        {
+            if (crewPanel == null) return;
+            crewPanel.Open();
         }
 
         /// <summary>외부(PortArrivalDialog)에서 호출 — 항구 화면 열기.</summary>

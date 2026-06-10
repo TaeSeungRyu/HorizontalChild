@@ -69,8 +69,11 @@ namespace Game.Combat
             var ship = player != null ? player.shipData : null;
             var npcChar = npc != null ? npc.character : null;
 
+            int playerBravery = (pCaptain != null ? pCaptain.bravery : 50);
+            if (Game.Player.PlayerCrew.Instance != null)
+                playerBravery += Game.Player.PlayerCrew.Instance.BraveryBonus;
             int playerPower = (ship != null ? ship.cannonPower : 3) * 15
-                              + (pCaptain != null ? pCaptain.bravery : 50)
+                              + playerBravery
                               + Random.Range(0, 30);
             int npcPower = (npcChar != null ? npcChar.bravery : 50)
                            + Random.Range(0, 30);

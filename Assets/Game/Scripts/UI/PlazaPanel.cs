@@ -12,15 +12,14 @@ using UnityEngine.UI;
 namespace Game.UI
 {
     /// <summary>
-    /// 광장 (Plaza) 패널 — 그 항구에 dwell 중인 NPC 만 고용 대상으로 표시 (§3.5).
+    /// 광장 (Plaza) 패널 — 항구 dwell NPC 를 선원으로 고용 (최대 10명).
     ///
-    /// 동작:
-    ///   - NpcSpawner.GetNpcsAtPort(_currentPort) 로 현재 항구에 머무는 NPC 조회
-    ///   - 각 행: 이름 + 능력치 (용기·항해·눈썰미) + 고용가 + [고용] 버튼
-    ///   - 고용 → 잔돈 차감 + playerShip.captain 교체 + NpcSpawner.HireNpcFromPort (풀 영구 제외)
-    ///   - 항구에 NPC 가 없으면 안내 메시지
+    /// 새 모델:
+    ///   - NPC 는 선장 교체가 아니라 "선원 아이템".
+    ///   - 고용 시 NpcDefinition.hireBonus 가 PlayerCrew 에 합산되어 능력치 증감.
+    ///   - 제약: 선원 < 10 + 좋은/나쁜 명성 게이트 + hireBasePrice 비용.
     ///
-    /// 고용가: NpcDefinition.hireBasePrice 우선, 없으면 (용기+항해+눈썰미)×10 fallback.
+    /// 각 행: 이름 / 본인 stats / 보너스(±) / 비용 / 명성 요구 / [고용] 버튼.
     /// </summary>
     public class PlazaPanel : MonoBehaviour
     {
@@ -90,8 +89,17 @@ namespace Game.UI
         {
             if (titleText != null) titleText.text = $"{(_currentPort != null ? _currentPort.displayNameKo : "")} 광장";
             if (moneyText != null && _state != null) moneyText.text = $"잔돈 {_state.Money:N0} G";
-            if (currentCaptainText != null && playerShip != null && playerShip.captain != null)
-                currentCaptainText.text = $"현재 선장: <b>{playerShip.captain.displayNameKo}</b>";
+
+            // 선장 + 현재 선원 수 표시
+            if (currentCaptainText != null)
+            {
+                var crew = PlayerCrew.Instance;
+                int n = crew != null ? crew.Count : 0;
+                int max = crew != null ? crew.maxCrew : 10;
+                string captainName = playerShip != null && playerShip.captain != null
+                    ? playerShip.captain.displayNameKo : "—";
+                currentCaptainText.text = $"선장: <b>{captainName}</b>  ·  선원 {n}/{max}";
+            }
 
             BuildRows();
         }
@@ -159,23 +167,64 @@ namespace Game.UI
             hlg.childForceExpandHeight = true;
 
             var le = row.GetComponent<LayoutElement>();
-            le.preferredHeight = 80f;
+            le.preferredHeight = 90f;
 
-            bool isCurrent = playerShip != null && playerShip.captain == ch;
             int price = HirePrice(def);
-            bool canAfford = _state != null && _state.Money >= price;
+            var crew = PlayerCrew.Instance;
+            var ps = _state;
 
-            AddText(row.transform, ch.displayNameKo, 220f, TextAlignmentOptions.Left);
+            bool alreadyHired = crew != null && crew.Contains(def);
+            bool crewFull = crew != null && crew.IsFull;
+            bool repOk = ps == null ||
+                (ps.GoodReputation >= def.requiredGoodReputation
+                 && ps.BadReputation >= def.requiredBadReputation);
+            bool canAfford = ps != null && ps.Money >= price;
+            bool canHire = !alreadyHired && !crewFull && repOk && canAfford;
+
+            // 이름
+            AddText(row.transform, ch.displayNameKo, 200f, TextAlignmentOptions.Left);
+
+            // 본인 능력치
             AddText(row.transform,
-                $"용기 {ch.bravery} / 항해 {ch.seamanship} / 눈썰미 {ch.keenEye}",
-                400f, TextAlignmentOptions.Left, 22f);
-            AddText(row.transform, $"{price:N0} G", 140f, TextAlignmentOptions.Right);
+                $"용 {ch.bravery} / 항 {ch.seamanship} / 눈 {ch.keenEye}",
+                240f, TextAlignmentOptions.Left, 20f);
 
-            var hireBtn = AddButton(row.transform, isCurrent ? "현재 선장" : "고용", 120f);
-            hireBtn.interactable = !isCurrent && canAfford;
+            // 보너스 (hireBonus)
+            AddText(row.transform, FormatBonus(def.hireBonus),
+                200f, TextAlignmentOptions.Left, 20f);
+
+            // 명성 요구
+            AddText(row.transform, FormatGate(def),
+                160f, TextAlignmentOptions.Left, 18f);
+
+            // 가격
+            AddText(row.transform, $"{price:N0} G", 120f, TextAlignmentOptions.Right);
+
+            // 버튼 라벨
+            string label = alreadyHired ? "고용됨"
+                         : crewFull ? "선원 가득"
+                         : !repOk ? "명성 부족"
+                         : !canAfford ? "돈 부족"
+                         : "고용";
+            var hireBtn = AddButton(row.transform, label, 130f);
+            hireBtn.interactable = canHire;
             hireBtn.onClick.AddListener(() => OnHire(def));
 
             return row;
+        }
+
+        private static string FormatBonus(Vector3Int b)
+        {
+            string Sign(int n) => n > 0 ? $"+{n}" : n.ToString();
+            return $"<color=#9CDCFE>{Sign(b.x)}/{Sign(b.y)}/{Sign(b.z)}</color>";
+        }
+
+        private static string FormatGate(NpcDefinition def)
+        {
+            if (def.requiredGoodReputation <= 0 && def.requiredBadReputation <= 0) return "—";
+            string g = def.requiredGoodReputation > 0 ? $"좋은 ≥{def.requiredGoodReputation}" : "";
+            string b = def.requiredBadReputation > 0 ? $"나쁜 ≥{def.requiredBadReputation}" : "";
+            return string.IsNullOrEmpty(g) ? b : (string.IsNullOrEmpty(b) ? g : $"{g} · {b}");
         }
 
         private int HirePrice(NpcDefinition def)
@@ -187,24 +236,38 @@ namespace Game.UI
 
         private void OnHire(NpcDefinition def)
         {
-            if (def == null || def.character == null || playerShip == null || _state == null) return;
-            var ch = def.character;
-            if (playerShip.captain == ch) return;
+            if (def == null || _state == null) return;
+            var crew = PlayerCrew.Instance;
+            if (crew == null)
+            {
+                Debug.LogError("[PlazaPanel] PlayerCrew 인스턴스 없음 — 씬에 PlayerCrew 컴포넌트 추가 필요.");
+                return;
+            }
+
+            if (crew.Contains(def)) return;
+            if (crew.IsFull) { Debug.Log("[PlazaPanel] 선원 가득 (10명 한도)."); return; }
+            if (_state.GoodReputation < def.requiredGoodReputation || _state.BadReputation < def.requiredBadReputation)
+            {
+                Debug.Log("[PlazaPanel] 명성 부족."); return;
+            }
+
             int price = HirePrice(def);
             if (!_state.TrySpend(price))
             {
                 Debug.Log($"[PlazaPanel] 돈 부족: 필요 {price}");
                 return;
             }
-            playerShip.captain = ch;
 
-            // 풀 영구 제외 (§3.5: 고용된 NPC 는 풀에서 영구 제외)
+            crew.TryHire(def);
+
+            // 풀 영구 제외 (§3.5)
             var spawner = NpcSpawner.Instance
                 ?? FindAnyObjectByType<NpcSpawner>(FindObjectsInactive.Include);
             spawner?.HireNpcFromPort(def);
 
             SaveService.Instance?.SaveGame();
-            Debug.Log($"[PlazaPanel] 새 선장: {ch.displayNameKo} ({price}G) — 풀에서 영구 제외");
+            Debug.Log($"[PlazaPanel] 선원 고용: {def.character.displayNameKo} ({price}G), " +
+                $"보너스 ({def.hireBonus.x},{def.hireBonus.y},{def.hireBonus.z}) — 풀에서 영구 제외");
             Refresh();
         }
 

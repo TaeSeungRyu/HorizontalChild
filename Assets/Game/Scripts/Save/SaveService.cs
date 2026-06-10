@@ -39,6 +39,7 @@ namespace Game.Save
         public RegionCatalog regionCatalog;
         public ProductCatalog productCatalog;
         public ShipCatalog shipCatalog;
+        public NpcCatalog npcCatalog;
 
         [Header("Refs")]
         public ShipController playerShip;
@@ -196,6 +197,17 @@ namespace Game.Save
                 data.shipId = playerShip.shipData != null ? playerShip.shipData.shipId : null;
             }
 
+            // 고용한 선원
+            var crew = PlayerCrew.Instance;
+            if (crew != null)
+            {
+                data.crewNpcIds.Clear();
+                foreach (var npc in crew.Crew)
+                {
+                    if (npc != null && !string.IsNullOrEmpty(npc.npcId)) data.crewNpcIds.Add(npc.npcId);
+                }
+            }
+
             // NPC 배 상태 — spawner 가 준비됐으면 현재 상태 수집,
             // 아직 spawn 전이면 (예: 로드 직후 onCargoChanged 자동저장) 직전 로드값 유지
             var spawner = NpcSpawner.Instance;
@@ -314,6 +326,28 @@ namespace Game.Save
                 var pos = playerShip.transform.position;
                 playerShip.transform.position = new Vector3(data.shipX, pos.y, data.shipZ);
                 if (data.playerDurability >= 0) playerShip.SetDurability(data.playerDurability);
+
+                // 고용 선원 복원
+                var crew = PlayerCrew.Instance;
+                if (crew != null && data.crewNpcIds != null && data.crewNpcIds.Count > 0)
+                {
+                    crew.Clear();
+                    if (npcCatalog != null && npcCatalog.all != null)
+                    {
+                        foreach (var id in data.crewNpcIds)
+                        {
+                            if (string.IsNullOrEmpty(id)) continue;
+                            foreach (var n in npcCatalog.all)
+                            {
+                                if (n != null && n.npcId == id) { crew.TryHire(n); break; }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogWarning("[SaveService] crewNpcIds 복원 실패 — npcCatalog 미할당.");
+                    }
+                }
 
                 // 구매한 배 복원 — shipId 로 카탈로그 조회
                 if (!string.IsNullOrEmpty(data.shipId))
