@@ -15,11 +15,12 @@ MonoBehaviour:
   shipId: ship.galleon
   displayName: "\uAC08\uB808\uC628\uC120"
   icon: {fileID: 0}
-  prefab3D: {fileID: 0}
+  prefab3D: {fileID: 6581449972608623316, guid: 84db5694beeaa2e42a1321236d143481, type: 3}
   cannonPower: 14
   speed: 5
   cargoCapacity: 180
   maxDurability: 150
+  attackInterval: 1.5
   basePrice: 6000
   gate:
     requiredGoodReputation: 0

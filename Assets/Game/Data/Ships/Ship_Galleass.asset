@@ -15,7 +15,7 @@ MonoBehaviour:
   shipId: ship.galleass
   displayName: "\uAC24\uB9AC\uC5B4\uC2A4"
   icon: {fileID: 0}
-  prefab3D: {fileID: 0}
+  prefab3D: {fileID: 2844690508272500315, guid: 43c17506131dfbd41bfad40d46eaa023, type: 3}
   cannonPower: 12
   speed: 6
   cargoCapacity: 140
