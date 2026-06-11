@@ -191,6 +191,14 @@ namespace Game.UI
                 Debug.Log($"[NationSelectionPanel] 선장 할당: {_selected.startingCharacter.displayNameKo} (용기 {_selected.startingCharacter.bravery} / 항해 {_selected.startingCharacter.seamanship} / 눈썰미 {_selected.startingCharacter.keenEye})");
             }
 
+            // 3.5) 시작 배 할당 — startingShip 있으면 그것, 없으면 ShipController.Start fallback 에 맡김
+            if (playerShip != null && _selected.startingShip != null && playerShip.shipData == null)
+            {
+                playerShip.shipData = _selected.startingShip;
+                playerShip.RefreshVisual();
+                Debug.Log($"[NationSelectionPanel] 시작 배 할당: {_selected.startingShip.displayName}");
+            }
+
             Hide();
         }
 

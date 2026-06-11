@@ -105,7 +105,29 @@ namespace Game.Ship
 
         private void Start()
         {
-            // 첫 진입 시 내구도 초기화 (저장 데이터가 있으면 SaveService 가 SetDurability 로 덮어씀)
+            // 안전망: shipData 미할당이면 씬·리소스에서 ShipCatalog 찾아 첫 ShipData 자동 적용
+            if (shipData == null)
+            {
+                var catalog = FindAnyObjectByType<Game.Save.SaveService>(FindObjectsInactive.Include)?.shipCatalog;
+                if (catalog == null || catalog.all == null || catalog.all.Length == 0)
+                {
+                    var loaded = Resources.FindObjectsOfTypeAll<ShipCatalog>();
+                    if (loaded != null && loaded.Length > 0) catalog = loaded[0];
+                }
+                if (catalog != null && catalog.all != null)
+                {
+                    foreach (var s in catalog.all)
+                    {
+                        if (s != null) { shipData = s; break; }
+                    }
+                }
+                if (shipData != null)
+                {
+                    Debug.LogWarning($"[ShipController] shipData 미할당 → fallback: {shipData.displayName}. " +
+                        "인스펙터에서 명시 할당 또는 NationData.startingShip 설정 권장.");
+                }
+            }
+
             if (CurrentDurability <= 0) CurrentDurability = MaxDurability;
             RefreshVisual();
         }
