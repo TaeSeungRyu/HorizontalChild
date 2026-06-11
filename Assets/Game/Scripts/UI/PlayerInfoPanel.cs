@@ -95,9 +95,9 @@ namespace Game.UI
             int bonusK = crew != null ? crew.KeenEyeBonus : 0;
 
             sb.AppendLine("<b>── 능력치 ──</b>");
-            sb.AppendLine("<mspace=4em>          기본    보너스    합계</mspace>");
-            sb.AppendLine(StatRow("용기  ", baseB, bonusB));
-            sb.AppendLine(StatRow("항해  ", baseS, bonusS));
+            sb.AppendLine("<pos=30%><b>기본</b><pos=55%><b>보너스</b><pos=80%><b>합계</b>");
+            sb.AppendLine(StatRow("용기", baseB, bonusB));
+            sb.AppendLine(StatRow("항해", baseS, bonusS));
             sb.AppendLine(StatRow("눈썰미", baseK, bonusK));
 
             sb.AppendLine();
@@ -135,7 +135,8 @@ namespace Game.UI
             string bonusStr = bonusVal > 0 ? $"<color=#9CDCFE>+{bonusVal}</color>"
                             : bonusVal < 0 ? $"<color=#F47C7C>{bonusVal}</color>"
                             : "0";
-            return $"<mspace=4em>{label}    {baseVal,3}    {bonusStr,8}    <b>{total,3}</b></mspace>";
+            // <pos> 태그는 글자 폭 무관 (한글/숫자/태그 모두) — 절대 위치라 안전
+            return $"{label}<pos=30%>{baseVal}<pos=55%>{bonusStr}<pos=80%><b>{total}</b>";
         }
 
         private string BuildMissionStatus()

@@ -7,10 +7,14 @@ using UnityEngine.UI;
 namespace Game.UI
 {
     /// <summary>
-    /// HUD 좌상단 — 선장 아바타 + 이름. 클릭 시 PlayerInfoPanel 열림.
+    /// HUD 좌상단 — 선장 아바타 + 이름 + 잔돈/명성. 클릭 시 PlayerInfoPanel 열림.
     ///
-    /// 아바타 이미지가 없으면 선장 이름의 첫 글자를 원 위에 표시 (placeholder).
-    /// 추후 captainAvatar(Sprite) 할당하면 그 이미지 사용.
+    /// 통합 정보:
+    ///   - 아바타 (원형 placeholder 또는 sprite)
+    ///   - 선장 이름
+    ///   - 잔돈 · 좋은 명성 · 나쁜 명성 (나쁜 명성은 0 이면 숨김)
+    ///
+    /// PlayerState 의 onMoneyChanged / Good / Bad 자동 구독 → 실시간 갱신.
     /// </summary>
     [RequireComponent(typeof(CanvasGroup))]
     public class PlayerInfoButton : MonoBehaviour
@@ -19,11 +23,13 @@ namespace Game.UI
         public Image avatarImage;           // 원형 배경 또는 실제 아바타
         public TMP_Text initialText;        // placeholder — 이름 첫 글자
         public TMP_Text nameText;
+        public TMP_Text statusText;         // 잔돈 + 명성 (1줄)
         public Button button;
 
         [Header("Targets")]
         public ShipController playerShip;
         public PlayerInfoPanel infoPanel;
+        public PlayerState playerState;
 
         [Header("Visibility")]
         [Tooltip("이 GameObject 들 중 하나라도 활성이면 버튼 숨김.")]
@@ -45,8 +51,27 @@ namespace Game.UI
         private void Start()
         {
             if (playerShip == null) playerShip = FindAnyObjectByType<ShipController>(FindObjectsInactive.Include);
+            if (playerState == null) playerState = PlayerState.Instance;
+            if (playerState != null)
+            {
+                playerState.onMoneyChanged.AddListener(OnWalletChanged);
+                playerState.onGoodReputationChanged.AddListener(OnWalletChanged);
+                playerState.onBadReputationChanged.AddListener(OnWalletChanged);
+            }
             Refresh();
         }
+
+        private void OnDestroy()
+        {
+            if (playerState != null)
+            {
+                playerState.onMoneyChanged.RemoveListener(OnWalletChanged);
+                playerState.onGoodReputationChanged.RemoveListener(OnWalletChanged);
+                playerState.onBadReputationChanged.RemoveListener(OnWalletChanged);
+            }
+        }
+
+        private void OnWalletChanged(int _) => RefreshStatus();
 
         private void Update()
         {
@@ -82,6 +107,29 @@ namespace Game.UI
             {
                 initialText.text = string.IsNullOrEmpty(captainName) ? "?" : captainName.Substring(0, 1);
             }
+            RefreshStatus();
+        }
+
+        private void RefreshStatus()
+        {
+            if (statusText == null) return;
+            if (playerState == null)
+            {
+                statusText.text = "";
+                return;
+            }
+            // 잔돈 · 좋은 N · 나쁜 N(0 이면 숨김)
+            string money = $"<color=#FFD86B>{playerState.Money:N0} G</color>";
+            string good = $"좋은 {playerState.GoodReputation}";
+            if (playerState.BadReputation > 0)
+            {
+                string bad = $"<color=#F47C7C>나쁜 {playerState.BadReputation}</color>";
+                statusText.text = $"{money}  ·  {good}  ·  {bad}";
+            }
+            else
+            {
+                statusText.text = $"{money}  ·  {good}";
+            }
         }
 
         // ─── Auto Layout ──────────────────────────────────────────────────
@@ -97,7 +145,7 @@ namespace Game.UI
             rt.anchorMax = new Vector2(0f, 1f);
             rt.pivot = new Vector2(0f, 1f);
             rt.anchoredPosition = new Vector2(30f, -30f);
-            rt.sizeDelta = new Vector2(360f, 110f);
+            rt.sizeDelta = new Vector2(460f, 130f);   // 잔돈/명성 들어갈 자리 확보
 
             // 배경 (반투명 둥근 사각)
             var bg = GetComponent<Image>();
@@ -146,7 +194,7 @@ namespace Game.UI
             initialText.color = new Color(0.2f, 0.15f, 0.1f);
             initialText.raycastTarget = false;
 
-            // 이름
+            // 이름 (위쪽)
             if (nameText == null)
             {
                 var nameGO = new GameObject("Name", typeof(RectTransform));
@@ -154,15 +202,34 @@ namespace Game.UI
                 nameText = nameGO.AddComponent<TextMeshProUGUI>();
             }
             var nameRT = nameText.rectTransform;
-            nameRT.anchorMin = new Vector2(0f, 0f);
+            nameRT.anchorMin = new Vector2(0f, 0.5f);
             nameRT.anchorMax = new Vector2(1f, 1f);
             nameRT.pivot = new Vector2(0f, 0.5f);
             nameRT.offsetMin = new Vector2(110f, 0f);
-            nameRT.offsetMax = new Vector2(-10f, 0f);
+            nameRT.offsetMax = new Vector2(-10f, -8f);
             nameText.fontSize = 28f;
-            nameText.alignment = TextAlignmentOptions.MidlineLeft;
+            nameText.alignment = TextAlignmentOptions.BottomLeft;
             nameText.color = Color.white;
             nameText.raycastTarget = false;
+
+            // 잔돈 / 명성 (아래쪽)
+            if (statusText == null)
+            {
+                var statusGO = new GameObject("Status", typeof(RectTransform));
+                statusGO.transform.SetParent(transform, false);
+                statusText = statusGO.AddComponent<TextMeshProUGUI>();
+            }
+            var statusRT = statusText.rectTransform;
+            statusRT.anchorMin = new Vector2(0f, 0f);
+            statusRT.anchorMax = new Vector2(1f, 0.5f);
+            statusRT.pivot = new Vector2(0f, 0.5f);
+            statusRT.offsetMin = new Vector2(110f, 8f);
+            statusRT.offsetMax = new Vector2(-10f, 0f);
+            statusText.fontSize = 20f;
+            statusText.alignment = TextAlignmentOptions.TopLeft;
+            statusText.color = new Color(0.9f, 0.9f, 0.9f);
+            statusText.raycastTarget = false;
+            statusText.richText = true;
 
             Debug.Log("[PlayerInfoButton] Auto Layout 완료.");
         }
