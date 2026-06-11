@@ -88,7 +88,11 @@ namespace Game.UI
             if (titleText != null) titleText.text = $"{(_currentPort != null ? _currentPort.displayNameKo : "")} 조선소";
             if (moneyText != null && _state != null) moneyText.text = $"잔돈 {_state.Money:N0} G";
             if (currentShipText != null && playerShip != null && playerShip.shipData != null)
-                currentShipText.text = $"현재 배: <b>{playerShip.shipData.displayName}</b>";
+            {
+                int cur = playerShip.CurrentDurability;
+                int max = playerShip.MaxDurability;
+                currentShipText.text = $"현재 배: <b>{playerShip.shipData.displayName}</b>  ·  내구 {cur}/{max}";
+            }
 
             BuildRows();
         }
@@ -104,13 +108,91 @@ namespace Game.UI
             }
             _spawnedRows.Clear();
 
-            if (rowsContainer == null || shipCatalog == null || shipCatalog.all == null) return;
+            if (rowsContainer == null) return;
+
+            // 맨 위: 수리 행 — 항상 표시 (§2.3 조선소가 수리 담당)
+            if (playerShip == null) playerShip = FindAnyObjectByType<ShipController>(FindObjectsInactive.Include);
+            if (playerShip == null)
+            {
+                Debug.LogWarning("[ShipyardPanel] playerShip null — 수리 행 생성 안 함. PortScreen / ShipyardPanel 인스펙터의 Player Ship 필드 확인.");
+            }
+            else if (playerShip.shipData == null)
+            {
+                Debug.LogWarning("[ShipyardPanel] playerShip.shipData null — 수리 행 생성 안 함. PlayerShip 의 ShipController.shipData 할당 확인.");
+            }
+            else
+            {
+                _spawnedRows.Add(BuildRepairRow());
+            }
+
+            if (shipCatalog == null || shipCatalog.all == null) return;
 
             foreach (var ship in shipCatalog.all)
             {
                 if (ship == null) continue;
                 _spawnedRows.Add(BuildShipRow(ship));
             }
+        }
+
+        private GameObject BuildRepairRow()
+        {
+            var row = new GameObject("Row_Repair",
+                typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement), typeof(Image));
+            row.transform.SetParent(rowsContainer, false);
+
+            // 살짝 어두운 배경으로 구분
+            var bg = row.GetComponent<Image>();
+            bg.color = new Color(0.15f, 0.2f, 0.25f, 0.6f);
+
+            var hlg = row.GetComponent<HorizontalLayoutGroup>();
+            hlg.padding = new RectOffset(16, 16, 8, 8);
+            hlg.spacing = 12f;
+            hlg.childAlignment = TextAnchor.MiddleLeft;
+            hlg.childControlWidth = false;
+            hlg.childControlHeight = true;
+            hlg.childForceExpandWidth = false;
+            hlg.childForceExpandHeight = true;
+
+            var le = row.GetComponent<LayoutElement>();
+            le.preferredHeight = 90f;
+
+            int cur = playerShip.CurrentDurability;
+            int max = playerShip.MaxDurability;
+            int cost = ShipRepairPanel.ComputeRepairCost(playerShip.shipData, cur, max);
+            bool damaged = cur < max;
+            bool canAfford = _state != null && _state.Money >= cost;
+
+            AddText(row.transform, "🔧 배 수리", 200f, TextAlignmentOptions.Left);
+            AddText(row.transform, $"내구 <b>{cur}/{max}</b>", 220f, TextAlignmentOptions.Left, 22f);
+            AddText(row.transform,
+                damaged ? $"수리비 {cost:N0} G" : "<color=#9CDCFE>깨끗함</color>",
+                240f, TextAlignmentOptions.Left, 22f);
+
+            string label = !damaged ? "수리 불필요"
+                         : !canAfford ? "돈 부족"
+                         : "수리하기";
+            var repairBtn = AddButton(row.transform, label, 140f);
+            repairBtn.interactable = damaged && canAfford;
+            repairBtn.onClick.AddListener(OnRepair);
+
+            return row;
+        }
+
+        private void OnRepair()
+        {
+            if (playerShip == null || playerShip.shipData == null || _state == null) return;
+            int cost = ShipRepairPanel.ComputeRepairCost(playerShip.shipData,
+                playerShip.CurrentDurability, playerShip.MaxDurability);
+            if (cost <= 0) return;
+            if (!_state.TrySpend(cost))
+            {
+                Debug.Log($"[ShipyardPanel] 돈 부족: 수리비 {cost}");
+                return;
+            }
+            playerShip.RestoreDurability();
+            Game.Save.SaveService.Instance?.SaveGame();
+            Debug.Log($"[ShipyardPanel] 수리 완료 — {cost} G 차감, 내구도 {playerShip.CurrentDurability}/{playerShip.MaxDurability}");
+            Refresh();
         }
 
         private GameObject BuildShipRow(ShipData ship)

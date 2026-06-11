@@ -49587,7 +49587,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff0507cda465a6f4ebed37093e7c21c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game::Game.Ship.ShipController
-  shipData: {fileID: 0}
+  shipData: {fileID: 11400000, guid: 5d3d104d2183da541b1801876b0321a7, type: 2}
   captain: {fileID: 11400000, guid: b4511fa2ecb090e4ab34ddb8c4637606, type: 2}
   maxTurnRate: 60
   acceleration: 2

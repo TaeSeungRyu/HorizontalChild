@@ -16,6 +16,8 @@ namespace Game.Data
         public PortData startingPort;
         [Tooltip("이 국가로 시작하면 PlayerShip.captain 에 자동 할당될 캐릭터.")]
         public CharacterData startingCharacter;
+        [Tooltip("이 국가로 시작할 때 자동 할당될 배. 비우면 ShipCatalog 첫 번째 배로 fallback.")]
+        public ShipData startingShip;
         public int startingYear = 1415;
 
         [Header("Start Spawn — 항구 좌표 + offset")]
