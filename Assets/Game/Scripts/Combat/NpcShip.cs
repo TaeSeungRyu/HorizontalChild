@@ -395,8 +395,11 @@ namespace Game.Combat
             var renderer = disc.GetComponent<Renderer>();
             if (renderer != null)
             {
-                // 불투명 — URP/Lit 기본(opaque) 으로 단색 빨강
-                var mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+                // 커스텀 always-on-top 셰이더 — 바다 파도 z-buffer 와 무관하게 항상 위에 그림
+                var customShader = Shader.Find("Custom/AlwaysOnTopUnlit");
+                var mat = customShader != null
+                    ? new Material(customShader)
+                    : new Material(Shader.Find("Universal Render Pipeline/Unlit"));   // fallback
                 var color = new Color(0.9f, 0.15f, 0.15f, 1f);
                 if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", color);
                 else if (mat.HasProperty("_Color")) mat.SetColor("_Color", color);
