@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Zanzibar
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.zanzibar
+  displayNameKo: "\uC794\uC9C0\uBC14\uB974"
+  displayNameOriginal: Zanzibar
+  nation: {fileID: 0}
+  latitude: -6.16
+  longitude: 39.2
+  shortDescription: "\uC815\uD5A5 \uD5A5\uAE30\uAC00 \uAC00\uB4DD\uD55C \uB3D9\uC544\uD504\uB9AC\uCE74\uC758
+    \uD5A5\uC2E0\uB8CC \uC12C."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: c39962807ebecf84ea051f6192838d21, type: 2}
+  - {fileID: 11400000, guid: 93471f3afecae5a4e9995730420c8c1e, type: 2}
+  - {fileID: 11400000, guid: 8c265ceca0188864ebd13e77b7a8c59d, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC794\uC9C0\uBC14\uB974"

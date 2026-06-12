@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Dili
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.dili
+  displayNameKo: "\uB51C\uB9AC"
+  displayNameOriginal: Dili
+  nation: {fileID: 0}
+  latitude: -8.55
+  longitude: 125.58
+  shortDescription: "\uD3EC\uB974\uD22C\uAC08\uC774 \uC790\uB9AC\uC7A1\uC740 \uD5A5\uB098\uBB34\uC758
+    \uC12C \uD2F0\uBAA8\uB974\uC758 \uD56D\uAD6C."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 8c265ceca0188864ebd13e77b7a8c59d, type: 2}
+  - {fileID: 11400000, guid: 3e2dd0dc803649a49b69a4d442a0bb1f, type: 2}
+  - {fileID: 11400000, guid: 7caf0c7f974dcfe43a6485a837514e6e, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uB51C\uB9AC"

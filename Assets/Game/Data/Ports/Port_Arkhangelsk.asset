@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Arkhangelsk
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.arkhangelsk
+  displayNameKo: "\uC544\uB974\uD55C\uAC94\uC2A4\uD06C"
+  displayNameOriginal: Arkhangelsk
+  nation: {fileID: 0}
+  latitude: 64.55
+  longitude: 40.55
+  shortDescription: "\uBC31\uD574\uC5D0 \uC790\uB9AC\uC7A1\uC740 \uB7EC\uC2DC\uC544\uC758
+    \uCCAB \uAD6D\uC81C \uBB34\uC5ED\uD56D."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 6f4b47f9714689647a203e8cd8e1fd07, type: 2}
+  - {fileID: 11400000, guid: 49eea1e03fedfef439740e4b2207b217, type: 2}
+  - {fileID: 11400000, guid: 84ca75bdb32ecc8439a42ca7eeadde92, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC544\uB974\uD55C\uAC94\uC2A4\uD06C"

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Recife
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.recife
+  displayNameKo: "\uD5E4\uC2DC\uD53C"
+  displayNameOriginal: Recife
+  nation: {fileID: 0}
+  latitude: -8.05
+  longitude: -34.88
+  shortDescription: "\uC0AC\uD0D5\uC218\uC218 \uB18D\uC7A5\uC774 \uB05D\uC5C6\uC774
+    \uD3BC\uCCD0\uC9C4 \uBE0C\uB77C\uC9C8 \uB3D9\uBD81\uBD80\uC758 \uD56D\uAD6C."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 8fc62d479a98f6a4e934a6fbc2260a58, type: 2}
+  - {fileID: 11400000, guid: 7915048ae6dcd5b468f527f2aebb37db, type: 2}
+  - {fileID: 11400000, guid: 56ea354e530880f498e07247d27e0635, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uD5E4\uC2DC\uD53C"

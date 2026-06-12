@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Kingston
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.kingston
+  displayNameKo: "\uD0B9\uC2A4\uD134"
+  displayNameOriginal: Kingston
+  nation: {fileID: 0}
+  latitude: 17.97
+  longitude: -76.79
+  shortDescription: "\uC601\uAD6D \uD574\uC801\uACFC \uC0C1\uC778\uC774 \uBAA8\uC774\uB358
+    \uC790\uBA54\uC774\uCE74\uC758 \uD070 \uD56D\uAD6C."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 8fc62d479a98f6a4e934a6fbc2260a58, type: 2}
+  - {fileID: 11400000, guid: f5d9898203583374e8e2fa1a5878ec98, type: 2}
+  - {fileID: 11400000, guid: f8068937c3432464e8266abd88022b39, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uD0B9\uC2A4\uD134_(\uC790\uBA54\uC774\uCE74)"
