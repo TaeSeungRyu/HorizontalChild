@@ -14688,11 +14688,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5186418e09cf8274a84c8bef21f76122, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game::OceanWaves
-  size: 80
-  resolution: 50
-  waveHeight: 0.5
+  size: 500
+  resolution: 63
+  waveHeight: 0.15
   waveSpeed: 1
   waveScale: 0.15
+  followCamera: 1
+  target: {fileID: 0}
+  waterLevel: 0
   seaColor: {r: 0.06, g: 0.28, b: 0.42, a: 1}
 --- !u!23 &1527075737
 MeshRenderer:
