@@ -15,10 +15,10 @@ MonoBehaviour:
   npcId: npc.escort035
   character: {fileID: 11400000, guid: 35b9249cf541de042abb25447ffb3b34, type: 2}
   type: 1
-  homePort: {fileID: 11400000, guid: c9172c0442f53dc449d31c832d6f7f50, type: 2}
+  homePort: {fileID: 11400000, guid: abf2227e69a2633458bdeca43cc6c88b, type: 2}
   patrolRange: 120
   patrolPorts: []
-  destinationPort: {fileID: 11400000, guid: 7c26c2e905f2c8e4eacaeda38ba64dd9, type: 2}
+  destinationPort: {fileID: 11400000, guid: fdfca5d1a8f94394799fe6f64f846ace, type: 2}
   hireBonus: {x: 1, y: 1, z: 2}
   hireBasePrice: 2244
   requiredGoodReputation: 5

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_HoiAn
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.hoi_an
+  displayNameKo: "\uD638\uC774\uC548"
+  displayNameOriginal: "H\u1ED9i An"
+  nation: {fileID: 0}
+  latitude: 15.88
+  longitude: 108.34
+  shortDescription: "\uBCA0\uD2B8\uB0A8 \uC911\uBD80 \uAC15\uAC00\uC758 \uC544\uB2F4\uD55C
+    \uC61B \uBB34\uC5ED \uB3C4\uC2DC."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: c32602d795d6ab543813623fa2ee71b4, type: 2}
+  - {fileID: 11400000, guid: afc78083ed89fea4ea4a441b2121288a, type: 2}
+  - {fileID: 11400000, guid: 8c265ceca0188864ebd13e77b7a8c59d, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uD638\uC774\uC548"

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Macau
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.macau
+  displayNameKo: "\uB9C8\uCE74\uC624"
+  displayNameOriginal: Macau
+  nation: {fileID: 0}
+  latitude: 22.2
+  longitude: 113.55
+  shortDescription: "\uD3EC\uB974\uD22C\uAC08\uC774 \uC911\uAD6D \uD574\uC548\uC5D0
+    \uC784\uB300\uD55C \uC791\uC740 \uBB34\uC5ED \uD56D\uAD6C."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 52753320d89cdf34f8cb4831120b6a88, type: 2}
+  - {fileID: 11400000, guid: afc78083ed89fea4ea4a441b2121288a, type: 2}
+  - {fileID: 11400000, guid: c32602d795d6ab543813623fa2ee71b4, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uB9C8\uCE74\uC624"

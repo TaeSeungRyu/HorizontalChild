@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Penang
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.penang
+  displayNameKo: "\uD398\uB0AD"
+  displayNameOriginal: Pulau Pinang
+  nation: {fileID: 0}
+  latitude: 5.41
+  longitude: 100.34
+  shortDescription: "\uB9D0\uB77C\uCE74 \uD574\uD611 \uBD81\uCABD\uC758 \uD5A5\uC2E0\uB8CC
+    \uC12C \uD56D\uAD6C."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: c39962807ebecf84ea051f6192838d21, type: 2}
+  - {fileID: 11400000, guid: 7caf0c7f974dcfe43a6485a837514e6e, type: 2}
+  - {fileID: 11400000, guid: 8c265ceca0188864ebd13e77b7a8c59d, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uD53C\uB0AD\uC8FC"

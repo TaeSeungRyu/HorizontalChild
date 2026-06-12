@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Veracruz
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.veracruz
+  displayNameKo: "\uBCA0\uB77C\uD06C\uB8E8\uC2A4"
+  displayNameOriginal: Veracruz
+  nation: {fileID: 0}
+  latitude: 19.18
+  longitude: -96.13
+  shortDescription: "\uC2A4\uD398\uC778\uC774 \uBA55\uC2DC\uCF54\uC5D0\uC11C \uBCF4\uBB3C\uC744
+    \uC2E4\uC5B4 \uBCF4\uB0B4\uB358 \uD070 \uD56D\uAD6C."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 0a2efd328f06c1f48ae7c03a92e60319, type: 2}
+  - {fileID: 11400000, guid: 7915048ae6dcd5b468f527f2aebb37db, type: 2}
+  - {fileID: 11400000, guid: 03631c899045d434fa069e60cb2d02bf, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uBCA0\uB77C\uD06C\uB8E8\uC2A4"

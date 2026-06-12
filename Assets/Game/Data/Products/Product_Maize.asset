@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27e49de8f35219c44a63185efbb0dde3, type: 3}
+  m_Name: Product_Maize
+  m_EditorClassIdentifier: Game::Game.Data.ProductData
+  productId: product.maize
+  displayNameKo: "\uC625\uC218\uC218"
+  icon: {fileID: 0}
+  basePrice: 30
+  isSpecial: 0
+  originPort: {fileID: 0}
+  shortDescription: "\uB178\uB780 \uC54C\uAC31\uC774\uAC00 \uC904\uC9C0\uC5B4 \uBC15\uD78C
+    \uC2E0\uB300\uB959\uC758 \uACE1\uC2DD\uC774\uC5D0\uC694."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC625\uC218\uC218"

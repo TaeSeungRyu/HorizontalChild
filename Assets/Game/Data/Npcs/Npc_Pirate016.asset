@@ -15,7 +15,7 @@ MonoBehaviour:
   npcId: npc.pirate016
   character: {fileID: 11400000, guid: 43dfe727e4432e844b7a7e27d1ab7563, type: 2}
   type: 2
-  homePort: {fileID: 11400000, guid: 98ab8708dd73a464dacd7ea943cd9c01, type: 2}
+  homePort: {fileID: 11400000, guid: 79006b120a9b7ee449e7d079b682a591, type: 2}
   patrolRange: 180
   patrolPorts: []
   destinationPort: {fileID: 0}

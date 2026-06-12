@@ -1,8 +1,8 @@
 using UnityEngine;
 
-// 배가 파도 위에 떠서 출렁이게 합니다.
-// 사용법: 배 오브젝트(Geobukseon, Clipper 등)에 이 스크립트를 Add Component 하세요.
-// 같은 씬의 OceanWaves(바다)를 자동으로 찾아, 그 파도 높이에 맞춰 뜨고 기울어집니다.
+// 배가 파도 위에 떠서 출렁이게 합니다. (높이 + 앞뒤/좌우 기울기만 담당)
+// 배의 "방향(yaw)"은 건드리지 않고 현재 향하는 방향을 그대로 존중하므로,
+// 조종/이동 스크립트가 배를 돌리면 그 방향대로 갑니다.
 public class FloatOnWaves : MonoBehaviour
 {
     [Header("바다 연결 (비우면 자동 검색)")]
@@ -14,26 +14,25 @@ public class FloatOnWaves : MonoBehaviour
     public float sampleWidth  = 1.5f;  // 좌우 기울기 감지 거리(배 폭의 절반쯤)
 
     [Header("부드러움")]
-    public float moveSmooth = 4f;      // 상하 따라가는 부드러움
-    public float rotateSmooth = 4f;    // 기울기 따라가는 부드러움
-
-    float headingYaw;
+    public float moveSmooth = 4f;
+    public float rotateSmooth = 4f;
 
     void Start()
     {
         if (ocean == null) ocean = FindObjectOfType<OceanWaves>();
-        headingYaw = transform.eulerAngles.y;
         if (ocean == null) Debug.LogWarning("FloatOnWaves: 씬에서 OceanWaves(바다)를 찾지 못했습니다.");
     }
 
-    void Update()
+    void LateUpdate()
     {
         if (ocean == null) return;
         Vector3 pos = transform.position;
 
-        Quaternion yawRot = Quaternion.Euler(0, headingYaw, 0);
-        Vector3 fwd = yawRot * Vector3.forward;
-        Vector3 right = yawRot * Vector3.right;
+        // 현재 향하는 방향(수평)을 그대로 사용 — 조종이 돌린 방향을 존중
+        Vector3 fwd = transform.forward; fwd.y = 0f;
+        if (fwd.sqrMagnitude < 1e-4f) fwd = Vector3.forward;
+        fwd.Normalize();
+        Vector3 right = Vector3.Cross(Vector3.up, fwd);
 
         float hC = ocean.GetHeight(pos.x, pos.z);
         float hF = ocean.GetHeight(pos.x + fwd.x * sampleLength, pos.z + fwd.z * sampleLength);
@@ -50,13 +49,11 @@ public class FloatOnWaves : MonoBehaviour
         Vector3 normal = Vector3.Cross(pF - pB, pR - pL).normalized;
         if (normal.y < 0) normal = -normal;
 
+        // 현재 방향을 수면 경사에 맞춰 살짝 기울이기만 함 (yaw 유지)
         Vector3 flatForward = Vector3.ProjectOnPlane(fwd, normal).normalized;
         Quaternion targetRot = Quaternion.LookRotation(flatForward, normal);
 
         transform.position = Vector3.Lerp(pos, targetPos, Time.deltaTime * moveSmooth);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * rotateSmooth);
     }
-
-    // 항해 방향을 바꿀 때 사용 (예: 배가 회전)
-    public void SetHeading(float yawDegrees) { headingYaw = yawDegrees; }
 }

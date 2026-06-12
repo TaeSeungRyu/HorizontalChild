@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Saigon
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.saigon
+  displayNameKo: "\uC0AC\uC774\uACF5"
+  displayNameOriginal: "S\xE0i G\xF2n"
+  nation: {fileID: 0}
+  latitude: 10.78
+  longitude: 106.7
+  shortDescription: "\uBA54\uCF69\uAC15 \uC0BC\uAC01\uC8FC \uC704\uC5D0 \uC790\uB77C\uB09C
+    \uBCA0\uD2B8\uB0A8 \uB0A8\uCABD \uD56D\uAD6C."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 8f7228e7e88d42242b18570978e83774, type: 2}
+  - {fileID: 11400000, guid: 7caf0c7f974dcfe43a6485a837514e6e, type: 2}
+  - {fileID: 11400000, guid: 6ab1ba2f4bcfee84ab7a0b1ebaf0b091, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uD638\uCC0C\uBBFC\uC2DC"
