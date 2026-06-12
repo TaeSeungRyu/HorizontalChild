@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_PhnomPenh
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.phnom_penh
+  displayNameKo: "\uD504\uB188\uD39C"
+  displayNameOriginal: Phnom Penh
+  nation: {fileID: 0}
+  latitude: 11.56
+  longitude: 104.92
+  shortDescription: "\uBA54\uCF69 \uAC15\uC774 \uAC08\uB77C\uC9C0\uB294 \uACF3\uC5D0
+    \uC790\uB9AC\uD55C \uCE84\uBCF4\uB514\uC544\uC758 \uC61B \uC218\uB3C4."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 8f7228e7e88d42242b18570978e83774, type: 2}
+  - {fileID: 11400000, guid: c32602d795d6ab543813623fa2ee71b4, type: 2}
+  - {fileID: 11400000, guid: 7caf0c7f974dcfe43a6485a837514e6e, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uD504\uB188\uD39C"

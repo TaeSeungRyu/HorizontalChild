@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Azov
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.azov
+  displayNameKo: "\uC544\uC870\uD504"
+  displayNameOriginal: Azov
+  nation: {fileID: 0}
+  latitude: 47.11
+  longitude: 39.42
+  shortDescription: "\uB3C8 \uAC15\uC774 \uD751\uD574\uB85C \uD758\uB7EC\uB4DC\uB294
+    \uC790\uB9AC\uC758 \uC61B \uC694\uC0C8 \uD56D\uAD6C."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: b3f49b99989d7f94e842a31482d5f55c, type: 2}
+  - {fileID: 11400000, guid: 21cf407dcdd2612439498c0b6e50e78b, type: 2}
+  - {fileID: 11400000, guid: 49eea1e03fedfef439740e4b2207b217, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC544\uC870\uD504"

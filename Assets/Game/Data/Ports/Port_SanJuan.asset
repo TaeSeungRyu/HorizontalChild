@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_SanJuan
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.san_juan
+  displayNameKo: "\uC0B0\uD6C4\uC548"
+  displayNameOriginal: San Juan
+  nation: {fileID: 0}
+  latitude: 18.47
+  longitude: -66.1
+  shortDescription: "\uC2A4\uD398\uC778\uC774 \uD478\uC5D0\uB974\uD1A0\uB9AC\uCF54\uC5D0
+    \uC138\uC6B4 \uAD73\uAC74\uD55C \uC694\uC0C8 \uD56D\uAD6C."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 8fc62d479a98f6a4e934a6fbc2260a58, type: 2}
+  - {fileID: 11400000, guid: f5d9898203583374e8e2fa1a5878ec98, type: 2}
+  - {fileID: 11400000, guid: f8068937c3432464e8266abd88022b39, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC0B0\uD6C4\uC548_(\uD478\uC5D0\uB974\uD1A0\uB9AC\uCF54)"
