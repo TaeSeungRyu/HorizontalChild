@@ -55,5 +55,31 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 09af8a65cce4e2c4c83eb9ca96d4f1aa, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2378726744874912155}
   m_SourcePrefab: {fileID: 100100000, guid: 09af8a65cce4e2c4c83eb9ca96d4f1aa, type: 3}
+--- !u!1 &4218356506414511831 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 09af8a65cce4e2c4c83eb9ca96d4f1aa, type: 3}
+  m_PrefabInstance: {fileID: 3912490311041305478}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2378726744874912155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4218356506414511831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f5c55de22626bb48920aff546c9eb09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game::FloatOnWaves
+  ocean: {fileID: 0}
+  floatOffset: 0
+  sampleLength: 5
+  sampleWidth: 1.5
+  moveSmooth: 4
+  rotateSmooth: 4
