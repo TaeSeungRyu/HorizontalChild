@@ -59,6 +59,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e03390eb6f4e8b14e8bee7c6a6885538, type: 3}
       insertIndex: -1
       addedObject: {fileID: -4178881881391220090}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e03390eb6f4e8b14e8bee7c6a6885538, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1043618622054092157}
   m_SourcePrefab: {fileID: 100100000, guid: e03390eb6f4e8b14e8bee7c6a6885538, type: 3}
 --- !u!1 &7114693343769411520 stripped
 GameObject:
@@ -80,6 +83,26 @@ MonoBehaviour:
   swingAngle: 25
   swingSpeed: 1
   axis: {x: 1, y: 0, z: 0}
+  stationarySpeedThreshold: 0.5
+  fadeSeconds: 0.5
   oarNamePrefixes: "Oar, \uB178, oar"
   useAlternatingSides: 1
   manualOars: []
+--- !u!114 &1043618622054092157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7114693343769411520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f5c55de22626bb48920aff546c9eb09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game::FloatOnWaves
+  ocean: {fileID: 0}
+  floatOffset: 0
+  sampleLength: 5
+  sampleWidth: 1.5
+  moveSmooth: 4
+  rotateSmooth: 4
