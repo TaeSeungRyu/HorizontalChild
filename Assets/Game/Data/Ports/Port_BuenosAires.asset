@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_BuenosAires
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.buenos_aires
+  displayNameKo: "\uBD80\uC5D0\uB178\uC2A4\uC544\uC774\uB808\uC2A4"
+  displayNameOriginal: Buenos Aires
+  nation: {fileID: 0}
+  latitude: -34.61
+  longitude: -58.38
+  shortDescription: "\uB77C\uD50C\uB77C\uD0C0 \uAC15\uC774 \uBC14\uB2E4\uC640 \uB9CC\uB098\uB294
+    \uACF3\uC5D0 \uC138\uC6CC\uC9C4 \uD070 \uD3C9\uC6D0\uC758 \uB3C4\uC2DC."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 2faefcb2c80c92c498e834c5e09d829c, type: 2}
+  - {fileID: 11400000, guid: 98296e5a1c96e1a428d5ef60bc3872e9, type: 2}
+  - {fileID: 11400000, guid: 91062d62c8568604eaffe9bdb5eea0be, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uBD80\uC5D0\uB178\uC2A4\uC544\uC774\uB808\uC2A4"

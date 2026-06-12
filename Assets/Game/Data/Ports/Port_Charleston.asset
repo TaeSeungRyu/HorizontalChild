@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Charleston
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.charleston
+  displayNameKo: "\uCC30\uC2A4\uD134"
+  displayNameOriginal: Charleston
+  nation: {fileID: 0}
+  latitude: 32.78
+  longitude: -79.93
+  shortDescription: "\uB0A8\uCABD \uB530\uB73B\uD55C \uD3C9\uC57C\uC758 \uC601\uAD6D
+    \uC2DD\uBBFC\uC9C0 \uD56D\uAD6C."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 8f7228e7e88d42242b18570978e83774, type: 2}
+  - {fileID: 11400000, guid: 549c9fc7ab859f542a2e0228d2e01c88, type: 2}
+  - {fileID: 11400000, guid: eb371c18ffb999047851566e937162d4, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uCC30\uC2A4\uD134_(\uC0AC\uC6B0\uC2A4\uCE90\uB864\uB77C\uC774\uB098\uC8FC)"

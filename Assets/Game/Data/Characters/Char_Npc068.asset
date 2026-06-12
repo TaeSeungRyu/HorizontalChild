@@ -17,9 +17,9 @@ MonoBehaviour:
   gender: 1
   role: 0
   portrait: {fileID: 0}
-  bravery: 30
-  seamanship: 53
-  keenEye: 60
+  bravery: 50
+  seamanship: 56
+  keenEye: 63
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}

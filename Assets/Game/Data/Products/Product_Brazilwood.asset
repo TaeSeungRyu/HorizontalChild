@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27e49de8f35219c44a63185efbb0dde3, type: 3}
+  m_Name: Product_Brazilwood
+  m_EditorClassIdentifier: Game::Game.Data.ProductData
+  productId: product.brazilwood
+  displayNameKo: "\uBE0C\uB77C\uC9C8\uC6B0\uB4DC"
+  icon: {fileID: 0}
+  basePrice: 140
+  isSpecial: 0
+  originPort: {fileID: 0}
+  shortDescription: "\uBE68\uAC04 \uC5FC\uB8CC\uB97C \uC5BB\uB294 \uB0A8\uBBF8\uC758
+    \uB2E8\uB2E8\uD55C \uB098\uBB34\uC608\uC694. \uBE0C\uB77C\uC9C8\uC774\uB77C\uB294
+    \uB098\uB77C \uC774\uB984\uC758 \uC720\uB798."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uD30C\uC6B0\uBE0C\uB77C\uC9C8"
