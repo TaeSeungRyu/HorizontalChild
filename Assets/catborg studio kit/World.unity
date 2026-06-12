@@ -14690,7 +14690,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game::OceanWaves
   size: 500
   resolution: 63
-  waveHeight: 0.15
+  waveHeight: 1
   waveSpeed: 1
   waveScale: 0.15
   followCamera: 1
