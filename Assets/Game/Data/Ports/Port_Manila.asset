@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Manila
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.manila
+  displayNameKo: "\uB9C8\uB2D0\uB77C"
+  displayNameOriginal: Manila
+  nation: {fileID: 0}
+  latitude: 14.6
+  longitude: 120.98
+  shortDescription: "\uC2A4\uD398\uC778\uC774 \uB9CC\uB4E0 \uB3D9\uB0A8\uC544\uC758
+    \uD070 \uBB34\uC5ED \uB3C4\uC2DC."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 0a2efd328f06c1f48ae7c03a92e60319, type: 2}
+  - {fileID: 11400000, guid: f8068937c3432464e8266abd88022b39, type: 2}
+  - {fileID: 11400000, guid: 389c65f9c50a4bd4badfd197b837e80f, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uB9C8\uB2D0\uB77C"

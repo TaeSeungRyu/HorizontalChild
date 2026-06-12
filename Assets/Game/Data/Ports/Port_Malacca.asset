@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Malacca
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.malacca
+  displayNameKo: "\uB9D0\uB77C\uCE74"
+  displayNameOriginal: Melaka
+  nation: {fileID: 0}
+  latitude: 2.2
+  longitude: 102.25
+  shortDescription: "\uB3D9\uC591\uACFC \uC11C\uC591\uC744 \uC787\uB294 \uC881\uC740
+    \uD574\uD611\uC758 \uD669\uAE08 \uBB34\uC5ED\uD56D."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: c39962807ebecf84ea051f6192838d21, type: 2}
+  - {fileID: 11400000, guid: ef582b9567a29774384c792f5dc9d793, type: 2}
+  - {fileID: 11400000, guid: 8c265ceca0188864ebd13e77b7a8c59d, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uBBC8\uB77C\uCE74\uC8FC"

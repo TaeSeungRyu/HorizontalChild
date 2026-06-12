@@ -76,6 +76,8 @@ namespace Game.Combat
         public float engagementGraceSeconds = 2f;
         [Tooltip("전투 한 번 후 다음 자동 전투까지 쿨다운(초).")]
         public float engagementCooldownSeconds = 5f;
+        [Tooltip("빨강 영역 원반의 Y 오프셋 (배 기준). 바다 표면 위로 살짝 띄울 값.")]
+        public float chaseIndicatorYOffset = 0.3f;
         private GameObject _chaseIndicator;
         private float _nextEngageTime;
         private bool _engagementOver;   // 전투 후 destroy 대기 중 — 추가 행동 차단
@@ -158,7 +160,7 @@ namespace Game.Combat
             if (_chaseIndicator != null)
             {
                 var p = transform.position;
-                _chaseIndicator.transform.position = new Vector3(p.x, p.y - 2.5f, p.z);
+                _chaseIndicator.transform.position = new Vector3(p.x, p.y + chaseIndicatorYOffset, p.z);
             }
         }
 
@@ -381,7 +383,7 @@ namespace Game.Combat
             disc.name = $"ChaseRange_{name}";
             disc.transform.SetParent(transform.parent, worldPositionStays: true);
             var p = transform.position;
-            disc.transform.position = new Vector3(p.x, p.y - 2.5f, p.z);
+            disc.transform.position = new Vector3(p.x, p.y + chaseIndicatorYOffset, p.z);
             float dia = pirateChaseRange * 2f;
             // Cylinder primitive 메시 높이=2, 직경=1 → world scale 그대로 (dia, height/2, dia)
             disc.transform.localScale = new Vector3(dia, 0.05f, dia);

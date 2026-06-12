@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Mombasa
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.mombasa
+  displayNameKo: "\uBAB8\uBC14\uC0AC"
+  displayNameOriginal: Mombasa
+  nation: {fileID: 0}
+  latitude: -4.05
+  longitude: 39.67
+  shortDescription: "\uB3D9\uC544\uD504\uB9AC\uCE74 \uD574\uC548\uC758 \uC2A4\uC640\uD790\uB9AC
+    \uBB34\uC5ED \uB3C4\uC2DC."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 93471f3afecae5a4e9995730420c8c1e, type: 2}
+  - {fileID: 11400000, guid: d746dc40538c795449a0222ef6cf10be, type: 2}
+  - {fileID: 11400000, guid: 83d070450b4806c4f894d7b21b0a9d22, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uBAB8\uBC14\uC0AC"

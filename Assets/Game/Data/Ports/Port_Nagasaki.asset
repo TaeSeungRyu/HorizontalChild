@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Nagasaki
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.nagasaki
+  displayNameKo: "\uB098\uAC00\uC0AC\uD0A4"
+  displayNameOriginal: Nagasaki
+  nation: {fileID: 0}
+  latitude: 32.75
+  longitude: 129.87
+  shortDescription: "\uD3EC\uB974\uD22C\uAC08\xB7\uB124\uB35C\uB780\uB4DC \uBC30\uAC00
+    \uB4DC\uB098\uB4E0 \uC77C\uBCF8\uC758 \uC791\uC740 \uD56D\uAD6C."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 0a2efd328f06c1f48ae7c03a92e60319, type: 2}
+  - {fileID: 11400000, guid: afc78083ed89fea4ea4a441b2121288a, type: 2}
+  - {fileID: 11400000, guid: 89146087b166bd846839f318e304fb5e, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uB098\uAC00\uC0AC\uD0A4\uC2DC"

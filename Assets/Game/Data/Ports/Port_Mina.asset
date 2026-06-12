@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Mina
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.mina
+  displayNameKo: "\uC5D8\uBBF8\uB098"
+  displayNameOriginal: Elmina
+  nation: {fileID: 0}
+  latitude: 5.08
+  longitude: -1.35
+  shortDescription: "\uD3EC\uB974\uD22C\uAC08\uC774 \uD669\uAE08\uC744 \uC0AC\uB7EC
+    \uC138\uC6B4 \uC11C\uC544\uD504\uB9AC\uCE74 \uC694\uC0C8 \uD56D\uAD6C."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: d746dc40538c795449a0222ef6cf10be, type: 2}
+  - {fileID: 11400000, guid: 93471f3afecae5a4e9995730420c8c1e, type: 2}
+  - {fileID: 11400000, guid: 7caf0c7f974dcfe43a6485a837514e6e, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC5D8\uBBF8\uB098"

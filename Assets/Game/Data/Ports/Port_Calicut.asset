@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Calicut
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.calicut
+  displayNameKo: "\uCE98\uB9AC\uCEF7"
+  displayNameOriginal: Kozhikode
+  nation: {fileID: 0}
+  latitude: 11.25
+  longitude: 75.78
+  shortDescription: "\uBC14\uC2A4\uCF54 \uB2E4 \uAC00\uB9C8\uAC00 \uBC1C\uACAC\uD55C
+    \uC778\uB3C4\uC758 \uD5A5\uC2E0\uB8CC \uD56D\uAD6C."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 7caf0c7f974dcfe43a6485a837514e6e, type: 2}
+  - {fileID: 11400000, guid: fb9d1d1541453214fb6b8a197641c071, type: 2}
+  - {fileID: 11400000, guid: 73cf2c22467e27f4baaf6e36b385fb1e, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uCF54\uC9C0\uCF54\uB4DC"
