@@ -1,8 +1,8 @@
 using UnityEngine;
 
 // 출렁이는 바다 — 빈 GameObject에 붙이면 물결치는 바다가 생깁니다.
-// 물결은 "월드 좌표" 기준이라, 타일을 여러 개 깔아도 이음새 없이 이어지고
-// 카메라를 따라다니게 하면(아래 Follow Camera) 맵이 아무리 커도 덮입니다.
+// 물결은 "월드 좌표" 기준이라 타일을 깔아도 이음새가 없고, Follow Camera로 맵 전체를 덮을 수 있습니다.
+// GetHeight()로 임의 지점의 수면 높이를 알려주어, 배 부력(FloatOnWaves)이 정확히 떠 있게 합니다.
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class OceanWaves : MonoBehaviour
 {
@@ -16,9 +16,9 @@ public class OceanWaves : MonoBehaviour
     public float waveScale  = 0.15f;
 
     [Header("맵 전체 덮기 (선택)")]
-    public bool  followCamera = false;     // 켜면 카메라를 따라다녀 항상 시야를 덮음
-    public Transform target;               // 비우면 Main Camera 자동 사용
-    public float waterLevel = 0f;          // 따라다닐 때 수면 높이(Y)
+    public bool  followCamera = false;
+    public Transform target;
+    public float waterLevel = 0f;
 
     [Header("색 (선택)")]
     public Color seaColor = new Color(0.06f, 0.28f, 0.42f);
@@ -70,10 +70,24 @@ public class OceanWaves : MonoBehaviour
         GetComponent<MeshFilter>().mesh = mesh;
     }
 
+    // 같은 파도 공식. 월드 좌표(worldX, worldZ)의 수면 높이를 돌려줌.
+    public float WaveOffset(float worldX, float worldZ)
+    {
+        float t = Time.time * waveSpeed;
+        return (Mathf.Sin(worldX * waveScale + t) * 0.6f
+              + Mathf.Sin(worldZ * waveScale * 1.3f + t * 0.8f) * 0.4f
+              + Mathf.Sin((worldX + worldZ) * waveScale * 0.7f + t * 1.3f) * 0.3f) * waveHeight;
+    }
+
+    // 수면의 실제 월드 Y 높이 (바다 오브젝트의 Y 위치 + 파도)
+    public float GetHeight(float worldX, float worldZ)
+    {
+        return transform.position.y + WaveOffset(worldX, worldZ);
+    }
+
     void Update()
     {
         if (mesh == null) return;
-        // 카메라 따라다니기 (격자 한 칸 단위로 스냅 → 물결이 미끄러지지 않음)
         if (followCamera)
         {
             Transform cam = target != null ? target : (Camera.main != null ? Camera.main.transform : null);
@@ -85,16 +99,12 @@ public class OceanWaves : MonoBehaviour
                 transform.position = new Vector3(sx, waterLevel, sz);
             }
         }
-        float t = Time.time * waveSpeed;
-        Vector3 p = transform.position;     // 월드 좌표 기준 물결 (타일 이음새 없음)
+        Vector3 p = transform.position;
         for (int i = 0; i < baseVerts.Length; i++)
         {
             float wx = baseVerts[i].x + p.x;
             float wz = baseVerts[i].z + p.z;
-            float w = Mathf.Sin(wx * waveScale + t) * 0.6f
-                    + Mathf.Sin(wz * waveScale * 1.3f + t * 0.8f) * 0.4f
-                    + Mathf.Sin((wx + wz) * waveScale * 0.7f + t * 1.3f) * 0.3f;
-            verts[i] = new Vector3(baseVerts[i].x, w * waveHeight, baseVerts[i].z);
+            verts[i] = new Vector3(baseVerts[i].x, WaveOffset(wx, wz), baseVerts[i].z);
         }
         mesh.vertices = verts;
         mesh.RecalculateNormals();

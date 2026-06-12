@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27e49de8f35219c44a63185efbb0dde3, type: 3}
+  m_Name: Product_Coconut
+  m_EditorClassIdentifier: Game::Game.Data.ProductData
+  productId: product.coconut
+  displayNameKo: "\uCF54\uCF54\uB11B"
+  icon: {fileID: 0}
+  basePrice: 35
+  isSpecial: 0
+  originPort: {fileID: 0}
+  shortDescription: "\uC57C\uC790\uC218 \uC704\uC5D0 \uB2EC\uB9AC\uB294 \uD070 \uAC08\uC0C9
+    \uC5F4\uB9E4. \uC548\uC5D0 \uC2DC\uC6D0\uD55C \uBB3C\uC774 \uB4E4\uC5B4\uC788\uC5B4\uC694."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uCF54\uCF54\uB11B"

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Hormuz
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.hormuz
+  displayNameKo: "\uD638\uB974\uBB34\uC988"
+  displayNameOriginal: Hormuz
+  nation: {fileID: 0}
+  latitude: 27.1
+  longitude: 56.45
+  shortDescription: "\uB3D9\uBC29\uC758 \uD5A5\uC2E0\uB8CC\uAC00 \uBAA8\uC774\uB294
+    \uD398\uB974\uC2DC\uC544\uB9CC \uC785\uAD6C\uC758 \uD56D\uAD6C."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 7caf0c7f974dcfe43a6485a837514e6e, type: 2}
+  - {fileID: 11400000, guid: fb9d1d1541453214fb6b8a197641c071, type: 2}
+  - {fileID: 11400000, guid: 420287c0a0f926840a2336763a1a3e08, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uD638\uB974\uBB34\uC988"

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Goa
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.goa
+  displayNameKo: "\uACE0\uC544"
+  displayNameOriginal: Goa
+  nation: {fileID: 0}
+  latitude: 15.5
+  longitude: 73.83
+  shortDescription: "\uD3EC\uB974\uD22C\uAC08 \uC0AC\uB78C\uB4E4\uC774 \uC138\uC6B4
+    \uC778\uB3C4\uC758 \uBB34\uC5ED \uAC70\uC810."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 7caf0c7f974dcfe43a6485a837514e6e, type: 2}
+  - {fileID: 11400000, guid: 69949bc6526149b4c9a0fe57fc1e0293, type: 2}
+  - {fileID: 11400000, guid: 03631c899045d434fa069e60cb2d02bf, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uACE0\uC544_\uC8FC"
