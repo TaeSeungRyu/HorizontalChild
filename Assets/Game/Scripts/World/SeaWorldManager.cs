@@ -54,6 +54,8 @@ namespace Game.World
         public Transform portIconsParent;
 
         [Header("Auto Arrival Detection")]
+        [Tooltip("자동 항구 진입 활성화. false = 사용자가 EnterPortButton 클릭해야만 입항. 어린이 친화 권장.")]
+        public bool autoArrivalEnabled = false;
         [Tooltip("플레이어가 항구에 이 거리 이내로 접근하면 자동으로 도착 알림. 0 이면 자동 도착 비활성 (버튼만 사용). 1 unit ≈ 7.4 km.")]
         [Range(0f, 100f)] public float arrivalRadiusUnits = 20f;
 
@@ -98,6 +100,9 @@ namespace Game.World
         /// </summary>
         private void CheckPortArrival()
         {
+            // 자동 진입 비활성 시: 거리 추적은 안 함, EnterPortButton 클릭만 항구 진입 트리거
+            if (!autoArrivalEnabled) return;
+
             var ports = EffectivePorts;
             if (playerShip == null || ports == null) return;
 
