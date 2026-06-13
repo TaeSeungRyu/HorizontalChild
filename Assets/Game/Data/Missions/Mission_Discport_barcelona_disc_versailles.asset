@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 359c5c86a7c54f849bd0672764cb69ed, type: 3}
+  m_Name: Mission_Discport_barcelona_disc_versailles
+  m_EditorClassIdentifier: Game::Game.Data.MissionTemplate
+  missionId: mission.disc.port_barcelona.disc_versailles
+  issuerPort: {fileID: 11400000, guid: c9172c0442f53dc449d31c832d6f7f50, type: 2}
+  targetDiscovery: {fileID: 11400000, guid: 7f44cab593b5e8648892909a8b8d5065, type: 2}
+  rewardMoney: 256
+  rewardGoodReputation: 6
+  title: "\uBCA0\uB974\uC0AC\uC720 \uAD81\uC804 \uC744(\uB97C) \uCC3E\uC544\uC8FC\uC138\uC694"
+  description: "\uBC14\uB974\uC140\uB85C\uB098 \uC758 \uBAA8\uD5D8\uAC00 \uC870\uD569
+    \uC758\uB8B0\uC785\uB2C8\uB2E4.\n\uBCA0\uB974\uC0AC\uC720 \uAD81\uC804 \uC758
+    \uC790\uCDE8\uB97C \uBC1C\uACAC\uD574\uC11C \uAC00\uC838\uC640 \uC8FC\uC138\uC694.
+    \uBCF4\uC0C1\uC740 256 G."
+  mapItemName: "\uBCA0\uB974\uC0AC\uC720 \uAD81\uC804 \uC73C\uB85C \uAC00\uB294 \uC9C0\uB3C4"

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 359c5c86a7c54f849bd0672764cb69ed, type: 3}
+  m_Name: Mission_Discport_tangier_disc_gibraltar_strait
+  m_EditorClassIdentifier: Game::Game.Data.MissionTemplate
+  missionId: mission.disc.port_tangier.disc_gibraltar_strait
+  issuerPort: {fileID: 11400000, guid: 098c8f7bac75f7641a6004ec12c56131, type: 2}
+  targetDiscovery: {fileID: 11400000, guid: 89dd2279aec6e2246b0e0140f66a78b0, type: 2}
+  rewardMoney: 202
+  rewardGoodReputation: 5
+  title: "\uC9C0\uBE0C\uB864\uD130 \uD574\uD611 \uC744(\uB97C) \uCC3E\uC544\uC8FC\uC138\uC694"
+  description: "\uD0D5\uD5E4\uB974 \uC758 \uBAA8\uD5D8\uAC00 \uC870\uD569 \uC758\uB8B0\uC785\uB2C8\uB2E4.\n\uC9C0\uBE0C\uB864\uD130
+    \uD574\uD611 \uC758 \uC790\uCDE8\uB97C \uBC1C\uACAC\uD574\uC11C \uAC00\uC838\uC640
+    \uC8FC\uC138\uC694. \uBCF4\uC0C1\uC740 202 G."
+  mapItemName: "\uC9C0\uBE0C\uB864\uD130 \uD574\uD611 \uC73C\uB85C \uAC00\uB294 \uC9C0\uB3C4"

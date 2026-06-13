@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 359c5c86a7c54f849bd0672764cb69ed, type: 3}
+  m_Name: Mission_Discport_new_orleans_disc_mississippi
+  m_EditorClassIdentifier: Game::Game.Data.MissionTemplate
+  missionId: mission.disc.port_new_orleans.disc_mississippi
+  issuerPort: {fileID: 11400000, guid: 777ac83981861974e8597988422feb86, type: 2}
+  targetDiscovery: {fileID: 11400000, guid: 35a9394f9bc43204184b07699423e97e, type: 2}
+  rewardMoney: 219
+  rewardGoodReputation: 5
+  title: "\uBBF8\uC2DC\uC2DC\uD53C \uAC15 \uC744(\uB97C) \uCC3E\uC544\uC8FC\uC138\uC694"
+  description: "\uB274\uC62C\uB9AC\uC5B8\uC2A4 \uC758 \uBAA8\uD5D8\uAC00 \uC870\uD569
+    \uC758\uB8B0\uC785\uB2C8\uB2E4.\n\uBBF8\uC2DC\uC2DC\uD53C \uAC15 \uC758 \uC790\uCDE8\uB97C
+    \uBC1C\uACAC\uD574\uC11C \uAC00\uC838\uC640 \uC8FC\uC138\uC694. \uBCF4\uC0C1\uC740
+    219 G."
+  mapItemName: "\uBBF8\uC2DC\uC2DC\uD53C \uAC15 \uC73C\uB85C \uAC00\uB294 \uC9C0\uB3C4"

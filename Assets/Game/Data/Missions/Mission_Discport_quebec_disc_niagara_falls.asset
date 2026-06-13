@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 359c5c86a7c54f849bd0672764cb69ed, type: 3}
+  m_Name: Mission_Discport_quebec_disc_niagara_falls
+  m_EditorClassIdentifier: Game::Game.Data.MissionTemplate
+  missionId: mission.disc.port_quebec.disc_niagara_falls
+  issuerPort: {fileID: 11400000, guid: 4aa4b08f0761c474292466dd67a9fb8d, type: 2}
+  targetDiscovery: {fileID: 11400000, guid: a307737618a658044abadd3cb32f864a, type: 2}
+  rewardMoney: 265
+  rewardGoodReputation: 6
+  title: "\uB098\uC774\uC544\uAC00\uB77C \uD3ED\uD3EC \uC744(\uB97C) \uCC3E\uC544\uC8FC\uC138\uC694"
+  description: "\uD018\uBCA1 \uC758 \uBAA8\uD5D8\uAC00 \uC870\uD569 \uC758\uB8B0\uC785\uB2C8\uB2E4.\n\uB098\uC774\uC544\uAC00\uB77C
+    \uD3ED\uD3EC \uC758 \uC790\uCDE8\uB97C \uBC1C\uACAC\uD574\uC11C \uAC00\uC838\uC640
+    \uC8FC\uC138\uC694. \uBCF4\uC0C1\uC740 265 G."
+  mapItemName: "\uB098\uC774\uC544\uAC00\uB77C \uD3ED\uD3EC \uC73C\uB85C \uAC00\uB294
+    \uC9C0\uB3C4"
