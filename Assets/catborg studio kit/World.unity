@@ -6048,7 +6048,8 @@ MonoBehaviour:
   activePorts: []
   discoveryCatalog: {fileID: 11400000, guid: d8e1e77fa1fceeb4e85017e6d1b0c5ca, type: 2}
   activeDiscoveries: []
-  portIconPrefab: {fileID: 8893140149326885892, guid: 63d1d7a40bbdade429fd41d729d77f73, type: 3}
+  portIconPrefab: {fileID: 7653883594897281170, guid: b3df9435f6cae224aa38600e4c11b0df, type: 3}
+  portIconHeight: 2
   portIconsParent: {fileID: 0}
   autoArrivalEnabled: 0
   arrivalRadiusUnits: 5
@@ -6433,63 +6434,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 658662419}
   m_CullTransparentMesh: 1
---- !u!1001 &690532381
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: fe7e58543bb7b3a40b0c779a7b1f0b22, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: fe7e58543bb7b3a40b0c779a7b1f0b22, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: fe7e58543bb7b3a40b0c779a7b1f0b22, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: fe7e58543bb7b3a40b0c779a7b1f0b22, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: fe7e58543bb7b3a40b0c779a7b1f0b22, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: fe7e58543bb7b3a40b0c779a7b1f0b22, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: fe7e58543bb7b3a40b0c779a7b1f0b22, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: fe7e58543bb7b3a40b0c779a7b1f0b22, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: fe7e58543bb7b3a40b0c779a7b1f0b22, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: fe7e58543bb7b3a40b0c779a7b1f0b22, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: fe7e58543bb7b3a40b0c779a7b1f0b22, type: 3}
-      propertyPath: m_Name
-      value: Harbor
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: fe7e58543bb7b3a40b0c779a7b1f0b22, type: 3}
 --- !u!1 &691699841
 GameObject:
   m_ObjectHideFlags: 0
@@ -21828,4 +21772,3 @@ SceneRoots:
   - {fileID: 278811884}
   - {fileID: 2034429103}
   - {fileID: 1761090348}
-  - {fileID: 690532381}

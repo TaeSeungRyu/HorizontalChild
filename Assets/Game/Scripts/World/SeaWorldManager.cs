@@ -49,6 +49,8 @@ namespace Game.World
         [Header("Visuals")]
         [Tooltip("항구 아이콘 프리팹. 비어 있으면 아이콘 생성을 건너뜀.")]
         public GameObject portIconPrefab;
+        [Tooltip("항구 아이콘을 놓을 높이(Y). 육지 윗면 ≈ 1.75, 물 ≈ 0. 묻혀서 안 보이면 이 값을 올리세요.")]
+        public float portIconHeight = 2f;
 
         [Tooltip("항구 아이콘들을 묶을 부모 Transform. 비어 있으면 본 GameObject 하위에 생성.")]
         public Transform portIconsParent;
@@ -159,6 +161,7 @@ namespace Game.World
 
                 var icon = Instantiate(portIconPrefab, portIconsParent);
                 var worldPos = GeoCoordinate.LatLngToWorld(port.latitude, port.longitude);
+                worldPos.y = portIconHeight;   // 육지/바다에 묻히지 않게 높이 지정
                 icon.transform.position = worldPos;
                 icon.name = $"PortIcon_{port.portId}";
 
