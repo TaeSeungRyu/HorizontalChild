@@ -6294,6 +6294,8 @@ MonoBehaviour:
   portCatalog: {fileID: 11400000, guid: abc59b2d20370ee4bafc4bd64c7d47f6, type: 2}
   resultPanel: {fileID: 1134557095}
   npcsParent: {fileID: 0}
+  npcLabelFont: {fileID: 11400000, guid: e404ff0fde379a24bb6a295dc09f79d7, type: 2}
+  showLabels: 1
   spawnCount: 100
   homePortSpawnDistance: 40
   worldHalfWidth: 2700
