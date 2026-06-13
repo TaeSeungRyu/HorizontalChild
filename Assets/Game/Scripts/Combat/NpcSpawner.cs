@@ -487,6 +487,17 @@ namespace Game.Combat
                 {
                     visualCol.enabled = false;
                 }
+                // 해적은 빨강 틴트 — 어린이가 한눈에 적임을 알아볼 수 있게
+                if (def.type == NpcType.Pirate)
+                {
+                    var tint = new Color(0.85f, 0.2f, 0.2f);
+                    foreach (var r in visual.GetComponentsInChildren<Renderer>())
+                    {
+                        if (r == null || r.material == null) continue;
+                        if (r.material.HasProperty("_BaseColor")) r.material.SetColor("_BaseColor", tint);
+                        else if (r.material.HasProperty("_Color")) r.material.SetColor("_Color", tint);
+                    }
+                }
             }
             else
             {
