@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_DanubeRiver
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.danube
+  displayNameKo: "\uB3C4\uB098\uC6B0 \uAC15"
+  category: 0
+  latitude: 44.5
+  longitude: 28.7
+  searchToleranceBase: 0.03
+  mainDescription: "\uC720\uB7FD\uC744 \uB3D9\uC11C\uB85C \uAC00\uB85C\uC9C8\uB7EC
+    \uD751\uD574\uAE4C\uC9C0 \uD750\uB974\uB294 \uD070 \uAC15\uC774\uC5D0\uC694."
+  moreInfo: "\uB3C5\uC77C\xB7\uC624\uC2A4\uD2B8\uB9AC\uC544\xB7\uD5DD\uAC00\uB9AC\xB7\uB8E8\uB9C8\uB2C8\uC544
+    \uC5EC\uB7EC \uB098\uB77C\uB97C \uC9C0\uB098\uAC00\uC694."
+  eraLabel: "\u2014"
+  relatedNation: {fileID: 0}
+  illustration: {fileID: 0}
+  relatedFigures: 
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uB3C4\uB098\uC6B0_\uAC15"
+  sensitiveExpressionChecked: 1

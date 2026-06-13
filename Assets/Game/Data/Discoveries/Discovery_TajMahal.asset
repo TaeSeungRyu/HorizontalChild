@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_TajMahal
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.taj_mahal
+  displayNameKo: "\uD0C0\uC9C0\uB9C8\uD560"
+  category: 0
+  latitude: 27.18
+  longitude: 78.04
+  searchToleranceBase: 0.03
+  mainDescription: "\uD669\uC81C\uAC00 \uC0AC\uB791\uD55C \uC655\uBE44\uB97C \uC704\uD574
+    \uC9C0\uC740 \uC0C8\uD558\uC580 \uB300\uB9AC\uC11D \uBB34\uB364."
+  moreInfo: "\uB2EC\uBE5B \uC544\uB798\uC5D0\uC11C \uD478\uB974\uAC8C \uBE5B\uB098\uB294
+    \uC778\uB3C4\uC758 \uBCF4\uC11D."
+  eraLabel: 1632~1653
+  relatedNation: {fileID: 0}
+  illustration: {fileID: 0}
+  relatedFigures: 
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uD0C0\uC9C0\uB9C8\uD560"
+  sensitiveExpressionChecked: 1

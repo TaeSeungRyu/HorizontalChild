@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_ChichenItza
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.chichen_itza
+  displayNameKo: "\uCE58\uCCB8\uC774\uD2B8\uC0AC"
+  category: 2
+  latitude: 20.68
+  longitude: -88.57
+  searchToleranceBase: 0.03
+  mainDescription: "\uB9C8\uC57C \uC0AC\uB78C\uB4E4\uC774 \uC138\uC6B4 \uAC70\uB300\uD55C
+    \uACC4\uB2E8 \uD53C\uB77C\uBBF8\uB4DC \uC2E0\uC804\uC774\uC5D0\uC694."
+  moreInfo: "\uCD98\uBD84\uC5D0 \uD587\uBE5B\uC774 \uBC40\uC774 \uB0B4\uB824\uC624\uB294
+    \uBAA8\uC591 \uADF8\uB9BC\uC790\uB97C \uB9CC\uB4E4\uC5B4\uC694."
+  eraLabel: "\uB9C8\uC57C 600~1200\uB144"
+  relatedNation: {fileID: 0}
+  illustration: {fileID: 0}
+  relatedFigures: 
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uCE58\uCCB8_\uC774\uD2B8\uC0AC"
+  sensitiveExpressionChecked: 1

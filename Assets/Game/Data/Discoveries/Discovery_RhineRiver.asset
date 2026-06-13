@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_RhineRiver
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.rhine
+  displayNameKo: "\uB77C\uC778 \uAC15"
+  category: 0
+  latitude: 50
+  longitude: 7.5
+  searchToleranceBase: 0.03
+  mainDescription: "\uB3C5\uC77C\uC744 \uAC00\uB974\uBA70 \uD750\uB974\uB294 \uAC70\uB300\uD55C
+    \uAC15. \uC591\uC606\uC5D0 \uC61B \uC131\uB4E4\uC774 \uC990\uBE44."
+  moreInfo: "\uC720\uB7FD \uC0C1\uC120\uACFC \uB5CF\uBAA9 \uBB34\uC5ED\uC758 \uC911\uC2EC
+    \uD1B5\uB85C."
+  eraLabel: "\u2014"
+  relatedNation: {fileID: 0}
+  illustration: {fileID: 0}
+  relatedFigures: 
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uB77C\uC778_\uAC15"
+  sensitiveExpressionChecked: 1

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_VictoriaFalls
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.victoria_falls
+  displayNameKo: "\uBE45\uD1A0\uB9AC\uC544 \uD3ED\uD3EC"
+  category: 0
+  latitude: -17.92
+  longitude: 25.85
+  searchToleranceBase: 0.03
+  mainDescription: "\uC7A0\uBCA0\uC9C0 \uAC15\uC774 \uAC70\uB300\uD55C \uC808\uBCBD\uC73C\uB85C
+    \uB5A8\uC5B4\uC9C0\uB294 \uCC9C\uB465 \uAC19\uC740 \uD3ED\uD3EC."
+  moreInfo: "\uD604\uC9C0\uC778\uB4E4\uC740 '\uCC9C\uB465\uC774 \uCE58\uB294 \uC548\uAC1C'
+    \uB77C\uACE0 \uBD88\uB7EC\uC694."
+  eraLabel: "\u2014"
+  relatedNation: {fileID: 0}
+  illustration: {fileID: 0}
+  relatedFigures: 
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uBE45\uD1A0\uB9AC\uC544_\uD3ED\uD3EC"
+  sensitiveExpressionChecked: 1

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_MississippiRiver
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.mississippi
+  displayNameKo: "\uBBF8\uC2DC\uC2DC\uD53C \uAC15"
+  category: 0
+  latitude: 32.3
+  longitude: -90.9
+  searchToleranceBase: 0.03
+  mainDescription: "\uBD81\uBBF8 \uD55C\uAC00\uC6B4\uB370\uB97C \uAC00\uB85C\uC9C0\uB974\uB294
+    \uAE38\uACE0 \uAD75\uC740 \uD070 \uAC15\uC774\uC5D0\uC694."
+  moreInfo: "\uC6D0\uC8FC\uBBFC\uACFC \uBB34\uC5ED\uC120\uC774 \uD568\uAED8 \uB2E4\uB2C8\uB358
+    \uBD81\uBBF8\uC758 \uB3D9\uB9E5."
+  eraLabel: "\u2014"
+  relatedNation: {fileID: 0}
+  illustration: {fileID: 0}
+  relatedFigures: 
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uBBF8\uC2DC\uC2DC\uD53C_\uAC15"
+  sensitiveExpressionChecked: 1

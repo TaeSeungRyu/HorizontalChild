@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_YangtzeRiver
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.yangtze
+  displayNameKo: "\uC591\uCBD4\uAC15"
+  category: 0
+  latitude: 31
+  longitude: 113
+  searchToleranceBase: 0.03
+  mainDescription: "\uC911\uAD6D\uC744 \uB3D9\uC11C\uB85C \uAC00\uB974\uB294 \uC544\uC2DC\uC544\uC5D0\uC11C
+    \uAC00\uC7A5 \uAE34 \uAC15\uC774\uC5D0\uC694."
+  moreInfo: "\uAC15 \uC548\uC5D0 \uC0AC\uB294 \uD770 \uB3CC\uACE0\uB798\uAC00 \uD55C\uB54C
+    \uC0B4\uC558\uC5B4\uC694."
+  eraLabel: "\u2014"
+  relatedNation: {fileID: 0}
+  illustration: {fileID: 0}
+  relatedFigures: 
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC591\uCBD4\uAC15"
+  sensitiveExpressionChecked: 1

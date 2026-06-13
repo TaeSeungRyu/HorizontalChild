@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_Stonehenge
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.stonehenge
+  displayNameKo: "\uC2A4\uD1A4\uD5E8\uC9C0"
+  category: 2
+  latitude: 51.18
+  longitude: -1.83
+  searchToleranceBase: 0.03
+  mainDescription: "\uB4E4\uD310 \uD55C\uBCF5\uD310\uC5D0 \uB3D9\uADF8\uB797\uAC8C
+    \uB298\uC5B4\uC120 \uAC70\uB300\uD55C \uB3CC\uAE30\uB465\uB4E4."
+  moreInfo: "\uC218\uCC9C \uB144 \uC804 \uB204\uAC00 \uC65C \uC138\uC6E0\uB294\uC9C0
+    \uC815\uD655\uD788 \uBAB0\uB77C\uC694."
+  eraLabel: "\uAE30\uC6D0\uC804 3000\uB144\uACBD"
+  relatedNation: {fileID: 0}
+  illustration: {fileID: 0}
+  relatedFigures: 
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC2A4\uD1A4\uD5E8\uC9C0"
+  sensitiveExpressionChecked: 1

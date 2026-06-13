@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_GreatBarrierReef
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.great_barrier_reef
+  displayNameKo: "\uADF8\uB808\uC774\uD2B8 \uBC30\uB9AC\uC5B4 \uB9AC\uD504"
+  category: 0
+  latitude: -18
+  longitude: 147
+  searchToleranceBase: 0.03
+  mainDescription: "\uC624\uC2A4\uD2B8\uB808\uC77C\uB9AC\uC544 \uB3D9\uCABD \uBC14\uB2E4\uC758
+    \uAC70\uB300\uD55C \uC0B0\uD638\uCD08 \uBCBD."
+  moreInfo: "\uC218\uCC9C \uC885\uC758 \uBB3C\uACE0\uAE30\uC640 \uAC70\uBD81\uC774
+    \uD568\uAED8 \uC0B4\uC544\uC694. \uC6B0\uC8FC\uC5D0\uC11C\uB3C4 \uBCF4\uC77C
+    \uB9CC\uD07C \uCEE4\uC694."
+  eraLabel: "\u2014"
+  relatedNation: {fileID: 0}
+  illustration: {fileID: 0}
+  relatedFigures: 
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uADF8\uB808\uC774\uD2B8\uBC30\uB9AC\uC5B4\uB9AC\uD504"
+  sensitiveExpressionChecked: 1

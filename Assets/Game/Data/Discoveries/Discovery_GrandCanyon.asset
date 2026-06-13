@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_GrandCanyon
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.grand_canyon
+  displayNameKo: "\uADF8\uB79C\uB4DC \uCE90\uB2C8\uC5B8"
+  category: 0
+  latitude: 36.1
+  longitude: -112.1
+  searchToleranceBase: 0.03
+  mainDescription: "\uCF5C\uB85C\uB77C\uB3C4 \uAC15\uC774 \uC218\uBC31\uB9CC \uB144\uC5D0
+    \uAC78\uCCD0 \uAE4E\uC544\uB0B8 \uAC70\uB300\uD55C \uD611\uACE1\uC774\uC5D0\uC694."
+  moreInfo: "\uAE4A\uC774 1.6 km, \uAE38\uC774 446 km \uC758 \uC790\uC5F0 \uBC15\uBB3C\uAD00."
+  eraLabel: "\uACE0\uC0DD\uB300~"
+  relatedNation: {fileID: 0}
+  illustration: {fileID: 0}
+  relatedFigures: 
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uADF8\uB79C\uB4DC_\uCE90\uB2C8\uC5B8"
+  sensitiveExpressionChecked: 1

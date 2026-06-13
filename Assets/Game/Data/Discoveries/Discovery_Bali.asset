@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_Bali
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.bali
+  displayNameKo: "\uBC1C\uB9AC \uC12C"
+  category: 0
+  latitude: -8.3
+  longitude: 115.09
+  searchToleranceBase: 0.03
+  mainDescription: "\uACC4\uB2E8\uC2DD \uB17C\uACFC \uD78C\uB450 \uC0AC\uC6D0\uC774
+    \uC5B4\uC6B0\uB7EC\uC9C4 \uC778\uB3C4\uB124\uC2DC\uC544\uC758 \uC544\uB984\uB2E4\uC6B4
+    \uC12C."
+  moreInfo: "\uBCBC\uB18D\uC0AC\xB7\uCDA4\xB7\uC870\uAC01\uC774 \uB9E4\uC77C \uC5B4\uC6B0\uB7EC\uC838\uC694."
+  eraLabel: "\u2014"
+  relatedNation: {fileID: 0}
+  illustration: {fileID: 0}
+  relatedFigures: 
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uBC1C\uB9AC\uC12C"
+  sensitiveExpressionChecked: 1

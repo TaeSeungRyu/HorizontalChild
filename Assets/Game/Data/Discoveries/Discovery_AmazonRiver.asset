@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_AmazonRiver
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.amazon_river
+  displayNameKo: "\uC544\uB9C8\uC874 \uAC15"
+  category: 0
+  latitude: -3.1
+  longitude: -60.03
+  searchToleranceBase: 0.03
+  mainDescription: "\uC138\uACC4\uC5D0\uC11C \uBB3C\uC774 \uAC00\uC7A5 \uB9CE\uC740
+    \uAC15. \uD478\uB978 \uC815\uAE00\uC774 \uB05D\uC5C6\uC774 \uD3BC\uCCD0\uC838\uC694."
+  moreInfo: "\uC218\uCC9C \uC885\uC758 \uB3D9\uC2DD\uBB3C\uC774 \uC5B4\uC6B8\uB824
+    \uC0AC\uB294 \uAC70\uB300\uD55C \uC0DD\uBA85\uC758 \uAC15."
+  eraLabel: "\u2014"
+  relatedNation: {fileID: 0}
+  illustration: {fileID: 0}
+  relatedFigures: 
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC544\uB9C8\uC874_\uAC15"
+  sensitiveExpressionChecked: 1
