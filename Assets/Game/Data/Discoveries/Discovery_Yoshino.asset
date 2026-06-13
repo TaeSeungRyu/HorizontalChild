@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_Yoshino
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.yoshino
+  displayNameKo: "\uC694\uC2DC\uB178 \uBC9A\uAF43"
+  category: 0
+  latitude: 34.36
+  longitude: 135.86
+  searchToleranceBase: 0.03
+  mainDescription: "\uC0B0 \uAC00\uB4DD \uBD84\uD64D \uBC9A\uAF43\uC774 \uD30C\uB3C4\uCC98\uB7FC
+    \uD53C\uB294 \uC77C\uBCF8\uC758 \uBA85\uC18C."
+  moreInfo: "30,000 \uADF8\uB8E8\uC758 \uBC9A\uAF43\uC774 \uBD04\uB9C8\uB2E4 \uB3D9\uC2DC\uC5D0
+    \uD53C\uC5B4\uC694."
+  eraLabel: "\u2014"
+  relatedNation: {fileID: 0}
+  illustration: {fileID: 0}
+  relatedFigures: 
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC694\uC2DC\uB178\uC0B0"
+  sensitiveExpressionChecked: 1

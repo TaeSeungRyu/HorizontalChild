@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_Colosseum
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.colosseum
+  displayNameKo: "\uCF5C\uB85C\uC138\uC6C0"
+  category: 2
+  latitude: 41.89
+  longitude: 12.49
+  searchToleranceBase: 0.03
+  mainDescription: "\uB85C\uB9C8 \uD55C\uBCF5\uD310\uC5D0 \uC6B0\uB69D \uC120 \uAC70\uB300\uD55C
+    \uC6D0\uD615 \uACBD\uAE30\uC7A5\uC774\uC5D0\uC694."
+  moreInfo: "\uAC80\uD22C\uC0AC\uAC00 \uC2F8\uC6B0\uB358 \uACF3. 5\uB9CC \uBA85\uC744
+    \uC218\uC6A9\uD588\uC5B4\uC694."
+  eraLabel: "80\uB144"
+  relatedNation: {fileID: 0}
+  illustration: {fileID: 0}
+  relatedFigures: 
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uCF5C\uB85C\uC138\uC6C0"
+  sensitiveExpressionChecked: 1

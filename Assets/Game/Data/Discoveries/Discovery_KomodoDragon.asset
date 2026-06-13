@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_KomodoDragon
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.komodo_dragon
+  displayNameKo: "\uCF54\uBAA8\uB3C4\uC655\uB3C4\uB9C8\uBC40"
+  category: 1
+  latitude: -8.55
+  longitude: 119.49
+  searchToleranceBase: 0.03
+  mainDescription: "\uC778\uB3C4\uB124\uC2DC\uC544 \uC791\uC740 \uC12C\uC5D0\uB9CC
+    \uC0AC\uB294 \uC138\uACC4\uC5D0\uC11C \uAC00\uC7A5 \uD070 \uB3C4\uB9C8\uBC40."
+  moreInfo: "\uBAB8\uAE38\uC774 3 m. \uCC9C\uCC9C\uD788 \uAC77\uC9C0\uB9CC \uC0AC\uC2B4\uB3C4
+    \uC0AC\uB0E5\uD574\uC694."
+  eraLabel: "\u2014"
+  relatedNation: {fileID: 0}
+  illustration: {fileID: 0}
+  relatedFigures: 
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uCF54\uBAA8\uB3C4\uC655\uB3C4\uB9C8\uBC40"
+  sensitiveExpressionChecked: 1

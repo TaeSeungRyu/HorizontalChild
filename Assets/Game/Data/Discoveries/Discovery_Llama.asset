@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_Llama
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.llama
+  displayNameKo: "\uB77C\uB9C8"
+  category: 1
+  latitude: -16.5
+  longitude: -68.15
+  searchToleranceBase: 0.03
+  mainDescription: "\uC548\uB370\uC2A4 \uC0B0\uC5D0\uC11C \uC9D0\uC744 \uB098\uB974\uB294
+    \uBD80\uB4DC\uB7EC\uC6B4 \uD138\uC758 \uB3D9\uBB3C\uC774\uC5D0\uC694."
+  moreInfo: "\uC789\uCE74\uB294 \uB77C\uB9C8 \uC5C6\uC774\uB294 \uC0B0\uC18D\uC744
+    \uB2E4\uB2D0 \uC218 \uC5C6\uC5C8\uC5B4\uC694."
+  eraLabel: "\u2014"
+  relatedNation: {fileID: 0}
+  illustration: {fileID: 0}
+  relatedFigures: 
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uB77C\uB9C8"
+  sensitiveExpressionChecked: 1

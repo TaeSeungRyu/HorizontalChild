@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_Jerusalem
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.jerusalem
+  displayNameKo: "\uC608\uB8E8\uC0B4\uB818 \uC61B \uB3C4\uC2DC"
+  category: 0
+  latitude: 31.78
+  longitude: 35.22
+  searchToleranceBase: 0.03
+  mainDescription: "\uC720\uB300\xB7\uAE30\uB3C5\xB7\uC774\uC2AC\uB78C \uC138 \uC885\uAD50\uAC00
+    \uAC70\uB8E9\uD558\uAC8C \uC5EC\uAE30\uB294 \uB3C4\uC2DC."
+  moreInfo: "\uD1B5\uACE1\uC758 \uBCBD, \uD669\uAE08 \uB3D4, \uC608\uC218 \uBB34\uB364
+    \uC131\uB2F9\uC774 \uBAA8\uB450 \uC788\uC5B4\uC694."
+  eraLabel: "\uACE0\uB300~"
+  relatedNation: {fileID: 0}
+  illustration: {fileID: 0}
+  relatedFigures: 
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC608\uB8E8\uC0B4\uB818"
+  sensitiveExpressionChecked: 1

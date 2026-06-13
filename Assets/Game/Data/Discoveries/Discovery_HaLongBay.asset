@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_HaLongBay
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.ha_long_bay
+  displayNameKo: "\uD558\uB871\uBCA0\uC774"
+  category: 0
+  latitude: 20.92
+  longitude: 107.18
+  searchToleranceBase: 0.03
+  mainDescription: "\uD478\uB978 \uBC14\uB2E4 \uC704\uB85C 1600\uAC1C\uC758 \uB3CC\uC12C\uC774
+    \uC19F\uC544 \uC788\uB294 \uBCA0\uD2B8\uB0A8 \uB9CC."
+  moreInfo: "\uC804\uC124\uC5D0 \uB530\uB974\uBA74 \uC6A9\uC774 \uB0B4\uB824\uC640
+    \uB9CC\uB4E0 \uD48D\uACBD."
+  eraLabel: "\u2014"
+  relatedNation: {fileID: 0}
+  illustration: {fileID: 0}
+  relatedFigures: 
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uD558\uB871_\uB9CC"
+  sensitiveExpressionChecked: 1

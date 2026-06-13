@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_Petra
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.petra
+  displayNameKo: "\uD398\uD2B8\uB77C"
+  category: 2
+  latitude: 30.33
+  longitude: 35.45
+  searchToleranceBase: 0.03
+  mainDescription: "\uC0AC\uB9C9\uC758 \uBD84\uD64D\uBE5B \uC808\uBCBD\uC744 \uD1B5\uC9F8\uB85C
+    \uAE4E\uC544 \uB9CC\uB4E0 \uBE44\uBC00\uC758 \uB3C4\uC2DC."
+  moreInfo: "\uB098\uBC14\uD14C\uC544 \uC0AC\uB78C\uB4E4\uC758 \uC61B \uC218\uB3C4.
+    \uC881\uC740 \uD611\uACE1\uC744 \uC9C0\uB098\uBA74 \uBCF4\uC5EC\uC694."
+  eraLabel: "\uAE30\uC6D0\uC804 4\uC138\uAE30~"
+  relatedNation: {fileID: 0}
+  illustration: {fileID: 0}
+  relatedFigures: 
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uD398\uD2B8\uB77C"
+  sensitiveExpressionChecked: 1

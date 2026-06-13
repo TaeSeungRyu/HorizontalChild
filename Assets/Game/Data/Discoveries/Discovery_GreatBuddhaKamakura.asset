@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_GreatBuddhaKamakura
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.great_buddha_kamakura
+  displayNameKo: "\uCE74\uB9C8\uCFE0\uB77C \uB300\uBD88"
+  category: 0
+  latitude: 35.32
+  longitude: 139.54
+  searchToleranceBase: 0.03
+  mainDescription: "\uC57C\uC678\uC5D0 \uC549\uC544 \uC788\uB294 13.35 m \uC758 \uAC70\uB300\uD55C
+    \uCCAD\uB3D9 \uBD88\uC0C1\uC774\uC5D0\uC694."
+  moreInfo: "\uC4F0\uB098\uBBF8\uC5D0 \uC2E0\uC804\uC774 \uD729\uC4F8\uB9B0 \uB4A4
+    700\uB144\uAC04 \uBE44\uBC14\uB78C\uC744 \uACAC\uB3A0\uC5B4\uC694."
+  eraLabel: 1252
+  relatedNation: {fileID: 0}
+  illustration: {fileID: 0}
+  relatedFigures: 
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uCE74\uB9C8\uCFE0\uB77C_\uB300\uBD88"
+  sensitiveExpressionChecked: 1

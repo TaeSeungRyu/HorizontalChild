@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_SantiagoCompostela
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.santiago_compostela
+  displayNameKo: "\uC0B0\uD2F0\uC544\uACE0 \uB370 \uCF64\uD3EC\uC2A4\uD154\uB77C"
+  category: 0
+  latitude: 42.88
+  longitude: -8.55
+  searchToleranceBase: 0.03
+  mainDescription: "\uC720\uB7FD \uC0AC\uB78C\uB4E4\uC774 \uCC9C \uB144 \uB3D9\uC548
+    \uAC78\uC5B4\uAC00\uB358 \uC21C\uB840\uC758 \uC885\uCC29\uC9C0."
+  moreInfo: "\uC131 \uC57C\uACE0\uBCF4\uC758 \uBB34\uB364\uC774 \uC788\uB294 \uACF3\uC73C\uB85C
+    \uC54C\uB824\uC84C\uC5B4\uC694."
+  eraLabel: "9\uC138\uAE30~"
+  relatedNation: {fileID: 0}
+  illustration: {fileID: 0}
+  relatedFigures: 
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC0B0\uD2F0\uC544\uACE0_\uB370_\uCF64\uD3EC\uC2A4\uD154\uB77C"
+  sensitiveExpressionChecked: 1

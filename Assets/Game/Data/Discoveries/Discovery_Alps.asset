@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e5885b0c0b4c84891252856e1a3156, type: 3}
+  m_Name: Discovery_Alps
+  m_EditorClassIdentifier: Game::Game.Data.DiscoveryData
+  discoveryId: disc.alps
+  displayNameKo: "\uC54C\uD504\uC2A4 \uC0B0\uB9E5"
+  category: 0
+  latitude: 46.5
+  longitude: 8.5
+  searchToleranceBase: 0.03
+  mainDescription: "\uC720\uB7FD \uD55C\uAC00\uC6B4\uB370 \uC19F\uC740 \uB208 \uB36E\uC778
+    \uAC70\uB300\uD55C \uC0B0\uB9E5\uC774\uC5D0\uC694."
+  moreInfo: "\uD55C\uB2C8\uBC1C\uC774 \uCF54\uB07C\uB9AC\uB97C \uB04C\uACE0 \uB118\uC5C8\uB358
+    \uACF3."
+  eraLabel: "\u2014"
+  relatedNation: {fileID: 0}
+  illustration: {fileID: 0}
+  relatedFigures: 
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC54C\uD504\uC2A4_\uC0B0\uB9E5"
+  sensitiveExpressionChecked: 1
