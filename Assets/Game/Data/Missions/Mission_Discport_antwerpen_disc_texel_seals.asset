@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 359c5c86a7c54f849bd0672764cb69ed, type: 3}
+  m_Name: Mission_Discport_antwerpen_disc_texel_seals
+  m_EditorClassIdentifier: Game::Game.Data.MissionTemplate
+  missionId: mission.disc.port_antwerpen.disc_texel_seals
+  issuerPort: {fileID: 11400000, guid: f9f0ee9511521874e94ebe5e85f8783d, type: 2}
+  targetDiscovery: {fileID: 11400000, guid: 1549831da67528243b2b9271d812ce80, type: 2}
+  rewardMoney: 214
+  rewardGoodReputation: 5
+  title: "\uD14D\uC140 \uC12C\uC758 \uBC14\uB2E4\uD45C\uBC94 \uC744(\uB97C) \uCC3E\uC544\uC8FC\uC138\uC694"
+  description: "\uC548\uD2B8\uBCA0\uB974\uD39C \uC758 \uBAA8\uD5D8\uAC00 \uC870\uD569
+    \uC758\uB8B0\uC785\uB2C8\uB2E4.\n\uD14D\uC140 \uC12C\uC758 \uBC14\uB2E4\uD45C\uBC94
+    \uC758 \uC790\uCDE8\uB97C \uBC1C\uACAC\uD574\uC11C \uAC00\uC838\uC640 \uC8FC\uC138\uC694.
+    \uBCF4\uC0C1\uC740 214 G."
+  mapItemName: "\uD14D\uC140 \uC12C\uC758 \uBC14\uB2E4\uD45C\uBC94 \uC73C\uB85C \uAC00\uB294
+    \uC9C0\uB3C4"
