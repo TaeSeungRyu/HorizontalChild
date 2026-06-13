@@ -70,16 +70,8 @@ namespace Game.Combat
         private List<Vector3> _waypoints;   // NavRouter 로 계산된 경유 점들 (마지막 = target). null = 직접 항해.
         private int _waypointIdx;
 
-        // 해적 자동 전투 — 시각 인디케이터 + 쿨다운
-        [Header("Pirate Auto-Engage")]
-        [Tooltip("이 시간(초) 이전엔 자동 전투 안 함. spawn 직후 즉시 도발 방지.")]
-        public float engagementGraceSeconds = 2f;
-        [Tooltip("전투 한 번 후 다음 자동 전투까지 쿨다운(초).")]
-        public float engagementCooldownSeconds = 5f;
-        [Tooltip("빨강 영역 원반의 Y 오프셋 (배 기준). 바다 표면 위로 살짝 띄울 값.")]
-        public float chaseIndicatorYOffset = 0.3f;
-        private GameObject _chaseIndicator;
-        private float _nextEngageTime;
+        // 어린이 정책: 해적은 먼저 공격 안 함 — 사용자가 클릭해야만 전투 (OnPointerClick)
+        // 인접 해적 협공(2:1) 은 StartPlayerCombat 에서 처리 (pirateChaseRange 안의 동료만)
         private bool _engagementOver;   // 전투 후 destroy 대기 중 — 추가 행동 차단
 
         // 외부 (SaveService) 가 사용
@@ -122,11 +114,6 @@ namespace Game.Combat
         {
             _playerShip = FindAnyObjectByType<ShipController>(FindObjectsInactive.Include);
             PickNewWanderDirection();
-            _nextEngageTime = Time.time + engagementGraceSeconds;
-            if (definition != null && definition.type == NpcType.Pirate)
-            {
-                CreateChaseIndicator();
-            }
         }
 
         /// <summary>
@@ -149,26 +136,10 @@ namespace Game.Combat
             _waypointIdx = 0;
         }
 
-        private void OnDestroy()
-        {
-            if (_chaseIndicator != null) Destroy(_chaseIndicator);
-        }
-
-        private void LateUpdate()
-        {
-            // 인디케이터가 해적 위치 따라가도록 (parent 안 시킴 — 부모 scale 영향 회피)
-            if (_chaseIndicator != null)
-            {
-                var p = transform.position;
-                _chaseIndicator.transform.position = new Vector3(p.x, p.y + chaseIndicatorYOffset, p.z);
-            }
-        }
-
         private void Update()
         {
             if (definition == null || _engagementOver || LockMovement) return;
             UpdateMovement();
-            if (definition.type == NpcType.Pirate) TryAutoEngage();
         }
 
         // ─── AI ──────────────────────────────────────────────────────────
@@ -194,12 +165,7 @@ namespace Game.Combat
                 desiredDir = _deflectDir;
                 speed = wanderSpeed;
             }
-            // 1) 해적 추적 / 상선 도주
-            else if (definition.type == NpcType.Pirate && playerDist <= pirateChaseRange && playerDist > 1f)
-            {
-                desiredDir = playerOffset.normalized;
-                speed = pirateChaseSpeed;
-            }
+            // 1) 상선만 플레이어 근접 시 도주 — 해적은 어린이 정책상 먼저 행동 안 함
             else if (definition.type == NpcType.Merchant && playerDist <= merchantFleeRange && playerDist > 1f)
             {
                 desiredDir = -playerOffset.normalized;
@@ -375,91 +341,12 @@ namespace Game.Combat
             _deflectUntil = Time.time + 1.5f;
         }
 
-        // ─── 해적 자동 전투 ──────────────────────────────────────────────
-
-        private void CreateChaseIndicator()
-        {
-            var disc = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            disc.name = $"ChaseRange_{name}";
-            disc.transform.SetParent(transform.parent, worldPositionStays: true);
-            var p = transform.position;
-            disc.transform.position = new Vector3(p.x, p.y + chaseIndicatorYOffset, p.z);
-            float dia = pirateChaseRange * 2f;
-            // Cylinder primitive 메시 높이=2, 직경=1 → world scale 그대로 (dia, height/2, dia)
-            disc.transform.localScale = new Vector3(dia, 0.05f, dia);
-
-            // Collider 제거 — 클릭/이동 방해 X
-            var col = disc.GetComponent<Collider>();
-            if (col != null) Destroy(col);
-
-            var renderer = disc.GetComponent<Renderer>();
-            if (renderer != null)
-            {
-                // 커스텀 always-on-top 셰이더 — 바다 파도 z-buffer 와 무관하게 항상 위에 그림
-                var customShader = Shader.Find("Custom/AlwaysOnTopUnlit");
-                var mat = customShader != null
-                    ? new Material(customShader)
-                    : new Material(Shader.Find("Universal Render Pipeline/Unlit"));   // fallback
-                var color = new Color(0.9f, 0.15f, 0.15f, 1f);
-                if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", color);
-                else if (mat.HasProperty("_Color")) mat.SetColor("_Color", color);
-                renderer.material = mat;
-                renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-                renderer.receiveShadows = false;
-            }
-
-            _chaseIndicator = disc;
-        }
-
-        private void TryAutoEngage()
-        {
-            if (Time.time < _nextEngageTime) return;
-
-            // 1) 플레이어 우선
-            if (_playerShip != null)
-            {
-                var d = _playerShip.transform.position - transform.position;
-                d.y = 0f;
-                if (d.magnitude <= pirateChaseRange)
-                {
-                    EngagePlayer();
-                    return;
-                }
-            }
-
-            // 2) 비-해적 NPC 탐색 (가장 가까운 1명)
-            var spawner = NpcSpawner.Instance;
-            if (spawner == null) return;
-            NpcShip closest = null;
-            float closestDist = pirateChaseRange;
-            foreach (var ship in spawner.AllSpawned)
-            {
-                if (ship == null || ship == this || ship._engagementOver) continue;
-                if (ship.definition == null) continue;
-                if (ship.definition.type == NpcType.Pirate) continue;   // 해적끼리는 안 싸움
-                var dd = ship.transform.position - transform.position;
-                dd.y = 0f;
-                float dist = dd.magnitude;
-                if (dist < closestDist)
-                {
-                    closestDist = dist;
-                    closest = ship;
-                }
-            }
-            if (closest != null) EngageNpc(closest);
-        }
-
-        private void EngagePlayer()
-        {
-            // 쿨다운 먼저 — 시퀀스 도중 다시 trigger 방지
-            _nextEngageTime = Time.time + engagementCooldownSeconds;
-            StartPlayerCombat();
-        }
+        // ─── 클릭 전투 (사용자가 먼저 공격해야만 트리거) ─────────────────
 
         /// <summary>
         /// 플레이어 vs 이 NPC 전투 시작.
         /// CombatSequence 가 있으면 시각 시퀀스(포탄·hit flash), 없으면 즉시 결과.
-        /// 클릭 트리거(OnPointerClick) 와 자동 트리거(EngagePlayer) 가 공유.
+        /// OnPointerClick 으로만 트리거 — 어린이 정책상 NPC 가 먼저 시작 안 함.
         /// </summary>
         private void StartPlayerCombat()
         {
@@ -498,24 +385,7 @@ namespace Game.Combat
             sequence.Begin(_playerShip, attackers, resultPanel);
         }
 
-        private void EngageNpc(NpcShip target)
-        {
-            int myBravery = (definition.character != null) ? definition.character.bravery : 50;
-            int theirBravery = (target.definition.character != null) ? target.definition.character.bravery : 50;
-            int myRoll = myBravery + Random.Range(0, 30);
-            int theirRoll = theirBravery + Random.Range(0, 30);
-
-            NpcShip loser = (myRoll >= theirRoll) ? target : this;
-            loser._engagementOver = true;
-            NpcSpawner.Instance?.OnNpcDefeated(loser.definition);
-            Destroy(loser.gameObject, 0.5f);
-
-            _nextEngageTime = Time.time + engagementCooldownSeconds;
-            if (target != null) target._nextEngageTime = Time.time + engagementCooldownSeconds;
-            Game.Save.SaveService.Instance?.SaveGame();
-        }
-
-        // ─── 클릭 → 전투 ─────────────────────────────────────────────────
+        // ─── 클릭 진입점 ────────────────────────────────────────────────
 
         public void OnPointerClick(PointerEventData eventData)
         {

@@ -24,6 +24,9 @@ public class NatureStreamer : MonoBehaviour
     public float maxSlope = 35f;
     public LayerMask groundMask = ~0;
     public float raycastHeight = 500f;
+    [Tooltip("0보다 크면 물가에서 이만큼 안쪽 육지에만 배치. 작은 섬·해안가 물 위 나무 제거. 단위=월드(예: 3~8)")]
+    public float shoreMargin = 0f;
+    [Range(4,8)] public int shoreSamples = 4;  // 주변을 몇 방향으로 검사할지
 
     [Header("배치 변화")]
     public Vector2 scaleRange = new Vector2(0.8f, 1.3f);
@@ -96,6 +99,7 @@ public class NatureStreamer : MonoBehaviour
             if (!Physics.Raycast(new Vector3(x, startY, z), Vector3.down, out RaycastHit hit, raycastHeight * 4f, groundMask)) continue;
             if (hit.point.y < minHeight || hit.point.y > maxHeight) continue;
             if (Vector3.Angle(hit.normal, Vector3.up) > maxSlope) continue;
+            if (shoreMargin > 0f && !SolidAround(x, z, startY)) continue;  // 물가/작은 섬 제외
 
             var prefab = prefabs[Random.Range(0, prefabs.Length)];
             if (prefab == null) continue;
@@ -108,6 +112,22 @@ public class NatureStreamer : MonoBehaviour
             if (colorVariation > 0f) ApplyTint(obj, 1f + Random.Range(-colorVariation, colorVariation));
         }
         Random.state = prev;
+    }
+
+    // 후보 지점 주변이 전부 '육지(minHeight 이상)' 인지 검사 → 작은 섬/해안 물가 배제
+    bool SolidAround(float x, float z, float startY)
+    {
+        int n = Mathf.Clamp(shoreSamples, 4, 8);
+        for (int k = 0; k < n; k++)
+        {
+            float a = Mathf.PI * 2f * k / n;
+            float nx = x + Mathf.Cos(a) * shoreMargin;
+            float nz = z + Mathf.Sin(a) * shoreMargin;
+            if (!Physics.Raycast(new Vector3(nx, startY, nz), Vector3.down, out RaycastHit h, raycastHeight * 4f, groundMask))
+                return false;          // 그 방향에 지면이 없음(=바다) → 물가
+            if (h.point.y < minHeight) return false;  // 그 방향이 수면 아래 → 물가
+        }
+        return true;
     }
 
     void ApplyTint(GameObject obj, float f)
