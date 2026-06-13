@@ -4,6 +4,7 @@ using Game.Data;
 using Game.Save;
 using Game.UI;
 using Game.World;
+using TMPro;
 using UnityEngine;
 
 namespace Game.Combat
@@ -29,6 +30,12 @@ namespace Game.Combat
         public PortCatalog portCatalog;   // 격침 NPC 재배치용 — 인스펙터에서 PortCatalog SO 할당
         public CombatResultPanel resultPanel;
         public Transform npcsParent;
+
+        [Header("NPC Label")]
+        [Tooltip("NPC 위 라벨에 쓸 TMP 폰트 (한글 지원). 비우면 TMP 기본 폰트 사용.")]
+        public TMP_FontAsset npcLabelFont;
+        [Tooltip("NPC 위에 타입+이름 라벨 표시.")]
+        public bool showLabels = true;
 
         [Header("Spawn")]
         [Tooltip("게임 시작 시 spawn 할 NPC 개수. 100명 풀세트면 100 권장.")]
@@ -510,6 +517,16 @@ namespace Game.Combat
             var script = npc.AddComponent<NpcShip>();
             script.Bind(def, resultPanel);
             if (def != null && !string.IsNullOrEmpty(def.npcId)) _spawned[def.npcId] = script;
+
+            // 머리 위 타입+이름 라벨 (sibling — 부모 scale 영향 회피)
+            if (showLabels)
+            {
+                var labelGO = new GameObject($"Label_{(def != null ? def.npcId : "?")}");
+                labelGO.transform.SetParent(npcsParent);
+                var label = labelGO.AddComponent<NpcLabel>();
+                label.Bind(script, npcLabelFont);
+            }
+
             return script;
         }
 
