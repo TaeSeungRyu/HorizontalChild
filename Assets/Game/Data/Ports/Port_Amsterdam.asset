@@ -16,8 +16,8 @@ MonoBehaviour:
   displayNameKo: "\uC554\uC2A4\uD14C\uB974\uB2F4"
   displayNameOriginal: Amsterdam
   nation: {fileID: 11400000, guid: 03b98d79c2b87574dbaf3a294bbf70b8, type: 2}
-  latitude: 52.4
-  longitude: 4.9
+  latitude: 52.648182
+  longitude: 5.231128
   shortDescription: "\uC6B4\uD558 \uC704\uB85C \uBC30\uB4E4\uC774 \uC274 \uC0C8 \uC5C6\uC774
     \uC624\uAC00\uB294 \uB3C4\uC2DC."
   cityIllustration: {fileID: 0}

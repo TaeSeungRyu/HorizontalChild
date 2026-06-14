@@ -16,8 +16,8 @@ MonoBehaviour:
   displayNameKo: "\uD638\uB974\uBB34\uC988"
   displayNameOriginal: Hormuz
   nation: {fileID: 0}
-  latitude: 27.1
-  longitude: 56.45
+  latitude: 27.198357
+  longitude: 56.55418
   shortDescription: "\uB3D9\uBC29\uC758 \uD5A5\uC2E0\uB8CC\uAC00 \uBAA8\uC774\uB294
     \uD398\uB974\uC2DC\uC544\uB9CC \uC785\uAD6C\uC758 \uD56D\uAD6C."
   cityIllustration: {fileID: 0}

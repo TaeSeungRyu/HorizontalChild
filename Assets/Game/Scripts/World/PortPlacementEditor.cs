@@ -48,7 +48,7 @@ namespace Game.World
         [Header("Handle Visual")]
         [Tooltip("핸들 구의 크기 (시각·콜라이더 모두). 카메라 멀면 크게.")]
         public float handleSize = 35f;
-        [Tooltip("클릭 콜라이더 추가 확장 (배율). 시각보다 큰 영역 확보. 카메라 멀면 8~16 까지 키워도 됨.")]
+        [Tooltip("[사용 안 함] 이전 collider 기반 클릭에서 사용. 이제는 'Pick Radius Pixels' 가 클릭 영역 결정.")]
         public float clickHitboxMultiplier = 10f;
         [Tooltip("핸들의 Y 위치 (월드). NPC·배보다 높게 잡아야 클릭이 NPC 에 안 가로채임.")]
         public float handleY = 30f;
@@ -72,10 +72,16 @@ namespace Game.World
         [Tooltip("발견물 핸들 표시 + 편집 허용.")]
         public bool showDiscoveries = true;
 
+        [Header("Click Picking")]
+        [Tooltip("핸들 선택 시 마우스 → 핸들 중심까지 허용되는 화면 거리 (픽셀). 크게 잡으면 클릭 쉬움.")]
+        public float pickRadiusPixels = 80f;
+
         // 런타임
         private bool _active;
         private readonly List<GameObject> _handles = new();
         private EditorHandle _selectedHandle;
+        private bool _dragging;
+        private Plane _dragPlane;
         private Vector3 _camDragLastMousePos;
         private bool _camDragging;
         // 편집 전 카메라 위치·회전 보존
@@ -388,9 +394,9 @@ namespace Game.World
                 rend.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             }
 
-            // SphereCollider radius 확장 — 클릭 영역 시각보다 크게
+            // SphereCollider 는 더 이상 클릭에 사용 안 함 (screen-space 픽킹 사용) → 제거
             var col = go.GetComponent<SphereCollider>();
-            if (col != null) col.radius = 0.5f * Mathf.Max(1f, clickHitboxMultiplier);
+            if (col != null) Destroy(col);
 
             var handle = go.AddComponent<EditorHandle>();
             handle.Init(this, port, discovery);
@@ -443,17 +449,64 @@ namespace Game.World
                     ResetHandleColor(_selectedHandle.gameObject);
                     Debug.Log("[PortPlacementEditor] 선택 해제 (Enter).");
                     _selectedHandle = null;
+                    _dragging = false;
                 }
             }
 
             var mouse = Mouse.current;
             if (mouse == null) return;
 
-            // 우클릭 드래그 카메라 팬
+            Vector2 mousePos = mouse.position.ReadValue();
+
+            // ── 좌클릭: 가장 가까운 핸들 선택 + 드래그 시작 (screen-space 픽킹) ──
+            if (mouse.leftButton.wasPressedThisFrame)
+            {
+                var picked = PickClosestHandle(mousePos, pickRadiusPixels);
+                if (picked != null)
+                {
+                    if (_selectedHandle != null && _selectedHandle != picked)
+                    {
+                        ResetHandleColor(_selectedHandle.gameObject);
+                    }
+                    _selectedHandle = picked;
+                    HighlightHandle(picked.gameObject);
+                    _dragPlane = new Plane(Vector3.up, picked.transform.position);
+                    _dragging = true;
+                    string label = picked.Port != null ? picked.Port.displayNameKo
+                                  : picked.Discovery != null ? picked.Discovery.displayNameKo : "?";
+                    Debug.Log($"[PortPlacementEditor] {label} 선택 — 드래그하면 이동.");
+                }
+            }
+
+            // ── 좌버튼 유지: 드래그 ──
+            if (_dragging && mouse.leftButton.isPressed && _selectedHandle != null)
+            {
+                var ray = mainCamera.ScreenPointToRay(mousePos);
+                if (_dragPlane.Raycast(ray, out float dist))
+                {
+                    var hit = ray.GetPoint(dist);
+                    var t = _selectedHandle.transform;
+                    t.position = new Vector3(hit.x, t.position.y, hit.z);
+                }
+            }
+
+            // ── 좌버튼 떼기: 저장 ──
+            if (_dragging && mouse.leftButton.wasReleasedThisFrame)
+            {
+                _dragging = false;
+                if (_selectedHandle != null)
+                {
+                    var pos = _selectedHandle.transform.position;
+                    if (_selectedHandle.Port != null) SavePortPosition(_selectedHandle.Port, pos);
+                    else if (_selectedHandle.Discovery != null) SaveDiscoveryPosition(_selectedHandle.Discovery, pos);
+                }
+            }
+
+            // ── 우클릭 드래그 카메라 팬 ──
             if (mouse.rightButton.wasPressedThisFrame)
             {
                 _camDragging = true;
-                _camDragLastMousePos = mouse.position.ReadValue();
+                _camDragLastMousePos = mousePos;
             }
             if (mouse.rightButton.wasReleasedThisFrame)
             {
@@ -461,52 +514,55 @@ namespace Game.World
             }
             if (_camDragging)
             {
-                Vector3 currentMouse = mouse.position.ReadValue();
-                Vector3 mouseDelta = currentMouse - _camDragLastMousePos;
-                _camDragLastMousePos = currentMouse;
-                // 화면 픽셀 → 월드 unit (Y 높이에 비례하게 살짝 키움)
+                Vector3 mouseDelta = (Vector3)mousePos - _camDragLastMousePos;
+                _camDragLastMousePos = mousePos;
                 float scaleFactor = panSpeed * Mathf.Max(1f, mainCamera.transform.position.y / 100f);
                 var worldDelta = new Vector3(-mouseDelta.x * scaleFactor, 0f, -mouseDelta.y * scaleFactor);
                 mainCamera.transform.position += worldDelta;
             }
 
-            // 마우스 휠 줌 (Y 축 변경) — InputSystem scroll 은 보통 ±120 단위
+            // ── 마우스 휠 줌 (Y 축) ──
             float wheel = mouse.scroll.ReadValue().y;
             if (Mathf.Abs(wheel) > 0.001f)
             {
                 var camPos = mainCamera.transform.position;
-                // /120 으로 정규화 (한 단위 = 한 노치)
                 camPos.y = Mathf.Clamp(camPos.y - (wheel / 120f) * zoomSpeed, minCameraY, maxCameraY);
                 mainCamera.transform.position = camPos;
             }
         }
 
-        // ─── 선택 표시 ──────────────────────────────────────────────────────
-
-        public void NotifyHandleSelected(EditorHandle handle)
+        /// <summary>화면 좌표 기준으로 가장 가까운 핸들을 찾음. radius 픽셀 내에 없으면 null.</summary>
+        private EditorHandle PickClosestHandle(Vector2 screenPos, float radius)
         {
-            // 이전 선택 색 복원
-            if (_selectedHandle != null && _selectedHandle != handle)
+            EditorHandle best = null;
+            float bestDist = radius;
+            foreach (var go in _handles)
             {
-                ResetHandleColor(_selectedHandle.gameObject);
+                if (go == null) continue;
+                var handle = go.GetComponent<EditorHandle>();
+                if (handle == null) continue;
+                Vector3 sp = mainCamera.WorldToScreenPoint(go.transform.position);
+                if (sp.z <= 0f) continue;   // 카메라 뒤
+                float d = Vector2.Distance(new Vector2(sp.x, sp.y), screenPos);
+                if (d < bestDist) { bestDist = d; best = handle; }
             }
-            _selectedHandle = handle;
-            // 새 선택을 초록색으로
-            var rend = handle.GetComponent<Renderer>();
-            if (rend != null && rend.material != null)
-            {
-                if (rend.material.HasProperty("_BaseColor")) rend.material.SetColor("_BaseColor", selectedColor);
-                else if (rend.material.HasProperty("_Color")) rend.material.SetColor("_Color", selectedColor);
-            }
+            return best;
+        }
+
+        private void HighlightHandle(GameObject go)
+        {
+            var rend = go.GetComponent<Renderer>();
+            if (rend == null || rend.material == null) return;
+            if (rend.material.HasProperty("_BaseColor")) rend.material.SetColor("_BaseColor", selectedColor);
+            else if (rend.material.HasProperty("_Color")) rend.material.SetColor("_Color", selectedColor);
         }
 
         private void ResetHandleColor(GameObject handleGO)
         {
             var rend = handleGO.GetComponent<Renderer>();
             if (rend == null || rend.material == null) return;
-            // 핸들 이름으로 port/discovery 구분 안 됨 → EditorHandle 의 _port/_discovery 보면 되지만 private
-            // 간단히: GameObject 의 이름이 "Handle_port." 로 시작하면 port, 그 외 discovery
-            Color c = handleGO.name.StartsWith("Handle_port.") ? portColor : discoveryColor;
+            var eh = handleGO.GetComponent<EditorHandle>();
+            Color c = (eh != null && eh.Port != null) ? portColor : discoveryColor;
             if (rend.material.HasProperty("_BaseColor")) rend.material.SetColor("_BaseColor", c);
             else if (rend.material.HasProperty("_Color")) rend.material.SetColor("_Color", c);
         }

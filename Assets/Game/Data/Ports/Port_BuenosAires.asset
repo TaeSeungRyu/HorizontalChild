@@ -16,8 +16,8 @@ MonoBehaviour:
   displayNameKo: "\uBD80\uC5D0\uB178\uC2A4\uC544\uC774\uB808\uC2A4"
   displayNameOriginal: Buenos Aires
   nation: {fileID: 0}
-  latitude: -34.61
-  longitude: -58.38
+  latitude: -34.670067
+  longitude: -58.467445
   shortDescription: "\uB77C\uD50C\uB77C\uD0C0 \uAC15\uC774 \uBC14\uB2E4\uC640 \uB9CC\uB098\uB294
     \uACF3\uC5D0 \uC138\uC6CC\uC9C4 \uD070 \uD3C9\uC6D0\uC758 \uB3C4\uC2DC."
   cityIllustration: {fileID: 0}

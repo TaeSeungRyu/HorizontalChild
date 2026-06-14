@@ -16,8 +16,8 @@ MonoBehaviour:
   displayNameKo: "\uC54C\uB809\uC0B0\uB4DC\uB9AC\uC544"
   displayNameOriginal: Iskenderiye
   nation: {fileID: 0}
-  latitude: 31.2
-  longitude: 29.92
+  latitude: 31.13922
+  longitude: 30.027931
   shortDescription: "\uC774\uC9D1\uD2B8 \uD070 \uAC15 \uC5B4\uADC0\uC5D0 \uC790\uB9AC\uD55C
     \uC61B \uD559\uBB38\uC758 \uB3C4\uC2DC."
   cityIllustration: {fileID: 0}

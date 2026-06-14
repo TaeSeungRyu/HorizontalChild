@@ -16,8 +16,8 @@ MonoBehaviour:
   displayNameKo: "\uD018\uBCA1"
   displayNameOriginal: "Qu\xE9bec"
   nation: {fileID: 0}
-  latitude: 46.81
-  longitude: -71.21
+  latitude: 47.320965
+  longitude: -70.86937
   shortDescription: "\uD504\uB791\uC2A4 \uC0AC\uB78C\uB4E4\uC774 \uC138\uC6B4 \uCD94\uC6B4
     \uAC15\uAC00 \uB3C4\uC2DC. \uBAA8\uD53C \uBB34\uC5ED\uC758 \uC911\uC2EC."
   cityIllustration: {fileID: 0}

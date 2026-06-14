@@ -16,8 +16,8 @@ MonoBehaviour:
   displayNameKo: "\uC0B0\uD6C4\uC548"
   displayNameOriginal: San Juan
   nation: {fileID: 0}
-  latitude: 18.47
-  longitude: -66.1
+  latitude: 18.214643
+  longitude: -66.055534
   shortDescription: "\uC2A4\uD398\uC778\uC774 \uD478\uC5D0\uB974\uD1A0\uB9AC\uCF54\uC5D0
     \uC138\uC6B4 \uAD73\uAC74\uD55C \uC694\uC0C8 \uD56D\uAD6C."
   cityIllustration: {fileID: 0}
