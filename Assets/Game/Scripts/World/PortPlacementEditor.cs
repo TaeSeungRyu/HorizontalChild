@@ -171,6 +171,7 @@ namespace Game.World
                     }
                 }
                 // 항구 마커들 — 클릭 가로채기 + 원본 위치 시각 중복 해결
+                int markerCount = 0;
                 foreach (var pm in FindObjectsByType<Game.Ports.PortMarker>(FindObjectsSortMode.None))
                 {
                     if (pm == null || pm.gameObject == null) continue;
@@ -178,8 +179,24 @@ namespace Game.World
                     {
                         pm.gameObject.SetActive(false);
                         _hiddenPortIcons.Add(pm.gameObject);
+                        markerCount++;
                     }
                 }
+                // PortIcon_* 명명 GameObject 도 모두 숨김 (PortMarker 없이 떠 있는 잔재)
+                foreach (var go in FindObjectsByType<GameObject>(FindObjectsSortMode.None))
+                {
+                    if (go == null || !go.activeSelf) continue;
+                    if (go.name != null && go.name.StartsWith("PortIcon_"))
+                    {
+                        if (!_hiddenPortIcons.Contains(go))
+                        {
+                            go.SetActive(false);
+                            _hiddenPortIcons.Add(go);
+                            markerCount++;
+                        }
+                    }
+                }
+                Debug.Log($"[PortPlacementEditor] 원본 포트마커 {markerCount} 개 숨김, 콜라이더 {_disabledColliders.Count} 개 비활성.");
             }
             else
             {
@@ -201,7 +218,8 @@ namespace Game.World
             if (playerShip != null) playerShip.LockInput = false;
             SeaSimulation.Resume(this);
 
-            // 강제 — 다른 source 가 paused 중이든 timeScale = 1
+            // 강제 복원 — 모든 pause source 무시하고 게임 시간 1로
+            SeaSimulation.Reset();
             Time.timeScale = 1f;
 
             DestroyHandles();
