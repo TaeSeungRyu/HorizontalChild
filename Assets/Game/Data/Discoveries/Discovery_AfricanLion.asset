@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.african_lion
   displayNameKo: "\uC544\uD504\uB9AC\uCE74 \uC0AC\uC790"
   category: 1
-  latitude: -2.33
-  longitude: 34.83
+  latitude: -3.7097166
+  longitude: 39.3801
   searchToleranceBase: 0.03
   mainDescription: "\uD669\uAE08\uBE5B \uAC08\uAE30\uB97C \uD718\uB0A0\uB9AC\uBA70
     \uCD08\uC6D0\uC744 \uB2E4\uC2A4\uB9AC\uB294 \uB3D9\uBB3C\uC758 \uC655\uC774\uC5D0\uC694."

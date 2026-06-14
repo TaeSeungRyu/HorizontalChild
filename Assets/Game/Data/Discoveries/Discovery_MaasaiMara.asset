@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.maasai_mara
   displayNameKo: "\uB9C8\uC0AC\uC774 \uB9C8\uB77C"
   category: 0
-  latitude: -1.5
-  longitude: 35.14
+  latitude: -2.12777
+  longitude: 40.762283
   searchToleranceBase: 0.03
   mainDescription: "\uC218\uBC31\uB9CC \uB9C8\uB9AC \uB204\uAC00 \uBB34\uB9AC\uC9C0\uC5B4
     \uC774\uB3D9\uD558\uB294 \uAC70\uB300\uD55C \uCD08\uC6D0\uC774\uC5D0\uC694."

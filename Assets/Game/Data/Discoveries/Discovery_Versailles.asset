@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.versailles
   displayNameKo: "\uBCA0\uB974\uC0AC\uC720 \uAD81\uC804"
   category: 0
-  latitude: 48.8
-  longitude: 2.12
+  latitude: 49.591732
+  longitude: 0.50883937
   searchToleranceBase: 0.03
   mainDescription: "\uB8E8\uC774 14\uC138\uAC00 \uC9C0\uC740 \uD669\uAE08\uBE5B \uAC70\uB300\uD55C
     \uAD81\uC804\uACFC \uC815\uC6D0."

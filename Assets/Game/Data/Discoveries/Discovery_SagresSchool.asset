@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.sagres_school
   displayNameKo: "\uC0AC\uADF8\uB808\uC2A4 \uD56D\uD574\uD559\uAD50"
   category: 3
-  latitude: 37
-  longitude: -8.95
+  latitude: 37.200294
+  longitude: -8.614834
   searchToleranceBase: 0.04
   mainDescription: "\uD3EC\uB974\uD22C\uAC08 \uB0A8\uC11C\uCABD \uB05D \uC791\uC740
     \uB9C8\uC744\uC5D0\uC11C \uD56D\uD574\uC0AC \uC5D4\uD788\uD06C \uC655\uC790\uAC00

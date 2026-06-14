@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.nile_crocodile
   displayNameKo: "\uB098\uC77C \uC545\uC5B4"
   category: 1
-  latitude: 30.5
-  longitude: 31
+  latitude: 31.301476
+  longitude: 31.357439
   searchToleranceBase: 0.04
   mainDescription: "\uC774\uC9D1\uD2B8\uC758 \uD070 \uAC15\uC5D0\uC11C \uD5E4\uC5C4\uCE58\uB294
     \uD06C\uACE0 \uBB34\uC11C\uC6B4 \uC545\uC5B4\uC608\uC694. \uC61B \uC774\uC9D1\uD2B8\uC5D0\uC11C\uB294

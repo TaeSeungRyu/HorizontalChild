@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.fall_constantinople
   displayNameKo: "\uCF58\uC2A4\uD0C4\uD2F0\uB178\uD3F4\uB9AC\uC2A4 \uD568\uB77D"
   category: 3
-  latitude: 41.02
-  longitude: 28.95
+  latitude: 41.150105
+  longitude: 28.610046
   searchToleranceBase: 0.03
   mainDescription: "1453\uB144, \uC624\uC2A4\uB9CC\uC758 \uC80A\uC740 \uC655\uC774
     \uCC9C \uB144\uC774 \uB118\uB294 \uD070 \uB3C4\uC2DC \uCF58\uC2A4\uD0C4\uD2F0\uB178\uD3F4\uB9AC\uC2A4\uB97C

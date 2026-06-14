@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.victoria_falls
   displayNameKo: "\uBE45\uD1A0\uB9AC\uC544 \uD3ED\uD3EC"
   category: 0
-  latitude: -17.92
-  longitude: 25.85
+  latitude: -19.95849
+  longitude: 34.52388
   searchToleranceBase: 0.03
   mainDescription: "\uC7A0\uBCA0\uC9C0 \uAC15\uC774 \uAC70\uB300\uD55C \uC808\uBCBD\uC73C\uB85C
     \uB5A8\uC5B4\uC9C0\uB294 \uCC9C\uB465 \uAC19\uC740 \uD3ED\uD3EC."

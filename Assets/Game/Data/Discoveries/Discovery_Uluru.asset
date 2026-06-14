@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.uluru
   displayNameKo: "\uC6B8\uB8E8\uB8E8"
   category: 0
-  latitude: -25.34
-  longitude: 131.04
+  latitude: -31.379368
+  longitude: 128.26442
   searchToleranceBase: 0.03
   mainDescription: "\uD638\uC8FC \uD55C\uBCF5\uD310\uC5D0 \uC6B0\uB69D \uC19F\uC740
     \uAC70\uB300\uD55C \uBD89\uC740 \uB3CC\uC0B0."

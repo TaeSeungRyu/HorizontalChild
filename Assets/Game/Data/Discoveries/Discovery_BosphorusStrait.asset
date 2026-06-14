@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.bosphorus_strait
   displayNameKo: "\uBCF4\uC2A4\uD3EC\uB8E8\uC2A4 \uD574\uD611"
   category: 0
-  latitude: 41.1
-  longitude: 29.1
+  latitude: 40.99541
+  longitude: 29.543531
   searchToleranceBase: 0.03
   mainDescription: "\uC774\uC2A4\uD0C4\uBD88 \uD55C\uAC00\uC6B4\uB370\uB97C \uC9C0\uB098\uB294
     \uC881\uC740 \uBC14\uB2F7\uAE38\uC774\uC5D0\uC694. \uD55C\uCABD\uC740 \uC720\uB7FD,

@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.ganges
   displayNameKo: "\uAC20\uC9C0\uC2A4 \uAC15"
   category: 0
-  latitude: 25.32
-  longitude: 83.01
+  latitude: 17.605225
+  longitude: 82.75785
   searchToleranceBase: 0.03
   mainDescription: "\uC778\uB3C4 \uC0AC\uB78C\uB4E4\uC774 \uAC70\uB8E9\uD558\uAC8C
     \uC5EC\uAE30\uB294 \uD070 \uAC15\uC774\uC5D0\uC694."

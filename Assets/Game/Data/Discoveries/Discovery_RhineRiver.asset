@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.rhine
   displayNameKo: "\uB77C\uC778 \uAC15"
   category: 0
-  latitude: 50
-  longitude: 7.5
+  latitude: 53.20919
+  longitude: 7.4139752
   searchToleranceBase: 0.03
   mainDescription: "\uB3C5\uC77C\uC744 \uAC00\uB974\uBA70 \uD750\uB974\uB294 \uAC70\uB300\uD55C
     \uAC15. \uC591\uC606\uC5D0 \uC61B \uC131\uB4E4\uC774 \uC990\uBE44."

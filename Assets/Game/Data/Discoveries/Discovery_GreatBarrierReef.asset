@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.great_barrier_reef
   displayNameKo: "\uADF8\uB808\uC774\uD2B8 \uBC30\uB9AC\uC5B4 \uB9AC\uD504"
   category: 0
-  latitude: -18
-  longitude: 147
+  latitude: -18.620771
+  longitude: 145.41313
   searchToleranceBase: 0.03
   mainDescription: "\uC624\uC2A4\uD2B8\uB808\uC77C\uB9AC\uC544 \uB3D9\uCABD \uBC14\uB2E4\uC758
     \uAC70\uB300\uD55C \uC0B0\uD638\uCD08 \uBCBD."

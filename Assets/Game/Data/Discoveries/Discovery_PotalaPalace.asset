@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.potala_palace
   displayNameKo: "\uD3EC\uD0C8\uB77C \uAD81"
   category: 0
-  latitude: 29.66
-  longitude: 91.12
+  latitude: 22.48123
+  longitude: 90.31296
   searchToleranceBase: 0.03
   mainDescription: "\uD2F0\uBCA0\uD2B8 \uB77C\uC2F8\uC758 \uC0B0 \uC704\uC5D0 \uC6B0\uB69D
     \uC19F\uC740 \uD770 \uAD81\uC804\uC774\uC5D0\uC694."

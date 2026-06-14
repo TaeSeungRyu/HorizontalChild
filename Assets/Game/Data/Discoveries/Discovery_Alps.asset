@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.alps
   displayNameKo: "\uC54C\uD504\uC2A4 \uC0B0\uB9E5"
   category: 0
-  latitude: 46.5
-  longitude: 8.5
+  latitude: 44.586636
+  longitude: 8.877026
   searchToleranceBase: 0.03
   mainDescription: "\uC720\uB7FD \uD55C\uAC00\uC6B4\uB370 \uC19F\uC740 \uB208 \uB36E\uC778
     \uAC70\uB300\uD55C \uC0B0\uB9E5\uC774\uC5D0\uC694."

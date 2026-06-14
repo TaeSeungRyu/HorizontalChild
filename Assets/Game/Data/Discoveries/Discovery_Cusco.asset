@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.cusco
   displayNameKo: "\uCFE0\uC2A4\uCF54"
   category: 2
-  latitude: -13.52
-  longitude: -71.97
+  latitude: -15.660448
+  longitude: -73.514946
   searchToleranceBase: 0.03
   mainDescription: "\uC789\uCE74 \uC81C\uAD6D\uC758 \uC218\uB3C4. \uC0AC\uB78C \uBAA8\uC591\uC73C\uB85C
     \uC124\uACC4\uB41C \uC2E0\uC131\uD55C \uB3C4\uC2DC."

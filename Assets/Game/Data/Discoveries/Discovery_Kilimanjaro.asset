@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.kilimanjaro
   displayNameKo: "\uD0AC\uB9AC\uB9CC\uC790\uB85C"
   category: 0
-  latitude: -3.07
-  longitude: 37.35
+  latitude: -4.9409823
+  longitude: 38.83511
   searchToleranceBase: 0.03
   mainDescription: "\uC801\uB3C4 \uAC00\uAE4C\uC774 \uC19F\uC740 5895 m \uC758 \uD654\uC0B0.
     \uAF2D\uB300\uAE30\uB294 \uB9CC\uB144\uC124."

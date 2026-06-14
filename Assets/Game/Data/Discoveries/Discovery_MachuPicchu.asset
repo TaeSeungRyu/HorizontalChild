@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.machu_picchu
   displayNameKo: "\uB9C8\uCD94\uD53D\uCD94"
   category: 2
-  latitude: -13.16
-  longitude: -72.55
+  latitude: -14.762836
+  longitude: -74.83089
   searchToleranceBase: 0.03
   mainDescription: "\uAD6C\uB984 \uC704 \uC548\uB370\uC2A4 \uC0B0\uAF2D\uB300\uAE30\uC5D0
     \uC789\uCE74\uAC00 \uC9C0\uC740 \uBE44\uBC00 \uB3C4\uC2DC\uC608\uC694."

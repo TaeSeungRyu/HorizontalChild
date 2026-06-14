@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.african_elephant
   displayNameKo: "\uC544\uD504\uB9AC\uCE74 \uCF54\uB07C\uB9AC"
   category: 1
-  latitude: -19.5
-  longitude: 23.5
+  latitude: -21.62275
+  longitude: 14.466834
   searchToleranceBase: 0.03
   mainDescription: "\uB545\uC5D0\uC11C \uAC00\uC7A5 \uD070 \uB3D9\uBB3C. \uD070 \uADC0\uC640
     \uAE34 \uCF54\uB97C \uAC00\uC84C\uC5B4\uC694."

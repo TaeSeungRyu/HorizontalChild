@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.ajanta_caves
   displayNameKo: "\uC544\uC794\uD0C0 \uC11D\uAD74"
   category: 2
-  latitude: 20.55
-  longitude: 75.7
+  latitude: 18.053913
+  longitude: 73.35509
   searchToleranceBase: 0.03
   mainDescription: "\uC808\uBCBD\uC744 \uAE4E\uC544 \uB9CC\uB4E0 30\uAC1C\uC758 \uB3D9\uAD74
     \uC548\uC5D0 \uBD80\uCC98 \uADF8\uB9BC\uC774 \uAC00\uB4DD."

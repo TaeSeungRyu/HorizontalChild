@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.persepolis
   displayNameKo: "\uD398\uB974\uC138\uD3F4\uB9AC\uC2A4"
   category: 2
-  latitude: 29.94
-  longitude: 52.89
+  latitude: 29.02018
+  longitude: 51.003437
   searchToleranceBase: 0.03
   mainDescription: "\uACE0\uB300 \uD398\uB974\uC2DC\uC544 \uC81C\uAD6D\uC758 \uD654\uB824\uD55C
     \uC758\uC2DD \uB3C4\uC2DC\uC600\uC5B4\uC694."

@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.bengal_tiger
   displayNameKo: "\uBCB5\uACE8 \uD638\uB791\uC774"
   category: 1
-  latitude: 27.5
-  longitude: 88.35
+  latitude: 21.780905
+  longitude: 88.32674
   searchToleranceBase: 0.03
   mainDescription: "\uC8FC\uD669 \uBC14\uD0D5\uC5D0 \uAC80\uC740 \uC904\uBB34\uB2AC\uAC00
     \uC120\uBA85\uD55C \uC778\uB3C4 \uC815\uAE00\uC758 \uC0AC\uB0E5\uAFBC."

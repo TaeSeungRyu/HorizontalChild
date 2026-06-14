@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.iberian_lynx
   displayNameKo: "\uC2A4\uB77C\uC18C\uB2C8"
   category: 1
-  latitude: 37
-  longitude: -6.5
+  latitude: 36.849827
+  longitude: -6.2694783
   searchToleranceBase: 0.04
   mainDescription: "\uC774\uBCA0\uB9AC\uC544 \uBC18\uB3C4 \uB0A8\uCABD \uAC08\uB300\uBC2D\uC5D0
     \uC0AC\uB294 \uC904\uBB34\uB2AC \uB4E4\uACE0\uC591\uC774\uC608\uC694. \uBFB0\uC871\uD55C

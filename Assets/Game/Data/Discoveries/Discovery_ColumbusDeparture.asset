@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.columbus_departure
   displayNameKo: "\uCF5C\uB7FC\uBC84\uC2A4 \uCD9C\uD56D"
   category: 3
-  latitude: 37.23
-  longitude: -6.9
+  latitude: 37.308903
+  longitude: -7.160066
   searchToleranceBase: 0.04
   mainDescription: "1492\uB144 \uBD04, \uCF5C\uB7FC\uBC84\uC2A4\uAC00 \uC791\uC740
     \uBC30 \uC138 \uCC99\uC744 \uC774\uB04C\uACE0 \uC2A4\uD398\uC778 \uD56D\uAD6C\uB97C

@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.angkor_wat
   displayNameKo: "\uC559\uCF54\uB974\uC640\uD2B8"
   category: 2
-  latitude: 13.41
-  longitude: 103.87
+  latitude: 12.277149
+  longitude: 102.7565
   searchToleranceBase: 0.03
   mainDescription: "\uCE84\uBCF4\uB514\uC544 \uC815\uAE00 \uC18D\uC5D0 \uC790\uB9AC\uD55C
     \uC138\uACC4 \uCD5C\uB300\uC758 \uC885\uAD50 \uAC74\uCD95\uBB3C."
