@@ -16,8 +16,8 @@ MonoBehaviour:
   displayNameKo: "\uC774\uC2A4\uD0C4\uBD88"
   displayNameOriginal: "\u0130stanbul"
   nation: {fileID: 11400000, guid: 2d79142ca971e694780252aed30ee891, type: 2}
-  latitude: 41
-  longitude: 28.9
+  latitude: 41.160156
+  longitude: 28.526722
   shortDescription: "\uB3D9\uCABD\uACFC \uC11C\uCABD \uC0AC\uC774\uC758 \uD070 \uC2DC\uC7A5\uC774
     \uC5F4\uB9AC\uB294 \uB3C4\uC2DC."
   cityIllustration: {fileID: 0}

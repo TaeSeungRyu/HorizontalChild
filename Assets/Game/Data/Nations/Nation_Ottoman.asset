@@ -19,6 +19,7 @@ MonoBehaviour:
   accentColor: {r: 0, g: 0.55, b: 0.55, a: 1}
   startingPort: {fileID: 11400000, guid: 0c812b37aed16004189c4427c168140a, type: 2}
   startingCharacter: {fileID: 11400000, guid: fea5c65c7751c7c4c94706db276c4047, type: 2}
+  startingShip: {fileID: 0}
   startingYear: 1470
   startingSeaOffsetLatitude: 0
   startingSeaOffsetLongitude: -1.5

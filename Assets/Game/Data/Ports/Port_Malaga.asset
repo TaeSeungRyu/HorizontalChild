@@ -16,8 +16,8 @@ MonoBehaviour:
   displayNameKo: "\uB9D0\uB77C\uAC00"
   displayNameOriginal: "M\xE1laga"
   nation: {fileID: 0}
-  latitude: 36.72
-  longitude: -4.42
+  latitude: 36.772423
+  longitude: -4.8953
   shortDescription: "\uD587\uBCD5\uC774 \uB530\uB73B\uD55C \uC9C0\uC911\uD574 \uBC14\uB2F7\uAC00\uC758
     \uC61B \uD56D\uAD6C."
   cityIllustration: {fileID: 0}

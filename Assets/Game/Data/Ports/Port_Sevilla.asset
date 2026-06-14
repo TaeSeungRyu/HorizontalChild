@@ -16,8 +16,8 @@ MonoBehaviour:
   displayNameKo: "\uC138\uBE44\uC57C"
   displayNameOriginal: Sevilla
   nation: {fileID: 11400000, guid: 576aa432306abcb4fbefe0a30f1c3254, type: 2}
-  latitude: 37.4
-  longitude: -5.9
+  latitude: 36.942825
+  longitude: -6.2031417
   shortDescription: "\uD070 \uAC15\uC744 \uB530\uB77C \uC0C8 \uB545\uC758 \uBCF4\uBB3C\uC774
     \uBAA8\uC774\uB294 \uB3C4\uC2DC."
   cityIllustration: {fileID: 0}

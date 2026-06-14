@@ -27,7 +27,9 @@ namespace Game.World
 
         public void OnPointerDown(PointerEventData ev)
         {
-            // 드래그 평면을 핸들의 현재 Y 위치에 설정
+            string label = _port != null ? _port.displayNameKo
+                         : _discovery != null ? _discovery.displayNameKo : "?";
+            Debug.Log($"[EditorHandle] 클릭됨 — {label} 선택. 이제 드래그하면 이동.");
             _dragPlane = new Plane(Vector3.up, transform.position);
             _dragging = true;
             if (_owner != null) _owner.NotifyHandleSelected(this);

@@ -16,8 +16,8 @@ MonoBehaviour:
   displayNameKo: "\uD0D5\uD5E4\uB974"
   displayNameOriginal: Tanger
   nation: {fileID: 0}
-  latitude: 35.78
-  longitude: -5.81
+  latitude: 34.95997
+  longitude: -5.96648
   shortDescription: "\uC9C0\uBE0C\uB864\uD130 \uB108\uBA38 \uBAA8\uB85C\uCF54 \uBD81\uCABD\uC758
     \uC61B \uB3C4\uC2DC."
   cityIllustration: {fileID: 0}
