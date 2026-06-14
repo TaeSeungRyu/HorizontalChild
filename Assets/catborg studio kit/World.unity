@@ -8388,10 +8388,11 @@ MonoBehaviour:
   discoveryCatalog: {fileID: 11400000, guid: d8e1e77fa1fceeb4e85017e6d1b0c5ca, type: 2}
   mainCamera: {fileID: 330585545}
   panSpeed: 0.53
-  zoomSpeed: 50
-  minCameraY: 50
-  maxCameraY: 2000
+  zoomSpeed: 500
+  minCameraY: 5
+  maxCameraY: 3000
   handleSize: 10
+  clickHitboxMultiplier: 2.5
   handleY: 5
   portColor: {r: 0.3, g: 0.7, b: 1, a: 1}
   discoveryColor: {r: 1, g: 0.8, b: 0.3, a: 1}
@@ -8401,6 +8402,8 @@ MonoBehaviour:
   labelYOffset: 1.6
   enableOnStart: 0
   playerShip: {fileID: 1690041783}
+  showPorts: 1
+  showDiscoveries: 0
 --- !u!1 &84848304
 GameObject:
   m_ObjectHideFlags: 0

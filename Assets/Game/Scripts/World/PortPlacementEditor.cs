@@ -39,17 +39,19 @@ namespace Game.World
         public Camera mainCamera;
         [Tooltip("우클릭 드래그 카메라 팬 속도 (월드 unit / 화면 pixel).")]
         public float panSpeed = 0.5f;
-        [Tooltip("마우스 휠 카메라 줌 속도.")]
-        public float zoomSpeed = 50f;
+        [Tooltip("마우스 휠 카메라 줌 속도. 크게 잡아야 한 노치당 의미 있게 이동.")]
+        public float zoomSpeed = 300f;
         [Tooltip("카메라 줌 최소·최대 Y.")]
-        public float minCameraY = 50f;
-        public float maxCameraY = 2000f;
+        public float minCameraY = 30f;
+        public float maxCameraY = 3000f;
 
         [Header("Handle Visual")]
-        [Tooltip("핸들 구의 크기.")]
-        public float handleSize = 10f;
-        [Tooltip("핸들의 Y 위치 (월드).")]
-        public float handleY = 5f;
+        [Tooltip("핸들 구의 크기 (시각·콜라이더 모두). 카메라 멀면 크게.")]
+        public float handleSize = 35f;
+        [Tooltip("클릭 콜라이더 추가 확장 (배율). 시각보다 큰 영역 확보.")]
+        public float clickHitboxMultiplier = 4f;
+        [Tooltip("핸들의 Y 위치 (월드). NPC·배보다 높게 잡아야 클릭이 NPC 에 안 가로채임.")]
+        public float handleY = 30f;
         public Color portColor = new Color(0.3f, 0.7f, 1f);
         public Color discoveryColor = new Color(1f, 0.8f, 0.3f);
         public Color selectedColor = new Color(0.4f, 1f, 0.4f);
@@ -65,6 +67,10 @@ namespace Game.World
         public bool enableOnStart = false;
         [Tooltip("에디터 모드 중 플레이어 배 입력 잠금.")]
         public ShipController playerShip;
+        [Tooltip("항구 핸들 표시 + 편집 허용.")]
+        public bool showPorts = true;
+        [Tooltip("발견물 핸들 표시 + 편집 허용.")]
+        public bool showDiscoveries = true;
 
         // 런타임
         private bool _active;
@@ -72,6 +78,10 @@ namespace Game.World
         private EditorHandle _selectedHandle;
         private Vector3 _camDragLastMousePos;
         private bool _camDragging;
+        // 편집 전 카메라 위치·회전 보존
+        private Vector3 _savedCameraPos;
+        private Quaternion _savedCameraRot;
+        private bool _camStateSaved;
 
         public bool IsActive => _active;
 
@@ -118,8 +128,66 @@ namespace Game.World
             _active = true;
             if (playerShip != null) playerShip.LockInput = true;
             SeaSimulation.Pause(this);   // NPC 이동 정지
+
+            // 편집 시작 전 카메라 상태 저장
+            if (mainCamera != null)
+            {
+                _savedCameraPos = mainCamera.transform.position;
+                _savedCameraRot = mainCamera.transform.rotation;
+                _camStateSaved = true;
+            }
+
+            // NPC·플레이어 배 콜라이더 비활성 — 핸들 클릭 가로채기 차단
+            DisableNonHandleColliders(true);
+
             BuildHandles();
             Debug.Log("[PortPlacementEditor] 에디터 모드 ON — 핸들 클릭·드래그로 이동, 우클릭 드래그로 팬, 휠로 줌.");
+        }
+
+        private readonly List<Collider> _disabledColliders = new();
+        private readonly List<GameObject> _hiddenPortIcons = new();
+
+        private void DisableNonHandleColliders(bool disable)
+        {
+            if (disable)
+            {
+                _disabledColliders.Clear();
+                _hiddenPortIcons.Clear();
+
+                // NPC 배들
+                foreach (var npc in FindObjectsByType<Game.Combat.NpcShip>(FindObjectsSortMode.None))
+                {
+                    foreach (var c in npc.GetComponentsInChildren<Collider>(true))
+                    {
+                        if (c.enabled) { c.enabled = false; _disabledColliders.Add(c); }
+                    }
+                }
+                // 플레이어 배
+                if (playerShip != null)
+                {
+                    foreach (var c in playerShip.GetComponentsInChildren<Collider>(true))
+                    {
+                        if (c.enabled) { c.enabled = false; _disabledColliders.Add(c); }
+                    }
+                }
+                // 항구 마커들 — 클릭 가로채기 + 원본 위치 시각 중복 해결
+                foreach (var pm in FindObjectsByType<Game.Ports.PortMarker>(FindObjectsSortMode.None))
+                {
+                    if (pm == null || pm.gameObject == null) continue;
+                    if (pm.gameObject.activeSelf)
+                    {
+                        pm.gameObject.SetActive(false);
+                        _hiddenPortIcons.Add(pm.gameObject);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var c in _disabledColliders) if (c != null) c.enabled = true;
+                _disabledColliders.Clear();
+                foreach (var go in _hiddenPortIcons) if (go != null) go.SetActive(true);
+                _hiddenPortIcons.Clear();
+            }
         }
 
         [ContextMenu("Disable Editor Mode")]
@@ -127,10 +195,25 @@ namespace Game.World
         {
             if (!_active) return;
             _active = false;
+            _camDragging = false;
+            _selectedHandle = null;
+
             if (playerShip != null) playerShip.LockInput = false;
             SeaSimulation.Resume(this);
+
+            // 강제 — 다른 source 가 paused 중이든 timeScale = 1
+            Time.timeScale = 1f;
+
             DestroyHandles();
-            Debug.Log("[PortPlacementEditor] 에디터 모드 OFF.");
+            DisableNonHandleColliders(false);   // NPC·플레이어·포트마커 복구
+
+            if (_camStateSaved && mainCamera != null)
+            {
+                mainCamera.transform.position = _savedCameraPos;
+                mainCamera.transform.rotation = _savedCameraRot;
+                _camStateSaved = false;
+            }
+            Debug.Log("[PortPlacementEditor] 에디터 모드 OFF — 카메라·콜라이더·포트마커·timeScale 모두 복원.");
         }
 
         public void Toggle()
@@ -143,7 +226,21 @@ namespace Game.World
         private void BuildHandles()
         {
             DestroyHandles();
-            if (portCatalog != null && portCatalog.all != null)
+            // 추가 cleanup — 이전 Enable 에서 남은 orphan Handle_* 모두 제거
+            int orphans = 0;
+            foreach (var t in transform.GetComponentsInChildren<Transform>(true))
+            {
+                if (t == null || t == transform) continue;
+                if (t.name != null && t.name.StartsWith("Handle_"))
+                {
+                    Destroy(t.gameObject);
+                    orphans++;
+                }
+            }
+            if (orphans > 0) Debug.LogWarning($"[PortPlacementEditor] orphan 핸들 {orphans} 개 제거.");
+
+            int portCount = 0, discCount = 0;
+            if (showPorts && portCatalog != null && portCatalog.all != null)
             {
                 foreach (var p in portCatalog.all)
                 {
@@ -151,9 +248,10 @@ namespace Game.World
                     _handles.Add(CreateHandle(p.displayNameKo, p.portId,
                         GeoCoordinate.LatLngToWorld(p.latitude, p.longitude),
                         portColor, port: p, discovery: null));
+                    portCount++;
                 }
             }
-            if (discoveryCatalog != null && discoveryCatalog.all != null)
+            if (showDiscoveries && discoveryCatalog != null && discoveryCatalog.all != null)
             {
                 foreach (var d in discoveryCatalog.all)
                 {
@@ -161,9 +259,11 @@ namespace Game.World
                     _handles.Add(CreateHandle(d.displayNameKo, d.discoveryId,
                         GeoCoordinate.LatLngToWorld(d.latitude, d.longitude),
                         discoveryColor, port: null, discovery: d));
+                    discCount++;
                 }
             }
-            Debug.Log($"[PortPlacementEditor] 핸들 {_handles.Count} 개 생성 ({portCatalog?.all?.Length ?? 0} 항구 + {discoveryCatalog?.all?.Length ?? 0} 발견물)");
+            Debug.Log($"[PortPlacementEditor] 핸들 {_handles.Count} 개 생성 " +
+                $"(항구 {portCount}, 발견물 {discCount}, showPorts={showPorts}, showDiscoveries={showDiscoveries})");
         }
 
         private void DestroyHandles()
@@ -195,7 +295,9 @@ namespace Game.World
                 rend.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             }
 
-            // SphereCollider 기본 부착 — IPointerDownHandler 동작용
+            // SphereCollider radius 확장 — 클릭 영역 시각보다 크게
+            var col = go.GetComponent<SphereCollider>();
+            if (col != null) col.radius = 0.5f * Mathf.Max(1f, clickHitboxMultiplier);
 
             var handle = go.AddComponent<EditorHandle>();
             handle.Init(this, port, discovery);
