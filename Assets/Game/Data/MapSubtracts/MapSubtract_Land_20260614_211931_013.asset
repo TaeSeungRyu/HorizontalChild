@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df6e9133e34f6b54c9edfdbde936a03c, type: 3}
+  m_Name: MapSubtract_Land_20260614_211931_013
+  m_EditorClassIdentifier: Game::Game.Data.MapSubtractData
+  subtractId: subtract.land.20260614_211931_013
+  displayNameKo: "\uB545 14"
+  kind: 1
+  widthKm: 0
+  points:
+  - {x: 11.505263, y: 53.692234}
+  - {x: 11.49913, y: 53.73882}
+  - {x: 11.481149, y: 53.78223}
+  - {x: 11.452543, y: 53.81951}
+  - {x: 11.415264, y: 53.848118}
+  - {x: 11.371851, y: 53.866096}
+  - {x: 11.325263, y: 53.872234}
+  - {x: 11.278676, y: 53.866096}
+  - {x: 11.235263, y: 53.848118}
+  - {x: 11.197984, y: 53.81951}
+  - {x: 11.169378, y: 53.78223}
+  - {x: 11.151397, y: 53.73882}
+  - {x: 11.145264, y: 53.692234}
+  - {x: 11.151397, y: 53.645645}
+  - {x: 11.169378, y: 53.602234}
+  - {x: 11.197984, y: 53.564953}
+  - {x: 11.235263, y: 53.53635}
+  - {x: 11.278676, y: 53.518368}
+  - {x: 11.325263, y: 53.51223}
+  - {x: 11.371851, y: 53.518368}
+  - {x: 11.415264, y: 53.53635}
+  - {x: 11.452543, y: 53.564953}
+  - {x: 11.481149, y: 53.602234}
+  - {x: 11.49913, y: 53.645645}
+  enabled: 1
+  notes: 
