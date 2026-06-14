@@ -48,8 +48,8 @@ namespace Game.World
         [Header("Handle Visual")]
         [Tooltip("핸들 구의 크기 (시각·콜라이더 모두). 카메라 멀면 크게.")]
         public float handleSize = 35f;
-        [Tooltip("클릭 콜라이더 추가 확장 (배율). 시각보다 큰 영역 확보.")]
-        public float clickHitboxMultiplier = 4f;
+        [Tooltip("클릭 콜라이더 추가 확장 (배율). 시각보다 큰 영역 확보. 카메라 멀면 8~16 까지 키워도 됨.")]
+        public float clickHitboxMultiplier = 10f;
         [Tooltip("핸들의 Y 위치 (월드). NPC·배보다 높게 잡아야 클릭이 NPC 에 안 가로채임.")]
         public float handleY = 30f;
         public Color portColor = new Color(0.3f, 0.7f, 1f);
@@ -210,28 +210,103 @@ namespace Game.World
         [ContextMenu("Disable Editor Mode")]
         public void Disable()
         {
-            if (!_active) return;
+            // _active 여부와 관계없이 항상 동일한 cleanup 경로를 탐 — Inspector 체크박스로
+            // 컴포넌트를 비활성화한 경우 OnDisable 에서도 같은 흐름을 타야 일관성 유지.
+            bool wasActive = _active;
             _active = false;
             _camDragging = false;
             _selectedHandle = null;
 
             if (playerShip != null) playerShip.LockInput = false;
-            SeaSimulation.Resume(this);
 
-            // 강제 복원 — 모든 pause source 무시하고 게임 시간 1로
+            // 우리가 등록했던 pause token 만 제거 + 안전망으로 Reset (다른 pauser 가 있다면
+            // 그 쪽에서 다시 Pause 하므로 게임이 일관성 잃지 않음).
+            SeaSimulation.Resume(this);
             SeaSimulation.Reset();
             Time.timeScale = 1f;
 
             DestroyHandles();
-            DisableNonHandleColliders(false);   // NPC·플레이어·포트마커 복구
+            DisableNonHandleColliders(false);
 
-            if (_camStateSaved && mainCamera != null)
+            // 카메라를 플레이어 위치로 (Y 도 적당히 — 너무 높으면 안 보임).
+            // playerShip 이 아직 0,0,0 에 있다면 카메라 그대로 둠 — (0,0,0) 으로 점프 방지.
+            if (mainCamera != null && playerShip != null
+                && playerShip.transform.position.sqrMagnitude > 0.01f)
             {
-                mainCamera.transform.position = _savedCameraPos;
-                mainCamera.transform.rotation = _savedCameraRot;
-                _camStateSaved = false;
+                var p = playerShip.transform.position;
+                var cam = mainCamera.transform.position;
+                float resetY = Mathf.Clamp(cam.y, 30f, 300f);
+                mainCamera.transform.position = new Vector3(p.x, resetY, p.z - 50f);
+                mainCamera.transform.LookAt(p);
             }
-            Debug.Log("[PortPlacementEditor] 에디터 모드 OFF — 카메라·콜라이더·포트마커·timeScale 모두 복원.");
+            _camStateSaved = false;
+
+            // 안전 — orphan 핸들이 있다면 강제 제거
+            ForceCleanup();
+
+            if (wasActive)
+            {
+                Debug.Log("[PortPlacementEditor] 에디터 모드 OFF — timeScale=1, 핸들 청소 완료.");
+            }
+        }
+
+        // 컴포넌트 체크박스 해제 / GameObject 비활성 / 씬 언로드 시에도 동일한 cleanup 보장.
+        // Disable() ContextMenu 만 의존하면 사용자가 인스펙터로 컴포넌트를 끄거나
+        // GameObject 를 비활성화 시켰을 때 pause token + handle 들이 누수됨 → 게임 freeze.
+        private void OnDisable()
+        {
+            // Play 모드가 아니면 SeaSimulation 등은 의미 없음
+            if (!Application.isPlaying) return;
+            Disable();
+        }
+
+        private void OnDestroy()
+        {
+            if (!Application.isPlaying) return;
+            // 안전망 — 다른 인스턴스가 OnDisable 보다 먼저 destroy 되는 경우 대비
+            SeaSimulation.Resume(this);
+            if (Time.timeScale == 0f) Time.timeScale = 1f;
+            if (playerShip != null) playerShip.LockInput = false;
+        }
+
+        /// <summary>씬에 남은 Handle_* GameObject 강제 제거 + timeScale 복원. 안전망.</summary>
+        private void ForceCleanup()
+        {
+            // 1) timeScale 절대 복원
+            SeaSimulation.Reset();
+            Time.timeScale = 1f;
+
+            // 2) Hierarchy 의 모든 Handle_* GameObject 찾아서 destroy
+            int killed = 0;
+            foreach (var go in FindObjectsByType<GameObject>(FindObjectsSortMode.None))
+            {
+                if (go == null) continue;
+                if (go.name != null && go.name.StartsWith("Handle_"))
+                {
+                    Destroy(go);
+                    killed++;
+                }
+            }
+            if (killed > 0) Debug.Log($"[PortPlacementEditor] ForceCleanup — 잔재 Handle 게오 {killed} 개 제거.");
+
+            // 3) PortMarker GO 가 비활성 상태로 남아있으면 재활성
+            foreach (var pm in FindObjectsByType<Game.Ports.PortMarker>(
+                FindObjectsInactive.Include, FindObjectsSortMode.None))
+            {
+                if (pm != null && pm.gameObject != null && !pm.gameObject.activeSelf)
+                {
+                    pm.gameObject.SetActive(true);
+                }
+            }
+        }
+
+        [ContextMenu("Force Cleanup (Emergency)")]
+        private void EmergencyCleanup()
+        {
+            ForceCleanup();
+            if (playerShip != null) playerShip.LockInput = false;
+            _active = false;
+            Debug.Log("[PortPlacementEditor] EMERGENCY 청소 완료.");
         }
 
         public void Toggle()
@@ -356,6 +431,20 @@ namespace Game.World
         private void Update()
         {
             if (!_active || mainCamera == null) return;
+
+            // 엔터키 누르면 현재 선택 해제 (색 원복)
+            var keyboard = Keyboard.current;
+            if (keyboard != null
+                && (keyboard.enterKey.wasPressedThisFrame
+                    || keyboard.numpadEnterKey.wasPressedThisFrame))
+            {
+                if (_selectedHandle != null)
+                {
+                    ResetHandleColor(_selectedHandle.gameObject);
+                    Debug.Log("[PortPlacementEditor] 선택 해제 (Enter).");
+                    _selectedHandle = null;
+                }
+            }
 
             var mouse = Mouse.current;
             if (mouse == null) return;

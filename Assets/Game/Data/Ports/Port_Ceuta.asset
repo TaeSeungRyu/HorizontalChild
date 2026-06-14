@@ -16,8 +16,8 @@ MonoBehaviour:
   displayNameKo: "\uC138\uC6B0\uD0C0"
   displayNameOriginal: Ceuta
   nation: {fileID: 11400000, guid: d3ae184577970864a8cffd9371bb3569, type: 2}
-  latitude: 35.9
-  longitude: -5.3
+  latitude: 35.675953
+  longitude: -5.54281
   shortDescription: "\uBC14\uB2E4\uB97C \uAC74\uB108 \uC0C8 \uAE38\uC774 \uC2DC\uC791\uB41C
     \uC791\uC740 \uD56D\uAD6C."
   cityIllustration: {fileID: 0}

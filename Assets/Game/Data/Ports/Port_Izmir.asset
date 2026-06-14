@@ -16,8 +16,8 @@ MonoBehaviour:
   displayNameKo: "\uC774\uC988\uBBF8\uB974"
   displayNameOriginal: "\u0130zmir"
   nation: {fileID: 0}
-  latitude: 38.42
-  longitude: 27.14
+  latitude: 38.33275
+  longitude: 26.768774
   shortDescription: "\uC5D0\uAC8C\uD574\uB97C \uB9C8\uC8FC \uBCF4\uB294 \uB530\uB73B\uD55C
     \uC624\uC2A4\uB9CC\uC758 \uD56D\uAD6C."
   cityIllustration: {fileID: 0}
