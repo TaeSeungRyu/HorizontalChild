@@ -3,6 +3,7 @@ using Game.Data;
 using Game.Ship;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -55,8 +56,9 @@ namespace Game.World
 
         [Header("Label")]
         public TMP_FontAsset labelFont;
-        public float labelFontSize = 6f;
-        public float labelYOffset = 1.6f;   // 핸들 위쪽 offset (loc unit)
+        [Tooltip("월드 단위 폰트 크기. 카메라 멀면 크게 (30~80).")]
+        public float labelFontSize = 40f;
+        public float labelYOffset = 2.0f;   // 핸들 위쪽 offset (loc unit)
 
         [Header("Behavior")]
         [Tooltip("Play 시 자동으로 에디터 모드 활성.")]
@@ -76,12 +78,42 @@ namespace Game.World
         private void Start()
         {
             if (mainCamera == null) mainCamera = Camera.main;
-            if (enableOnStart) Enable();
+
+            // 진단 로그
+            int portCount = portCatalog?.all?.Length ?? 0;
+            int discCount = discoveryCatalog?.all?.Length ?? 0;
+            Debug.Log($"[PortPlacementEditor] Start — enableOnStart={enableOnStart}, " +
+                $"portCatalog={(portCatalog != null ? portCount.ToString() : "NULL")} 항구, " +
+                $"discoveryCatalog={(discoveryCatalog != null ? discCount.ToString() : "NULL")} 발견물, " +
+                $"mainCamera={(mainCamera != null ? mainCamera.name : "NULL")}");
+
+            // 메인 카메라에 PhysicsRaycaster 없으면 자동 추가 (핸들 클릭 가능하려면 필수)
+            if (mainCamera != null && mainCamera.GetComponent<UnityEngine.EventSystems.PhysicsRaycaster>() == null)
+            {
+                mainCamera.gameObject.AddComponent<UnityEngine.EventSystems.PhysicsRaycaster>();
+                Debug.LogWarning("[PortPlacementEditor] 메인 카메라에 PhysicsRaycaster 자동 추가 — 핸들 클릭 활성화.");
+            }
+
+            if (enableOnStart)
+            {
+                Enable();
+            }
+            else
+            {
+                Debug.Log("[PortPlacementEditor] enableOnStart=false → 자동 활성 안 함. " +
+                    "Inspector 의 'Enable On Start' 토글 ON 또는 컴포넌트 우클릭 → 'Enable Editor Mode' 로 켜기.");
+            }
         }
 
         [ContextMenu("Enable Editor Mode")]
         public void Enable()
         {
+            if (!Application.isPlaying)
+            {
+                Debug.LogWarning("[PortPlacementEditor] Play 모드에서만 작동합니다. Unity 의 ▶ Play 버튼을 누른 뒤 다시 시도하세요. " +
+                    "또는 'Enable On Start' 토글 ON + Play.");
+                return;
+            }
             if (_active) return;
             _active = true;
             if (playerShip != null) playerShip.LockInput = true;
@@ -187,16 +219,16 @@ namespace Game.World
             tmp.text = text;
             tmp.alignment = TextAlignmentOptions.Center;
             tmp.fontSize = labelFontSize;
-            tmp.outlineWidth = 0.2f;
+            tmp.outlineWidth = 0.35f;
             tmp.outlineColor = Color.black;
             tmp.faceColor = Color.white;
             tmp.enableWordWrapping = false;
             tmp.raycastTarget = false;
             tmp.richText = true;
 
-            // RectTransform 크기 충분히
+            // RectTransform 크기 충분히 — 글자 폭에 맞춰
             var rt = labelGO.GetComponent<RectTransform>();
-            if (rt != null) rt.sizeDelta = new Vector2(40f, 8f);
+            if (rt != null) rt.sizeDelta = new Vector2(300f, 60f);
         }
 
         // ─── 카메라 팬·줌 ────────────────────────────────────────────────────
@@ -205,32 +237,37 @@ namespace Game.World
         {
             if (!_active || mainCamera == null) return;
 
+            var mouse = Mouse.current;
+            if (mouse == null) return;
+
             // 우클릭 드래그 카메라 팬
-            if (Input.GetMouseButtonDown(1))
+            if (mouse.rightButton.wasPressedThisFrame)
             {
                 _camDragging = true;
-                _camDragLastMousePos = Input.mousePosition;
+                _camDragLastMousePos = mouse.position.ReadValue();
             }
-            if (Input.GetMouseButtonUp(1))
+            if (mouse.rightButton.wasReleasedThisFrame)
             {
                 _camDragging = false;
             }
             if (_camDragging)
             {
-                Vector3 mouseDelta = Input.mousePosition - _camDragLastMousePos;
-                _camDragLastMousePos = Input.mousePosition;
+                Vector3 currentMouse = mouse.position.ReadValue();
+                Vector3 mouseDelta = currentMouse - _camDragLastMousePos;
+                _camDragLastMousePos = currentMouse;
                 // 화면 픽셀 → 월드 unit (Y 높이에 비례하게 살짝 키움)
                 float scaleFactor = panSpeed * Mathf.Max(1f, mainCamera.transform.position.y / 100f);
                 var worldDelta = new Vector3(-mouseDelta.x * scaleFactor, 0f, -mouseDelta.y * scaleFactor);
                 mainCamera.transform.position += worldDelta;
             }
 
-            // 마우스 휠 줌 (Y 축 변경)
-            float wheel = Input.mouseScrollDelta.y;
+            // 마우스 휠 줌 (Y 축 변경) — InputSystem scroll 은 보통 ±120 단위
+            float wheel = mouse.scroll.ReadValue().y;
             if (Mathf.Abs(wheel) > 0.001f)
             {
                 var camPos = mainCamera.transform.position;
-                camPos.y = Mathf.Clamp(camPos.y - wheel * zoomSpeed, minCameraY, maxCameraY);
+                // /120 으로 정규화 (한 단위 = 한 노치)
+                camPos.y = Mathf.Clamp(camPos.y - (wheel / 120f) * zoomSpeed, minCameraY, maxCameraY);
                 mainCamera.transform.position = camPos;
             }
         }
