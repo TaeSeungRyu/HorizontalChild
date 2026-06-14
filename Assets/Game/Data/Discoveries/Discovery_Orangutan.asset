@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.orangutan
   displayNameKo: "\uC624\uB791\uC6B0\uD0C4"
   category: 1
-  latitude: 1.07
-  longitude: 110.34
+  latitude: 1.3749814
+  longitude: 109.849106
   searchToleranceBase: 0.03
   mainDescription: "\uBCF4\uB974\uB124\uC624\uC640 \uC218\uB9C8\uD2B8\uB77C \uC815\uAE00\uC5D0
     \uC0AC\uB294 \uBD89\uC740 \uD138\uC758 \uD070 \uC6D0\uC22D\uC774\uC608\uC694."

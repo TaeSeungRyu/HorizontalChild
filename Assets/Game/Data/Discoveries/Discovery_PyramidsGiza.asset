@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.pyramids_giza
   displayNameKo: "\uAE30\uC790 \uD53C\uB77C\uBBF8\uB4DC"
   category: 2
-  latitude: 30.05
-  longitude: 31
+  latitude: 29.948008
+  longitude: 31.305859
   searchToleranceBase: 0.03
   mainDescription: "\uC774\uC9D1\uD2B8\uC758 \uBAA8\uB798 \uC704\uC5D0 \uC6B0\uB69D
     \uC19F\uC740 \uAC70\uB300\uD55C \uB3CC\uBB34\uB364\uC774\uC5D0\uC694. 4500\uB144

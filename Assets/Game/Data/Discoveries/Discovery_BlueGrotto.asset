@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.blue_grotto
   displayNameKo: "\uD478\uB978 \uB3D9\uAD74"
   category: 0
-  latitude: 40.6
-  longitude: 14.2
+  latitude: 41.25171
+  longitude: 13.8809805
   searchToleranceBase: 0.03
   mainDescription: "\uC774\uD0C8\uB9AC\uC544 \uB0A8\uCABD \uC791\uC740 \uC12C \uC606\uC5D0
     \uC228\uC5B4 \uC788\uB294 \uC2E0\uBE44\uD55C \uB3D9\uAD74\uC774\uC5D0\uC694.

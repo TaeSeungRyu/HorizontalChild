@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.vesuvius
   displayNameKo: "\uBCA0\uC218\uBE44\uC624 \uD654\uC0B0"
   category: 0
-  latitude: 40.82
-  longitude: 14.43
+  latitude: 40.837223
+  longitude: 14.597959
   searchToleranceBase: 0.03
   mainDescription: "\uB098\uD3F4\uB9AC\uB9CC \uC606\uC5D0 \uC19F\uC740 \uD654\uC0B0.
     79\uB144 \uD3FC\uD398\uC774\uB97C \uC0BC\uCF30\uC5B4\uC694."

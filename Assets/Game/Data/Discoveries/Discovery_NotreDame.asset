@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.notre_dame
   displayNameKo: "\uB178\uD2B8\uB974\uB2F4 \uB300\uC131\uB2F9"
   category: 0
-  latitude: 48.85
-  longitude: 2.35
+  latitude: 49.92996
+  longitude: 1.5527421
   searchToleranceBase: 0.03
   mainDescription: "\uD30C\uB9AC \uAC15 \uD55C\uBCF5\uD310 \uC12C\uC5D0 \uC138\uC6CC\uC9C4
     \uAC70\uB300\uD55C \uACE0\uB515 \uC131\uB2F9\uC774\uC5D0\uC694."

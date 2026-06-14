@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.pompeii
   displayNameKo: "\uD3FC\uD398\uC774"
   category: 2
-  latitude: 40.75
-  longitude: 14.49
+  latitude: 40.230625
+  longitude: 15.152814
   searchToleranceBase: 0.04
   mainDescription: "\uC774\uD0C8\uB9AC\uC544 \uB0A8\uCABD \uD654\uC0B0 \uC544\uB798
     \uBB3B\uD600 \uC788\uB358 \uC61B \uB85C\uB9C8 \uB3C4\uC2DC\uC608\uC694. \uD55C\uC21C\uAC04\uC5D0

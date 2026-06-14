@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.jerusalem
   displayNameKo: "\uC608\uB8E8\uC0B4\uB818 \uC61B \uB3C4\uC2DC"
   category: 0
-  latitude: 31.78
-  longitude: 35.22
+  latitude: 31.795397
+  longitude: 34.68016
   searchToleranceBase: 0.03
   mainDescription: "\uC720\uB300\xB7\uAE30\uB3C5\xB7\uC774\uC2AC\uB78C \uC138 \uC885\uAD50\uAC00
     \uAC70\uB8E9\uD558\uAC8C \uC5EC\uAE30\uB294 \uB3C4\uC2DC."

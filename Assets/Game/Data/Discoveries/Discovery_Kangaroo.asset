@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.kangaroo
   displayNameKo: "\uCEA5\uAC70\uB8E8"
   category: 1
-  latitude: -23.7
-  longitude: 133.9
+  latitude: -31.534498
+  longitude: 132.79263
   searchToleranceBase: 0.03
   mainDescription: "\uC8FC\uBA38\uB2C8\uC5D0 \uC544\uAE30\uB97C \uB123\uACE0 \uB6F0\uC5B4\uB2E4\uB2C8\uB294
     \uD638\uC8FC\uC758 \uD070 \uB3D9\uBB3C."

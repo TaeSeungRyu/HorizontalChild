@@ -8402,8 +8402,9 @@ MonoBehaviour:
   labelYOffset: 1.6
   enableOnStart: 0
   playerShip: {fileID: 1690041783}
-  showPorts: 1
-  showDiscoveries: 0
+  showPorts: 0
+  showDiscoveries: 1
+  pickRadiusPixels: 80
 --- !u!1 &84848304
 GameObject:
   m_ObjectHideFlags: 0
@@ -97866,17 +97867,18 @@ MonoBehaviour:
   autoChange: 1
   autoChangeInterval: {x: 30, y: 90}
   transitionTime: 6
+  useScreenTint: 1
+  maxTintAlpha: 0.38
+  cloudyTint: {r: 0.55, g: 0.58, b: 0.62, a: 1}
+  rainTint: {r: 0.38, g: 0.45, b: 0.55, a: 1}
+  useCloudParticles: 1
   target: {fileID: 0}
   cloudHeight: 40
+  useRainParticles: 1
   rainHeight: 22
   sun: {fileID: 0}
-  clearSun: {r: 1, g: 0.98, b: 0.92, a: 1}
-  overcastSun: {r: 0.62, g: 0.64, b: 0.68, a: 1}
   clearSunIntensity: 1.6
   overcastSunIntensity: 0.85
-  controlAmbient: 1
-  clearAmbient: {r: 0.55, g: 0.6, b: 0.68, a: 1}
-  overcastAmbient: {r: 0.4, g: 0.42, b: 0.46, a: 1}
 --- !u!1 &1040141374
 GameObject:
   m_ObjectHideFlags: 0

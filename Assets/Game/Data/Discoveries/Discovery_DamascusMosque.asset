@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.damascus_mosque
   displayNameKo: "\uB2E4\uB9C8\uC2A4\uCFE0\uC2A4 \uC6B0\uB9C8\uC774\uC57C \uBAA8\uC2A4\uD06C"
   category: 0
-  latitude: 33.51
-  longitude: 36.3
+  latitude: 33.490524
+  longitude: 35.436768
   searchToleranceBase: 0.03
   mainDescription: "\uC138\uACC4\uC5D0\uC11C \uAC00\uC7A5 \uC624\uB798\uB41C \uD070
     \uBAA8\uC2A4\uD06C \uC911 \uD558\uB098\uC608\uC694."

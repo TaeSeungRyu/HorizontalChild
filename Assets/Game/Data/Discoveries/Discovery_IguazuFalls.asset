@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.iguazu_falls
   displayNameKo: "\uC774\uACFC\uC218 \uD3ED\uD3EC"
   category: 0
-  latitude: -25.69
-  longitude: -54.44
+  latitude: -27.646782
+  longitude: -49.117832
   searchToleranceBase: 0.03
   mainDescription: "\uC218\uB9CE\uC740 \uC904\uAE30\uB85C \uAC08\uB77C\uC9C0\uBA70
     \uB5A8\uC5B4\uC9C0\uB294 \uAC70\uB300\uD55C \uC815\uAE00 \uD3ED\uD3EC."

@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.mekong
   displayNameKo: "\uBA54\uCF69 \uAC15"
   category: 0
-  latitude: 12
-  longitude: 105
+  latitude: 10.369617
+  longitude: 104.87096
   searchToleranceBase: 0.03
   mainDescription: "\uB3D9\uB0A8\uC544 \uB2E4\uC12F \uB098\uB77C\uB97C \uD750\uB974\uB294
     \uAE38\uACE0 \uD48D\uC694\uB85C\uC6B4 \uD070 \uAC15\uC774\uC5D0\uC694."

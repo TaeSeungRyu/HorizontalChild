@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.mount_everest
   displayNameKo: "\uC5D0\uBCA0\uB808\uC2A4\uD2B8"
   category: 0
-  latitude: 27.99
-  longitude: 86.93
+  latitude: 20.089672
+  longitude: 85.46015
   searchToleranceBase: 0.03
   mainDescription: "\uD788\uB9D0\uB77C\uC57C \uAF2D\uB300\uAE30, 8849 m \uC138\uACC4
     \uCD5C\uACE0\uBD09\uC774\uC5D0\uC694."

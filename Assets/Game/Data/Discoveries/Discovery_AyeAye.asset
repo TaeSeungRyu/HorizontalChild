@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.aye_aye
   displayNameKo: "\uC544\uC774\uC544\uC774"
   category: 1
-  latitude: -15.5
-  longitude: 47.4
+  latitude: -21.147795
+  longitude: 55.428715
   searchToleranceBase: 0.03
   mainDescription: "\uAE34 \uC190\uAC00\uB77D\uC73C\uB85C \uB098\uBB34\uB97C \uB450\uB4DC\uB824
     \uACE4\uCDA9\uC744 \uCC3E\uB294 \uB9C8\uB2E4\uAC00\uC2A4\uCE74\uB974\uC758 \uC2E0\uBE44\uD55C

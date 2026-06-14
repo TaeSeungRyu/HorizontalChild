@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.petra
   displayNameKo: "\uD398\uD2B8\uB77C"
   category: 2
-  latitude: 30.33
-  longitude: 35.45
+  latitude: 29.587856
+  longitude: 35.338547
   searchToleranceBase: 0.03
   mainDescription: "\uC0AC\uB9C9\uC758 \uBD84\uD64D\uBE5B \uC808\uBCBD\uC744 \uD1B5\uC9F8\uB85C
     \uAE4E\uC544 \uB9CC\uB4E0 \uBE44\uBC00\uC758 \uB3C4\uC2DC."
