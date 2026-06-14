@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df6e9133e34f6b54c9edfdbde936a03c, type: 3}
+  m_Name: MapSubtract_Malacca
+  m_EditorClassIdentifier: Game::Game.Data.MapSubtractData
+  subtractId: subtract.malacca
+  displayNameKo: "\uB9D0\uB77C\uCE74 \uD574\uD611"
+  widthKm: 150
+  points:
+  - {x: 98.5, y: 6}
+  - {x: 101, y: 3}
+  - {x: 103.5, y: 1.5}
+  enabled: 1
+  notes: "\uC548\uB2E4\uB9CC\uD574 \u2192 \uC2F1\uAC00\uD3EC\uB974. \uB3D9\uB0A8\uC544
+    \uD56D\uD574 \uD575\uC2EC."

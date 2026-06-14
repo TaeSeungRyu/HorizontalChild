@@ -37,6 +37,7 @@ namespace Game.Editor
             total += RefreshCatalogOfType<NpcCatalog, NpcDefinition>(c => c.all, (c, arr) => c.all = arr);
             total += RefreshCatalogOfType<ShipCatalog, ShipData>(c => c.all, (c, arr) => c.all = arr);
             total += RefreshCatalogOfType<CharacterCatalog, CharacterData>(c => c.all, (c, arr) => c.all = arr);
+            total += RefreshCatalogOfType<MapSubtractCatalog, MapSubtractData>(c => c.all, (c, arr) => c.all = arr);
 
             AssetDatabase.SaveAssets();
             Debug.Log($"[CatalogRefresher] 완료. 총 {total}개 SO 가 카탈로그에 등록됨.");

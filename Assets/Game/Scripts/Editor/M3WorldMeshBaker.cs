@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using Game.Data;
 using Game.World;
 using Newtonsoft.Json.Linq;
 using UnityEditor;
@@ -28,6 +29,9 @@ namespace Game.Editor
         private const string MeshPath    = "Assets/Game/Art/Map/WorldLand.mesh";
         private const string MaterialPath = "Assets/Game/Art/Map/WorldLand.mat";
         private const string PrefabPath  = "Assets/Game/Art/Map/WorldLand.prefab";
+
+        // 베이크 시 자동 로드되는 카탈로그 — 등록된 모든 활성 subtract 영역이 메쉬에서 잘림.
+        private const string MapSubtractCatalogPath = "Assets/Game/Data/_Catalogs/MapSubtractCatalog.asset";
 
         // 추천 기본값 (사용자 결정 사항)
         // ExtrudeHeight 가 크면 해안선이 "벽" 처럼 보임 (side wall 이 또렷).
@@ -69,8 +73,11 @@ namespace Game.Editor
                     return;
                 }
 
+                EditorUtility.DisplayProgressBar("Bake World Land", "Subtract 영역 로드...", 0.3f);
+                var subtractPolys = LoadSubtractPolygonsWorld(out int subtractCount, out int subtractDisabled);
+
                 EditorUtility.DisplayProgressBar("Bake World Land", "삼각화 + 메쉬 생성...", 0.5f);
-                var mesh = BuildExtrudedMesh(rings);
+                var mesh = BuildExtrudedMesh(rings, subtractPolys, out int droppedTris);
 
                 EditorUtility.DisplayProgressBar("Bake World Land", "Asset 저장 중...", 0.85f);
                 SaveMeshAsset(mesh);
@@ -84,6 +91,7 @@ namespace Game.Editor
                     $"[M3WorldMeshBaker] 완료.\n" +
                     $"  • Features 읽음: {featureCount} (Dateline 스킵 {skipped})\n" +
                     $"  • 폴리곤 ring: {rings.Count}\n" +
+                    $"  • Subtract 영역: 활성 {subtractCount}, 비활성 {subtractDisabled} (제거된 삼각형 {droppedTris})\n" +
                     $"  • 정점: {mesh.vertexCount}, 삼각형: {mesh.triangles.Length / 3}\n" +
                     $"  • Asset: {MeshPath} / {MaterialPath} / {PrefabPath}\n" +
                     $"  • 다음 단계: Prefab 을 씬에 드래그.\n" +
@@ -188,13 +196,46 @@ namespace Game.Editor
             return true;
         }
 
+        // ─── Subtract 영역 로드 ────────────────────────────────────────────
+
+        /// <summary>
+        /// MapSubtractCatalog 의 활성 MapSubtractData 를 월드 좌표 XZ 폴리곤 리스트로 변환.
+        /// 베이크 시 이 폴리곤들 안에 들어가는 삼각형 centroid 가 모두 제거됨.
+        /// </summary>
+        private static List<Vector2[]> LoadSubtractPolygonsWorld(out int enabled, out int disabled)
+        {
+            enabled = 0;
+            disabled = 0;
+            var result = new List<Vector2[]>();
+            var catalog = AssetDatabase.LoadAssetAtPath<MapSubtractCatalog>(MapSubtractCatalogPath);
+            if (catalog == null || catalog.all == null) return result;
+
+            foreach (var d in catalog.all)
+            {
+                if (d == null) continue;
+                if (!d.enabled) { disabled++; continue; }
+                var polys = Game.World.MapSubtractGeometry.BuildSubtractPolygonsWorld(d);
+                if (polys.Count > 0)
+                {
+                    enabled++;
+                    result.AddRange(polys);
+                }
+            }
+            return result;
+        }
+
         // ─── Mesh 빌드 ─────────────────────────────────────────────────────
 
-        private static Mesh BuildExtrudedMesh(List<Vector2[]> rings)
+        private static Mesh BuildExtrudedMesh(
+            List<Vector2[]> rings,
+            List<Vector2[]> subtractPolys,
+            out int droppedTris)
         {
             var verts = new List<Vector3>();
             var tris = new List<int>();
             int skippedByTriangulation = 0;
+            droppedTris = 0;
+            bool hasSubtract = subtractPolys != null && subtractPolys.Count > 0;
 
             foreach (var ring in rings)
             {
@@ -250,18 +291,32 @@ namespace Game.Editor
                     verts.Add(new Vector3(v.x, BaseY, v.z));
                 }
 
-                // 7) Top triangles (CCW 위에서)
-                for (int i = 0; i < topTris.Count; i++)
+                // 7+8) Top + Bottom triangles — 삼각형 centroid 가 subtract 영역에 있으면 스킵
+                //      삼각형 단위로 필터하면 cut edge 가 살짝 jagged 해지지만
+                //      MaxEdgeWorldUnits 가 작아 시각적으로 거의 알아챌 수 없음.
+                for (int t = 0; t < topTris.Count; t += 3)
                 {
-                    tris.Add(baseIndex + topTris[i]);
-                }
-
-                // 8) Bottom triangles (winding 반전 → 아래쪽 노멀)
-                for (int i = 0; i < topTris.Count; i += 3)
-                {
-                    tris.Add(baseIndex + topCount + topTris[i]);
-                    tris.Add(baseIndex + topCount + topTris[i + 2]);
-                    tris.Add(baseIndex + topCount + topTris[i + 1]);
+                    int ia = topTris[t], ib = topTris[t + 1], ic = topTris[t + 2];
+                    if (hasSubtract)
+                    {
+                        var a = topLocal[ia]; var b = topLocal[ib]; var c = topLocal[ic];
+                        var centroid = new Vector2(
+                            (a.x + b.x + c.x) / 3f,
+                            (a.z + b.z + c.z) / 3f);
+                        if (Game.World.MapSubtractGeometry.PointInAny(centroid, subtractPolys))
+                        {
+                            droppedTris++;
+                            continue;
+                        }
+                    }
+                    // Top
+                    tris.Add(baseIndex + ia);
+                    tris.Add(baseIndex + ib);
+                    tris.Add(baseIndex + ic);
+                    // Bottom (winding 반전)
+                    tris.Add(baseIndex + topCount + ia);
+                    tris.Add(baseIndex + topCount + ic);
+                    tris.Add(baseIndex + topCount + ib);
                 }
 
                 // 9) Side walls — boundary 정점을 별도 복제해서 사용
@@ -280,6 +335,19 @@ namespace Game.Editor
                 for (int i = 0; i < n; i++)
                 {
                     int next = (i + 1) % n;
+
+                    // Side wall quad 의 중심이 subtract 영역에 있으면 스킵
+                    if (hasSubtract)
+                    {
+                        var p0 = topLocal[i]; var p1 = topLocal[next];
+                        var midXZ = new Vector2((p0.x + p1.x) * 0.5f, (p0.z + p1.z) * 0.5f);
+                        if (Game.World.MapSubtractGeometry.PointInAny(midXZ, subtractPolys))
+                        {
+                            droppedTris += 2;
+                            continue;
+                        }
+                    }
+
                     int tCurr = sideTopStart + i;
                     int tNext = sideTopStart + next;
                     int bCurr = sideBotStart + i;
