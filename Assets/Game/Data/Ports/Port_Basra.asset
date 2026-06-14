@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Basra
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.basra
+  displayNameKo: "\uBC14\uC2A4\uB77C"
+  displayNameOriginal: Basra
+  nation: {fileID: 0}
+  latitude: 30.5
+  longitude: 47.79
+  shortDescription: "\uD2F0\uADF8\uB9AC\uC2A4\xB7\uC720\uD504\uB77C\uD14C\uC2A4 \uB450
+    \uAC15\uC774 \uD569\uCCD0\uC9C0\uB294 \uBA54\uC18C\uD3EC\uD0C0\uBBF8\uC544\uC758
+    \uC61B \uBB34\uC5ED\uD56D."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: e91d9d9d071ced84f820250be5d2600a, type: 2}
+  - {fileID: 11400000, guid: 32dc6dbd3aada7a4b919794be3f125bd, type: 2}
+  - {fileID: 11400000, guid: c32602d795d6ab543813623fa2ee71b4, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uBC14\uC2A4\uB77C"

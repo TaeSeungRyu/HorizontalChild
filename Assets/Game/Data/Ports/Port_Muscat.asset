@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Muscat
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.muscat
+  displayNameKo: "\uBB34\uC2A4\uCE74\uD2B8"
+  displayNameOriginal: Muscat
+  nation: {fileID: 0}
+  latitude: 23.61
+  longitude: 58.59
+  shortDescription: "\uC544\uB77C\uBE44\uC544 \uBC18\uB3C4 \uB3D9\uCABD \uB05D, \uC9C4\uC8FC\uC7A1\uC774
+    \uBC30\uAC00 \uAC00\uB4DD\uD55C \uC624\uB9CC\uC758 \uD56D\uAD6C."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 420287c0a0f926840a2336763a1a3e08, type: 2}
+  - {fileID: 11400000, guid: a9e210f6e49af3b439910a74fe8d9d23, type: 2}
+  - {fileID: 11400000, guid: e91d9d9d071ced84f820250be5d2600a, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uBB34\uC2A4\uCE74\uD2B8"

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_NootkaSound
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.nootka_sound
+  displayNameKo: "\uB204\uD2B8\uCE74 \uC0AC\uC6B4\uB4DC"
+  displayNameOriginal: Nootka Sound
+  nation: {fileID: 0}
+  latitude: 49.6
+  longitude: -126.62
+  shortDescription: "\uBD81\uD0DC\uD3C9\uC591\uC758 \uAE4A\uC740 \uB9CC. \uD574\uB2EC
+    \uAC00\uC8FD\uC744 \uB178\uB9AC\uB294 \uBAA8\uD53C \uC0AC\uB0E5\uAFBC\uB4E4\uC758
+    \uAC70\uC810."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 23fc32c4f48686e468a06e557056124d, type: 2}
+  - {fileID: 11400000, guid: a7ce28925bd135a43977e4c37a116e0d, type: 2}
+  - {fileID: 11400000, guid: 6f4b47f9714689647a203e8cd8e1fd07, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uB204\uD2B8\uCE74_\uC0AC\uC6B4\uB4DC"
