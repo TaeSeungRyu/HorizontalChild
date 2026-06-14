@@ -123,6 +123,30 @@ namespace Game.Editor
                 d.notes = "대서양 → 마나우스 → 이키토스. 폭 250km — 대항해시대 2 처럼 강 안쪽까지 항해.";
             });
 
+            // 북해 → 발트해 통로 (네덜란드 동쪽이 막혀서 어린이가 통과 못 하는 문제 해결)
+            CreateOrLoad("MapSubtract_NorthSeaPassage.asset", d =>
+            {
+                d.subtractId = "subtract.north_sea_passage";
+                d.displayNameKo = "북해 → 발트해 통로";
+                d.widthKm = 300f;   // 매우 넓게 — 어린이 통과 보장
+                d.enabled = true;
+                d.points = new[]
+                {
+                    // 네덜란드 동쪽 시작 → 독일 북쪽 → 유틀란드 서쪽 → 스카게라크 →
+                    // 카테가트 → 발트해 입구
+                    new Vector2(4.0f, 53.0f),    // 네덜란드 북쪽 (Wadden Sea 시작)
+                    new Vector2(7.0f, 54.0f),    // 독일 북쪽 (Wadden Sea 동쪽)
+                    new Vector2(8.0f, 55.5f),    // 유틀란드 (덴마크) 서해안
+                    new Vector2(8.0f, 57.0f),    // 유틀란드 북서
+                    new Vector2(9.5f, 57.8f),    // 스카게라크 입구
+                    new Vector2(11.0f, 58.0f),   // 스카게라크 중심
+                    new Vector2(12.0f, 57.0f),   // 카테가트 입구
+                    new Vector2(12.5f, 55.8f),   // 카테가트 남쪽
+                    new Vector2(13.0f, 54.5f),   // 발트해 입구 (Lübeck Bay)
+                };
+                d.notes = "네덜란드 동쪽 막힘 해결. 북해 ↔ 발트해 큰 통로. 폭 300km.";
+            });
+
             // ─── 2) 카탈로그 — 폴더 스캔으로 모든 MapSubtractData 등록 ─────────
             //     (사용자가 에디터로 만든 SO 도 자동 포함됨)
             var catalogPath = $"{DataRoot}/_Catalogs/MapSubtractCatalog.asset";
@@ -156,6 +180,7 @@ namespace Game.Editor
             Debug.Log(
                 $"[M10MapSubtractSeeder] 완료. 카탈로그 → {allFound.Count}개 영역 등록.\n" +
                 "  • 나일강 폭 200km / 아마존강 폭 250km (대항해시대 2 풍)\n" +
+                "  • 북해↔발트해 통로 폭 300km (네덜란드 동쪽 막힘 해결)\n" +
                 "\n다음:\n" +
                 "  → Game ▸ Bake World Land Mesh from GeoJSON  — 메쉬 재베이크 (5~10초)\n" +
                 "  → Play 모드에서 나일강·아마존강으로 배 진입 가능!");
