@@ -16,8 +16,8 @@ MonoBehaviour:
   displayNameKo: "\uBCA0\uB124\uCE58\uC544"
   displayNameOriginal: Venezia
   nation: {fileID: 11400000, guid: 50ff5fa2e6c3f1044ba3d1c4585f47d3, type: 2}
-  latitude: 45.4
-  longitude: 12.3
+  latitude: 45.05817
+  longitude: 12.409674
   shortDescription: "\uBB3C\uAE38\uC774 \uAC70\uB9AC\uAC00 \uB41C \uC2E0\uAE30\uD55C
     \uB3C4\uC2DC."
   cityIllustration: {fileID: 0}

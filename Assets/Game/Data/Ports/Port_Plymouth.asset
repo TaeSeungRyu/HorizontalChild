@@ -16,8 +16,8 @@ MonoBehaviour:
   displayNameKo: "\uD50C\uB9AC\uBA38\uC2A4"
   displayNameOriginal: Plymouth
   nation: {fileID: 0}
-  latitude: 50.37
-  longitude: -4.14
+  latitude: 50.358772
+  longitude: -3.8760993
   shortDescription: "\uC6A9\uAC10\uD55C \uBC43\uC0AC\uB78C\uB4E4\uC774 \uC0C8 \uB545\uC744
     \uD5A5\uD574 \uB5A0\uB098\uB294 \uC791\uC740 \uD56D\uAD6C."
   cityIllustration: {fileID: 0}
