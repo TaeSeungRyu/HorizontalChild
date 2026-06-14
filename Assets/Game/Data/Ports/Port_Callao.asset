@@ -16,8 +16,8 @@ MonoBehaviour:
   displayNameKo: "\uCE74\uC57C\uC624"
   displayNameOriginal: Callao
   nation: {fileID: 0}
-  latitude: -12.05
-  longitude: -77.13
+  latitude: -12.1903715
+  longitude: -76.80281
   shortDescription: "\uC789\uCE74 \uC704\uC5D0 \uC138\uC6CC\uC9C4 \uD398\uB8E8\uC758
     \uC2A4\uD398\uC778 \uBD80\uC655\uB839 \uD56D\uAD6C."
   cityIllustration: {fileID: 0}

@@ -16,8 +16,8 @@ MonoBehaviour:
   displayNameKo: "\uC0C1\uD2B8\uD398\uD14C\uB974\uBD80\uB974\uD06C"
   displayNameOriginal: Sankt-Peterburg
   nation: {fileID: 0}
-  latitude: 59.93
-  longitude: 30.34
+  latitude: 60.420174
+  longitude: 29.132282
   shortDescription: "\uD45C\uD2B8\uB974 \uB300\uC81C\uAC00 \uBC1C\uD2B8\uD574 \uAC00\uC5D0
     \uC138\uC6B4 \uB7EC\uC2DC\uC544\uC758 \uC0C8 \uC218\uB3C4."
   cityIllustration: {fileID: 0}

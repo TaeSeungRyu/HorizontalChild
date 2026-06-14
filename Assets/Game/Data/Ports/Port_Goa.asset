@@ -16,8 +16,8 @@ MonoBehaviour:
   displayNameKo: "\uACE0\uC544"
   displayNameOriginal: Goa
   nation: {fileID: 0}
-  latitude: 15.5
-  longitude: 73.83
+  latitude: 15.09244
+  longitude: 73.934845
   shortDescription: "\uD3EC\uB974\uD22C\uAC08 \uC0AC\uB78C\uB4E4\uC774 \uC138\uC6B4
     \uC778\uB3C4\uC758 \uBB34\uC5ED \uAC70\uC810."
   cityIllustration: {fileID: 0}

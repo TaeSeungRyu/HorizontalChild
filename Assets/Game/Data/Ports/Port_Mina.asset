@@ -16,8 +16,8 @@ MonoBehaviour:
   displayNameKo: "\uC5D8\uBBF8\uB098"
   displayNameOriginal: Elmina
   nation: {fileID: 0}
-  latitude: 5.4695377
-  longitude: -1.0221881
+  latitude: 5.359441
+  longitude: -0.9665786
   shortDescription: "\uD3EC\uB974\uD22C\uAC08\uC774 \uD669\uAE08\uC744 \uC0AC\uB7EC
     \uC138\uC6B4 \uC11C\uC544\uD504\uB9AC\uCE74 \uC694\uC0C8 \uD56D\uAD6C."
   cityIllustration: {fileID: 0}

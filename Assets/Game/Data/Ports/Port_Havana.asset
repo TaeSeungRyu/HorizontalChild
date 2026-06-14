@@ -16,8 +16,8 @@ MonoBehaviour:
   displayNameKo: "\uC544\uBC14\uB098"
   displayNameOriginal: La Habana
   nation: {fileID: 0}
-  latitude: 23.13
-  longitude: -82.38
+  latitude: 22.958414
+  longitude: -82.357925
   shortDescription: "\uC2A4\uD398\uC778 \uBCF4\uBB3C\uC120\uC774 \uBAA8\uC774\uB294
     \uCE74\uB9AC\uBE0C\uD574\uC758 \uD070 \uD56D\uAD6C."
   cityIllustration: {fileID: 0}

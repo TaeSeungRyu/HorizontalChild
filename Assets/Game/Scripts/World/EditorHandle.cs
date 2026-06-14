@@ -1,60 +1,24 @@
 using Game.Data;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace Game.World
 {
     /// <summary>
-    /// PortPlacementEditor 가 만드는 핸들 컴포넌트.
-    /// 클릭 → drag → 위치 이동, 놓으면 PortData / DiscoveryData 에 저장.
+    /// PortPlacementEditor 가 만드는 핸들 컴포넌트 — 데이터 보관용 마커.
+    ///
+    /// 클릭/드래그 로직은 PortPlacementEditor.Update() 의 screen-space 픽킹으로
+    /// 이전됨 (IPointerDownHandler 는 핸들이 많이 겹칠 때 raycast 가 엉뚱한
+    /// 콜라이더를 잡아 신뢰성이 떨어짐). 본 클래스는 핸들 → SO 매핑만 보관.
     /// </summary>
-    public class EditorHandle : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
+    public class EditorHandle : MonoBehaviour
     {
-        private PortPlacementEditor _owner;
-        private PortData _port;
-        private DiscoveryData _discovery;
-        private Camera _cam;
-        private Plane _dragPlane;
-        private bool _dragging;
+        public PortData Port { get; private set; }
+        public DiscoveryData Discovery { get; private set; }
 
         public void Init(PortPlacementEditor owner, PortData port, DiscoveryData discovery)
         {
-            _owner = owner;
-            _port = port;
-            _discovery = discovery;
-            _cam = Camera.main;
-        }
-
-        public void OnPointerDown(PointerEventData ev)
-        {
-            string label = _port != null ? _port.displayNameKo
-                         : _discovery != null ? _discovery.displayNameKo : "?";
-            Debug.Log($"[EditorHandle] 클릭됨 — {label} 선택. 이제 드래그하면 이동.");
-            _dragPlane = new Plane(Vector3.up, transform.position);
-            _dragging = true;
-            if (_owner != null) _owner.NotifyHandleSelected(this);
-        }
-
-        public void OnDrag(PointerEventData ev)
-        {
-            if (!_dragging || _cam == null) return;
-            var ray = _cam.ScreenPointToRay(ev.position);
-            if (_dragPlane.Raycast(ray, out float dist))
-            {
-                var hit = ray.GetPoint(dist);
-                transform.position = new Vector3(hit.x, transform.position.y, hit.z);
-            }
-        }
-
-        public void OnPointerUp(PointerEventData ev)
-        {
-            if (!_dragging) return;
-            _dragging = false;
-            if (_owner != null)
-            {
-                if (_port != null) _owner.SavePortPosition(_port, transform.position);
-                else if (_discovery != null) _owner.SaveDiscoveryPosition(_discovery, transform.position);
-            }
+            Port = port;
+            Discovery = discovery;
         }
     }
 }

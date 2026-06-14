@@ -16,8 +16,8 @@ MonoBehaviour:
   displayNameKo: "\uD22C\uC544\uB9C8\uC2DC\uB098"
   displayNameOriginal: Toamasina
   nation: {fileID: 0}
-  latitude: -18.15
-  longitude: 49.4
+  latitude: -18.545155
+  longitude: 49.02791
   shortDescription: "\uB9C8\uB2E4\uAC00\uC2A4\uCE74\uB974 \uB3D9\uCABD \uD574\uC548\uC758
     \uD5A5\uC2E0\uB8CC \uD56D\uAD6C."
   cityIllustration: {fileID: 0}

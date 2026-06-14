@@ -16,8 +16,8 @@ MonoBehaviour:
   displayNameKo: "\uC548\uD2B8\uBCA0\uB974\uD39C"
   displayNameOriginal: Antwerpen
   nation: {fileID: 0}
-  latitude: 51.22
-  longitude: 4.4
+  latitude: 51.219326
+  longitude: 3.1689088
   shortDescription: "\uBCF4\uC11D\uC744 \uB2E4\uB4EC\uB294 \uC7A5\uC778\uC774 \uBAA8\uC778
     \uAC15\uAC00\uC758 \uB3C4\uC2DC."
   cityIllustration: {fileID: 0}

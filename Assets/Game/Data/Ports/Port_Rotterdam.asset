@@ -16,8 +16,8 @@ MonoBehaviour:
   displayNameKo: "\uB85C\uD14C\uB974\uB2F4"
   displayNameOriginal: Rotterdam
   nation: {fileID: 0}
-  latitude: 51.92
-  longitude: 4.48
+  latitude: 51.816383
+  longitude: 4.090308
   shortDescription: "\uBD81\uD574\uB85C \uB098\uAC00\uB294 \uD070 \uAC15 \uC5B4\uADC0\uC758
     \uBD84\uC8FC\uD55C \uD56D\uAD6C."
   cityIllustration: {fileID: 0}
