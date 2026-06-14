@@ -73,11 +73,16 @@ namespace Game.Editor
                     return;
                 }
 
-                EditorUtility.DisplayProgressBar("Bake World Land", "Subtract 영역 로드...", 0.3f);
-                var subtractPolys = LoadSubtractPolygonsWorld(out int subtractCount, out int subtractDisabled);
+                EditorUtility.DisplayProgressBar("Bake World Land", "편집 영역 로드 (Sea/Land)...", 0.3f);
+                LoadEditPolygons(
+                    out var seaPolys, out var landRings,
+                    out int seaCount, out int landCount, out int editDisabled);
+
+                // Land 영역을 NE rings 에 추가 — 같은 삼각화 파이프 사용
+                if (landRings.Count > 0) rings.AddRange(landRings);
 
                 EditorUtility.DisplayProgressBar("Bake World Land", "삼각화 + 메쉬 생성...", 0.5f);
-                var mesh = BuildExtrudedMesh(rings, subtractPolys, out int droppedTris);
+                var mesh = BuildExtrudedMesh(rings, seaPolys, out int droppedTris);
 
                 EditorUtility.DisplayProgressBar("Bake World Land", "Asset 저장 중...", 0.85f);
                 SaveMeshAsset(mesh);
@@ -90,12 +95,10 @@ namespace Game.Editor
                 Debug.Log(
                     $"[M3WorldMeshBaker] 완료.\n" +
                     $"  • Features 읽음: {featureCount} (Dateline 스킵 {skipped})\n" +
-                    $"  • 폴리곤 ring: {rings.Count}\n" +
-                    $"  • Subtract 영역: 활성 {subtractCount}, 비활성 {subtractDisabled} (제거된 삼각형 {droppedTris})\n" +
+                    $"  • 폴리곤 ring: {rings.Count} (NE {rings.Count - landRings.Count} + Land 추가 {landRings.Count})\n" +
+                    $"  • 편집 영역: Sea {seaCount}, Land {landCount}, 비활성 {editDisabled} (제거된 삼각형 {droppedTris})\n" +
                     $"  • 정점: {mesh.vertexCount}, 삼각형: {mesh.triangles.Length / 3}\n" +
-                    $"  • Asset: {MeshPath} / {MaterialPath} / {PrefabPath}\n" +
-                    $"  • 다음 단계: Prefab 을 씬에 드래그.\n" +
-                    $"  • 항해 카브(Ceuta 등) 는 런타임 WorldCarves 에서 처리 — 메쉬 변형 없음.");
+                    $"  • Asset: {MeshPath} / {MaterialPath} / {PrefabPath}");
 
                 // BuildExtrudedMesh 안에서 카운트 한 skippedByTriangulation 는 로컬이라
                 // 본 로그에선 접근 불가 — 위 LogWarning 으로 개별 표시됨
@@ -196,32 +199,50 @@ namespace Game.Editor
             return true;
         }
 
-        // ─── Subtract 영역 로드 ────────────────────────────────────────────
+        // ─── 편집 영역 로드 ────────────────────────────────────────────────
 
         /// <summary>
-        /// MapSubtractCatalog 의 활성 MapSubtractData 를 월드 좌표 XZ 폴리곤 리스트로 변환.
-        /// 베이크 시 이 폴리곤들 안에 들어가는 삼각형 centroid 가 모두 제거됨.
+        /// MapSubtractCatalog 의 활성 MapSubtractData 를 Sea/Land 별로 분리:
+        ///   Sea polys (world XZ) → 삼각형 centroid 안에 있으면 제거
+        ///   Land rings (lat/lng) → NE rings 와 함께 삼각화 (새 땅)
         /// </summary>
-        private static List<Vector2[]> LoadSubtractPolygonsWorld(out int enabled, out int disabled)
+        private static void LoadEditPolygons(
+            out List<Vector2[]> seaPolysWorld,
+            out List<Vector2[]> landRingsLatLng,
+            out int seaCount, out int landCount, out int disabledCount)
         {
-            enabled = 0;
-            disabled = 0;
-            var result = new List<Vector2[]>();
-            var catalog = AssetDatabase.LoadAssetAtPath<MapSubtractCatalog>(MapSubtractCatalogPath);
-            if (catalog == null || catalog.all == null) return result;
+            seaPolysWorld = new List<Vector2[]>();
+            landRingsLatLng = new List<Vector2[]>();
+            seaCount = 0; landCount = 0; disabledCount = 0;
 
-            foreach (var d in catalog.all)
+            // 카탈로그 의존 X — 프로젝트 전체에서 MapSubtractData 직접 스캔.
+            // 카탈로그 경로가 다르거나 catalog.all 이 stale 해도 disk 의 SO 가 정답.
+            var guids = AssetDatabase.FindAssets("t:MapSubtractData");
+            foreach (var g in guids)
             {
+                var path = AssetDatabase.GUIDToAssetPath(g);
+                var d = AssetDatabase.LoadAssetAtPath<MapSubtractData>(path);
                 if (d == null) continue;
-                if (!d.enabled) { disabled++; continue; }
-                var polys = Game.World.MapSubtractGeometry.BuildSubtractPolygonsWorld(d);
-                if (polys.Count > 0)
+                if (!d.enabled) { disabledCount++; continue; }
+
+                if (d.kind == MapEditKind.Land)
                 {
-                    enabled++;
-                    result.AddRange(polys);
+                    // Land: 폴리곤 모드만 지원 (브러시는 24각형). 폴리라인 land 는 무시.
+                    if (d.widthKm > 0f || d.points == null || d.points.Length < 3) continue;
+                    // 복사 (외부에서 수정 방지)
+                    var ring = new Vector2[d.points.Length];
+                    System.Array.Copy(d.points, ring, d.points.Length);
+                    landRingsLatLng.Add(ring);
+                    landCount++;
+                }
+                else // Sea
+                {
+                    var polys = Game.World.MapSubtractGeometry.BuildSubtractPolygonsWorld(d);
+                    if (polys.Count == 0) continue;
+                    seaPolysWorld.AddRange(polys);
+                    seaCount++;
                 }
             }
-            return result;
         }
 
         // ─── Mesh 빌드 ─────────────────────────────────────────────────────

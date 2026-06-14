@@ -1,151 +1,147 @@
-# 맵 카브 에디터 — 사용 가이드
+# 지형 에디터 — 사용 가이드 (대항해시대 2 풍)
 
-베이크된 `WorldLand.mesh` 에서 사각형 또는 폴리라인(강·해협) 영역을 잘라내는 도구.
-시각적으로 진짜 구멍이 뚫리고 충돌도 동시에 풀려서 배가 통과 가능해진다.
+지도에서 바다·땅을 마우스로 칠해서 다듬는 도구. 저장 누르면 메쉬 즉시 갱신.
 
-> ⚠ **Unity Editor Play 모드 전용** — 빌드(.exe/.apk)에선 저장/베이크 부분 동작 안 함.
+> ⚠ **Unity Editor Play 모드 전용** — 빌드(.exe/.apk) 에선 저장 부분 동작 안 함.
 
 ---
 
 ## A. 한 번만 셋업
 
-### 1. 카탈로그 + 예시 영역 시드
+### 1. 카탈로그 + 시작 카브 시드 (선택)
 Unity 메뉴 → `Game ▸ Seed M10 Map Subtracts`
 - `Assets/Game/Data/_Catalogs/MapSubtractCatalog.asset` 생성
-- 4개 예시 영역 자동 등록: 나일강·아마존강·말라카·스카게라크
+- 나일강·아마존강 예시 등록
 
-### 2. 첫 베이크
-Unity 메뉴 → `Game ▸ Bake World Land Mesh from GeoJSON`
-- `WorldLand.mesh` 가 시드된 4개 영역을 잘라낸 상태로 다시 구워짐
-- 씬에 이미 `WorldLand` prefab 인스턴스가 있으면 자동 반영 (MeshFilter 가 같은 mesh asset 참조)
+처음부터 빈 상태로 시작하고 싶으면 시드 안 해도 됨 — `MapSubtractCatalog.asset` 만 수동 생성 (Project 창 우클릭 → Create → Game/Data → Map Subtract Catalog).
 
-### 3. MapSubtractEditor GameObject 추가
+### 2. MapSubtractEditor GameObject 추가
 1. Hierarchy 빈 공간 우클릭 → Create Empty
-2. 이름: `MapSubtractEditor`
+2. 이름: `TerrainEditor`
 3. Add Component → **Map Subtract Editor**
 
-### 4. Inspector 필드 할당
+### 3. Inspector 필드 할당
 
 | 필드 | 값 |
 |---|---|
 | **Catalog** | `_Catalogs/MapSubtractCatalog.asset` 드래그 |
 | **Main Camera** | 메인 카메라. 비우면 자동 검색 |
-| **Player Ship** | 플레이어 배 GameObject (입력 잠금용) |
-| **Label Font** | `Art/Pretendard-Regular SDF.asset` 드래그 (한글 라벨) |
+| **Player Ship** | 플레이어 배 (입력 잠금용) |
+| **UI Font** | `Art/Pretendard-Regular SDF.asset` 드래그 (한글 라벨 필수) |
+| **Brush Km** | 기본 20 (5~200 슬라이더) |
 | **Enable On Start** | ☐ 평소엔 끔. Play 후 ContextMenu 로 수동 활성 |
 
 ---
 
-## B. 사용법
+## B. 사용법 (4 단계만 기억)
 
-### 활성화
-- Inspector → MapSubtractEditor 컴포넌트 우클릭 → **Enable Editor Mode**
-- 또는 enableOnStart ☑ 후 Play 재시작
+### 1) 활성화
+Inspector → MapSubtractEditor 우클릭 → **Enable Editor Mode**
+화면 하단에 4개 버튼 [**바다**] [**땅**] [**저장**] [**취소**] 가 나타남.
 
-### 모드 토글 (M 키)
-| Mode | 동작 |
-|---|---|
-| **Rectangle** | 좌클릭 드래그 두 모서리 → 사각형. 떼면 즉시 SO 저장 |
-| **Polyline** | 좌클릭으로 점 추가 → Enter 로 확정 (강·해협 모양). 마우스 휠로 폭 조절 |
+### 2) 모드 선택
+- [**바다**] 클릭 → 파란 강조. 우클릭하면 바다로 만들기 모드.
+- [**땅**] 클릭 → 주황 강조. 우클릭하면 땅으로 만들기 모드.
+- 같은 버튼 다시 클릭 또는 **Enter** 키 → 모드 해제 (회색).
 
-### 카메라
-| 동작 | 효과 |
-|---|---|
-| **우클릭 드래그** | 팬 (자유 이동) |
-| **마우스 휠** (작업 중 아닐 때) | 줌 (Y 높이 변화) |
-| **마우스 휠** (폴리라인 작성 중) | 폴리라인 폭 조절 (10~500km) |
+### 3) 칠하기
+**모드가 활성** 일 때:
+- 마우스 커서 위치에 노랑 원이 따라다님 (브러시 미리보기)
+- **마우스 오른쪽 버튼 클릭** → 그 자리에 20km 원이 추가 (메모리만, 디스크에 안 들어감 아직)
+- 연속 클릭 가능 — 클릭할 때마다 원 하나씩
 
-### 기존 영역 편집
-- 외곽선 클릭 → **선택** (초록색으로 변함)
-- **Delete** 키 → SO 에셋 삭제 + 시각 제거
-- 현재 위치 수정은 SO 직접 편집 또는 삭제 → 재드로우
+**모드가 해제** 일 때:
+- 우클릭 드래그 → 카메라 팬 (지도 이동)
+- 마우스 휠 → 카메라 줌
 
-### 기타 단축키
+**Smart Undo**:
+- 땅 모드에서 기존 바다 카브 위 클릭 → 그 바다 삭제 예약 (회색으로 변함)
+- 바다 모드에서 기존 땅 영역 위 클릭 → 그 땅 삭제 예약
+- 같은 자리 또 클릭 → 삭제 예약 취소
+
+### 4) 저장
+[**저장**] 버튼 클릭 → 한꺼번에:
+- 모든 pending 원 → MapSubtractData SO 로 저장
+- 모든 삭제 예약 SO → 디스크에서 삭제
+- 메쉬 자동 재베이크 (몇 초)
+- 씬의 WorldLand 즉시 갱신
+
+[**취소**] → pending 모두 버림. 삭제 예약도 복원. 디스크는 손대지 않음.
+
+---
+
+## C. 키보드 단축키
+
 | 키 | 효과 |
 |---|---|
-| **M** | Mode 토글 |
-| **B** | Re-bake — 메쉬 즉시 재구성 + 씬 갱신 (몇 초 걸림) |
-| **Enter** | 폴리라인 확정 |
-| **Esc** | 작성 중인 폴리라인/사각형 취소 |
-| **Del** | 선택된 영역 삭제 |
-
-### 비활성화
-- 컴포넌트 우클릭 → **Disable Editor Mode**
+| **Enter** | 모드 해제 (지도 이동 모드로) |
+| **`[`** | 브러시 -5km |
+| **`]`** | 브러시 +5km |
+| **휠** | 카메라 줌 |
 
 ---
 
-## C. 작업 흐름 예시
+## D. 시각 색 표
 
-### 예: 동남아시아 섬 제거
-1. 우클릭 드래그로 카메라를 인도네시아·말레이시아 쪽으로 이동
-2. 마우스 휠로 줌인 — 군도 보임
-3. **M** → Rectangle 모드 확인
-4. 보르네오 동쪽 작은 섬 위를 좌클릭 드래그로 박스 → 떼기 → 저장됨
-5. 같은 방식으로 술라웨시 북쪽, 필리핀 작은 섬들 등 반복
-6. **B** → Re-bake → 메쉬 갱신 (5~10초)
-7. 카메라 다시 줌아웃해서 결과 확인
-
-### 예: 강 만들기 (아프리카 가상 운하)
-1. **M** → Polyline 모드로 토글
-2. 지중해 쪽 시작점 좌클릭
-3. 아프리카 내륙으로 클릭 클릭 클릭...
-4. 마우스 휠로 폭 조절 (50~100km 추천)
-5. **Enter** → 확정 + 저장
-6. **B** → Re-bake → 강이 메쉬에 구멍으로 표현됨
+| 색 | 의미 |
+|---|---|
+| 🔵 파랑 진하게 | 새로 추가한 바다 (pending) |
+| 🟠 주황 진하게 | 새로 추가한 땅 (pending) |
+| ⚪ 흰색 흐리게 | 기존 저장된 영역 (수정 안 한 것) |
+| ⚫ 회색 흐리게 | 삭제 예약된 영역 |
+| 🟡 노랑 (커서) | 현재 브러시 미리보기 |
 
 ---
 
-## D. 데이터 구조
+## E. 데이터 모델
 
-### `MapSubtractData.cs` (SO 한 개 = 한 영역)
+`MapSubtractData` SO 한 개 = 영역 한 개:
+
 | 필드 | 의미 |
 |---|---|
-| `subtractId` | 코드 참조용 안정적 id |
-| `displayNameKo` | 한글 표시 이름 (예: "나일강") |
-| `widthKm` | **0 = 폴리곤 모드** (points 가 정점). **>0 = 폴리라인 모드** (점들을 잇는 띠) |
-| `points` | `Vector2[]` — x=longitude, y=latitude. PortData 와 같은 관례 |
-| `enabled` | ☐ 면 베이크 무시. 임시 비활성 |
-| `notes` | 자유 메모 |
+| `kind` | **Sea** = 바다로 (육지 삭제) / **Land** = 땅으로 (새 폴리곤 추가) |
+| `widthKm` | 0 = 폴리곤 (points 가 정점) / >0 = 폴리라인 (강 등) |
+| `points` | `Vector2[]` — x=longitude, y=latitude |
+| `enabled` | ☐ 면 베이크 무시 (일시 비활성) |
 
-### `MapSubtractCatalog.cs`
-- `all: MapSubtractData[]` 모든 영역 리스트
-- M3WorldMeshBaker 가 `_Catalogs/MapSubtractCatalog.asset` 를 자동 로드
-- 새 SO 추가 시 `Game ▸ Refresh All Catalogs` 가 자동 채움 (또는 에디터가 즉시 추가)
+에디터는 클릭마다 widthKm=0 인 24각형 원으로 저장.
+기존 폴리라인 영역(나일·아마존)은 그대로 유지됨.
 
 ---
 
-## E. 베이크 동작
+## F. 베이크 동작
 
 `Game ▸ Bake World Land Mesh from GeoJSON`:
-1. ne_110m_land.geojson 읽음 (기존)
-2. **MapSubtractCatalog 의 활성 영역 로드** (신규)
-3. 폴리라인 → 사각 띠 변환 (각 세그먼트 = 사각형)
-4. 각 NE 폴리곤 삼각화 후 — 삼각형 centroid 가 subtract 영역 안에 있으면 **삭제**
-5. Side wall 도 같은 방식으로 필터
-6. 결과 메쉬 → `WorldLand.mesh` (in-place 갱신, prefab 자동 반영)
+1. NE GeoJSON 폴리곤 로드 (기존)
+2. **MapSubtractCatalog 의 Land 영역** → NE 폴리곤 리스트에 합쳐 삼각화 (없던 땅 생성)
+3. **Sea 영역** → 삼각형 centroid 가 안에 있으면 제거 (있던 땅 삭제)
+4. 결과 메쉬 → `WorldLand.mesh` 갱신
+5. 씬의 MeshCollider 자동 새로고침 (저장 버튼이 처리)
 
-### 한계
-- **Cut edge 가 약간 jagged**: 삼각형 단위로 자르므로 cut 경계가 삼각형 모서리에 맞춰짐. MaxEdgeWorldUnits = 200 으로 작아서 거의 안 보임 (육안 1~2 픽셀)
-- **시각만 — 콜라이더 별도**: MeshCollider 도 같이 갱신되지만 **PhysX 캐시** 때문에 첫 베이크 후 Play 모드에서 즉시 안 먹힘. Re-bake 버튼 (B 키) 이 sharedMesh 재할당으로 PhysX 강제 갱신
+순서: Land 추가 → Sea 제거. 같은 자리에 둘 다 있으면 Sea 가 이김 → "지움" 효과.
 
 ---
 
-## F. 문제 해결
+## G. 문제 해결
 
-| 증상 | 원인 | 해결 |
-|---|---|---|
-| 영역 그렸는데 메쉬가 안 바뀜 | Re-bake 안 함 | **B** 키 또는 컴포넌트 우클릭 Re-bake World Land |
-| Re-bake 후에도 배가 안 통과 | MeshCollider PhysX 캐시 | Re-bake 가 sharedMesh 재할당으로 갱신해야 함. 안 되면 Play 종료 → 재시작 |
-| 영역 라벨 안 보임 | TMP 폰트 미할당 | Inspector Label Font |
-| 카탈로그가 비어있다고 함 | 시드 안 함 | `Game ▸ Seed M10 Map Subtracts` |
-| 영역 점이 0개로 저장됨 | 폴리라인 1점만 찍고 Enter | 폴리라인은 2점 이상 필요 |
-| Re-bake 가 너무 느림 | 50+ 개 subtract | 일부 enabled = ☐ 처리 또는 큰 영역으로 통합 |
+| 증상 | 해결 |
+|---|---|
+| 한글 안 보임 | Inspector UI Font 에 한글 SDF 폰트 할당 |
+| 버튼 클릭 안 됨 | 씬에 EventSystem 없음 → 에디터가 자동 추가하지만 안 되면 수동 추가 |
+| 우클릭이 자꾸 카메라 팬 | 모드가 None 임. [바다] 또는 [땅] 먼저 클릭 |
+| 저장 후에도 메쉬 그대로 | Console 에 "베이크 완료" 메시지 확인. 없으면 Game ▸ Bake World Land 수동 |
+| 원이 너무 작아서 안 보임 | [ ] 키로 브러시 크게 |
+| 잘못 칠한 곳 | 반대 모드로 같은 자리 클릭 (Smart Undo) 또는 [취소] 버튼 |
 
 ---
 
-## G. 향후 확장 아이디어
+## H. 작업 흐름 예시 — 동남아 작은 섬 정리
 
-- **선택한 영역 드래그 이동** (현재는 삭제 → 재드로우만 가능)
-- **폴리곤 모드에서 점 추가/제거** (현재는 사각형 4점 고정)
-- **카브 영역 표시 토글** (Inspector 옵션) — 시각 확인용 / 게임 플레이용 분리
-- **Auto re-bake** (영역 추가 즉시 백그라운드 베이크) — 현재는 명시적 B 키
+1. **Enable Editor Mode**
+2. 우클릭 드래그로 동남아 줌인
+3. **[바다]** 클릭 (파란 강조)
+4. 작은 섬 위에 우클릭 — 파란 원 표시
+5. 다른 작은 섬에도 클릭 클릭 — 5~10 곳
+6. 잘못 찍었으면 **[땅]** 클릭 → 그 파란 원 위에 클릭 → 취소
+7. 만족하면 **[저장]** → 메쉬 갱신
+8. **Enter** → 모드 해제 → 카메라 이동하면서 결과 확인

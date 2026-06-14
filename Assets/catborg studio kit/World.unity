@@ -8398,7 +8398,7 @@ MonoBehaviour:
   discoveryColor: {r: 1, g: 0.8, b: 0.3, a: 1}
   selectedColor: {r: 0.4, g: 1, b: 0.4, a: 1}
   labelFont: {fileID: 11400000, guid: e404ff0fde379a24bb6a295dc09f79d7, type: 2}
-  labelFontSize: 6
+  labelFontSize: 15
   labelYOffset: 1.6
   enableOnStart: 0
   playerShip: {fileID: 1690041783}
@@ -103296,21 +103296,20 @@ MonoBehaviour:
   catalog: {fileID: 11400000, guid: 9c85aaecd80b8784a9308e6361de98eb, type: 2}
   mainCamera: {fileID: 0}
   playerShip: {fileID: 1690041783}
+  uiFont: {fileID: 0}
+  brushKm: 20
+  brushSegments: 24
   panSpeed: 0.5
   zoomSpeed: 300
   minCameraY: 30
   maxCameraY: 3000
-  mode: 0
-  defaultWidthKm: 50
-  widthStepKm: 5
   visualY: 35
   lineWidth: 1.5
-  polygonOutlineColor: {r: 1, g: 0.4, b: 0.4, a: 0.9}
-  polylineOutlineColor: {r: 0.4, g: 0.7, b: 1, a: 0.9}
-  previewColor: {r: 1, g: 1, b: 0.3, a: 0.9}
-  selectedColor: {r: 0.4, g: 1, b: 0.4, a: 1}
-  labelFont: {fileID: 11400000, guid: e404ff0fde379a24bb6a295dc09f79d7, type: 2}
-  labelFontSize: 24
+  seaColor: {r: 0.2, g: 0.5, b: 1, a: 0.95}
+  landColor: {r: 0.85, g: 0.55, b: 0.25, a: 0.95}
+  existingDim: {r: 1, g: 1, b: 1, a: 0.35}
+  markedRemoveColor: {r: 0.6, g: 0.6, b: 0.6, a: 0.5}
+  brushCursorColor: {r: 1, g: 1, b: 0.3, a: 0.7}
   enableOnStart: 0
   saveFolder: Assets/Game/Data/MapSubtracts
 --- !u!4 &1099928814

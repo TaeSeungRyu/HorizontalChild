@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df6e9133e34f6b54c9edfdbde936a03c, type: 3}
+  m_Name: MapSubtract_Sea_20260614_211521_005
+  m_EditorClassIdentifier: Game::Game.Data.MapSubtractData
+  subtractId: subtract.sea.20260614_211521_005
+  displayNameKo: "\uBC14\uB2E4 6"
+  kind: 0
+  widthKm: 0
+  points:
+  - {x: 10.8508215, y: 54.96916}
+  - {x: 10.844689, y: 55.015743}
+  - {x: 10.826707, y: 55.059155}
+  - {x: 10.798101, y: 55.096436}
+  - {x: 10.760822, y: 55.125042}
+  - {x: 10.717409, y: 55.14302}
+  - {x: 10.670822, y: 55.14916}
+  - {x: 10.624235, y: 55.14302}
+  - {x: 10.580822, y: 55.125042}
+  - {x: 10.543543, y: 55.096436}
+  - {x: 10.514937, y: 55.059155}
+  - {x: 10.496955, y: 55.015743}
+  - {x: 10.490823, y: 54.96916}
+  - {x: 10.496955, y: 54.92257}
+  - {x: 10.514937, y: 54.879158}
+  - {x: 10.543543, y: 54.841877}
+  - {x: 10.580822, y: 54.813274}
+  - {x: 10.624235, y: 54.79529}
+  - {x: 10.670822, y: 54.789158}
+  - {x: 10.717409, y: 54.79529}
+  - {x: 10.760822, y: 54.813274}
+  - {x: 10.798101, y: 54.841877}
+  - {x: 10.826707, y: 54.879158}
+  - {x: 10.844689, y: 54.92257}
+  enabled: 1
+  notes: 
