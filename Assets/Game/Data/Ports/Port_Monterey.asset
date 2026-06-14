@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f4637fed73cfe43a2305644700f03a, type: 3}
+  m_Name: Port_Monterey
+  m_EditorClassIdentifier: Game::Game.Data.PortData
+  portId: port.monterey
+  displayNameKo: "\uBAAC\uD14C\uB808\uC774"
+  displayNameOriginal: Monterey
+  nation: {fileID: 0}
+  latitude: 36.6
+  longitude: -121.89
+  shortDescription: "\uC2A4\uD398\uC778\uC774 \uCE98\uB9AC\uD3EC\uB2C8\uC544\uC5D0
+    \uC138\uC6B4 \uC218\uB3C4. \uC120\uAD50\uC0AC\uC640 \uCE74\uC6B0\uBCF4\uC774\uAC00
+    \uC624\uAC00\uB294 \uD56D\uAD6C."
+  cityIllustration: {fileID: 0}
+  commonProducts:
+  - {fileID: 11400000, guid: 0a2efd328f06c1f48ae7c03a92e60319, type: 2}
+  - {fileID: 11400000, guid: 2faefcb2c80c92c498e834c5e09d829c, type: 2}
+  - {fileID: 11400000, guid: eb371c18ffb999047851566e937162d4, type: 2}
+  specialProducts: []
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uBAAC\uD14C\uB808\uC774_(\uCE98\uB9AC\uD3EC\uB2C8\uC544\uC8FC)"
