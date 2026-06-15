@@ -2107,12 +2107,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 20635953}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -12.2389, y: -0, z: -40.6796}
+  m_LocalRotation: {x: -0, y: 0, z: -0, w: 1}
+  m_LocalPosition: {x: 87.7611, y: -0.5, z: -600.6796}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1690041786}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &20635955
 MonoBehaviour:
@@ -103303,6 +103303,7 @@ MonoBehaviour:
   zoomSpeed: 300
   minCameraY: 30
   maxCameraY: 3000
+  fitScreenCameraY: 80
   visualY: 35
   lineWidth: 1.5
   seaColor: {r: 0.2, g: 0.5, b: 1, a: 0.95}
@@ -141730,6 +141731,66 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &1465871953
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1465871954}
+  - component: {fileID: 1465871955}
+  m_Layer: 0
+  m_Name: TyphoonSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1465871954
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1465871953}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1465871955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1465871953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc7aa7866017eed46ad928042b2b4ef5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game::Game.World.TyphoonSpawner
+  typhoonPrefab: {fileID: 919132149155446097, guid: 47ed96897e7d65948903337ac9fdd0bc, type: 3}
+  playerShip: {fileID: 1690041783}
+  maxActive: 3
+  spawnIntervalSeconds: 45
+  lifetimeSeconds: 90
+  typhoonScale: 1
+  hazardRadiusKm: 120
+  damagePercentPerSecond: 5
+  highlightColor: {r: 1, g: 1, b: 1, a: 1}
+  europeLatMin: 35
+  europeLatMax: 71
+  europeLngMin: -10
+  europeLngMax: 40
+  worldLatMin: -55
+  worldLatMax: 65
+  spawnNowTest: 0
 --- !u!1 &1468425808
 GameObject:
   m_ObjectHideFlags: 0
@@ -163477,7 +163538,10 @@ PrefabInstance:
     - {fileID: 3588834308678477261, guid: 5c9ad7a665eb406438ee1b1c10ac8165, type: 3}
     - {fileID: 9187308223039480452, guid: 5c9ad7a665eb406438ee1b1c10ac8165, type: 3}
     - {fileID: -3306813550804760141, guid: 5c9ad7a665eb406438ee1b1c10ac8165, type: 3}
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5c9ad7a665eb406438ee1b1c10ac8165, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 20635954}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 5c9ad7a665eb406438ee1b1c10ac8165, type: 3}
       insertIndex: -1
@@ -209910,7 +209974,6 @@ SceneRoots:
   - {fileID: 403584447}
   - {fileID: 2080213505}
   - {fileID: 657037236}
-  - {fileID: 20635954}
   - {fileID: 1527075735}
   - {fileID: 278811884}
   - {fileID: 2034429103}
@@ -209918,3 +209981,4 @@ SceneRoots:
   - {fileID: 79976599}
   - {fileID: 1039368087}
   - {fileID: 1099928814}
+  - {fileID: 1465871954}

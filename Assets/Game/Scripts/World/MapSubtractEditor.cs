@@ -118,6 +118,11 @@ namespace Game.World
         private Vector3 _savedCamPosition;
         private bool _savedCamState;
 
+        // WorldLand 인스턴스의 Transform — 카브 좌표를 mesh-local 로 정렬할 때 사용.
+        // 사용자가 prefab 을 (0,0,0) 외 위치에 두면 click(world) vs 메쉬 vertex(mesh-local)
+        // 가 어긋남. InverseTransformPoint 로 보정.
+        private Transform _landTransform;
+
         public bool IsActive => _active;
 
         // ─── 활성/비활성 ───────────────────────────────────────────────────
@@ -161,6 +166,14 @@ namespace Game.World
                 if (p.y < minCameraY) p.y = 200f;   // 너무 낮으면 적당히 위로
                 mainCamera.transform.position = p;
                 mainCamera.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+            }
+
+            // WorldLand 인스턴스 참조 캐싱 — 좌표 변환에 사용
+            var landmass = FindAnyObjectByType<Landmass>();
+            _landTransform = landmass != null ? landmass.transform : null;
+            if (_landTransform != null && _landTransform.position.sqrMagnitude > 0.01f)
+            {
+                Debug.Log($"[MapSubtractEditor] WorldLand 위치 보정 적용 — pos={_landTransform.position}");
             }
 
             EnsureUI();
@@ -351,7 +364,11 @@ namespace Game.World
 
         private ExistingView FindExistingAtPoint(Vector3 worldPos, MapEditKind kind)
         {
-            var p = new Vector2(worldPos.x, worldPos.z);
+            // 기존 SO 의 poly 는 mesh-local 좌표. click 도 mesh-local 로 변환해 비교.
+            Vector3 localPos = _landTransform != null
+                ? _landTransform.InverseTransformPoint(worldPos)
+                : worldPos;
+            var p = new Vector2(localPos.x, localPos.z);
             foreach (var e in _existing)
             {
                 if (e.data == null || e.data.kind != kind) continue;
@@ -513,9 +530,16 @@ namespace Game.World
             foreach (var poly in polys)
             {
                 for (int i = 0; i < poly.Length; i++)
-                    lr.SetPosition(cursor++, new Vector3(poly[i].x, visualY, poly[i].y));
-                lr.SetPosition(cursor++, new Vector3(poly[0].x, visualY, poly[0].y));
+                    lr.SetPosition(cursor++, MeshLocalXZToWorld(poly[i]));
+                lr.SetPosition(cursor++, MeshLocalXZToWorld(poly[0]));
             }
+        }
+
+        /// <summary>mesh-local XZ → world (Y=visualY). WorldLand transform 적용.</summary>
+        private Vector3 MeshLocalXZToWorld(Vector2 meshLocalXZ)
+        {
+            var local = new Vector3(meshLocalXZ.x, visualY, meshLocalXZ.y);
+            return _landTransform != null ? _landTransform.TransformPoint(local) : local;
         }
 
         // ─── 저장 / 취소 ───────────────────────────────────────────────────
@@ -623,13 +647,20 @@ namespace Game.World
         {
             int n = Mathf.Max(8, segments);
             var arr = new Vector2[n];
+
+            // WorldLand 가 (0,0,0) 외 위치에 있으면 click(world) 을 mesh-local 로 변환해야
+            // LatLng 매핑이 메쉬 정점과 일치함.
+            Vector3 centerLocal = _landTransform != null
+                ? _landTransform.InverseTransformPoint(center)
+                : center;
+
             for (int i = 0; i < n; i++)
             {
                 float t = (i / (float)n) * Mathf.PI * 2f;
                 var wp = new Vector3(
-                    center.x + Mathf.Cos(t) * radiusUnits,
+                    centerLocal.x + Mathf.Cos(t) * radiusUnits,
                     0f,
-                    center.z + Mathf.Sin(t) * radiusUnits);
+                    centerLocal.z + Mathf.Sin(t) * radiusUnits);
                 var ll = GeoCoordinate.WorldToLatLng(wp);
                 arr[i] = new Vector2(ll.longitude, ll.latitude);
             }
