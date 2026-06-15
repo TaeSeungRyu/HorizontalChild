@@ -16,21 +16,17 @@ using UnityEditor;
 namespace Game.World
 {
     /// <summary>
-    /// 지형 에디터 — 대항해시대 2 풍 맵 다듬기.
+    /// 지형 에디터 — 드래그로 선을 그려 강/땅 영역 생성.
     ///
     /// 사용 흐름:
-    ///   1) [강] 또는 [땅] 버튼 클릭 → 해당 모드 활성 (버튼 강조).
-    ///   2) 지도 위에서 마우스 오른쪽 버튼 클릭 → 그 자리에 20km 원 카브 (Sea) 또는 새 땅 (Land) 추가.
-    ///      연속 클릭 가능. 변경은 색 원으로 표시 (메모리에만 있음).
+    ///   1) [강] 또는 [땅] 버튼 클릭 → 모드 활성 (버튼 강조).
+    ///   2) 지도 위에서 마우스 오른쪽 버튼을 누르고 드래그 → 손 떼면 선 확정.
+    ///      선 두께 = 브러시 km (Inspector / [ ] 키로 조절).
+    ///      여러 번 드래그 = 여러 폴리라인 추가 (메모리에만 있음).
     ///   3) Enter 키 또는 같은 버튼 다시 클릭 → 모드 해제.
     ///   4) 모드 해제 상태: 우클릭 드래그 = 카메라 팬, 휠 = 줌.
-    ///   5) [저장] 버튼 → SO 생성 + 카탈로그 갱신 + 메쉬 재베이크. 변경 확정.
-    ///   6) [취소] 버튼 → 메모리에만 있던 변경을 모두 버림.
-    ///
-    /// Smart Undo:
-    ///   - Land 모드에서 기존 Sea 카브 영역에 클릭 → 그 Sea 제거 표시
-    ///   - Sea  모드에서 기존 Land 영역에 클릭     → 그 Land 제거 표시
-    ///   - 같은 세션의 pending 도 동일하게 토글
+    ///   5) [저장] 버튼 → SO 생성 + 카탈로그 갱신 + 메쉬 재베이크 + RiverOverlay 갱신.
+    ///   6) [취소] 버튼 → 메모리 pending 모두 버림.
     ///
     /// 빌드(.exe/.apk) 에선 저장 + 베이크 부분 동작 안 함 — Editor Play 전용.
     /// </summary>
@@ -79,8 +75,8 @@ namespace Game.World
         private class Pending
         {
             public MapEditKind kind;
-            public Vector3 worldCenter;
-            public float radiusUnits;
+            public List<Vector3> linePoints;   // 드래그로 그린 폴리라인 (월드 좌표, Y=visualY)
+            public float widthUnits;            // 선 두께 (월드 unit)
             public GameObject visual;
             public LineRenderer line;
         }
@@ -101,13 +97,22 @@ namespace Game.World
         private Image _riverBtnBg, _landBtnBg, _saveBtnBg;
         private TextMeshProUGUI _statusText;
 
-        // 브러시 커서
+        // 브러시 커서 (solid Cylinder 디스크)
         private GameObject _brushCursor;
-        private LineRenderer _brushLine;
+        private Renderer _brushRenderer;
+        private Material _brushMaterial;
 
         // 카메라 드래그 (mode=None 시 우클릭 = 팬)
         private Vector3 _camDragLast;
         private bool _camDragging;
+
+        // 선 그리기 (mode=River/Land 시 우클릭 드래그 = 선)
+        private bool _drawing;
+        private readonly List<Vector3> _currentDrawPoints = new();
+        private GameObject _drawPreview;
+        private LineRenderer _drawPreviewLine;
+        [Tooltip("드래그 중 점 간 최소 거리 (월드 unit). 작을수록 부드러운 선, 큰 데이터.")]
+        public float minDrawPointDistanceUnits = 2f;
 
         // CameraFollow 잠시 끄기 — 안 끄면 매 프레임 플레이어 배 쪽으로 끌어당김 → 팬 안 됨
         private CameraFollow _cameraFollow;
@@ -183,7 +188,7 @@ namespace Game.World
             EnsureBrushCursor();
             UpdateStatusText();
 
-            Debug.Log("[MapSubtractEditor] 에디터 ON. [강] 또는 [땅] 누른 뒤 우클릭으로 칠하기, [저장] 으로 확정.");
+            Debug.Log("[MapSubtractEditor] 에디터 ON. [강] 또는 [땅] 누른 뒤 우클릭 드래그로 선 그리기 → 손 떼면 확정 → [저장].");
         }
 
         [ContextMenu("Disable Editor Mode")]
@@ -249,8 +254,10 @@ namespace Game.World
             }
 
             Vector2 mousePos = mouse.position.ReadValue();
-            bool overUI = EventSystem.current != null
-                && EventSystem.current.IsPointerOverGameObject();
+            // Canvas UI 위에 있을 때만 true. PhysicsRaycaster 가 잡는 3D 메쉬는 제외.
+            // (PortPlacementEditor 가 Main Camera 에 PhysicsRaycaster 를 붙여 놓으면
+            //  육지 MeshCollider 까지 "UI" 로 오인되어 클릭이 막히는 문제 차단)
+            bool overUI = IsPointerOverCanvasUI(mousePos);
 
             // ── 브러시 커서 위치 갱신 ──
             UpdateBrushCursor(mousePos, overUI);
@@ -281,19 +288,52 @@ namespace Game.World
             }
             else
             {
-                // mode=Sea/Land → 우클릭 = 지형 수정 (UI 위는 무시)
+                // mode=River/Land → 우클릭 드래그 = 선 그리기
+
+                // 1) 우버튼 press — 선 시작
                 if (mouse.rightButton.wasPressedThisFrame && !overUI)
                 {
                     if (TryGetWorldUnderMouse(mousePos, out var w))
                     {
-                        var (lat, lng) = GeoCoordinate.WorldToLatLng(w);
-                        Debug.Log($"[MapSubtractEditor] 우클릭 — world=({w.x:F1}, {w.z:F1}), lat={lat:F2}°, lng={lng:F2}°, mode={_mode}");
-                        HandleTerrainClick(w);
+                        _drawing = true;
+                        _currentDrawPoints.Clear();
+                        _currentDrawPoints.Add(new Vector3(w.x, visualY, w.z));
+                        EnsureDrawPreview();
+                        UpdateDrawPreview();
+                    }
+                }
+
+                // 2) 드래그 중 — 마우스 이동 시 점 추가
+                if (_drawing && mouse.rightButton.isPressed)
+                {
+                    if (TryGetWorldUnderMouse(mousePos, out var w))
+                    {
+                        var newPt = new Vector3(w.x, visualY, w.z);
+                        var last = _currentDrawPoints[_currentDrawPoints.Count - 1];
+                        if (Vector3.Distance(last, newPt) >= minDrawPointDistanceUnits)
+                        {
+                            _currentDrawPoints.Add(newPt);
+                            UpdateDrawPreview();
+                        }
+                    }
+                }
+
+                // 3) 우버튼 release — 선 확정 → pending polyline 추가
+                if (_drawing && mouse.rightButton.wasReleasedThisFrame)
+                {
+                    _drawing = false;
+                    if (_currentDrawPoints.Count >= 2)
+                    {
+                        var kind = _mode == EditMode.River ? MapEditKind.River : MapEditKind.Land;
+                        float widthUnits = brushKm / GeoCoordinate.KmPerUnit;
+                        AddPendingPolyline(kind, new List<Vector3>(_currentDrawPoints), widthUnits);
                     }
                     else
                     {
-                        Debug.LogWarning("[MapSubtractEditor] 우클릭 — Y={visualY} 평면 raycast 실패. 카메라가 평면 아래에 있나?");
+                        Debug.Log("[MapSubtractEditor] 선 길이가 너무 짧음 — 무시. 우클릭 드래그로 그려주세요.");
                     }
+                    _currentDrawPoints.Clear();
+                    if (_drawPreview != null) { Destroy(_drawPreview); _drawPreview = null; }
                 }
             }
 
@@ -332,69 +372,68 @@ namespace Game.World
                     : new Color(0.22f, 0.22f, 0.22f, 0.95f);
         }
 
-        // ─── 지형 클릭 처리 ────────────────────────────────────────────────
+        // ─── 드로잉 ────────────────────────────────────────────────────────
 
-        private void HandleTerrainClick(Vector3 worldPos)
+        private void EnsureDrawPreview()
         {
-            float r = (brushKm) / GeoCoordinate.KmPerUnit;
-            MapEditKind oppKind = _mode == EditMode.River ? MapEditKind.Land : MapEditKind.River;
-            MapEditKind myKind  = _mode == EditMode.River ? MapEditKind.River  : MapEditKind.Land;
-
-            // 1) Smart undo — 반대 모드의 pending 가 겹치면 그것을 제거
-            for (int i = _pendings.Count - 1; i >= 0; i--)
-            {
-                if (_pendings[i].kind != oppKind) continue;
-                if (Vector3.Distance(_pendings[i].worldCenter, worldPos) < r + _pendings[i].radiusUnits)
-                {
-                    if (_pendings[i].visual != null) Destroy(_pendings[i].visual);
-                    Debug.Log($"[MapSubtractEditor] 반대 pending 취소 ({_pendings[i].kind}).");
-                    _pendings.RemoveAt(i);
-                    return;
-                }
-            }
-
-            // 2) Smart undo — 기존 SO 중 반대 종류가 클릭 점을 포함하면 제거 표시 토글
-            var hitExisting = FindExistingAtPoint(worldPos, oppKind);
-            if (hitExisting != null)
-            {
-                hitExisting.markedRemove = !hitExisting.markedRemove;
-                ApplyExistingViewColor(hitExisting);
-                Debug.Log($"[MapSubtractEditor] 기존 {hitExisting.data.kind} '{hitExisting.data.displayNameKo}' " +
-                    (hitExisting.markedRemove ? "삭제 예약" : "삭제 취소"));
-                return;
-            }
-
-            // 3) 새 pending 원 추가
-            AddPendingCircle(myKind, worldPos, r);
+            if (_drawPreview != null) return;
+            _drawPreview = new GameObject("DrawPreview");
+            _drawPreview.transform.SetParent(transform);
+            _drawPreviewLine = _drawPreview.AddComponent<LineRenderer>();
+            var color = _mode == EditMode.River ? riverColor : landColor;
+            color.a = 0.7f;
+            ConfigureLineRenderer(_drawPreviewLine, color);
+            float w = brushKm / GeoCoordinate.KmPerUnit;
+            _drawPreviewLine.startWidth = w;
+            _drawPreviewLine.endWidth = w;
+            _drawPreviewLine.numCapVertices = 6;
+            _drawPreviewLine.numCornerVertices = 6;
         }
 
-        private ExistingView FindExistingAtPoint(Vector3 worldPos, MapEditKind kind)
+        private void UpdateDrawPreview()
         {
-            // 기존 SO 의 poly 는 mesh-local 좌표. click 도 mesh-local 로 변환해 비교.
-            Vector3 localPos = _landTransform != null
-                ? _landTransform.InverseTransformPoint(worldPos)
-                : worldPos;
-            var p = new Vector2(localPos.x, localPos.z);
-            foreach (var e in _existing)
-            {
-                if (e.data == null || e.data.kind != kind) continue;
-                var polys = MapSubtractGeometry.BuildSubtractPolygonsWorld(e.data);
-                if (MapSubtractGeometry.PointInAny(p, polys)) return e;
-            }
-            return null;
+            if (_drawPreviewLine == null) return;
+            _drawPreviewLine.positionCount = _currentDrawPoints.Count;
+            for (int i = 0; i < _currentDrawPoints.Count; i++)
+                _drawPreviewLine.SetPosition(i, _currentDrawPoints[i]);
         }
 
-        private void AddPendingCircle(MapEditKind kind, Vector3 center, float radiusUnits)
+        private void AddPendingPolyline(MapEditKind kind, List<Vector3> points, float widthUnits)
         {
-            var p = new Pending { kind = kind, worldCenter = center, radiusUnits = radiusUnits };
-            p.visual = new GameObject($"Pending_{kind}");
+            var p = new Pending { kind = kind, linePoints = points, widthUnits = widthUnits };
+            p.visual = new GameObject($"Pending_{kind}_Line");
             p.visual.transform.SetParent(transform);
             p.line = p.visual.AddComponent<LineRenderer>();
             var color = kind == MapEditKind.River ? riverColor : landColor;
+            color.a = 0.8f;
             ConfigureLineRenderer(p.line, color);
-            DrawCircle(p.line, center, radiusUnits, brushSegments);
+            p.line.startWidth = widthUnits;
+            p.line.endWidth = widthUnits;
+            p.line.numCapVertices = 6;
+            p.line.numCornerVertices = 6;
+            p.line.positionCount = points.Count;
+            for (int i = 0; i < points.Count; i++) p.line.SetPosition(i, points[i]);
             _pendings.Add(p);
-            Debug.Log($"[MapSubtractEditor] 새 pending {kind} 추가 — pos=({center.x:F1}, {center.z:F1}), r={radiusUnits:F1}u, 총 pending {_pendings.Count}개");
+            float lenUnits = 0f;
+            for (int i = 1; i < points.Count; i++) lenUnits += Vector3.Distance(points[i - 1], points[i]);
+            Debug.Log($"[MapSubtractEditor] 새 pending {kind} 선 추가 — 점 {points.Count}개, 길이 {lenUnits:F1}u (≈{lenUnits * GeoCoordinate.KmPerUnit:F0}km), 폭 {widthUnits * GeoCoordinate.KmPerUnit:F0}km. 총 pending {_pendings.Count}개");
+        }
+
+        /// <summary>반투명 머티리얼 — solid disk 등에서 사용.</summary>
+        private static Material CreateTransparentMaterial(Color color)
+        {
+            var shader = Shader.Find("Universal Render Pipeline/Lit");
+            if (shader == null) shader = Shader.Find("Standard");
+            var mat = new Material(shader);
+            if (mat.HasProperty("_Surface")) mat.SetFloat("_Surface", 1f);
+            if (mat.HasProperty("_ZWrite")) mat.SetFloat("_ZWrite", 0f);
+            if (mat.HasProperty("_SrcBlend")) mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+            if (mat.HasProperty("_DstBlend")) mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            mat.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
+            mat.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+            if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", color);
+            if (mat.HasProperty("_Color")) mat.SetColor("_Color", color);
+            return mat;
         }
 
         // ─── 기존 SO 시각화 ────────────────────────────────────────────────
@@ -440,10 +479,19 @@ namespace Game.World
         private void EnsureBrushCursor()
         {
             if (_brushCursor != null) return;
-            _brushCursor = new GameObject("BrushCursor");
+            _brushCursor = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            _brushCursor.name = "BrushCursor";
             _brushCursor.transform.SetParent(transform);
-            _brushLine = _brushCursor.AddComponent<LineRenderer>();
-            ConfigureLineRenderer(_brushLine, brushCursorColor);
+            var col = _brushCursor.GetComponent<Collider>();
+            if (col != null) Destroy(col);
+            _brushRenderer = _brushCursor.GetComponent<Renderer>();
+            if (_brushRenderer != null)
+            {
+                _brushMaterial = CreateTransparentMaterial(brushCursorColor);
+                _brushRenderer.sharedMaterial = _brushMaterial;
+                _brushRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                _brushRenderer.receiveShadows = false;
+            }
         }
 
         private void UpdateBrushCursor(Vector2 mousePos, bool overUI)
@@ -451,19 +499,42 @@ namespace Game.World
             if (_brushCursor == null) return;
             if (overUI || _mode == EditMode.None)
             {
-                if (_brushLine.positionCount != 0) _brushLine.positionCount = 0;
+                _brushCursor.SetActive(false);
                 return;
             }
             if (!TryGetWorldUnderMouse(mousePos, out var w))
             {
-                _brushLine.positionCount = 0;
+                _brushCursor.SetActive(false);
                 return;
             }
+            _brushCursor.SetActive(true);
             float r = brushKm / GeoCoordinate.KmPerUnit;
+            _brushCursor.transform.position = new Vector3(w.x, visualY + 0.5f, w.z);
+            _brushCursor.transform.localScale = new Vector3(r * 2f, 0.05f, r * 2f);
             var c = _mode == EditMode.River ? riverColor : landColor;
-            c.a = 0.6f;
-            _brushLine.startColor = c; _brushLine.endColor = c;
-            DrawCircle(_brushLine, w, r, brushSegments);
+            c.a = 0.5f;
+            if (_brushMaterial != null)
+            {
+                if (_brushMaterial.HasProperty("_BaseColor")) _brushMaterial.SetColor("_BaseColor", c);
+                if (_brushMaterial.HasProperty("_Color")) _brushMaterial.SetColor("_Color", c);
+            }
+        }
+
+        // ─── UI 위 체크 (Canvas 만) ────────────────────────────────────────
+
+        private static readonly List<RaycastResult> _uiRaycastResults = new();
+        private static bool IsPointerOverCanvasUI(Vector2 mousePos)
+        {
+            if (EventSystem.current == null) return false;
+            _uiRaycastResults.Clear();
+            var ped = new PointerEventData(EventSystem.current) { position = mousePos };
+            EventSystem.current.RaycastAll(ped, _uiRaycastResults);
+            for (int i = 0; i < _uiRaycastResults.Count; i++)
+            {
+                // GraphicRaycaster = Canvas UI. 3D PhysicsRaycaster 는 무시.
+                if (_uiRaycastResults[i].module is GraphicRaycaster) return true;
+            }
+            return false;
         }
 
         // ─── 마우스 → 월드 좌표 ────────────────────────────────────────────
@@ -562,18 +633,19 @@ namespace Game.World
 
             int created = 0, removed = 0;
 
-            // 1) 새 pending → SO 생성
+            // 1) 새 pending 폴리라인 → SO 생성
             foreach (var p in _pendings)
             {
+                if (p.linePoints == null || p.linePoints.Count < 2) continue;
                 var so = ScriptableObject.CreateInstance<MapSubtractData>();
                 string ts = System.DateTime.Now.ToString("yyyyMMdd_HHmmss");
                 string uniq = $"{ts}_{created:D3}";
                 so.subtractId = $"subtract.{p.kind.ToString().ToLower()}.{uniq}";
                 so.displayNameKo = p.kind == MapEditKind.River ? $"강 {created + 1}" : $"땅 {created + 1}";
                 so.kind = p.kind;
-                so.widthKm = 0f;
+                so.widthKm = p.widthUnits * GeoCoordinate.KmPerUnit;   // unit → km
                 so.enabled = true;
-                so.points = CircleToLatLngPolygon(p.worldCenter, p.radiusUnits, brushSegments);
+                so.points = LinePointsToLatLng(p.linePoints);
                 AssetDatabase.CreateAsset(so, $"{saveFolder}/MapSubtract_{p.kind}_{uniq}.asset");
                 created++;
             }
@@ -620,6 +692,10 @@ namespace Game.World
             // 6) 새 SO 들을 ExistingView 로 다시 빌드
             BuildExistingViews();
 
+            // 7) 강 시각·통과 영역 즉시 갱신 (RiverOverlay 가 씬에 있으면)
+            var riverOverlay = FindAnyObjectByType<RiverOverlay>();
+            if (riverOverlay != null) riverOverlay.Refresh();
+
             Debug.Log($"[MapSubtractEditor] 저장 완료. 새 영역 +{created}, 제거 -{removed}. " +
                 (ok ? "메쉬 재베이크 완료." : "베이크 실패 — 메뉴 'Game ▸ Bake World Land' 수동 실행."));
 #else
@@ -654,25 +730,17 @@ namespace Game.World
             Debug.Log($"[MapSubtractEditor] 취소: pending {n} 개 버림, 삭제 예약 {undone} 개 복원.");
         }
 
-        private Vector2[] CircleToLatLngPolygon(Vector3 center, float radiusUnits, int segments)
+        /// <summary>드래그로 그린 월드 좌표 점들 → MapSubtractData.points (lat/lng 배열).</summary>
+        private Vector2[] LinePointsToLatLng(List<Vector3> worldPoints)
         {
-            int n = Mathf.Max(8, segments);
-            var arr = new Vector2[n];
-
-            // WorldLand 가 (0,0,0) 외 위치에 있으면 click(world) 을 mesh-local 로 변환해야
-            // LatLng 매핑이 메쉬 정점과 일치함.
-            Vector3 centerLocal = _landTransform != null
-                ? _landTransform.InverseTransformPoint(center)
-                : center;
-
-            for (int i = 0; i < n; i++)
+            var arr = new Vector2[worldPoints.Count];
+            for (int i = 0; i < worldPoints.Count; i++)
             {
-                float t = (i / (float)n) * Mathf.PI * 2f;
-                var wp = new Vector3(
-                    centerLocal.x + Mathf.Cos(t) * radiusUnits,
-                    0f,
-                    centerLocal.z + Mathf.Sin(t) * radiusUnits);
-                var ll = GeoCoordinate.WorldToLatLng(wp);
+                // WorldLand 가 (0,0,0) 외 위치면 mesh-local 로 변환해야 lat/lng 가 메쉬 정점과 일치
+                Vector3 local = _landTransform != null
+                    ? _landTransform.InverseTransformPoint(worldPoints[i])
+                    : worldPoints[i];
+                var ll = GeoCoordinate.WorldToLatLng(local);
                 arr[i] = new Vector2(ll.longitude, ll.latitude);
             }
             return arr;
