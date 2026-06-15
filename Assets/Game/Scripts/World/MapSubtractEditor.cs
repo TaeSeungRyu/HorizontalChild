@@ -55,6 +55,8 @@ namespace Game.World
         public float zoomSpeed = 300f;
         public float minCameraY = 30f;
         public float maxCameraY = 3000f;
+        [Tooltip("[화면맞추기] 버튼이 카메라를 이 Y 로 스냅. 20km 브러시가 또렷이 보이는 줌.")]
+        public float fitScreenCameraY = 80f;
 
         [Header("Visual")]
         [Tooltip("브러시·핸들 Y 위치. Land 표면(≈1.75) 바로 위에 두면 클릭 위치가 정확.")]
@@ -590,6 +592,21 @@ namespace Game.World
 #endif
         }
 
+        /// <summary>
+        /// 카메라를 편집에 가장 적합한 화면 크기로 스냅 — top-down + 정해진 Y.
+        /// 줌 레벨에 따라 클릭 위치가 어긋나는 문제를 한 방에 해결.
+        /// 현재 XZ 는 유지 (보고 있던 위치 그대로).
+        /// </summary>
+        public void FitScreen()
+        {
+            if (mainCamera == null) return;
+            var p = mainCamera.transform.position;
+            p.y = fitScreenCameraY;
+            mainCamera.transform.position = p;
+            mainCamera.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+            Debug.Log($"[MapSubtractEditor] 화면맞추기 — Y={fitScreenCameraY}, top-down 시점.");
+        }
+
         public void Cancel()
         {
             int n = _pendings.Count;
@@ -710,6 +727,8 @@ namespace Game.World
                 () => SetMode(EditMode.Sea));
             (_landBtn, _landBtnBg) = CreateBigButton(toolbar.transform, "땅",
                 () => SetMode(EditMode.Land));
+            CreateBigButton(toolbar.transform, "화면맞추기", FitScreen,
+                new Color(0.3f, 0.4f, 0.7f, 1f));
             (_saveBtn, _saveBtnBg) = CreateBigButton(toolbar.transform, "저장", Save,
                 new Color(0.2f, 0.55f, 0.2f, 1f));
             CreateBigButton(toolbar.transform, "취소", Cancel,
