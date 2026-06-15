@@ -57,8 +57,8 @@ namespace Game.World
         public float maxCameraY = 3000f;
 
         [Header("Visual")]
-        [Tooltip("브러시·핸들 Y 위치 (배 위)")]
-        public float visualY = 35f;
+        [Tooltip("브러시·핸들 Y 위치. Land 표면(≈1.75) 바로 위에 두면 클릭 위치가 정확.")]
+        public float visualY = 3f;
         public float lineWidth = 1.5f;
         public Color seaColor = new Color(0.2f, 0.5f, 1f, 0.95f);
         public Color landColor = new Color(0.85f, 0.55f, 0.25f, 0.95f);
@@ -111,6 +111,11 @@ namespace Game.World
         private CameraFollow _cameraFollow;
         private bool _cameraFollowWasEnabled;
 
+        // 에디터 진입 전 카메라 자세 — 종료 시 복원
+        private Quaternion _savedCamRotation;
+        private Vector3 _savedCamPosition;
+        private bool _savedCamState;
+
         public bool IsActive => _active;
 
         // ─── 활성/비활성 ───────────────────────────────────────────────────
@@ -143,6 +148,17 @@ namespace Game.World
                     _cameraFollowWasEnabled = _cameraFollow.enabled;
                     _cameraFollow.enabled = false;
                 }
+
+                // 카메라 자세 저장 + top-down 시점으로 강제 (클릭 위치 정확성 위해)
+                _savedCamRotation = mainCamera.transform.rotation;
+                _savedCamPosition = mainCamera.transform.position;
+                _savedCamState = true;
+
+                // 현재 카메라 XZ 유지, Y 는 적당히, 회전은 정수직 내려다보기
+                var p = mainCamera.transform.position;
+                if (p.y < minCameraY) p.y = 200f;   // 너무 낮으면 적당히 위로
+                mainCamera.transform.position = p;
+                mainCamera.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
             }
 
             EnsureUI();
@@ -166,6 +182,14 @@ namespace Game.World
             SeaSimulation.Resume(this);
             SeaSimulation.Reset();
             Time.timeScale = 1f;
+
+            // 카메라 자세 복원
+            if (_savedCamState && mainCamera != null)
+            {
+                mainCamera.transform.rotation = _savedCamRotation;
+                mainCamera.transform.position = _savedCamPosition;
+                _savedCamState = false;
+            }
 
             // CameraFollow 복원
             if (_cameraFollow != null)
@@ -782,8 +806,10 @@ namespace Game.World
                 ? $"<color=#FFDD55><b>⚠ [저장] 버튼을 눌러야 실제 지도에 적용됩니다 ({totalChanges}개 대기 중)</b></color>"
                 : "<color=#AAAAAA>우클릭=칠하기, Enter=모드 해제</color>";
 
+            float camY = mainCamera != null ? mainCamera.transform.position.y : 0f;
             _statusText.text =
-                $"<b>모드:</b> {modeKo}  |  <b>브러시:</b> {brushKm:F0} km  ([ ] 키)\n" +
+                $"<b>모드:</b> {modeKo}  |  <b>브러시:</b> {brushKm:F0} km  ([ ] 키)  |  " +
+                $"<b>줌 Y:</b> {camY:F0}\n" +
                 $"<b>변경:</b> 바다 +{pendingSea}, 땅 +{pendingLand}, 삭제 -{markedRemove}\n" +
                 $"<size=18>{saveHint}</size>";
 
