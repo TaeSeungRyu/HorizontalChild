@@ -57,8 +57,8 @@ namespace Game.World
         [Header("Test")]
         [Tooltip("☑ → 즉시 태풍 1개 생성 후 자동 해제. 개발 확인용.")]
         public bool spawnNowTest = false;
-        [Tooltip("테스트 모드일 때 배 근처(이 거리만큼)에 spawn — 카메라가 따라가는 위치라 즉시 보임. 0=원래대로 랜덤.")]
-        [Range(0f, 200f)] public float testSpawnNearShipUnits = 60f;
+        [Tooltip("테스트 모드일 때 배 옆에 spawn 되는 거리 (unit). 0=원래대로 랜덤.")]
+        [Range(0f, 100f)] public float testSpawnNearShipUnits = 20f;
 
         // ─── 런타임 ────────────────────────────────────────────────────────
         private class Active
@@ -72,7 +72,9 @@ namespace Game.World
 
         // 하이라이트
         private bool _highlighting;
-        private float _damageBuffer;   // 누적 소수점 데미지
+        private float _damageBuffer;        // 누적 소수점 데미지
+        private float _totalDamageInBurst;  // 현재 hazard 진입 후 누적 손상
+        private float _nextHudToastAt;      // 다음 toast 시각
         private readonly List<Renderer> _shipRenderers = new();
         private readonly List<Material> _origMats = new();
         private readonly List<Material> _highlightMats = new();
@@ -128,9 +130,10 @@ namespace Game.World
             Vector3 pos;
             if (nearShipForTest && playerShip != null && testSpawnNearShipUnits > 0f)
             {
-                // 테스트 — 배 근처에 약간 떨어진 곳 (배 진행방향 앞쪽)
+                // 테스트 — 배 오른쪽 옆 (카메라가 65° 기울어서 너무 앞쪽은 frustum 위로 빠짐)
+                // ship.right = 화면 기준 오른쪽 → CameraFollow followYaw 켜져도 항상 보임.
                 var ship = playerShip.transform;
-                pos = ship.position + ship.forward * testSpawnNearShipUnits;
+                pos = ship.position + ship.right * testSpawnNearShipUnits;
                 pos.y = 0f;
             }
             else
@@ -226,9 +229,24 @@ namespace Game.World
 
             if (inHazard)
             {
+                // 처음 진입 — toast + 즉시 데미지 한 번 (체감 위해)
+                if (!_highlighting)
+                {
+                    var toast = Game.UI.ToastService.Instance;
+                    if (toast != null) toast.Show("⚠ 태풍에 휩쓸렸어요! 빨리 벗어나세요!");
+                    Debug.Log($"[TyphoonSpawner] 태풍 진입 — 내구도 {playerShip.CurrentDurability}/{playerShip.MaxDurability}");
+                    _totalDamageInBurst = 0f;
+                    _nextHudToastAt = Time.time + 2f;
+
+                    // 입장 즉시 페널티 한 번 — 체감용
+                    int firstHit = Mathf.Max(1, Mathf.RoundToInt(playerShip.MaxDurability * damagePercentPerSecond / 100f));
+                    playerShip.ApplyDamage(firstHit);
+                    _totalDamageInBurst += firstHit;
+                }
+
                 ApplyHighlight(true);
-                // 1초당 MaxDurability * (damagePercentPerSecond / 100) 감소.
-                // ApplyDamage 가 int 라 누적 → 1 이상이면 적용.
+
+                // 1초당 MaxDurability * (damagePercentPerSecond / 100) 감소
                 float perSec = playerShip.MaxDurability * (damagePercentPerSecond / 100f);
                 _damageBuffer += perSec * Time.deltaTime;
                 if (_damageBuffer >= 1f)
@@ -236,12 +254,37 @@ namespace Game.World
                     int dmg = Mathf.FloorToInt(_damageBuffer);
                     _damageBuffer -= dmg;
                     playerShip.ApplyDamage(dmg);
+                    _totalDamageInBurst += dmg;
+                }
+
+                // 2초마다 toast 로 현황 알림 (HUD 가 없을 때 체감 보조)
+                if (Time.time >= _nextHudToastAt)
+                {
+                    _nextHudToastAt = Time.time + 2f;
+                    var toast = Game.UI.ToastService.Instance;
+                    if (toast != null)
+                    {
+                        toast.Show($"⚠ 태풍! 내구도 {playerShip.CurrentDurability}/{playerShip.MaxDurability} " +
+                                   $"(누적 -{Mathf.RoundToInt(_totalDamageInBurst)})");
+                    }
+                    Debug.Log($"[TyphoonSpawner] 태풍 안 — 내구도 {playerShip.CurrentDurability}/{playerShip.MaxDurability}, 누적 손상 {_totalDamageInBurst:F1}");
                 }
             }
             else
             {
+                if (_highlighting)
+                {
+                    // 방금 벗어남 — toast
+                    var toast = Game.UI.ToastService.Instance;
+                    if (toast != null && _totalDamageInBurst > 0)
+                    {
+                        toast.Show($"태풍에서 벗어났어요. 내구도 -{Mathf.RoundToInt(_totalDamageInBurst)} 손상.");
+                    }
+                    Debug.Log($"[TyphoonSpawner] 태풍 탈출 — 총 손상 {_totalDamageInBurst:F1}");
+                }
                 ApplyHighlight(false);
                 _damageBuffer = 0f;
+                _totalDamageInBurst = 0f;
             }
         }
 
@@ -254,9 +297,6 @@ namespace Game.World
                 _highlightShipRoot = playerShip.gameObject;
             }
 
-            if (_highlighting == on) return;
-            _highlighting = on;
-
             // 캐시 lazy 구축
             if (_shipRenderers.Count == 0 && playerShip != null)
             {
@@ -266,17 +306,37 @@ namespace Game.World
                     _shipRenderers.Add(r);
                     _origMats.Add(r.sharedMaterial);
                     var hm = new Material(r.sharedMaterial);
-                    if (hm.HasProperty("_BaseColor")) hm.SetColor("_BaseColor", highlightColor);
-                    else if (hm.HasProperty("_Color")) hm.SetColor("_Color", highlightColor);
-                    if (hm.HasProperty("_EmissionColor")) hm.SetColor("_EmissionColor", highlightColor * 0.5f);
                     _highlightMats.Add(hm);
                 }
             }
 
-            for (int i = 0; i < _shipRenderers.Count; i++)
+            if (_highlighting != on)
             {
-                if (_shipRenderers[i] == null) continue;
-                _shipRenderers[i].sharedMaterial = on ? _highlightMats[i] : _origMats[i];
+                _highlighting = on;
+                // ON 으로 전환 — 머티리얼 교체
+                // OFF 로 전환 — 원본 복원
+                for (int i = 0; i < _shipRenderers.Count; i++)
+                {
+                    if (_shipRenderers[i] == null) continue;
+                    _shipRenderers[i].sharedMaterial = on ? _highlightMats[i] : _origMats[i];
+                }
+            }
+
+            // ON 상태일 동안 매 프레임 색을 PULSE — 깜빡임 효과로 체감 강화
+            if (on)
+            {
+                // 0~1 사이 sine 펄스 (0.4초 주기)
+                float pulse = 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * (Mathf.PI * 2f / 0.4f));
+                // 흰색 ↔ 빨간색 사이 펄스 — 위험 신호
+                var pulsedColor = Color.Lerp(highlightColor, Color.red, pulse * 0.7f);
+                for (int i = 0; i < _highlightMats.Count; i++)
+                {
+                    var hm = _highlightMats[i];
+                    if (hm == null) continue;
+                    if (hm.HasProperty("_BaseColor")) hm.SetColor("_BaseColor", pulsedColor);
+                    else if (hm.HasProperty("_Color")) hm.SetColor("_Color", pulsedColor);
+                    if (hm.HasProperty("_EmissionColor")) hm.SetColor("_EmissionColor", pulsedColor * 0.6f);
+                }
             }
         }
 

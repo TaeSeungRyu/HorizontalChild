@@ -141775,7 +141775,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc7aa7866017eed46ad928042b2b4ef5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game::Game.World.TyphoonSpawner
-  typhoonPrefab: {fileID: 919132149155446097, guid: 47ed96897e7d65948903337ac9fdd0bc, type: 3}
+  typhoonPrefab: {fileID: 2494449644430375465, guid: c07e3294a39c4b84aaf508c6468ff273, type: 3}
   playerShip: {fileID: 1690041783}
   maxActive: 3
   spawnIntervalSeconds: 45
@@ -141791,6 +141791,7 @@ MonoBehaviour:
   worldLatMin: -55
   worldLatMax: 65
   spawnNowTest: 0
+  testSpawnNearShipUnits: 60
 --- !u!1 &1468425808
 GameObject:
   m_ObjectHideFlags: 0
