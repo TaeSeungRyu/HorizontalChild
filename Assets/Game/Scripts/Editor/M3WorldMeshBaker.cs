@@ -50,6 +50,10 @@ namespace Game.Editor
         // 작을수록 정점 ↑ / 충돌 안정성 ↑.
         private const float MaxEdgeWorldUnits = 200f;
 
+        // Carve 영역 근처에서 적용되는 더 작은 edge 한계 (unit). 1 unit ≈ 7.4 km.
+        // 작은 브러시(20km) 도 원형으로 잘리도록 카브 부근만 finely 분할.
+        private const float CarveFineMaxEdge = 2f;
+
         [MenuItem("Game/Bake World Land Mesh from GeoJSON")]
         public static void Bake()
         {
@@ -300,6 +304,14 @@ namespace Game.Editor
                 // 4) Interior 큰 삼각형 분할 (topLocal 에 새 정점 추가, topTris 인덱스 재배치)
                 SubdivideLargeTriangles(topLocal, topTris, MaxEdgeWorldUnits);
 
+                // 4b) Subtract 영역 근처는 추가로 잘게 분할 — 카브가 원형으로 보이게.
+                //     기본 200unit 삼각형은 작은 카브에선 뾰족하게 잘림. 카브 근처만
+                //     CarveFineMaxEdge(2unit≈15km) 까지 쪼개 둘레가 부드러워짐.
+                if (hasSubtract)
+                {
+                    SubdivideTrianglesNearCarves(topLocal, topTris, subtractPolys, CarveFineMaxEdge);
+                }
+
                 int topCount = topLocal.Count;
                 int baseIndex = verts.Count;
 
@@ -312,19 +324,23 @@ namespace Game.Editor
                     verts.Add(new Vector3(v.x, BaseY, v.z));
                 }
 
-                // 7+8) Top + Bottom triangles — 삼각형 centroid 가 subtract 영역에 있으면 스킵
-                //      삼각형 단위로 필터하면 cut edge 가 살짝 jagged 해지지만
-                //      MaxEdgeWorldUnits 가 작아 시각적으로 거의 알아챌 수 없음.
+                // 7+8) Top + Bottom triangles — 정점 하나라도 subtract 영역에 있으면 스킵.
+                //      centroid 만 보면 길고 가는 삼각형의 "꼬리" 가 카브 안으로 뻗어
+                //      가로 줄무늬처럼 보임. 정점 단위로 보면 카브 살짝 커지지만 깔끔.
                 for (int t = 0; t < topTris.Count; t += 3)
                 {
                     int ia = topTris[t], ib = topTris[t + 1], ic = topTris[t + 2];
                     if (hasSubtract)
                     {
                         var a = topLocal[ia]; var b = topLocal[ib]; var c = topLocal[ic];
-                        var centroid = new Vector2(
-                            (a.x + b.x + c.x) / 3f,
-                            (a.z + b.z + c.z) / 3f);
-                        if (Game.World.MapSubtractGeometry.PointInAny(centroid, subtractPolys))
+                        var pa = new Vector2(a.x, a.z);
+                        var pb = new Vector2(b.x, b.z);
+                        var pc = new Vector2(c.x, c.z);
+                        bool inA = Game.World.MapSubtractGeometry.PointInAny(pa, subtractPolys);
+                        bool inB = Game.World.MapSubtractGeometry.PointInAny(pb, subtractPolys);
+                        bool inC = Game.World.MapSubtractGeometry.PointInAny(pc, subtractPolys);
+                        // 셋 중 하나라도 안에 있으면 → 통째로 제거 (꼬리 stripe 방지)
+                        if (inA || inB || inC)
                         {
                             droppedTris++;
                             continue;
@@ -357,12 +373,17 @@ namespace Game.Editor
                 {
                     int next = (i + 1) % n;
 
-                    // Side wall quad 의 중심이 subtract 영역에 있으면 스킵
+                    // Side wall quad — 양 끝점 중 하나라도 subtract 안이면 스킵.
+                    // mid 만 보면 카브 경계에서 일부 walls 가 살아남아 vertical stripe 가
+                    // 위에서 가로 줄로 보임.
                     if (hasSubtract)
                     {
                         var p0 = topLocal[i]; var p1 = topLocal[next];
-                        var midXZ = new Vector2((p0.x + p1.x) * 0.5f, (p0.z + p1.z) * 0.5f);
-                        if (Game.World.MapSubtractGeometry.PointInAny(midXZ, subtractPolys))
+                        var xz0 = new Vector2(p0.x, p0.z);
+                        var xz1 = new Vector2(p1.x, p1.z);
+                        bool in0 = Game.World.MapSubtractGeometry.PointInAny(xz0, subtractPolys);
+                        bool in1 = Game.World.MapSubtractGeometry.PointInAny(xz1, subtractPolys);
+                        if (in0 || in1)
                         {
                             droppedTris += 2;
                             continue;
@@ -483,6 +504,98 @@ namespace Game.Editor
                     tris.Add(newIdx); tris.Add(ib); tris.Add(ic);
                 }
                 // 현재 인덱스 그대로 — 분할된 삼각형도 재검사
+            }
+        }
+
+        /// <summary>
+        /// Carve 영역의 bounding box 와 겹치는 삼각형만 추가 분할.
+        /// 결과: 카브 근처는 finely 분할 → 원형 cut 가 부드러워짐. 멀리 떨어진
+        /// 영역은 그대로 → 정점 폭증 방지.
+        /// </summary>
+        private static void SubdivideTrianglesNearCarves(
+            List<Vector3> verts, List<int> tris,
+            List<Vector2[]> carvePolys, float fineMaxEdge)
+        {
+            if (carvePolys == null || carvePolys.Count == 0) return;
+
+            // 각 카브 폴리곤의 bounding box (margin 포함) 계산
+            int nb = carvePolys.Count;
+            var bbMinX = new float[nb]; var bbMaxX = new float[nb];
+            var bbMinZ = new float[nb]; var bbMaxZ = new float[nb];
+            float margin = fineMaxEdge * 2f;
+            for (int k = 0; k < nb; k++)
+            {
+                float mnx = float.MaxValue, mxx = float.MinValue;
+                float mnz = float.MaxValue, mxz = float.MinValue;
+                foreach (var p in carvePolys[k])
+                {
+                    if (p.x < mnx) mnx = p.x;
+                    if (p.x > mxx) mxx = p.x;
+                    if (p.y < mnz) mnz = p.y;
+                    if (p.y > mxz) mxz = p.y;
+                }
+                bbMinX[k] = mnx - margin; bbMaxX[k] = mxx + margin;
+                bbMinZ[k] = mnz - margin; bbMaxZ[k] = mxz + margin;
+            }
+
+            float sqMax = fineMaxEdge * fineMaxEdge;
+            int safety = 2000000;
+            int i = 0;
+            while (i < tris.Count && safety-- > 0)
+            {
+                int ia = tris[i], ib = tris[i + 1], ic = tris[i + 2];
+                var a = verts[ia]; var b = verts[ib]; var c = verts[ic];
+
+                // 삼각형 bbox
+                float tMnX = a.x, tMxX = a.x, tMnZ = a.z, tMxZ = a.z;
+                if (b.x < tMnX) tMnX = b.x; if (b.x > tMxX) tMxX = b.x;
+                if (c.x < tMnX) tMnX = c.x; if (c.x > tMxX) tMxX = c.x;
+                if (b.z < tMnZ) tMnZ = b.z; if (b.z > tMxZ) tMxZ = b.z;
+                if (c.z < tMnZ) tMnZ = c.z; if (c.z > tMxZ) tMxZ = c.z;
+
+                bool nearCarve = false;
+                for (int k = 0; k < nb; k++)
+                {
+                    if (tMxX < bbMinX[k] || tMnX > bbMaxX[k]) continue;
+                    if (tMxZ < bbMinZ[k] || tMnZ > bbMaxZ[k]) continue;
+                    nearCarve = true; break;
+                }
+                if (!nearCarve) { i += 3; continue; }
+
+                // 변 길이 검사
+                float dxab = b.x - a.x, dzab = b.z - a.z;
+                float dxbc = c.x - b.x, dzbc = c.z - b.z;
+                float dxca = a.x - c.x, dzca = a.z - c.z;
+                float dab = dxab * dxab + dzab * dzab;
+                float dbc = dxbc * dxbc + dzbc * dzbc;
+                float dca = dxca * dxca + dzca * dzca;
+
+                if (dab <= sqMax && dbc <= sqMax && dca <= sqMax)
+                {
+                    i += 3;
+                    continue;
+                }
+
+                int newIdx = verts.Count;
+                if (dab >= dbc && dab >= dca)
+                {
+                    verts.Add(new Vector3((a.x + b.x) * 0.5f, a.y, (a.z + b.z) * 0.5f));
+                    tris[i + 1] = newIdx;
+                    tris.Add(newIdx); tris.Add(ib); tris.Add(ic);
+                }
+                else if (dbc >= dca)
+                {
+                    verts.Add(new Vector3((b.x + c.x) * 0.5f, b.y, (b.z + c.z) * 0.5f));
+                    tris[i + 2] = newIdx;
+                    tris.Add(ia); tris.Add(newIdx); tris.Add(ic);
+                }
+                else
+                {
+                    verts.Add(new Vector3((c.x + a.x) * 0.5f, c.y, (c.z + a.z) * 0.5f));
+                    tris[i + 2] = newIdx;
+                    tris.Add(newIdx); tris.Add(ib); tris.Add(ic);
+                }
+                // 새 삼각형도 재검사
             }
         }
 
