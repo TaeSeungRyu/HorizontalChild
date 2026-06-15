@@ -19,7 +19,7 @@ namespace Game.World
     /// 지형 에디터 — 대항해시대 2 풍 맵 다듬기.
     ///
     /// 사용 흐름:
-    ///   1) [바다] 또는 [땅] 버튼 클릭 → 해당 모드 활성 (버튼 강조).
+    ///   1) [강] 또는 [땅] 버튼 클릭 → 해당 모드 활성 (버튼 강조).
     ///   2) 지도 위에서 마우스 오른쪽 버튼 클릭 → 그 자리에 20km 원 카브 (Sea) 또는 새 땅 (Land) 추가.
     ///      연속 클릭 가능. 변경은 색 원으로 표시 (메모리에만 있음).
     ///   3) Enter 키 또는 같은 버튼 다시 클릭 → 모드 해제.
@@ -36,7 +36,7 @@ namespace Game.World
     /// </summary>
     public class MapSubtractEditor : MonoBehaviour
     {
-        public enum EditMode { None, Sea, Land }
+        public enum EditMode { None, River, Land }
 
         [Header("Refs")]
         public MapSubtractCatalog catalog;
@@ -59,10 +59,10 @@ namespace Game.World
         public float fitScreenCameraY = 80f;
 
         [Header("Visual")]
-        [Tooltip("브러시·핸들 Y 위치. Land 표면(≈1.75) 바로 위에 두면 클릭 위치가 정확.")]
-        public float visualY = 3f;
-        public float lineWidth = 1.5f;
-        public Color seaColor = new Color(0.2f, 0.5f, 1f, 0.95f);
+        [Tooltip("브러시·핸들 Y 위치. Top-down 시점에선 높여도 parallax 없음 — Land(1.75) 위로 충분히 띄워 가림 없도록.")]
+        public float visualY = 30f;
+        public float lineWidth = 2.5f;
+        public Color riverColor = new Color(0.2f, 0.5f, 1f, 0.95f);
         public Color landColor = new Color(0.85f, 0.55f, 0.25f, 0.95f);
         public Color existingDim = new Color(1f, 1f, 1f, 0.35f);
         public Color markedRemoveColor = new Color(0.6f, 0.6f, 0.6f, 0.5f);
@@ -97,8 +97,8 @@ namespace Game.World
 
         // UI
         private Canvas _ui;
-        private Button _seaBtn, _landBtn, _saveBtn, _cancelBtn;
-        private Image _seaBtnBg, _landBtnBg, _saveBtnBg;
+        private Button _riverBtn, _landBtn, _saveBtn, _cancelBtn;
+        private Image _riverBtnBg, _landBtnBg, _saveBtnBg;
         private TextMeshProUGUI _statusText;
 
         // 브러시 커서
@@ -183,7 +183,7 @@ namespace Game.World
             EnsureBrushCursor();
             UpdateStatusText();
 
-            Debug.Log("[MapSubtractEditor] 에디터 ON. [바다] 또는 [땅] 누른 뒤 우클릭으로 칠하기, [저장] 으로 확정.");
+            Debug.Log("[MapSubtractEditor] 에디터 ON. [강] 또는 [땅] 누른 뒤 우클릭으로 칠하기, [저장] 으로 확정.");
         }
 
         [ContextMenu("Disable Editor Mode")]
@@ -286,7 +286,13 @@ namespace Game.World
                 {
                     if (TryGetWorldUnderMouse(mousePos, out var w))
                     {
+                        var (lat, lng) = GeoCoordinate.WorldToLatLng(w);
+                        Debug.Log($"[MapSubtractEditor] 우클릭 — world=({w.x:F1}, {w.z:F1}), lat={lat:F2}°, lng={lng:F2}°, mode={_mode}");
                         HandleTerrainClick(w);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("[MapSubtractEditor] 우클릭 — Y={visualY} 평면 raycast 실패. 카메라가 평면 아래에 있나?");
                     }
                 }
             }
@@ -316,8 +322,8 @@ namespace Game.World
 
         private void RefreshButtonHighlights()
         {
-            if (_seaBtnBg != null)
-                _seaBtnBg.color = _mode == EditMode.Sea
+            if (_riverBtnBg != null)
+                _riverBtnBg.color = _mode == EditMode.River
                     ? new Color(0.25f, 0.55f, 0.95f, 1f)
                     : new Color(0.22f, 0.22f, 0.22f, 0.95f);
             if (_landBtnBg != null)
@@ -331,8 +337,8 @@ namespace Game.World
         private void HandleTerrainClick(Vector3 worldPos)
         {
             float r = (brushKm) / GeoCoordinate.KmPerUnit;
-            MapEditKind oppKind = _mode == EditMode.Sea ? MapEditKind.Land : MapEditKind.Sea;
-            MapEditKind myKind  = _mode == EditMode.Sea ? MapEditKind.Sea  : MapEditKind.Land;
+            MapEditKind oppKind = _mode == EditMode.River ? MapEditKind.Land : MapEditKind.River;
+            MapEditKind myKind  = _mode == EditMode.River ? MapEditKind.River  : MapEditKind.Land;
 
             // 1) Smart undo — 반대 모드의 pending 가 겹치면 그것을 제거
             for (int i = _pendings.Count - 1; i >= 0; i--)
@@ -384,10 +390,11 @@ namespace Game.World
             p.visual = new GameObject($"Pending_{kind}");
             p.visual.transform.SetParent(transform);
             p.line = p.visual.AddComponent<LineRenderer>();
-            var color = kind == MapEditKind.Sea ? seaColor : landColor;
+            var color = kind == MapEditKind.River ? riverColor : landColor;
             ConfigureLineRenderer(p.line, color);
             DrawCircle(p.line, center, radiusUnits, brushSegments);
             _pendings.Add(p);
+            Debug.Log($"[MapSubtractEditor] 새 pending {kind} 추가 — pos=({center.x:F1}, {center.z:F1}), r={radiusUnits:F1}u, 총 pending {_pendings.Count}개");
         }
 
         // ─── 기존 SO 시각화 ────────────────────────────────────────────────
@@ -453,7 +460,7 @@ namespace Game.World
                 return;
             }
             float r = brushKm / GeoCoordinate.KmPerUnit;
-            var c = _mode == EditMode.Sea ? seaColor : landColor;
+            var c = _mode == EditMode.River ? riverColor : landColor;
             c.a = 0.6f;
             _brushLine.startColor = c; _brushLine.endColor = c;
             DrawCircle(_brushLine, w, r, brushSegments);
@@ -501,6 +508,10 @@ namespace Game.World
                 if (mat.HasProperty("_Color")) mat.SetColor("_Color", color);
                 if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", color);
                 if (mat.HasProperty("_TintColor")) mat.SetColor("_TintColor", color);
+                // 항상 위에 그리기 — 메쉬에 가려져 안 보이는 문제 방지
+                mat.renderQueue = 4000;
+                if (mat.HasProperty("_ZTest"))
+                    mat.SetFloat("_ZTest", (float)UnityEngine.Rendering.CompareFunction.Always);
                 lr.material = mat;
             }
         }
@@ -558,7 +569,7 @@ namespace Game.World
                 string ts = System.DateTime.Now.ToString("yyyyMMdd_HHmmss");
                 string uniq = $"{ts}_{created:D3}";
                 so.subtractId = $"subtract.{p.kind.ToString().ToLower()}.{uniq}";
-                so.displayNameKo = p.kind == MapEditKind.Sea ? $"바다 {created + 1}" : $"땅 {created + 1}";
+                so.displayNameKo = p.kind == MapEditKind.River ? $"강 {created + 1}" : $"땅 {created + 1}";
                 so.kind = p.kind;
                 so.widthKm = 0f;
                 so.enabled = true;
@@ -754,8 +765,8 @@ namespace Game.World
             hg.childForceExpandWidth = false;
             hg.childForceExpandHeight = false;
 
-            (_seaBtn, _seaBtnBg) = CreateBigButton(toolbar.transform, "바다",
-                () => SetMode(EditMode.Sea));
+            (_riverBtn, _riverBtnBg) = CreateBigButton(toolbar.transform, "강",
+                () => SetMode(EditMode.River));
             (_landBtn, _landBtnBg) = CreateBigButton(toolbar.transform, "땅",
                 () => SetMode(EditMode.Land));
             CreateBigButton(toolbar.transform, "화면맞추기", FitScreen,
@@ -835,19 +846,19 @@ namespace Game.World
         private void UpdateStatusText()
         {
             if (_statusText == null) return;
-            int pendingSea = 0, pendingLand = 0;
+            int pendingRiver = 0, pendingLand = 0;
             foreach (var p in _pendings)
             {
-                if (p.kind == MapEditKind.Sea) pendingSea++;
+                if (p.kind == MapEditKind.River) pendingRiver++;
                 else pendingLand++;
             }
             int markedRemove = 0;
             foreach (var e in _existing) if (e.markedRemove) markedRemove++;
-            int totalChanges = pendingSea + pendingLand + markedRemove;
+            int totalChanges = pendingRiver + pendingLand + markedRemove;
 
             string modeKo = _mode switch
             {
-                EditMode.Sea  => "<color=#5599FF>바다 칠하기</color>",
+                EditMode.River  => "<color=#5599FF>강 그리기</color>",
                 EditMode.Land => "<color=#FFB060>땅 칠하기</color>",
                 _ => "<color=#888888>모드 없음 (지도 이동)</color>",
             };
@@ -860,7 +871,7 @@ namespace Game.World
             _statusText.text =
                 $"<b>모드:</b> {modeKo}  |  <b>브러시:</b> {brushKm:F0} km  ([ ] 키)  |  " +
                 $"<b>줌 Y:</b> {camY:F0}\n" +
-                $"<b>변경:</b> 바다 +{pendingSea}, 땅 +{pendingLand}, 삭제 -{markedRemove}\n" +
+                $"<b>변경:</b> 강 +{pendingRiver}, 땅 +{pendingLand}, 삭제 -{markedRemove}\n" +
                 $"<size=18>{saveHint}</size>";
 
             // 저장 버튼 강조 — 변경사항이 있으면 밝게

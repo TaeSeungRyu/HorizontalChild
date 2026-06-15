@@ -4,10 +4,16 @@ namespace Game.Data
 {
     public enum MapEditKind
     {
-        /// <summary>이 영역의 육지를 메쉬에서 제거 (바다로 만듦).</summary>
+        /// <summary>이 영역의 육지를 메쉬에서 제거 (바다로 만듦). [Deprecated — River 권장]</summary>
         Sea = 0,
         /// <summary>이 영역에 새 육지를 추가 (없던 곳에 땅 만듦).</summary>
         Land = 1,
+        /// <summary>
+        /// 강 영역. 메쉬는 건드리지 않고 시각적으로 강 오버레이만 추가.
+        /// 배는 이 영역에서 육지 충돌 무시 → 통과 가능.
+        /// 어린이 친화 — 육지 그대로 보이지만 강 따라 항해.
+        /// </summary>
+        River = 2,
     }
 
     /// <summary>

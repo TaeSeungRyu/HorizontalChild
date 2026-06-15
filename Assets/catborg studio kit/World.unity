@@ -103306,7 +103306,7 @@ MonoBehaviour:
   fitScreenCameraY: 80
   visualY: 35
   lineWidth: 1.5
-  seaColor: {r: 0.2, g: 0.5, b: 1, a: 0.95}
+  riverColor: {r: 0.2, g: 0.5, b: 1, a: 0.95}
   landColor: {r: 0.85, g: 0.55, b: 0.25, a: 0.95}
   existingDim: {r: 1, g: 1, b: 1, a: 0.35}
   markedRemoveColor: {r: 0.6, g: 0.6, b: 0.6, a: 0.5}
@@ -190785,6 +190785,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1961387851}
   m_CullTransparentMesh: 1
+--- !u!1 &1962700789
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1962700790}
+  - component: {fileID: 1962700791}
+  m_Layer: 0
+  m_Name: RiverOverlay
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1962700790
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1962700789}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1962700791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1962700789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be0930139d1f43c45a144c49c0a7a412, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game::Game.World.RiverOverlay
+  catalog: {fileID: 11400000, guid: 9c85aaecd80b8784a9308e6361de98eb, type: 2}
+  overlayY: 1.85
+  waterColor: {r: 0.3, g: 0.6, b: 0.9, a: 1}
 --- !u!21 &1965922471
 Material:
   serializedVersion: 8
@@ -209983,3 +210030,4 @@ SceneRoots:
   - {fileID: 1039368087}
   - {fileID: 1099928814}
   - {fileID: 1465871954}
+  - {fileID: 1962700790}

@@ -299,6 +299,8 @@ namespace Game.Ship
         {
             // 항해 카브(지브롤터 등) — 메쉬가 어떻든 무조건 통과 가능
             if (World.WorldCarves.IsInOpenArea(worldPos)) return false;
+            // 강(River) 영역 — 메쉬는 그대로지만 강 위는 항해 가능
+            if (World.RiverRegistry.IsInRiver(worldPos)) return false;
 
             int count = Physics.OverlapSphereNonAlloc(worldPos, collisionCheckRadius, _overlapBuffer);
             for (int i = 0; i < count; i++)

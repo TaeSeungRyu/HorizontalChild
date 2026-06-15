@@ -239,6 +239,11 @@ namespace Game.Editor
                     landRingsLatLng.Add(ring);
                     landCount++;
                 }
+                else if (d.kind == MapEditKind.River)
+                {
+                    // River 는 메쉬에 영향 X — RiverOverlay 가 런타임에 시각·충돌 처리.
+                    continue;
+                }
                 else // Sea
                 {
                     var polys = Game.World.MapSubtractGeometry.BuildSubtractPolygonsWorld(d);

@@ -82,8 +82,9 @@ namespace Game.Editor
             // ─── 1) 나일강 + 아마존강 SO 생성/갱신 (기존 사용자 SO 는 안 건드림) ───
             CreateOrLoad("MapSubtract_Nile.asset", d =>
             {
-                d.subtractId = "subtract.nile";
+                d.subtractId = "river.nile";
                 d.displayNameKo = "나일강";
+                d.kind = MapEditKind.River;
                 d.widthKm = 200f;   // 넓게 — 어린이가 헤매지 않게
                 d.enabled = true;
                 d.points = new[]
@@ -104,8 +105,9 @@ namespace Game.Editor
 
             CreateOrLoad("MapSubtract_Amazon.asset", d =>
             {
-                d.subtractId = "subtract.amazon";
+                d.subtractId = "river.amazon";
                 d.displayNameKo = "아마존강";
+                d.kind = MapEditKind.River;
                 d.widthKm = 250f;   // 더 넓게 — 본류는 진짜 100km 이상
                 d.enabled = true;
                 d.points = new[]
@@ -126,8 +128,9 @@ namespace Game.Editor
             // 북해 → 발트해 통로 (네덜란드 동쪽이 막혀서 어린이가 통과 못 하는 문제 해결)
             CreateOrLoad("MapSubtract_NorthSeaPassage.asset", d =>
             {
-                d.subtractId = "subtract.north_sea_passage";
+                d.subtractId = "river.north_sea_passage";
                 d.displayNameKo = "북해 → 발트해 통로";
+                d.kind = MapEditKind.River;
                 d.widthKm = 300f;   // 매우 넓게 — 어린이 통과 보장
                 d.enabled = true;
                 d.points = new[]
