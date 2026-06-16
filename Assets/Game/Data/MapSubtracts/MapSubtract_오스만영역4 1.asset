@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df6e9133e34f6b54c9edfdbde936a03c, type: 3}
+  m_Name: "MapSubtract_\uC624\uC2A4\uB9CC\uC601\uC5ED4 1"
+  m_EditorClassIdentifier: Game::Game.Data.MapSubtractData
+  subtractId: "\uC624\uC2A4\uB9CC\uC601\uC5ED4"
+  displayNameKo: "\uC624\uC2A4\uB9CC\uC601\uC5ED4"
+  kind: 0
+  widthKm: 44
+  points:
+  - {x: 29.179667, y: 41.162064}
+  - {x: 28.84999, y: 40.914814}
+  - {x: 29.035427, y: 40.914814}
+  - {x: 28.170061, y: 40.605747}
+  - {x: 27.922804, y: 40.52333}
+  - {x: 27.36647, y: 40.52333}
+  - {x: 26.871979, y: 40.461514}
+  - {x: 26.624722, y: 40.35849}
+  - {x: 25.924171, y: 40.11124}
+  - {x: 26.006592, y: 39.678547}
+  - {x: 26.192028, y: 39.431293}
+  enabled: 1
+  notes: 

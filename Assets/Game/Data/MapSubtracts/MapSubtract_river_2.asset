@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df6e9133e34f6b54c9edfdbde936a03c, type: 3}
+  m_Name: MapSubtract_river_2
+  m_EditorClassIdentifier: Game::Game.Data.MapSubtractData
+  subtractId: river_2
+  displayNameKo: river_2
+  kind: 0
+  widthKm: 55
+  points:
+  - {x: 30.202639, y: 23.937069}
+  - {x: 30.985607, y: 21.299702}
+  - {x: 30.470495, y: 19.21866}
+  - {x: 30.408697, y: 17.302452}
+  - {x: 31.500721, y: 15.612892}
+  enabled: 1
+  notes: 

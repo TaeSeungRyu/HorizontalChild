@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.sahara
   displayNameKo: "\uC0AC\uD558\uB77C \uC0AC\uB9C9"
   category: 0
-  latitude: 23.42
-  longitude: 25.32
+  latitude: 22.733276
+  longitude: 24.871561
   searchToleranceBase: 0.03
   mainDescription: "\uB05D\uC5C6\uC774 \uD3BC\uCCD0\uC9C4 \uD669\uAE08\uBE5B \uBAA8\uB798
     \uBC14\uB2E4. \uC138\uACC4\uC5D0\uC11C \uAC00\uC7A5 \uD070 \uB354\uC6B4 \uC0AC\uB9C9."

@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.luxor_temple
   displayNameKo: "\uB8E9\uC18C\uB974 \uC2E0\uC804"
   category: 2
-  latitude: 25.7
-  longitude: 32.64
+  latitude: 25.424028
+  longitude: 31.524097
   searchToleranceBase: 0.03
   mainDescription: "\uB098\uC77C\uAC15 \uB3D9\uCABD\uC5D0 \uC790\uB9AC\uD55C \uAC70\uB300\uD55C
     \uAE30\uB465\uC758 \uB3C4\uC2DC \uC2E0\uC804."

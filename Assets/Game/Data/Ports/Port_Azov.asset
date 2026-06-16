@@ -16,8 +16,8 @@ MonoBehaviour:
   displayNameKo: "\uC544\uC870\uD504"
   displayNameOriginal: Azov
   nation: {fileID: 0}
-  latitude: 47.11
-  longitude: 39.42
+  latitude: 47.24481
+  longitude: 38.27114
   shortDescription: "\uB3C8 \uAC15\uC774 \uD751\uD574\uB85C \uD758\uB7EC\uB4DC\uB294
     \uC790\uB9AC\uC758 \uC61B \uC694\uC0C8 \uD56D\uAD6C."
   cityIllustration: {fileID: 0}

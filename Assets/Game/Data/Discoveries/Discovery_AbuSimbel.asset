@@ -15,8 +15,8 @@ MonoBehaviour:
   discoveryId: disc.abu_simbel
   displayNameKo: "\uC544\uBD80\uC2EC\uBCA8 \uC2E0\uC804"
   category: 2
-  latitude: 22.34
-  longitude: 31.62
+  latitude: 22.34844
+  longitude: 31.127916
   searchToleranceBase: 0.03
   mainDescription: "\uC0B0\uC744 \uD1B5\uC9F8\uB85C \uAE4E\uC544 \uB9CC\uB4E0 \uAC70\uB300\uD55C
     \uB78C\uC138\uC2A4 2\uC138 \uC2E0\uC804\uC774\uC5D0\uC694."
