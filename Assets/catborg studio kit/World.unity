@@ -15490,7 +15490,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -5.000122}
+  m_AnchoredPosition: {x: 0, y: -5.000244}
   m_SizeDelta: {x: -160, y: -330}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &133546772
@@ -30448,6 +30448,16 @@ MonoBehaviour:
     - {fileID: 7314289784835802119, guid: 5f63671c6d021d549989266d8c8e1237, type: 3}
     - {fileID: 7324277885378089821, guid: 089185570f9102c4ead6f4d6e9cab996, type: 3}
     - {fileID: 2112061158072553745, guid: c11b91f43fcf7f546b35cd4e8135529e, type: 3}
+  - regionName: "\uC2DC\uBCA0\uB9AC\uC544"
+    latMin: 50
+    latMax: 75
+    lngMin: 40
+    lngMax: 180
+    prefabs:
+    - {fileID: 8630096253940133616, guid: 34a47df0986c0144fab7ffd60ef430b9, type: 3}
+    - {fileID: 288465213666625367, guid: 645d9f622dbd3aa4fab6d58eca81537d, type: 3}
+    - {fileID: 6064921025645270756, guid: 3727a5cf2c8496649b67946778dead6d, type: 3}
+    - {fileID: 1709262000281422758, guid: 5a681bd77536c5a47aef612ec91f6bf2, type: 3}
   chunkSize: 50
   viewRadius: 4
   perChunk: 90
@@ -37061,7 +37071,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -5.000122}
+  m_AnchoredPosition: {x: 0, y: -5.000244}
   m_SizeDelta: {x: -160, y: -330}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &326713191
@@ -56474,7 +56484,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -5.000122}
+  m_AnchoredPosition: {x: 0, y: -5.000244}
   m_SizeDelta: {x: -160, y: -330}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &477221222
@@ -70089,6 +70099,7 @@ MonoBehaviour:
   onLoaded:
     m_PersistentCalls:
       m_Calls: []
+  seaAutoSaveIntervalSeconds: 5
 --- !u!114 &600646462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151961,7 +151972,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -5.000122}
+  m_AnchoredPosition: {x: 0, y: -5.000244}
   m_SizeDelta: {x: -160, y: -330}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1303565310
@@ -199308,6 +199319,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game::Game.Ship.ShipController
   shipData: {fileID: 11400000, guid: 5d3d104d2183da541b1801876b0321a7, type: 2}
   captain: {fileID: 11400000, guid: b4511fa2ecb090e4ab34ddb8c4637606, type: 2}
+  testSpeedMultiplier: 5
   maxTurnRate: 60
   acceleration: 2
   passiveDeceleration: 0.5
