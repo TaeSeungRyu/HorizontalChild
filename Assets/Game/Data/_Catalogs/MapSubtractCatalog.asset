@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2df8f6307d038e4ba4f257e39317025, type: 3}
   m_Name: MapSubtractCatalog
   m_EditorClassIdentifier: Game::Game.Data.MapSubtractCatalog
-  all: []
+  all:
+  - {fileID: 11400000, guid: 31fc6a59403de984799a2b0205621a8d, type: 2}
+  - {fileID: 11400000, guid: ef0a0d0c1050a3044b91dfd6dc222617, type: 2}
