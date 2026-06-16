@@ -10,8 +10,27 @@ public class NatureStreamer : MonoBehaviour
     [Header("따라다닐 대상 (비우면 Main Camera)")]
     public Transform target;
 
-    [Header("뿌릴 프리팹 (나무/바위/꽃 등)")]
+    [Header("뿌릴 프리팹 — 지역 매칭 없을 때 fallback")]
     public GameObject[] prefabs;
+
+    [System.Serializable]
+    public class RegionPrefabSet
+    {
+        [Tooltip("Inspector 표시용 이름 (예: 유럽, 열대 아프리카)")]
+        public string regionName = "Unnamed";
+        [Tooltip("위도 범위 (°). 예: 유럽=35~71, 열대=-23.5~23.5")]
+        [Range(-90f, 90f)] public float latMin = -90f;
+        [Range(-90f, 90f)] public float latMax = 90f;
+        [Tooltip("경도 범위 (°). 예: 유럽=-10~40, 동아시아=100~150")]
+        [Range(-180f, 180f)] public float lngMin = -180f;
+        [Range(-180f, 180f)] public float lngMax = 180f;
+        [Tooltip("이 영역에서 spawn 되는 프리팹들")]
+        public GameObject[] prefabs;
+    }
+
+    [Header("지역별 프리팹 (위에서 아래로 검사, 첫 매칭 영역 사용)")]
+    [Tooltip("예: 유럽엔 침엽수, 열대엔 야자수. 매칭 안 되면 위의 fallback Prefabs 사용.")]
+    public RegionPrefabSet[] regionSets;
 
     [Header("청크 / 범위")]
     public float chunkSize = 50f;     // 한 구역 크기
@@ -102,7 +121,10 @@ public class NatureStreamer : MonoBehaviour
             if (shoreMargin > 0f && !SolidAround(x, z, startY)) continue;  // 물가/작은 섬 제외
             if (Game.World.RiverRegistry.IsInRiver(hit.point)) continue;   // 강 위는 식생 제외
 
-            var prefab = prefabs[Random.Range(0, prefabs.Length)];
+            // 위치 → 지역 매칭 → 해당 영역 프리팹 set 선택
+            var prefabSet = PickPrefabSetFor(hit.point);
+            if (prefabSet == null || prefabSet.Length == 0) continue;
+            var prefab = prefabSet[Random.Range(0, prefabSet.Length)];
             if (prefab == null) continue;
             var obj = Instantiate(prefab, hit.point, Quaternion.identity, container.transform);
             Quaternion baseRot = alignToSlope ? Quaternion.FromToRotation(Vector3.up, hit.normal) : Quaternion.identity;
@@ -113,6 +135,24 @@ public class NatureStreamer : MonoBehaviour
             if (colorVariation > 0f) ApplyTint(obj, 1f + Random.Range(-colorVariation, colorVariation));
         }
         Random.state = prev;
+    }
+
+    // 위·경도 박스 매칭으로 적합한 프리팹 set 선택. 매칭 없으면 fallback prefabs.
+    GameObject[] PickPrefabSetFor(Vector3 worldPos)
+    {
+        if (regionSets != null && regionSets.Length > 0)
+        {
+            var ll = Game.World.GeoCoordinate.WorldToLatLng(worldPos);
+            for (int i = 0; i < regionSets.Length; i++)
+            {
+                var set = regionSets[i];
+                if (set == null || set.prefabs == null || set.prefabs.Length == 0) continue;
+                if (ll.latitude < set.latMin || ll.latitude > set.latMax) continue;
+                if (ll.longitude < set.lngMin || ll.longitude > set.lngMax) continue;
+                return set.prefabs;
+            }
+        }
+        return prefabs;   // fallback
     }
 
     // 후보 지점 주변이 전부 '육지(minHeight 이상)' 인지 검사 → 작은 섬/해안 물가 배제

@@ -64,6 +64,7 @@ Assets/Game/
 │  └─ MountainPlacer.cs       산 배치(지정 위치)
 └─ Docs/                      가이드 문서(여기)
    ├─ README.md               ← 이 색인
+   ├─ 강_페인터_가이드.md
    ├─ 바다_배_시스템_가이드.md
    ├─ 산_배치_가이드.md
    ├─ 자연물_배치_가이드.md
@@ -81,6 +82,7 @@ Assets/Game/
 | 나무·풀 깔기(작은 맵) | `NatureScatter` | 자연물_배치_가이드 |
 | 나무·풀 깔기(큰 맵) | `NatureStreamer` | 자연물_밀도_조절_가이드 |
 | 산 올리기 | 모델 직접 배치 / `MountainPlacer` | 산_배치_가이드 |
+| 강·운하·물길 그리기 | `Game ▸ River Painter` (2D 에디터) | 강_페인터_가이드 |
 
 ---
 
