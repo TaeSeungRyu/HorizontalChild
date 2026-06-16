@@ -55,8 +55,8 @@ namespace Game.World
         public float fitScreenCameraY = 80f;
 
         [Header("Visual")]
-        [Tooltip("브러시·핸들 Y 위치. Top-down 시점에선 높여도 parallax 없음 — Land(1.75) 위로 충분히 띄워 가림 없도록.")]
-        public float visualY = 30f;
+        [Tooltip("브러시·pending Y 위치. RiverOverlay.overlayY(2.0) 와 정확히 일치시켜 parallax 0.")]
+        public float visualY = 2.0f;
         public float lineWidth = 2.5f;
         public Color riverColor = new Color(0.2f, 0.5f, 1f, 0.95f);
         public Color landColor = new Color(0.85f, 0.55f, 0.25f, 0.95f);
@@ -110,7 +110,7 @@ namespace Game.World
         private bool _drawing;
         private readonly List<Vector3> _currentDrawPoints = new();
         private GameObject _drawPreview;
-        private LineRenderer _drawPreviewLine;
+        // _drawPreview 의 MeshFilter 를 통해 갱신 — 별도 LineRenderer 필드 불필요
         [Tooltip("드래그 중 점 간 최소 거리 (월드 unit). 작을수록 부드러운 선, 큰 데이터.")]
         public float minDrawPointDistanceUnits = 2f;
 
@@ -173,13 +173,9 @@ namespace Game.World
                 mainCamera.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
             }
 
-            // WorldLand 인스턴스 참조 캐싱 — 좌표 변환에 사용
-            var landmass = FindAnyObjectByType<Landmass>();
-            _landTransform = landmass != null ? landmass.transform : null;
-            if (_landTransform != null && _landTransform.position.sqrMagnitude > 0.01f)
-            {
-                Debug.Log($"[MapSubtractEditor] WorldLand 위치 보정 적용 — pos={_landTransform.position}");
-            }
+            // WorldLand 가 identity transform 이라고 가정 — world 좌표 그대로 lat/lng 변환.
+            // (Non-identity 면 mesh-local 과 어긋남 → WorldLand 의 Transform 을 Reset 필요)
+            _landTransform = null;
 
             EnsureUI();
             _ui.gameObject.SetActive(true);
@@ -307,6 +303,17 @@ namespace Game.World
                 // 1) 우버튼 press — 선 시작
                 if (mouse.rightButton.wasPressedThisFrame && !overUI)
                 {
+                    // 카메라 회전 진단 — top-down 이 아니면 click 위치 어긋남 가능
+                    var rot = mainCamera.transform.rotation.eulerAngles;
+                    bool topDown = Mathf.Abs(rot.x - 90f) < 1f
+                                && Mathf.Abs(Mathf.DeltaAngle(rot.y, 0f)) < 1f
+                                && Mathf.Abs(Mathf.DeltaAngle(rot.z, 0f)) < 1f;
+                    if (!topDown)
+                    {
+                        Debug.LogWarning($"[MapSubtractEditor] 카메라가 top-down 아님! rotation={rot} — " +
+                            "[화면맞추기] 버튼 한 번 누르세요. 그렇지 않으면 그린 위치가 어긋날 수 있어요.");
+                    }
+
                     if (TryGetWorldUnderMouse(mousePos, out var w))
                     {
                         _drawing = true;
@@ -332,7 +339,7 @@ namespace Game.World
                     }
                 }
 
-                // 3) 우버튼 release — 선 확정 → pending polyline 추가
+                // 3) 우버튼 release — 선 확정 → pending 추가 (저장은 사용자가 [저장] 클릭)
                 if (_drawing && mouse.rightButton.wasReleasedThisFrame)
                 {
                     _drawing = false;
@@ -387,50 +394,83 @@ namespace Game.World
         }
 
         // ─── 드로잉 ────────────────────────────────────────────────────────
+        // 시각은 모두 RiverOverlay 가 생성하는 메쉬와 동일한 quad-strip 으로 통일.
+        // 결과: 그리는 중 미리보기 = pending = 저장된 강 메쉬 — 크기·모양 정확히 일치.
 
         private void EnsureDrawPreview()
         {
             if (_drawPreview != null) return;
             _drawPreview = new GameObject("DrawPreview");
             _drawPreview.transform.SetParent(transform);
-            _drawPreviewLine = _drawPreview.AddComponent<LineRenderer>();
+            _drawPreview.AddComponent<MeshFilter>();
+            var mr = _drawPreview.AddComponent<MeshRenderer>();
+            mr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            mr.receiveShadows = false;
             var color = _mode == EditMode.River ? riverColor : landColor;
-            color.a = 0.7f;
-            ConfigureLineRenderer(_drawPreviewLine, color);
-            float w = brushKm / GeoCoordinate.KmPerUnit;
-            _drawPreviewLine.startWidth = w;
-            _drawPreviewLine.endWidth = w;
-            _drawPreviewLine.numCapVertices = 6;
-            _drawPreviewLine.numCornerVertices = 6;
+            color.a = 0.6f;
+            mr.sharedMaterial = CreateTransparentMaterial(color);
         }
 
         private void UpdateDrawPreview()
         {
-            if (_drawPreviewLine == null) return;
-            _drawPreviewLine.positionCount = _currentDrawPoints.Count;
-            for (int i = 0; i < _currentDrawPoints.Count; i++)
-                _drawPreviewLine.SetPosition(i, _currentDrawPoints[i]);
+            if (_drawPreview == null) return;
+            var mf = _drawPreview.GetComponent<MeshFilter>();
+            if (mf == null) return;
+            float widthUnits = brushKm / GeoCoordinate.KmPerUnit;
+            var mesh = BuildStripMesh(_currentDrawPoints, widthUnits);
+            mf.sharedMesh = mesh;
         }
 
         private void AddPendingPolyline(MapEditKind kind, List<Vector3> points, float widthUnits)
         {
             var p = new Pending { kind = kind, linePoints = points, widthUnits = widthUnits };
-            p.visual = new GameObject($"Pending_{kind}_Line");
+            p.visual = new GameObject($"Pending_{kind}_Strip");
             p.visual.transform.SetParent(transform);
-            p.line = p.visual.AddComponent<LineRenderer>();
+            p.visual.AddComponent<MeshFilter>().sharedMesh = BuildStripMesh(points, widthUnits);
+            var mr = p.visual.AddComponent<MeshRenderer>();
+            mr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            mr.receiveShadows = false;
+            // pending 도 저장된 강 메쉬와 동일한 외관 (불투명) — "이미 적용된 모양" 으로 보이게.
             var color = kind == MapEditKind.River ? riverColor : landColor;
-            color.a = 0.8f;
-            ConfigureLineRenderer(p.line, color);
-            p.line.startWidth = widthUnits;
-            p.line.endWidth = widthUnits;
-            p.line.numCapVertices = 6;
-            p.line.numCornerVertices = 6;
-            p.line.positionCount = points.Count;
-            for (int i = 0; i < points.Count; i++) p.line.SetPosition(i, points[i]);
+            color.a = 1f;
+            mr.sharedMaterial = CreateTransparentMaterial(color);
             _pendings.Add(p);
             float lenUnits = 0f;
             for (int i = 1; i < points.Count; i++) lenUnits += Vector3.Distance(points[i - 1], points[i]);
             Debug.Log($"[MapSubtractEditor] 새 pending {kind} 선 추가 — 점 {points.Count}개, 길이 {lenUnits:F1}u (≈{lenUnits * GeoCoordinate.KmPerUnit:F0}km), 폭 {widthUnits * GeoCoordinate.KmPerUnit:F0}km. 총 pending {_pendings.Count}개");
+        }
+
+        /// <summary>RiverOverlay 와 동일한 quad-strip 메쉬 빌더. 시각이 저장 결과와 정확히 일치.</summary>
+        private Mesh BuildStripMesh(List<Vector3> points, float widthUnits)
+        {
+            var mesh = new Mesh { name = "StripMesh" };
+            if (points == null || points.Count < 2) return mesh;
+            float halfW = widthUnits * 0.5f;
+            var verts = new List<Vector3>(points.Count * 4);
+            var tris = new List<int>(points.Count * 6);
+            for (int i = 0; i < points.Count - 1; i++)
+            {
+                Vector3 a = points[i], b = points[i + 1];
+                var dir2 = new Vector2(b.x - a.x, b.z - a.z);
+                if (dir2.sqrMagnitude < 0.0001f) continue;
+                dir2.Normalize();
+                var perp2 = new Vector2(-dir2.y, dir2.x) * halfW;
+                var aCapXZ = new Vector2(a.x - dir2.x * halfW, a.z - dir2.y * halfW);
+                var bCapXZ = new Vector2(b.x + dir2.x * halfW, b.z + dir2.y * halfW);
+                int baseIdx = verts.Count;
+                verts.Add(new Vector3(aCapXZ.x + perp2.x, visualY, aCapXZ.y + perp2.y));   // 0: TL
+                verts.Add(new Vector3(bCapXZ.x + perp2.x, visualY, bCapXZ.y + perp2.y));   // 1: TR
+                verts.Add(new Vector3(bCapXZ.x - perp2.x, visualY, bCapXZ.y - perp2.y));   // 2: BR
+                verts.Add(new Vector3(aCapXZ.x - perp2.x, visualY, aCapXZ.y - perp2.y));   // 3: BL
+                tris.Add(baseIdx + 0); tris.Add(baseIdx + 1); tris.Add(baseIdx + 3);
+                tris.Add(baseIdx + 1); tris.Add(baseIdx + 2); tris.Add(baseIdx + 3);
+            }
+            if (verts.Count > 65535) mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+            mesh.SetVertices(verts);
+            mesh.SetTriangles(tris, 0);
+            mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
+            return mesh;
         }
 
         /// <summary>반투명 머티리얼 — solid disk 등에서 사용.</summary>
@@ -662,11 +702,10 @@ namespace Game.World
             }
         }
 
-        /// <summary>mesh-local XZ → world (Y=visualY). WorldLand transform 적용.</summary>
+        /// <summary>XZ → Vector3 (Y=visualY). 평면 위치만 변환.</summary>
         private Vector3 MeshLocalXZToWorld(Vector2 meshLocalXZ)
         {
-            var local = new Vector3(meshLocalXZ.x, visualY, meshLocalXZ.y);
-            return _landTransform != null ? _landTransform.TransformPoint(local) : local;
+            return new Vector3(meshLocalXZ.x, visualY, meshLocalXZ.y);
         }
 
         // ─── 저장 / 취소 ───────────────────────────────────────────────────
@@ -730,9 +769,25 @@ namespace Game.World
             // 4) Pending 시각 제거 (이제 SO 가 되었으니)
             ClearAllPendings();
 
-            // 5) 메쉬 재베이크
-            bool ok = EditorApplication.ExecuteMenuItem("Game/Bake World Land Mesh from GeoJSON");
-            if (ok) RefreshLiveMeshColliders();
+            // 5) 메쉬 재베이크 — Land/Sea kind 변경이 있을 때만 (River 만 변경됐으면 skip)
+            bool needsBake = false;
+            foreach (var d in allFound)
+            {
+                if (d == null) continue;
+                if (d.kind == MapEditKind.Land || d.kind == MapEditKind.Sea) { needsBake = true; break; }
+            }
+            if (!needsBake)
+            {
+                foreach (var e in _existing) if (e.markedRemove && e.data != null
+                    && (e.data.kind == MapEditKind.Land || e.data.kind == MapEditKind.Sea))
+                { needsBake = true; break; }
+            }
+            bool ok = true;
+            if (needsBake)
+            {
+                ok = EditorApplication.ExecuteMenuItem("Game/Bake World Land Mesh from GeoJSON");
+                if (ok) RefreshLiveMeshColliders();
+            }
 
             // 6) 새 SO 들을 ExistingView 로 다시 빌드
             BuildExistingViews();
@@ -753,7 +808,7 @@ namespace Game.World
             riverOverlay.Refresh();
 
             Debug.Log($"[MapSubtractEditor] 저장 완료. 새 영역 +{created}, 제거 -{removed}. " +
-                (ok ? "메쉬 재베이크 완료." : "베이크 실패 — 메뉴 'Game ▸ Bake World Land' 수동 실행."));
+                (needsBake ? (ok ? "메쉬 재베이크 완료." : "베이크 실패 — 수동 실행.") : "River-only 변경 — 베이크 skip (빠름)."));
 #else
             Debug.LogWarning("[MapSubtractEditor] 저장은 Editor Play 모드에서만 가능.");
 #endif
@@ -792,11 +847,8 @@ namespace Game.World
             var arr = new Vector2[worldPoints.Count];
             for (int i = 0; i < worldPoints.Count; i++)
             {
-                // WorldLand 가 (0,0,0) 외 위치면 mesh-local 로 변환해야 lat/lng 가 메쉬 정점과 일치
-                Vector3 local = _landTransform != null
-                    ? _landTransform.InverseTransformPoint(worldPoints[i])
-                    : worldPoints[i];
-                var ll = GeoCoordinate.WorldToLatLng(local);
+                // WorldLand 가 identity transform 이라고 가정 — world 좌표 그대로 변환.
+                var ll = GeoCoordinate.WorldToLatLng(worldPoints[i]);
                 arr[i] = new Vector2(ll.longitude, ll.latitude);
             }
             return arr;

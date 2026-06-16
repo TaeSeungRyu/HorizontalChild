@@ -113,10 +113,8 @@ namespace Game.World
             _spawned.Clear();
             RiverRegistry.Clear();
 
-            Transform landT = FindWorldLandTransform();
-            RiverRegistry.SetLandTransform(landT);
-            if (landT != null && (landT.position.sqrMagnitude > 0.01f || landT.localScale != Vector3.one))
-                Debug.Log($"[RiverOverlay] WorldLand transform — pos={landT.position}, scale={landT.localScale}");
+            // WorldLand identity transform 가정 — landT 사용 X.
+            RiverRegistry.SetLandTransform(null);
 
             if (catalog == null || catalog.all == null)
             {
@@ -138,12 +136,11 @@ namespace Game.World
                 GameObject visual;
                 if (d.widthKm > 0f && d.points != null && d.points.Length >= 2)
                 {
-                    visual = BuildRiverLine(d, landT);
+                    visual = BuildRiverLine(d);
                 }
                 else if (d.points != null && d.points.Length >= 3)
                 {
-                    // 폴리곤 — center-fan mesh (24각형 brush 등)
-                    visual = BuildRiverPolygonMesh(d, landT);
+                    visual = BuildRiverPolygonMesh(d);
                 }
                 else
                 {
@@ -158,7 +155,7 @@ namespace Game.World
 
         // ─── 폴리라인 강 → quad-strip 메쉬 (segment 마다 사각형, 시각 = 충돌과 일치) ───
 
-        private GameObject BuildRiverLine(MapSubtractData d, Transform landT)
+        private GameObject BuildRiverLine(MapSubtractData d)
         {
             // BuildSubtractPolygonsWorld 와 동일한 사각형들로 메쉬 빌드.
             // → 시각 영역과 RiverRegistry 충돌 영역이 정확히 같음.
@@ -180,9 +177,7 @@ namespace Game.World
                 int baseIdx = verts.Count;
                 for (int i = 0; i < 4; i++)
                 {
-                    var local = new Vector3(poly[i].x, overlayY, poly[i].y);
-                    var world = landT != null ? landT.TransformPoint(local) : local;
-                    verts.Add(world);
+                    verts.Add(new Vector3(poly[i].x, overlayY, poly[i].y));
                 }
                 // BuildSubtractPolygonsWorld 사각형 순서: TL(0), TR(1), BR(2), BL(3)
                 // top-down 카메라에서 normal +Y 향하게 CCW from above — 0→1→3 + 1→2→3
@@ -206,7 +201,7 @@ namespace Game.World
 
         // ─── 폴리곤 강 → center-fan mesh ───────────────────────────────────
 
-        private GameObject BuildRiverPolygonMesh(MapSubtractData d, Transform landT)
+        private GameObject BuildRiverPolygonMesh(MapSubtractData d)
         {
             // 폴리곤 정점 (lat/lng) → mesh-local XZ
             var pts = new Vector3[d.points.Length];
@@ -232,9 +227,6 @@ namespace Game.World
             for (int i = 0; i < n; i++) verts[i + 1] = pts[i];
 
             // LandTransform 적용
-            if (landT != null)
-                for (int i = 0; i < verts.Length; i++) verts[i] = landT.TransformPoint(verts[i]);
-
             // CCW winding (위에서 +Y normal)
             var tris = new int[n * 3];
             for (int i = 0; i < n; i++)
