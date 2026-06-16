@@ -48,6 +48,11 @@ namespace Game.Save
         public UnityEvent onSaved;
         public UnityEvent onLoaded;
 
+        [Header("Auto Save (항해 중)")]
+        [Tooltip("바다 항해 중 자동 저장 간격 (초). 0 이면 비활성. SeaSimulation 일시정지(항구·메뉴·에디터) 중엔 skip.")]
+        [Range(0f, 60f)] public float seaAutoSaveIntervalSeconds = 5f;
+        private float _nextSeaAutoSaveAt;
+
         private const string FileName = "save_slot_0.json";
         private string FilePath => Path.Combine(Application.persistentDataPath, FileName);
 
@@ -107,6 +112,19 @@ namespace Game.Save
         private void OnApplicationPause(bool paused)
         {
             if (paused && HasGameSession()) SaveGame();
+        }
+
+        private void Update()
+        {
+            // 바다 항해 중 자동 저장 — 일시정지/항구 진입 시엔 skip
+            if (seaAutoSaveIntervalSeconds <= 0f) return;
+            if (Time.unscaledTime < _nextSeaAutoSaveAt) return;
+            _nextSeaAutoSaveAt = Time.unscaledTime + seaAutoSaveIntervalSeconds;
+
+            if (!HasGameSession()) return;
+            if (SeaSimulation.IsPaused) return;   // 항구·일시정지 메뉴·에디터 모드 등
+
+            SaveGame();
         }
 
         private bool HasGameSession()

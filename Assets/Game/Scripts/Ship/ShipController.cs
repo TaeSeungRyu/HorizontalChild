@@ -30,6 +30,10 @@ namespace Game.Ship
         [Tooltip("선장 캐릭터. 항해 능력에 따라 속도 보너스. 비어 있으면 보너스 없음.")]
         public CharacterData captain;
 
+        [Header("TEST")]
+        [Tooltip("[테스트용] 최종 속도에 곱하는 배수. 일반 게임에선 1. 빠른 이동 테스트 시 5 등.")]
+        [Range(0.1f, 20f)] public float testSpeedMultiplier = 5f;
+
         [Header("Movement Tuning")]
         [Tooltip("최대 회전 속도 (도/초). 어린이가 따라가기 쉬운 값.")]
         [Range(20f, 180f)] public float maxTurnRate = 60f;
@@ -328,7 +332,7 @@ namespace Game.Ship
             var crew = Game.Player.PlayerCrew.Instance;
             if (crew != null) seamanship += crew.SeamanshipBonus;
             float bonus = 1f + (Mathf.Clamp(seamanship, 1, 200) / 100f) * 0.5f;
-            return baseSpeed * bonus;
+            return baseSpeed * bonus * testSpeedMultiplier;
         }
 
         // ─── 보조 ────────────────────────────────────────────────────────────
