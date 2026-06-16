@@ -36,6 +36,23 @@ namespace Game.World
                 longitude = -5.45f,
                 radiusKm = 110f,
             },
+            // 이스탄불 / 보스포러스 해협 — 마르마라해 ↔ 흑해 통로.
+            // 1:110m 단순화 메쉬에선 거의 안 보일 정도로 좁아서 배가 막힘.
+            new Carve
+            {
+                name = "Istanbul / Bosphorus",
+                latitude = 41.0f,
+                longitude = 29.0f,
+                radiusKm = 130f,
+            },
+            // 다르다넬스 해협 — 에게해 ↔ 마르마라해. 이스탄불로 가는 길.
+            new Carve
+            {
+                name = "Dardanelles",
+                latitude = 40.2f,
+                longitude = 26.4f,
+                radiusKm = 80f,
+            },
         };
 
         /// <summary>
