@@ -87,6 +87,16 @@ namespace Game.World
                 ? target.rotation * scaledOffset
                 : scaledOffset;
             Vector3 desiredPos = target.position + worldOffset;
+
+            // 경도 wraparound 감지 — 배가 world 절반 이상 X 점프 시 카메라도 같이 텔레포트
+            // (그렇지 않으면 lerp 가 세계 가운데를 가로질러 어색하게 스크롤됨)
+            float halfWorld = GeoCoordinate.WorldWidthUnits * 0.5f;
+            if (Mathf.Abs(desiredPos.x - transform.position.x) > halfWorld)
+            {
+                transform.position = new Vector3(
+                    desiredPos.x, transform.position.y, transform.position.z);
+            }
+
             transform.position = Vector3.Lerp(
                 transform.position, desiredPos,
                 positionLerpSpeed * Time.deltaTime);

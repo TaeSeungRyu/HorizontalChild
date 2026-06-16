@@ -53,6 +53,38 @@ namespace Game.World
                 longitude = 26.4f,
                 radiusKm = 80f,
             },
+            // 영국해협 (도버) — 영국 ↔ 프랑스 좁은 해협
+            new Carve
+            {
+                name = "English Channel / Dover",
+                latitude = 51.0f,
+                longitude = 1.5f,
+                radiusKm = 150f,
+            },
+            // 콘월 끝 (영국 남서) — 대서양에서 영국해협 진입로
+            new Carve
+            {
+                name = "Cornwall / Land's End",
+                latitude = 50.0f,
+                longitude = -5.5f,
+                radiusKm = 100f,
+            },
+            // 스코틀랜드 북단 — 영국 ↔ 노르웨이·아이슬란드 항로
+            new Carve
+            {
+                name = "Scotland North",
+                latitude = 58.6f,
+                longitude = -3.0f,
+                radiusKm = 130f,
+            },
+            // 아일랜드 해 — 영국 ↔ 아일랜드 사이
+            new Carve
+            {
+                name = "Irish Sea",
+                latitude = 53.5f,
+                longitude = -5.0f,
+                radiusKm = 120f,
+            },
         };
 
         /// <summary>

@@ -61,6 +61,14 @@ namespace Game.Ship
         [Tooltip("육지에 부딪힐 때 즉시 정지할지. 기획상 어린이 친화 — 데미지 X, 멈춤만.")]
         public bool blockMovementOnLand = true;
 
+        [Header("World Bounds")]
+        [Tooltip("배가 갈 수 있는 최대 위도(북). 이 위로는 못 감.")]
+        [Range(40f, 89f)] public float maxLatitude = 75f;
+        [Tooltip("배가 갈 수 있는 최소 위도(남).")]
+        [Range(-89f, -40f)] public float minLatitude = -60f;
+        [Tooltip("경도 wraparound — 서쪽 끝 도달 시 동쪽 끝으로 텔레포트 (지구처럼).")]
+        public bool wrapLongitude = true;
+
         // ─── 런타임 상태 ─────────────────────────────────────────────────────
 
         public float CurrentSpeed { get; private set; }
@@ -288,6 +296,21 @@ namespace Game.Ship
                     CurrentSpeed = 0f;
                     return;
                 }
+
+                // 경도 wraparound — 서쪽 끝 ↔ 동쪽 끝 (지구처럼 연결)
+                if (wrapLongitude)
+                {
+                    float halfWidth = World.GeoCoordinate.WorldWidthUnits * 0.5f;
+                    if (newPos.x > halfWidth) newPos.x -= World.GeoCoordinate.WorldWidthUnits;
+                    else if (newPos.x < -halfWidth) newPos.x += World.GeoCoordinate.WorldWidthUnits;
+                }
+
+                // 위도 clamp — 너무 북·남쪽은 못 가게 (sliding along boundary)
+                const float unitsPerDegree = 15f;
+                float maxZ = maxLatitude * unitsPerDegree;
+                float minZ = minLatitude * unitsPerDegree;
+                if (newPos.z > maxZ) newPos.z = maxZ;
+                else if (newPos.z < minZ) newPos.z = minZ;
 
                 transform.position = newPos;
             }
