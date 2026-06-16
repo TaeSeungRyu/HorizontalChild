@@ -55,11 +55,12 @@ namespace Game.World
         public float fitScreenCameraY = 80f;
 
         [Header("Visual")]
-        [Tooltip("브러시·pending Y 위치. RiverOverlay.overlayY(2.0) 와 정확히 일치시켜 parallax 0.")]
-        public float visualY = 2.0f;
+        [Tooltip("브러시·pending Y 위치. RiverOverlay.overlayY(2.0) 바로 위에서 살짝(0.05u) Z-fight 회피.")]
+        public float visualY = 2.05f;
         public float lineWidth = 2.5f;
-        public Color riverColor = new Color(0.2f, 0.5f, 1f, 0.95f);
-        public Color landColor = new Color(0.85f, 0.55f, 0.25f, 0.95f);
+        // pending 색 = RiverOverlay.waterColor 와 정확히 일치 — drawn = saved 시각.
+        public Color riverColor = new Color(0.30f, 0.60f, 0.90f, 1f);
+        public Color landColor = new Color(0.65f, 0.55f, 0.40f, 1f);
         public Color existingDim = new Color(1f, 1f, 1f, 0.35f);
         public Color markedRemoveColor = new Color(0.6f, 0.6f, 0.6f, 0.5f);
         public Color brushCursorColor = new Color(1f, 1f, 0.3f, 0.7f);
@@ -430,11 +431,20 @@ namespace Game.World
             var mr = p.visual.AddComponent<MeshRenderer>();
             mr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             mr.receiveShadows = false;
-            // pending 도 저장된 강 메쉬와 동일한 외관 (불투명) — "이미 적용된 모양" 으로 보이게.
             var color = kind == MapEditKind.River ? riverColor : landColor;
             color.a = 1f;
             mr.sharedMaterial = CreateTransparentMaterial(color);
             _pendings.Add(p);
+
+            // ★ Temp 강은 RiverRegistry 에도 등록 → 배가 즉시 통과 가능 (저장 안 해도 게임 동작)
+            if (kind == MapEditKind.River)
+            {
+                float widthKm = widthUnits * GeoCoordinate.KmPerUnit;
+                var polys = MapSubtractGeometry.BuildPolylinePolygonsFromWorld(points, widthKm);
+                foreach (var poly in polys) RiverRegistry.AddPendingPolygon(poly);
+                Debug.Log($"[MapSubtractEditor] temp 강 — RiverRegistry 에 폴리곤 {polys.Count} 개 추가 (배 즉시 통과 가능).");
+            }
+
             float lenUnits = 0f;
             for (int i = 1; i < points.Count; i++) lenUnits += Vector3.Distance(points[i - 1], points[i]);
             Debug.Log($"[MapSubtractEditor] 새 pending {kind} 선 추가 — 점 {points.Count}개, 길이 {lenUnits:F1}u (≈{lenUnits * GeoCoordinate.KmPerUnit:F0}km), 폭 {widthUnits * GeoCoordinate.KmPerUnit:F0}km. 총 pending {_pendings.Count}개");
@@ -539,6 +549,27 @@ namespace Game.World
         {
             foreach (var p in _pendings) if (p.visual != null) Destroy(p.visual);
             _pendings.Clear();
+            // Temp 강 충돌 영역도 함께 제거 → 배가 더 이상 그 자리 통과 불가
+            RiverRegistry.ClearPending();
+        }
+
+        /// <summary>마지막 pending 하나만 제거 (Cancel 버튼 용).</summary>
+        private void RemoveLastPending()
+        {
+            if (_pendings.Count == 0) return;
+            int lastIdx = _pendings.Count - 1;
+            var p = _pendings[lastIdx];
+            if (p.visual != null) Destroy(p.visual);
+            _pendings.RemoveAt(lastIdx);
+            // Temp polys 도 전체 재구성 (특정 pending 의 polys 추적 안 함 — 간단화)
+            RiverRegistry.ClearPending();
+            foreach (var remaining in _pendings)
+            {
+                if (remaining.kind != MapEditKind.River) continue;
+                float wKm = remaining.widthUnits * GeoCoordinate.KmPerUnit;
+                var polys = MapSubtractGeometry.BuildPolylinePolygonsFromWorld(remaining.linePoints, wKm);
+                foreach (var poly in polys) RiverRegistry.AddPendingPolygon(poly);
+            }
         }
 
         // ─── 브러시 커서 ───────────────────────────────────────────────────
@@ -606,15 +637,40 @@ namespace Game.World
 
         // ─── 마우스 → 월드 좌표 ────────────────────────────────────────────
 
+        private static readonly RaycastHit[] _hitBuf = new RaycastHit[8];
+
         private bool TryGetWorldUnderMouse(Vector2 screenPos, out Vector3 world)
         {
             world = default;
             var ray = mainCamera.ScreenPointToRay(screenPos);
-            var plane = new Plane(Vector3.up, new Vector3(0f, visualY, 0f));
-            if (!plane.Raycast(ray, out float d)) return false;
-            world = ray.GetPoint(d);
-            world.y = visualY;
-            return true;
+
+            // 1) Physics.Raycast 우선 — 실제 land MeshCollider hit point 사용 → 카메라 기울기 무관 정확
+            int n = Physics.RaycastNonAlloc(ray, _hitBuf, 5000f);
+            float bestT = float.MaxValue;
+            bool found = false;
+            for (int i = 0; i < n; i++)
+            {
+                var h = _hitBuf[i];
+                if (h.collider == null) continue;
+                if (h.collider.GetComponentInParent<Landmass>() == null) continue;
+                if (h.distance < bestT)
+                {
+                    bestT = h.distance;
+                    world = new Vector3(h.point.x, visualY, h.point.z);
+                    found = true;
+                }
+            }
+            if (found) return true;
+
+            // 2) Fallback — Y=0 sea level 평면 (육지가 없는 바다 클릭 시)
+            var plane = new Plane(Vector3.up, Vector3.zero);
+            if (plane.Raycast(ray, out float d))
+            {
+                var p = ray.GetPoint(d);
+                world = new Vector3(p.x, visualY, p.z);
+                return true;
+            }
+            return false;
         }
 
         // ─── LineRenderer 그리기 ───────────────────────────────────────────
@@ -829,16 +885,17 @@ namespace Game.World
             Debug.Log($"[MapSubtractEditor] 화면맞추기 — Y={fitScreenCameraY}, top-down 시점.");
         }
 
+        /// <summary>[취소] 버튼 — 가장 최근에 그린 temp 하나만 제거 (다시 누르면 그 전 것). 단계별 undo.</summary>
         public void Cancel()
         {
-            int n = _pendings.Count;
-            ClearAllPendings();
-            int undone = 0;
-            foreach (var e in _existing)
+            if (_pendings.Count == 0)
             {
-                if (e.markedRemove) { e.markedRemove = false; ApplyExistingViewColor(e); undone++; }
+                Debug.Log("[MapSubtractEditor] 취소할 temp 없음.");
+                return;
             }
-            Debug.Log($"[MapSubtractEditor] 취소: pending {n} 개 버림, 삭제 예약 {undone} 개 복원.");
+            int beforeCount = _pendings.Count;
+            RemoveLastPending();
+            Debug.Log($"[MapSubtractEditor] 취소: 마지막 temp 1개 제거. 남은 temp {_pendings.Count}/{beforeCount}.");
         }
 
         /// <summary>드래그로 그린 월드 좌표 점들 → MapSubtractData.points (lat/lng 배열).</summary>

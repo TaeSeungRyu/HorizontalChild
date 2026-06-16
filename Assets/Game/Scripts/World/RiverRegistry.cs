@@ -12,45 +12,52 @@ namespace Game.World
     /// </summary>
     public static class RiverRegistry
     {
-        // polygons 는 mesh-local 좌표. IsInRiver 에서 ship 의 world → mesh-local 로 변환 후 비교.
-        private static readonly List<Vector2[]> _polysMeshLocal = new();
+        // 저장된 강 — RiverOverlay 가 catalog 에서 빌드
+        private static readonly List<Vector2[]> _committed = new();
+        // Temp 강 — MapSubtractEditor 가 그리는 중 추가, Save/Cancel/Disable 시 정리
+        private static readonly List<Vector2[]> _pending = new();
         private static Transform _landT;
 
-        public static int Count => _polysMeshLocal.Count;
+        public static int Count => _committed.Count + _pending.Count;
 
-        public static void Clear()
-        {
-            _polysMeshLocal.Clear();
-            _landT = null;
-        }
-
-        /// <summary>RiverOverlay 가 Refresh 시 호출 — WorldLand 의 Transform 기억.</summary>
-        public static void SetLandTransform(Transform t) => _landT = t;
+        // ── 저장된 (committed) ─────────────────────────────────────────────
+        public static void Clear() => _committed.Clear();
 
         public static void AddPolygon(Vector2[] polyMeshLocalXZ)
         {
             if (polyMeshLocalXZ == null || polyMeshLocalXZ.Length < 3) return;
-            _polysMeshLocal.Add(polyMeshLocalXZ);
+            _committed.Add(polyMeshLocalXZ);
         }
 
-        /// <summary>월드 좌표 worldPos 가 등록된 강 영역 안이면 true.</summary>
+        // ── Temp (pending) ────────────────────────────────────────────────
+        public static void ClearPending() => _pending.Clear();
+
+        public static void AddPendingPolygon(Vector2[] polyMeshLocalXZ)
+        {
+            if (polyMeshLocalXZ == null || polyMeshLocalXZ.Length < 3) return;
+            _pending.Add(polyMeshLocalXZ);
+        }
+
+        public static void SetLandTransform(Transform t) => _landT = t;
+
+        /// <summary>월드 좌표 worldPos 가 강(저장 또는 temp) 안이면 true.</summary>
         public static bool IsInRiver(Vector3 worldPos)
         {
-            if (_polysMeshLocal.Count == 0) return false;
+            if (_committed.Count == 0 && _pending.Count == 0) return false;
             Vector3 local = _landT != null ? _landT.InverseTransformPoint(worldPos) : worldPos;
             var p = new Vector2(local.x, local.z);
-            for (int i = 0; i < _polysMeshLocal.Count; i++)
-            {
-                if (MapSubtractGeometry.PointInPolygon(p, _polysMeshLocal[i])) return true;
-            }
+            for (int i = 0; i < _committed.Count; i++)
+                if (MapSubtractGeometry.PointInPolygon(p, _committed[i])) return true;
+            for (int i = 0; i < _pending.Count; i++)
+                if (MapSubtractGeometry.PointInPolygon(p, _pending[i])) return true;
             return false;
         }
 
-        /// <summary>씬 재로드 시 누수 방지 — 정적 상태 정리.</summary>
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void OnRuntimeInit()
         {
-            _polysMeshLocal.Clear();
+            _committed.Clear();
+            _pending.Clear();
             _landT = null;
         }
     }

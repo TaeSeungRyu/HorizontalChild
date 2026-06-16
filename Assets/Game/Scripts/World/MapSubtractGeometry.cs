@@ -85,6 +85,30 @@ namespace Game.World
             return inside;
         }
 
+        /// <summary>
+        /// 월드 좌표 polyline + widthKm 으로 segment 사각형 polygons 생성.
+        /// (BuildSubtractPolygonsWorld 의 폴리라인 path 와 동일 — SO 없이 즉시 호출 가능)
+        /// </summary>
+        public static List<Vector2[]> BuildPolylinePolygonsFromWorld(List<Vector3> worldPoints, float widthKm)
+        {
+            var result = new List<Vector2[]>();
+            if (worldPoints == null || worldPoints.Count < 2 || widthKm <= 0f) return result;
+            float halfWidthUnits = (widthKm * 0.5f) / GeoCoordinate.KmPerUnit;
+            for (int i = 0; i < worldPoints.Count - 1; i++)
+            {
+                var a = new Vector2(worldPoints[i].x, worldPoints[i].z);
+                var b = new Vector2(worldPoints[i + 1].x, worldPoints[i + 1].z);
+                var dir = b - a;
+                if (dir.sqrMagnitude < 0.0001f) continue;
+                dir.Normalize();
+                var perp = new Vector2(-dir.y, dir.x) * halfWidthUnits;
+                var aCap = a - dir * halfWidthUnits;
+                var bCap = b + dir * halfWidthUnits;
+                result.Add(new[] { aCap + perp, bCap + perp, bCap - perp, aCap - perp });
+            }
+            return result;
+        }
+
         /// <summary>여러 폴리곤 중 하나라도 점을 포함하면 true.</summary>
         public static bool PointInAny(Vector2 p, List<Vector2[]> polygons)
         {
