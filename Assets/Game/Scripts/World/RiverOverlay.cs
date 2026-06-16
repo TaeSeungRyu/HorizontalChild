@@ -185,9 +185,10 @@ namespace Game.World
                     verts.Add(world);
                 }
                 // BuildSubtractPolygonsWorld 사각형 순서: TL(0), TR(1), BR(2), BL(3)
-                // 위에서 볼 때 CCW (normal +Y) — 0→3→1, 1→3→2
-                tris.Add(baseIdx + 0); tris.Add(baseIdx + 3); tris.Add(baseIdx + 1);
-                tris.Add(baseIdx + 1); tris.Add(baseIdx + 3); tris.Add(baseIdx + 2);
+                // top-down 카메라에서 normal +Y 향하게 CCW from above — 0→1→3 + 1→2→3
+                // (이전 0→3→1 은 -Y 향해 backface cull 됨)
+                tris.Add(baseIdx + 0); tris.Add(baseIdx + 1); tris.Add(baseIdx + 3);
+                tris.Add(baseIdx + 1); tris.Add(baseIdx + 2); tris.Add(baseIdx + 3);
             }
 
             var mesh = new Mesh { name = $"RiverMesh_{d.name}" };
