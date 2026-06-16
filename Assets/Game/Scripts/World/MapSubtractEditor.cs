@@ -56,7 +56,7 @@ namespace Game.World
 
         [Header("Visual")]
         [Tooltip("브러시·pending Y 위치. RiverOverlay.overlayY(2.0) 바로 위에서 살짝(0.05u) Z-fight 회피.")]
-        public float visualY = 2.05f;
+        public float visualY = 2.0f;   // = RiverOverlay.overlayY (높이차 0)
         public float lineWidth = 2.5f;
         // pending 색 = RiverOverlay.waterColor 와 정확히 일치 — drawn = saved 시각.
         public Color riverColor = new Color(0.30f, 0.60f, 0.90f, 1f);
@@ -233,6 +233,18 @@ namespace Game.World
             ClearAllExistingViews();
             if (_brushCursor != null) Destroy(_brushCursor);
             if (_ui != null) _ui.gameObject.SetActive(false);
+
+            // 저장 안 된 TEMP_ SO 자동 삭제 — 에디터 종료 / Play 종료 시
+#if UNITY_EDITOR
+            int deletedTemps = DeleteAllTempFiles();
+            if (deletedTemps > 0)
+            {
+                RebuildCatalogFromFolder();
+                var riverOverlay = FindAnyObjectByType<RiverOverlay>();
+                if (riverOverlay != null) riverOverlay.Refresh();
+                Debug.Log($"[MapSubtractEditor] 에디터 종료 — 저장 안 된 TEMP_ {deletedTemps} 개 자동 삭제.");
+            }
+#endif
             if (wasActive) Debug.Log("[MapSubtractEditor] 에디터 OFF.");
         }
 
@@ -340,7 +352,7 @@ namespace Game.World
                     }
                 }
 
-                // 3) 우버튼 release — 선 확정 → pending 추가 (저장은 사용자가 [저장] 클릭)
+                // 3) 우버튼 release — 즉시 TEMP_ SO 파일 생성 → RiverOverlay 가 picking up
                 if (_drawing && mouse.rightButton.wasReleasedThisFrame)
                 {
                     _drawing = false;
@@ -348,7 +360,7 @@ namespace Game.World
                     {
                         var kind = _mode == EditMode.River ? MapEditKind.River : MapEditKind.Land;
                         float widthUnits = brushKm / GeoCoordinate.KmPerUnit;
-                        AddPendingPolyline(kind, new List<Vector3>(_currentDrawPoints), widthUnits);
+                        CreateTempSO(kind, new List<Vector3>(_currentDrawPoints), widthUnits);
                     }
                     else
                     {
@@ -764,44 +776,131 @@ namespace Game.World
             return new Vector3(meshLocalXZ.x, visualY, meshLocalXZ.y);
         }
 
-        // ─── 저장 / 취소 ───────────────────────────────────────────────────
+        // ─── TEMP_ SO 라이프사이클 ───────────────────────────────────────
+        // 흐름:
+        //   drag release → CreateTempSO (TEMP_ 파일 생성 + RiverOverlay refresh → 즉시 게임 반영)
+        //   [저장] → RenameTempToSaved (TEMP_ 제거 → 영구 파일)
+        //   [취소] → DeleteAllTempFiles (TEMP_ 파일 삭제)
+        //   Disable / Play stop → DeleteAllTempFiles (저장 안 된 temp 자동 정리)
+        //   Game start (static) → DeleteAllTempFiles (이전 세션 orphan 정리)
+
+        private const string TempFilePrefix = "TEMP_";
+
+        /// <summary>드래그 종료 → 즉시 TEMP_*.asset 생성. RiverOverlay 가 picking up 해 게임에 반영.</summary>
+        private void CreateTempSO(MapEditKind kind, List<Vector3> points, float widthUnits)
+        {
+#if UNITY_EDITOR
+            EnsureFolder(saveFolder);
+            var so = ScriptableObject.CreateInstance<MapSubtractData>();
+            string ts = System.DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+            so.subtractId = $"subtract.{kind.ToString().ToLower()}.temp.{ts}";
+            so.displayNameKo = $"{(kind == MapEditKind.River ? "강" : "땅")} (temp)";
+            so.kind = kind;
+            so.widthKm = widthUnits * GeoCoordinate.KmPerUnit;
+            so.enabled = true;
+            so.points = LinePointsToLatLng(points);
+            string path = $"{saveFolder}/{TempFilePrefix}MapSubtract_{kind}_{ts}.asset";
+            AssetDatabase.CreateAsset(so, path);
+            AssetDatabase.SaveAssets();
+
+            // 카탈로그에 추가
+            if (catalog != null)
+            {
+                var list = new List<MapSubtractData>();
+                if (catalog.all != null) list.AddRange(catalog.all);
+                list.Add(so);
+                catalog.all = list.ToArray();
+                EditorUtility.SetDirty(catalog);
+                AssetDatabase.SaveAssets();
+            }
+
+            // RiverOverlay refresh → 즉시 게임에 강 등장 + 배 통과 가능
+            var riverOverlay = FindAnyObjectByType<RiverOverlay>();
+            if (riverOverlay == null)
+            {
+                var go = new GameObject("RiverOverlay (Auto)");
+                riverOverlay = go.AddComponent<RiverOverlay>();
+                riverOverlay.catalog = catalog;
+            }
+            else if (riverOverlay.catalog == null)
+            {
+                riverOverlay.catalog = catalog;
+            }
+            riverOverlay.Refresh();
+
+            Debug.Log($"[MapSubtractEditor] TEMP_ {kind} SO 생성: {path}. 게임 즉시 반영. (저장 안 누르면 종료 시 자동 삭제)");
+#endif
+        }
 
         public void Save()
         {
 #if UNITY_EDITOR
-            EnsureFolder(saveFolder);
+            // TEMP_ 파일들을 영구 파일로 rename (prefix 제거) → 다음 세션에도 살아남음
+            int renamed = RenameTempToSaved();
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
 
-            int created = 0, removed = 0;
+            // 카탈로그 재스캔 (이름 바뀐 SO 들 포함)
+            RebuildCatalogFromFolder();
 
-            // 1) 새 pending 폴리라인 → SO 생성
-            foreach (var p in _pendings)
+            // RiverOverlay refresh (rename 이라 mesh 변화 없지만 카탈로그 reference 갱신)
+            var riverOverlay = FindAnyObjectByType<RiverOverlay>();
+            if (riverOverlay != null) riverOverlay.Refresh();
+
+            Debug.Log($"[MapSubtractEditor] 저장 완료. {renamed} 개 TEMP_ → 영구 파일로 전환.");
+#else
+            Debug.LogWarning("[MapSubtractEditor] 저장은 Editor Play 모드에서만 가능.");
+#endif
+        }
+
+#if UNITY_EDITOR
+        /// <summary>모든 TEMP_*.asset 파일을 prefix 제거해 영구 파일로 rename. 반환: rename 개수.</summary>
+        private int RenameTempToSaved()
+        {
+            int renamed = 0;
+            if (!AssetDatabase.IsValidFolder(saveFolder)) return 0;
+            var guids = AssetDatabase.FindAssets("t:MapSubtractData", new[] { saveFolder });
+            foreach (var g in guids)
             {
-                if (p.linePoints == null || p.linePoints.Count < 2) continue;
-                var so = ScriptableObject.CreateInstance<MapSubtractData>();
-                string ts = System.DateTime.Now.ToString("yyyyMMdd_HHmmss");
-                string uniq = $"{ts}_{created:D3}";
-                so.subtractId = $"subtract.{p.kind.ToString().ToLower()}.{uniq}";
-                so.displayNameKo = p.kind == MapEditKind.River ? $"강 {created + 1}" : $"땅 {created + 1}";
-                so.kind = p.kind;
-                so.widthKm = p.widthUnits * GeoCoordinate.KmPerUnit;   // unit → km
-                so.enabled = true;
-                so.points = LinePointsToLatLng(p.linePoints);
-                AssetDatabase.CreateAsset(so, $"{saveFolder}/MapSubtract_{p.kind}_{uniq}.asset");
-                created++;
+                var path = AssetDatabase.GUIDToAssetPath(g);
+                var filename = System.IO.Path.GetFileName(path);
+                if (!filename.StartsWith(TempFilePrefix)) continue;
+                var newName = filename.Substring(TempFilePrefix.Length);
+                // RenameAsset 의 newName 은 확장자 없이 — 파일명 + .asset 자동 추가
+                var newNameNoExt = System.IO.Path.GetFileNameWithoutExtension(newName);
+                var msg = AssetDatabase.RenameAsset(path, newNameNoExt);
+                if (string.IsNullOrEmpty(msg)) renamed++;
+                else Debug.LogWarning($"[MapSubtractEditor] Rename 실패 — {path}: {msg}");
             }
+            return renamed;
+        }
 
-            // 2) markedRemove → SO 삭제
-            for (int i = _existing.Count - 1; i >= 0; i--)
+        /// <summary>모든 TEMP_*.asset 파일 삭제. 반환: 삭제 개수.</summary>
+        private int DeleteAllTempFiles()
+        {
+            int deleted = 0;
+            if (!AssetDatabase.IsValidFolder(saveFolder)) return 0;
+            var guids = AssetDatabase.FindAssets("t:MapSubtractData", new[] { saveFolder });
+            foreach (var g in guids)
             {
-                if (!_existing[i].markedRemove) continue;
-                var path = AssetDatabase.GetAssetPath(_existing[i].data);
-                if (!string.IsNullOrEmpty(path)) AssetDatabase.DeleteAsset(path);
-                if (_existing[i].visual != null) Destroy(_existing[i].visual);
-                _existing.RemoveAt(i);
-                removed++;
+                var path = AssetDatabase.GUIDToAssetPath(g);
+                var filename = System.IO.Path.GetFileName(path);
+                if (!filename.StartsWith(TempFilePrefix)) continue;
+                AssetDatabase.DeleteAsset(path);
+                deleted++;
             }
+            if (deleted > 0)
+            {
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+            }
+            return deleted;
+        }
 
-            // 3) 카탈로그 재스캔 (폴더의 모든 SO)
+        /// <summary>폴더 안 모든 SO 를 카탈로그.all 에 다시 채움.</summary>
+        private void RebuildCatalogFromFolder()
+        {
+            if (catalog == null) return;
             var allFound = new List<MapSubtractData>();
             if (AssetDatabase.IsValidFolder(saveFolder))
             {
@@ -812,63 +911,35 @@ namespace Game.World
                     if (d != null) allFound.Add(d);
                 }
             }
-            if (catalog == null)
-            {
-                Debug.LogError("[MapSubtractEditor] Catalog 미할당 — 저장 불가.");
-                return;
-            }
             catalog.all = allFound.ToArray();
             EditorUtility.SetDirty(catalog);
             AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-
-            // 4) Pending 시각 제거 (이제 SO 가 되었으니)
-            ClearAllPendings();
-
-            // 5) 메쉬 재베이크 — Land/Sea kind 변경이 있을 때만 (River 만 변경됐으면 skip)
-            bool needsBake = false;
-            foreach (var d in allFound)
-            {
-                if (d == null) continue;
-                if (d.kind == MapEditKind.Land || d.kind == MapEditKind.Sea) { needsBake = true; break; }
-            }
-            if (!needsBake)
-            {
-                foreach (var e in _existing) if (e.markedRemove && e.data != null
-                    && (e.data.kind == MapEditKind.Land || e.data.kind == MapEditKind.Sea))
-                { needsBake = true; break; }
-            }
-            bool ok = true;
-            if (needsBake)
-            {
-                ok = EditorApplication.ExecuteMenuItem("Game/Bake World Land Mesh from GeoJSON");
-                if (ok) RefreshLiveMeshColliders();
-            }
-
-            // 6) 새 SO 들을 ExistingView 로 다시 빌드
-            BuildExistingViews();
-
-            // 7) 강 시각·통과 영역 즉시 갱신 — RiverOverlay 가 없으면 자동 생성
-            var riverOverlay = FindAnyObjectByType<RiverOverlay>();
-            if (riverOverlay == null)
-            {
-                var go = new GameObject("RiverOverlay (Auto)");
-                riverOverlay = go.AddComponent<RiverOverlay>();
-                riverOverlay.catalog = catalog;
-                Debug.Log("[MapSubtractEditor] RiverOverlay 가 씬에 없어 자동 생성.");
-            }
-            else if (riverOverlay.catalog == null)
-            {
-                riverOverlay.catalog = catalog;
-            }
-            riverOverlay.Refresh();
-
-            Debug.Log($"[MapSubtractEditor] 저장 완료. 새 영역 +{created}, 제거 -{removed}. " +
-                (needsBake ? (ok ? "메쉬 재베이크 완료." : "베이크 실패 — 수동 실행.") : "River-only 변경 — 베이크 skip (빠름)."));
-#else
-            Debug.LogWarning("[MapSubtractEditor] 저장은 Editor Play 모드에서만 가능.");
-#endif
         }
+
+        /// <summary>게임 시작마다 자동 호출 — 이전 세션의 orphan TEMP_ 파일 정리.</summary>
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void StaticAutoCleanupTempOnGameStart()
+        {
+            const string folder = "Assets/Game/Data/MapSubtracts";
+            if (!AssetDatabase.IsValidFolder(folder)) return;
+            var guids = AssetDatabase.FindAssets("t:MapSubtractData", new[] { folder });
+            int deleted = 0;
+            foreach (var g in guids)
+            {
+                var path = AssetDatabase.GUIDToAssetPath(g);
+                var filename = System.IO.Path.GetFileName(path);
+                if (!filename.StartsWith(TempFilePrefix)) continue;
+                AssetDatabase.DeleteAsset(path);
+                deleted++;
+            }
+            if (deleted > 0)
+            {
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+                Debug.Log($"[MapSubtractEditor] 게임 시작 — 이전 세션 orphan TEMP_ {deleted} 개 자동 정리.");
+            }
+        }
+#endif
 
         /// <summary>
         /// 카메라를 편집에 가장 적합한 화면 크기로 스냅 — top-down + 정해진 Y.
@@ -885,17 +956,23 @@ namespace Game.World
             Debug.Log($"[MapSubtractEditor] 화면맞추기 — Y={fitScreenCameraY}, top-down 시점.");
         }
 
-        /// <summary>[취소] 버튼 — 가장 최근에 그린 temp 하나만 제거 (다시 누르면 그 전 것). 단계별 undo.</summary>
+        /// <summary>[취소] 버튼 — 저장 안 된 TEMP_ SO 모두 즉시 삭제.</summary>
         public void Cancel()
         {
-            if (_pendings.Count == 0)
+#if UNITY_EDITOR
+            int deleted = DeleteAllTempFiles();
+            if (deleted > 0)
             {
-                Debug.Log("[MapSubtractEditor] 취소할 temp 없음.");
-                return;
+                RebuildCatalogFromFolder();
+                var riverOverlay = FindAnyObjectByType<RiverOverlay>();
+                if (riverOverlay != null) riverOverlay.Refresh();
+                Debug.Log($"[MapSubtractEditor] 취소: TEMP_ {deleted} 개 삭제.");
             }
-            int beforeCount = _pendings.Count;
-            RemoveLastPending();
-            Debug.Log($"[MapSubtractEditor] 취소: 마지막 temp 1개 제거. 남은 temp {_pendings.Count}/{beforeCount}.");
+            else
+            {
+                Debug.Log("[MapSubtractEditor] 취소: 삭제할 TEMP_ 없음.");
+            }
+#endif
         }
 
         /// <summary>드래그로 그린 월드 좌표 점들 → MapSubtractData.points (lat/lng 배열).</summary>
