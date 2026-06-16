@@ -52,7 +52,7 @@ namespace Game.Editor
 
         // Carve 영역 근처에서 적용되는 더 작은 edge 한계 (unit). 1 unit ≈ 7.4 km.
         // 작은 브러시(20km) 도 원형으로 잘리도록 카브 부근만 finely 분할.
-        private const float CarveFineMaxEdge = 2f;
+        private const float CarveFineMaxEdge = 0.8f;  // 강가 매끈하게(작을수록 부드럽지만 삼각형↑·베이크 느림)
 
         [MenuItem("Game/Bake World Land Mesh from GeoJSON")]
         public static void Bake()

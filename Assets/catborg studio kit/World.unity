@@ -30433,7 +30433,21 @@ MonoBehaviour:
   - {fileID: 3547281064385252088, guid: 8fe780861521c3b43aaf761a7a821e57, type: 3}
   - {fileID: 4423296547210344926, guid: b752407b85a35914cb5998e03b10c159, type: 3}
   - {fileID: 3719823848385994996, guid: 5ac59590364e95543b553c87967848cb, type: 3}
-  regionSets: []
+  regionSets:
+  - regionName: "\uC720\uB7FD"
+    latMin: 35
+    latMax: 71
+    lngMin: -10
+    lngMax: 40
+    prefabs:
+    - {fileID: 1233535241654229103, guid: a79126935ac519548a97df7446146c2c, type: 3}
+    - {fileID: 3719823848385994996, guid: 5ac59590364e95543b553c87967848cb, type: 3}
+    - {fileID: 4423296547210344926, guid: b752407b85a35914cb5998e03b10c159, type: 3}
+    - {fileID: 7210441839915396386, guid: 75898ee72b26ae940b7d2ebaf70a809b, type: 3}
+    - {fileID: 4196373654054391523, guid: 7749938e722b74447b2f8d457788391b, type: 3}
+    - {fileID: 7314289784835802119, guid: 5f63671c6d021d549989266d8c8e1237, type: 3}
+    - {fileID: 7324277885378089821, guid: 089185570f9102c4ead6f4d6e9cab996, type: 3}
+    - {fileID: 2112061158072553745, guid: c11b91f43fcf7f546b35cd4e8135529e, type: 3}
   chunkSize: 50
   viewRadius: 4
   perChunk: 90
