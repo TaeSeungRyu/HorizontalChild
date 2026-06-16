@@ -75,80 +75,16 @@ namespace Game.Editor
             EnsureFolder($"{DataRoot}/_Catalogs");
 
             // ─── 0) 이전 시드의 사용 안 하는 SO 정리 ─────────────────────────
-            //     (Malacca / Skagerrak 는 사용자 요청에 따라 제거. 사용자가 만든 SO 는 보존)
+            //     사용자가 모양이 좋지 않다고 한 시드 강(나일·아마존·북해통로 등) 모두 제거.
+            //     사용자가 에디터로 직접 그린 SO 는 다른 이름이라 보존됨.
             DeleteIfExists($"{DataRoot}/MapSubtracts/MapSubtract_Malacca.asset");
             DeleteIfExists($"{DataRoot}/MapSubtracts/MapSubtract_Skagerrak.asset");
+            DeleteIfExists($"{DataRoot}/MapSubtracts/MapSubtract_Nile.asset");
+            DeleteIfExists($"{DataRoot}/MapSubtracts/MapSubtract_Amazon.asset");
+            DeleteIfExists($"{DataRoot}/MapSubtracts/MapSubtract_NorthSeaPassage.asset");
 
-            // ─── 1) 나일강 + 아마존강 SO 생성/갱신 (기존 사용자 SO 는 안 건드림) ───
-            CreateOrLoad("MapSubtract_Nile.asset", d =>
-            {
-                d.subtractId = "river.nile";
-                d.displayNameKo = "나일강";
-                d.kind = MapEditKind.River;
-                d.widthKm = 200f;   // 넓게 — 어린이가 헤매지 않게
-                d.enabled = true;
-                d.points = new[]
-                {
-                    // points: (longitude, latitude)
-                    new Vector2(31.5f, 32.0f),  // 지중해 어귀 (다미에타)
-                    new Vector2(31.2f, 30.5f),  // 카이로 북쪽
-                    new Vector2(31.2f, 29.0f),  // 카이로 남쪽
-                    new Vector2(31.5f, 27.0f),  // 베니수에프
-                    new Vector2(32.0f, 25.7f),  // 룩소르
-                    new Vector2(32.9f, 24.1f),  // 아스완
-                    new Vector2(32.5f, 21.0f),  // 누비아 사막
-                    new Vector2(32.5f, 18.0f),  // 동골라
-                    new Vector2(32.6f, 15.6f),  // 카르툼 (백/청 합류)
-                };
-                d.notes = "지중해 → 카이로 → 룩소르 → 카르툼. 폭 200km — 배가 충분히 통과.";
-            });
-
-            CreateOrLoad("MapSubtract_Amazon.asset", d =>
-            {
-                d.subtractId = "river.amazon";
-                d.displayNameKo = "아마존강";
-                d.kind = MapEditKind.River;
-                d.widthKm = 250f;   // 더 넓게 — 본류는 진짜 100km 이상
-                d.enabled = true;
-                d.points = new[]
-                {
-                    new Vector2(-48.5f, -0.5f),  // 대서양 어귀 (벨렘 부근)
-                    new Vector2(-52.0f, -1.5f),
-                    new Vector2(-55.5f, -2.4f),  // 산타렘
-                    new Vector2(-58.5f, -3.0f),
-                    new Vector2(-60.0f, -3.1f),  // 마나우스
-                    new Vector2(-63.0f, -3.5f),
-                    new Vector2(-66.0f, -3.8f),
-                    new Vector2(-70.0f, -4.0f),
-                    new Vector2(-73.2f, -3.7f),  // 이키토스 (페루)
-                };
-                d.notes = "대서양 → 마나우스 → 이키토스. 폭 250km — 대항해시대 2 처럼 강 안쪽까지 항해.";
-            });
-
-            // 북해 → 발트해 통로 (네덜란드 동쪽이 막혀서 어린이가 통과 못 하는 문제 해결)
-            CreateOrLoad("MapSubtract_NorthSeaPassage.asset", d =>
-            {
-                d.subtractId = "river.north_sea_passage";
-                d.displayNameKo = "북해 → 발트해 통로";
-                d.kind = MapEditKind.River;
-                d.widthKm = 300f;   // 매우 넓게 — 어린이 통과 보장
-                d.enabled = true;
-                d.points = new[]
-                {
-                    // 네덜란드 동쪽 시작 → 독일 북쪽 → 유틀란드 서쪽 → 스카게라크 →
-                    // 카테가트 → 발트해 입구
-                    new Vector2(4.0f, 53.0f),    // 네덜란드 북쪽 (Wadden Sea 시작)
-                    new Vector2(7.0f, 54.0f),    // 독일 북쪽 (Wadden Sea 동쪽)
-                    new Vector2(8.0f, 55.5f),    // 유틀란드 (덴마크) 서해안
-                    new Vector2(8.0f, 57.0f),    // 유틀란드 북서
-                    new Vector2(9.5f, 57.8f),    // 스카게라크 입구
-                    new Vector2(11.0f, 58.0f),   // 스카게라크 중심
-                    new Vector2(12.0f, 57.0f),   // 카테가트 입구
-                    new Vector2(12.5f, 55.8f),   // 카테가트 남쪽
-                    new Vector2(13.0f, 54.5f),   // 발트해 입구 (Lübeck Bay)
-                };
-                d.notes = "네덜란드 동쪽 막힘 해결. 북해 ↔ 발트해 큰 통로. 폭 300km.";
-            });
+            // ─── 1) 시드 강 없음 — 사용자가 직접 에디터로 그리도록 ─────────
+            //     (이전엔 Nile/Amazon/NorthSea 를 seed 했으나 모양이 어색하다는 피드백으로 제거)
 
             // ─── 2) 카탈로그 — 폴더 스캔으로 모든 MapSubtractData 등록 ─────────
             //     (사용자가 에디터로 만든 SO 도 자동 포함됨)

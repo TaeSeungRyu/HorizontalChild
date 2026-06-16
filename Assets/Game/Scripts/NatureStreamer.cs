@@ -100,6 +100,7 @@ public class NatureStreamer : MonoBehaviour
             if (hit.point.y < minHeight || hit.point.y > maxHeight) continue;
             if (Vector3.Angle(hit.normal, Vector3.up) > maxSlope) continue;
             if (shoreMargin > 0f && !SolidAround(x, z, startY)) continue;  // 물가/작은 섬 제외
+            if (Game.World.RiverRegistry.IsInRiver(hit.point)) continue;   // 강 위는 식생 제외
 
             var prefab = prefabs[Random.Range(0, prefabs.Length)];
             if (prefab == null) continue;

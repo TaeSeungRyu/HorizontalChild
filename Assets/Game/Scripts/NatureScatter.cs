@@ -86,6 +86,7 @@ public class NatureScatter : MonoBehaviour
             if (!Physics.Raycast(from, Vector3.down, out RaycastHit hit, raycastHeight * 2f, groundMask)) continue;
             if (hit.point.y < minHeight || hit.point.y > maxHeight) continue;
             if (Vector3.Angle(hit.normal, Vector3.up) > maxSlope) continue;
+            if (Game.World.RiverRegistry.IsInRiver(hit.point)) continue;   // 강 위는 식생 제외
 
             var prefab = prefabs[Random.Range(0, prefabs.Length)];
             if (prefab == null) continue;
