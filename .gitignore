@@ -89,3 +89,13 @@ $RECYCLE.BIN/
 # This project's own clutter
 # =============================================================================
 UpgradeLog*.htm
+
+# =============================================================================
+# Generated assets — regenerable via Unity Editor menus, don't commit (too large)
+# =============================================================================
+# WorldLand 메쉬 (200MB+) — Game ▸ Bake World Land Mesh from GeoJSON 으로 재생성
+Assets/Game/Art/Map/WorldLand.mesh
+Assets/Game/Art/Map/WorldLand.mesh.meta
+
+# filter-repo 백업 (필요 없으면 수동 삭제: rm -rf .git.backup_before_filter_repo)
+.git.backup_before_filter_repo/

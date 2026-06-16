@@ -30455,8 +30455,8 @@ MonoBehaviour:
     lngMax: 180
     prefabs:
     - {fileID: 8630096253940133616, guid: 34a47df0986c0144fab7ffd60ef430b9, type: 3}
-    - {fileID: 288465213666625367, guid: 645d9f622dbd3aa4fab6d58eca81537d, type: 3}
-    - {fileID: 6064921025645270756, guid: 3727a5cf2c8496649b67946778dead6d, type: 3}
+    - {fileID: 3719823848385994996, guid: 5ac59590364e95543b553c87967848cb, type: 3}
+    - {fileID: 4423296547210344926, guid: b752407b85a35914cb5998e03b10c159, type: 3}
     - {fileID: 7210441839915396386, guid: 75898ee72b26ae940b7d2ebaf70a809b, type: 3}
   chunkSize: 50
   viewRadius: 4
