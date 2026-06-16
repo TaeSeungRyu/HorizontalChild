@@ -46,6 +46,10 @@ namespace Game.World
             _spawned.Clear();
             RiverRegistry.Clear();
 
+            // WorldLand transform 등록 — Registry 가 ship world → mesh-local 변환에 사용
+            var landmass = FindAnyObjectByType<Landmass>();
+            RiverRegistry.SetLandTransform(landmass != null ? landmass.transform : null);
+
             if (catalog == null || catalog.all == null)
             {
                 Debug.Log("[RiverOverlay] catalog 비어 있음 — 강 영역 없음.");
@@ -87,20 +91,28 @@ namespace Game.World
             mr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             mr.receiveShadows = false;
 
-            // Mesh — center-fan 삼각화 (볼록 폴리곤·사각 띠 모두 OK)
+            // WorldLand offset 보정 — 강이 메쉬 정점과 같은 world 위치에 보이도록
+            var landmass = FindAnyObjectByType<Landmass>();
+            Transform landT = landmass != null ? landmass.transform : null;
+
             var mesh = new Mesh { name = $"RiverMesh_{name}" };
             int n = polyXZ.Length;
             var verts = new Vector3[n + 1];
-            verts[0] = ComputeCentroid(polyXZ);   // fan 중심
+            verts[0] = ApplyLandTransform(ComputeCentroidLocal(polyXZ), landT);
             for (int i = 0; i < n; i++)
-                verts[i + 1] = new Vector3(polyXZ[i].x, overlayY, polyXZ[i].y);
+            {
+                var local = new Vector3(polyXZ[i].x, overlayY, polyXZ[i].y);
+                verts[i + 1] = ApplyLandTransform(local, landT);
+            }
 
+            // Center-fan 삼각화 — winding 을 위에서 봤을 때 CCW 로 (normal 이 +Y 향하게).
+            // 이전 winding (0, i+1, (i+1)%n + 1) 는 -Y 향해서 top-down 카메라가 backface cull.
             var tris = new int[n * 3];
             for (int i = 0; i < n; i++)
             {
                 tris[i * 3 + 0] = 0;
-                tris[i * 3 + 1] = i + 1;
-                tris[i * 3 + 2] = ((i + 1) % n) + 1;
+                tris[i * 3 + 1] = ((i + 1) % n) + 1;
+                tris[i * 3 + 2] = i + 1;
             }
             mesh.vertices = verts;
             mesh.triangles = tris;
@@ -108,7 +120,7 @@ namespace Game.World
             mesh.RecalculateBounds();
             mf.sharedMesh = mesh;
 
-            // 머티리얼 — URP Lit, 푸른 물색
+            // 머티리얼 — URP Lit, 푸른 물색 + 양면 렌더 (winding 안 맞아도 안전)
             var shader = Shader.Find("Universal Render Pipeline/Lit");
             if (shader == null) shader = Shader.Find("Standard");
             var mat = new Material(shader);
@@ -116,12 +128,20 @@ namespace Game.World
             else if (mat.HasProperty("_Color")) mat.SetColor("_Color", waterColor);
             if (mat.HasProperty("_Smoothness")) mat.SetFloat("_Smoothness", 0.7f);
             if (mat.HasProperty("_Metallic")) mat.SetFloat("_Metallic", 0f);
+            // 양면 렌더 (Cull Off) — winding 오류·기울임 등 안전망
+            if (mat.HasProperty("_Cull")) mat.SetFloat("_Cull", 0f);
+            mat.doubleSidedGI = true;
             mr.sharedMaterial = mat;
 
             return go;
         }
 
-        private Vector3 ComputeCentroid(Vector2[] poly)
+        private static Vector3 ApplyLandTransform(Vector3 local, Transform landT)
+        {
+            return landT != null ? landT.TransformPoint(local) : local;
+        }
+
+        private Vector3 ComputeCentroidLocal(Vector2[] poly)
         {
             float sx = 0f, sz = 0f;
             for (int i = 0; i < poly.Length; i++)
@@ -132,5 +152,6 @@ namespace Game.World
             float inv = 1f / poly.Length;
             return new Vector3(sx * inv, overlayY, sz * inv);
         }
+
     }
 }

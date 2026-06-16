@@ -184,6 +184,20 @@ namespace Game.World
             EnsureUI();
             _ui.gameObject.SetActive(true);
 
+            // RiverOverlay 자동 보장 — 기존 강 데이터가 즉시 메쉬·통과 영역으로 나타남
+            var riverOverlay = FindAnyObjectByType<RiverOverlay>();
+            if (riverOverlay == null)
+            {
+                var go = new GameObject("RiverOverlay (Auto)");
+                riverOverlay = go.AddComponent<RiverOverlay>();
+                riverOverlay.catalog = catalog;
+            }
+            else if (riverOverlay.catalog == null)
+            {
+                riverOverlay.catalog = catalog;
+                riverOverlay.Refresh();
+            }
+
             BuildExistingViews();
             EnsureBrushCursor();
             UpdateStatusText();
@@ -448,16 +462,29 @@ namespace Game.World
                 var go = new GameObject($"Existing_{d.kind}_{d.name}");
                 go.transform.SetParent(transform);
                 var lr = go.AddComponent<LineRenderer>();
-                ConfigureLineRenderer(lr, existingDim);
+                var baseColor = ColorForKind(d.kind);
+                baseColor.a = 0.55f;
+                ConfigureLineRenderer(lr, baseColor);
                 DrawDataOutline(lr, d);
                 _existing.Add(new ExistingView { data = d, visual = go, line = lr });
+            }
+        }
+
+        private Color ColorForKind(MapEditKind k)
+        {
+            switch (k)
+            {
+                case MapEditKind.River: return riverColor;
+                case MapEditKind.Land:  return landColor;
+                default: return existingDim;
             }
         }
 
         private void ApplyExistingViewColor(ExistingView e)
         {
             if (e.line == null) return;
-            var c = e.markedRemove ? markedRemoveColor : existingDim;
+            var c = e.markedRemove ? markedRemoveColor : ColorForKind(e.data.kind);
+            c.a = e.markedRemove ? 0.5f : 0.55f;
             e.line.startColor = c;
             e.line.endColor = c;
         }
@@ -604,6 +631,24 @@ namespace Game.World
 
         private void DrawDataOutline(LineRenderer lr, MapSubtractData d)
         {
+            // 폴리라인은 중심선을 실제 폭으로 한 줄로 그리기 (강 시각화)
+            if (d.widthKm > 0f && d.points != null && d.points.Length >= 2)
+            {
+                lr.positionCount = d.points.Length;
+                for (int i = 0; i < d.points.Length; i++)
+                {
+                    var w = GeoCoordinate.LatLngToWorld(d.points[i].y, d.points[i].x);
+                    lr.SetPosition(i, MeshLocalXZToWorld(new Vector2(w.x, w.z)));
+                }
+                float widthUnits = d.widthKm / GeoCoordinate.KmPerUnit;
+                lr.startWidth = widthUnits;
+                lr.endWidth = widthUnits;
+                lr.numCapVertices = 6;
+                lr.numCornerVertices = 6;
+                return;
+            }
+
+            // 폴리곤 (widthKm=0) — 외곽선 그리기
             var polys = MapSubtractGeometry.BuildSubtractPolygonsWorld(d);
             int total = 0;
             foreach (var p in polys) total += p.Length + 1;
@@ -692,9 +737,20 @@ namespace Game.World
             // 6) 새 SO 들을 ExistingView 로 다시 빌드
             BuildExistingViews();
 
-            // 7) 강 시각·통과 영역 즉시 갱신 (RiverOverlay 가 씬에 있으면)
+            // 7) 강 시각·통과 영역 즉시 갱신 — RiverOverlay 가 없으면 자동 생성
             var riverOverlay = FindAnyObjectByType<RiverOverlay>();
-            if (riverOverlay != null) riverOverlay.Refresh();
+            if (riverOverlay == null)
+            {
+                var go = new GameObject("RiverOverlay (Auto)");
+                riverOverlay = go.AddComponent<RiverOverlay>();
+                riverOverlay.catalog = catalog;
+                Debug.Log("[MapSubtractEditor] RiverOverlay 가 씬에 없어 자동 생성.");
+            }
+            else if (riverOverlay.catalog == null)
+            {
+                riverOverlay.catalog = catalog;
+            }
+            riverOverlay.Refresh();
 
             Debug.Log($"[MapSubtractEditor] 저장 완료. 새 영역 +{created}, 제거 -{removed}. " +
                 (ok ? "메쉬 재베이크 완료." : "베이크 실패 — 메뉴 'Game ▸ Bake World Land' 수동 실행."));
