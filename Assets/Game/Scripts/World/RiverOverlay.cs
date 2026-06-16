@@ -32,10 +32,14 @@ namespace Game.World
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void AutoBootstrap()
         {
-            if (FindAnyObjectByType<RiverOverlay>() != null) return;
+            if (FindAnyObjectByType<RiverOverlay>() != null)
+            {
+                Debug.Log("[RiverOverlay] AutoBootstrap — 씬에 이미 존재. skip.");
+                return;
+            }
             var go = new GameObject("RiverOverlay (Auto)");
             go.AddComponent<RiverOverlay>();
-            // catalog 는 본 컴포넌트 Start 에서 자동 검색
+            Debug.Log("[RiverOverlay] AutoBootstrap — RiverOverlay 자동 생성됨.");
         }
 
         private void Start()
@@ -47,25 +51,59 @@ namespace Game.World
         /// <summary>씬·프로젝트에서 MapSubtractCatalog 자동 검색.</summary>
         private static MapSubtractCatalog FindCatalog()
         {
-            // 1) 이미 로드된 객체에서 찾기 (다른 컴포넌트가 참조 중이면 발견)
+            // 1) 씬의 MapSubtractEditor 가 참조 중이면 그것 사용 (가장 빠르고 신뢰성 높음)
+            var editor = FindAnyObjectByType<MapSubtractEditor>();
+            if (editor != null && editor.catalog != null)
+            {
+                Debug.Log($"[RiverOverlay] catalog — MapSubtractEditor 에서 발견: {editor.catalog.name}");
+                return editor.catalog;
+            }
+
+            // 2) 이미 로드된 객체에서 찾기
             var loaded = Resources.FindObjectsOfTypeAll<MapSubtractCatalog>();
-            if (loaded != null && loaded.Length > 0) return loaded[0];
+            if (loaded != null && loaded.Length > 0)
+            {
+                Debug.Log($"[RiverOverlay] catalog — 메모리에서 발견: {loaded[0].name}");
+                return loaded[0];
+            }
 
 #if UNITY_EDITOR
-            // 2) Editor — 프로젝트 전체 스캔
+            // 3) Editor — 프로젝트 전체 스캔
             var guids = UnityEditor.AssetDatabase.FindAssets("t:MapSubtractCatalog");
             if (guids.Length > 0)
             {
                 var path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
-                return UnityEditor.AssetDatabase.LoadAssetAtPath<MapSubtractCatalog>(path);
+                var c = UnityEditor.AssetDatabase.LoadAssetAtPath<MapSubtractCatalog>(path);
+                Debug.Log($"[RiverOverlay] catalog — AssetDatabase 에서 발견: {path}");
+                return c;
             }
 #endif
 
-            // 3) Resources 폴더 fallback (빌드용)
+            // 4) Resources 폴더 fallback (빌드용)
             var fromResources = Resources.Load<MapSubtractCatalog>("MapSubtractCatalog");
-            if (fromResources != null) return fromResources;
+            if (fromResources != null)
+            {
+                Debug.Log("[RiverOverlay] catalog — Resources/MapSubtractCatalog 에서 발견");
+                return fromResources;
+            }
 
             Debug.LogWarning("[RiverOverlay] MapSubtractCatalog 를 못 찾음. Inspector 에 수동 할당 또는 Resources 폴더에 두기.");
+            return null;
+        }
+
+        /// <summary>WorldLand 를 우선 찾고, 없으면 아무 Landmass 반환.</summary>
+        private static Transform FindWorldLandTransform()
+        {
+            var all = FindObjectsByType<Landmass>(FindObjectsSortMode.None);
+            // 1) 이름이 "WorldLand" 인 것 우선
+            foreach (var lm in all)
+            {
+                if (lm == null) continue;
+                if (lm.name == "WorldLand" || lm.name.StartsWith("WorldLand"))
+                    return lm.transform;
+            }
+            // 2) Fallback — 첫 번째
+            if (all.Length > 0 && all[0] != null) return all[0].transform;
             return null;
         }
 
@@ -75,9 +113,10 @@ namespace Game.World
             _spawned.Clear();
             RiverRegistry.Clear();
 
-            var landmass = FindAnyObjectByType<Landmass>();
-            Transform landT = landmass != null ? landmass.transform : null;
+            Transform landT = FindWorldLandTransform();
             RiverRegistry.SetLandTransform(landT);
+            if (landT != null && (landT.position.sqrMagnitude > 0.01f || landT.localScale != Vector3.one))
+                Debug.Log($"[RiverOverlay] WorldLand transform — pos={landT.position}, scale={landT.localScale}");
 
             if (catalog == null || catalog.all == null)
             {
@@ -117,35 +156,50 @@ namespace Game.World
             Debug.Log($"[RiverOverlay] 강 {riverCount}개 등록 — Registry polys {RiverRegistry.Count}, 시각 GameObjects {_spawned.Count}");
         }
 
-        // ─── 폴리라인 강 → LineRenderer (폭 widthKm) ────────────────────────
+        // ─── 폴리라인 강 → quad-strip 메쉬 (segment 마다 사각형, 시각 = 충돌과 일치) ───
 
         private GameObject BuildRiverLine(MapSubtractData d, Transform landT)
         {
+            // BuildSubtractPolygonsWorld 와 동일한 사각형들로 메쉬 빌드.
+            // → 시각 영역과 RiverRegistry 충돌 영역이 정확히 같음.
+            var polys = MapSubtractGeometry.BuildSubtractPolygonsWorld(d);
+            if (polys.Count == 0) return null;
+
             var go = new GameObject($"River_{d.displayNameKo ?? d.name}");
             go.transform.SetParent(transform);
-            var lr = go.AddComponent<LineRenderer>();
-            lr.useWorldSpace = true;
-            lr.alignment = LineAlignment.TransformZ;   // 라인 평면 = 객체 XY (아래에서 회전 적용해 XZ 와 일치)
-            go.transform.rotation = Quaternion.Euler(90f, 0f, 0f);   // local Z = world +Y → 라인은 XZ 평면에 평평
+            var mf = go.AddComponent<MeshFilter>();
+            var mr = go.AddComponent<MeshRenderer>();
+            mr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            mr.receiveShadows = false;
 
-            float widthUnits = d.widthKm / GeoCoordinate.KmPerUnit;
-            lr.startWidth = widthUnits;
-            lr.endWidth = widthUnits;
-            lr.numCapVertices = 8;
-            lr.numCornerVertices = 8;
-            lr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-            lr.receiveShadows = false;
-
-            lr.positionCount = d.points.Length;
-            for (int i = 0; i < d.points.Length; i++)
+            var verts = new List<Vector3>(polys.Count * 4);
+            var tris  = new List<int>(polys.Count * 6);
+            foreach (var poly in polys)
             {
-                var w = GeoCoordinate.LatLngToWorld(d.points[i].y, d.points[i].x);
-                var local = new Vector3(w.x, overlayY, w.z);
-                var world = landT != null ? landT.TransformPoint(local) : local;
-                lr.SetPosition(i, world);
+                if (poly.Length < 4) continue;
+                int baseIdx = verts.Count;
+                for (int i = 0; i < 4; i++)
+                {
+                    var local = new Vector3(poly[i].x, overlayY, poly[i].y);
+                    var world = landT != null ? landT.TransformPoint(local) : local;
+                    verts.Add(world);
+                }
+                // BuildSubtractPolygonsWorld 사각형 순서: TL(0), TR(1), BR(2), BL(3)
+                // 위에서 볼 때 CCW (normal +Y) — 0→3→1, 1→3→2
+                tris.Add(baseIdx + 0); tris.Add(baseIdx + 3); tris.Add(baseIdx + 1);
+                tris.Add(baseIdx + 1); tris.Add(baseIdx + 3); tris.Add(baseIdx + 2);
             }
 
-            lr.material = CreateWaterMaterial();
+            var mesh = new Mesh { name = $"RiverMesh_{d.name}" };
+            if (verts.Count > 65535)
+                mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+            mesh.SetVertices(verts);
+            mesh.SetTriangles(tris, 0);
+            mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
+            mf.sharedMesh = mesh;
+            mr.sharedMaterial = CreateWaterMaterial();
+
             return go;
         }
 
