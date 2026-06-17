@@ -30531,9 +30531,9 @@ MonoBehaviour:
     - {fileID: 1494138323695188, guid: 8d62cd78cacebae41a485b535b9084f7, type: 3}
     - {fileID: 6843553192576141062, guid: dcacddbd57d443e42a5623b9104fa2b1, type: 3}
   - regionName: "\uBD81\uADF9\uAD8C"
-    latMin: 50
-    latMax: 75
-    lngMin: 40
+    latMin: 60
+    latMax: 89
+    lngMin: -180
     lngMax: 180
     prefabs:
     - {fileID: 8630096253940133616, guid: 34a47df0986c0144fab7ffd60ef430b9, type: 3}

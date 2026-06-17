@@ -13,9 +13,10 @@
 - Inspector → `Prefabs (기본)` 에는 **모든 prefab** 드래그 (어디에도 매칭 안 될 때 fallback)
 - 그 아래 `Region Sets` 에 다음 표대로 영역 추가
 
-## 3. 지역별 식생 표 (12개 영역)
+## 3. 지역별 식생 표 (13개 영역)
 
 위에서 아래로 순서대로 배치하면 우선순위대로 매칭됨.
+**Element 0 (북극권)** 이 최우선 — lat 65+ 어디든 (그린란드·아이슬란드·스발바르·시베리아 북부·알래스카 북부) 다 잡음.
 
 | #   | Region Name          | latMin | latMax | lngMin | lngMax | 권장 prefab 예시                  |
 | --- | -------------------- | ------ | ------ | ------ | ------ | --------------------------------- | --- |
@@ -37,18 +38,19 @@
 
 `Assets/Game/Art/Models/Nature/` 위치한 prefab 들:
 
-| prefab                                  | 어울리는 지역                      |
-| --------------------------------------- | ---------------------------------- |
-| `palm` 계열 (palm-detailed-straight 등) | 열대 (3, 6, 9, 10)                 |
-| `Tree_Pine`                             | 침엽수림 (1, 4, 5, 7, 8, 11)       |
-| `Tree_Round`                            | 활엽수·열대 (1, 3, 5, 6, 7, 9, 10) |
-| `Tree_Dead`                             | 한대·사막 (4, 8, 12)               |
-| `Bush`                                  | 사막·관목지 (2, 3, 6, 10, 11, 12)  |
-| `Rock`, `Rock_Small`                    | 어디든 (전부)                      |
-| `Grass_Tuft`                            | 사막·초원 (2, 12)                  |
-| `Flower`                                | 온대 (1, 5)                        |
-| `Mountain_Big`, `Mountain_Peak`         | 산악 (3, 7, 10, 11)                |
-| `Hill_Round`                            | 평원·언덕 (1, 5, 7, 8)             |
+| prefab                                  | 어울리는 지역                       |
+| --------------------------------------- | ----------------------------------- |
+| `palm` 계열 (palm-detailed-straight 등) | 열대 (3, 6, 9, 10)                  |
+| `Tree_Pine`                             | 침엽수림 (1, 4, 5, 7, 8, 11)        |
+| `Tree_Round`                            | 활엽수·열대 (1, 3, 5, 6, 7, 9, 10)  |
+| `Tree_Dead`                             | **북극·한대·사막 (0, 4, 8, 12)**    |
+| `Bush`                                  | 사막·관목지 (2, 3, 6, 10, 11, 12)   |
+| `Rock`, `Rock_Small`                    | **어디든 (전부, 북극 0 포함)**      |
+| `Grass_Tuft`                            | 사막·초원 (2, 12)                   |
+| `Flower`                                | 온대 (1, 5)                         |
+| `Mountain_Big`, `Mountain_Peak`         | 산악 (3, 7, 10, 11)                 |
+| `Hill_Round`                            | 평원·언덕 (1, 5, 7, 8)              |
+| 얼음·눈 계열 (추가 시)                  | **북극권 (0)** — 새 얼음 prefab 권장 |
 | `Stump`                                 | 어디든                             |
 
 ## 5. Inspector 셋업 절차
@@ -60,21 +62,30 @@ NatureStreamer → Inspector → **Prefabs** (지역 매칭 없을 때 fallback)
 
 ### Step 2 — Region Sets 펼치기
 
-`Region Sets` 라벨 옆 ▶ 클릭 → **Size: 12** 입력. 12개 Element 슬롯 생성.
+`Region Sets` 라벨 옆 ▶ 클릭 → **Size: 13** 입력. 13개 Element 슬롯 생성.
 
 ### Step 3 — 각 영역 채우기
 
-위 표 순서대로 `Element 0 ~ 11` 채우기:
+위 표 순서대로 `Element 0 ~ 12` 채우기:
 
-**예시: Element 0 = 유럽**
+**예시: Element 0 = 북극권** (최우선)
+
+1. Region Name: `북극권` 입력
+2. Lat Min: `65`, Lat Max: `89`
+3. Lng Min: `-180`, Lng Max: `180`
+4. Prefabs: 얼음 prefab, `Tree_Dead`, `Rock`, `Rock_Small`, `Hill_Round` 드래그
+   - **나무 계열 (palm/Tree_Pine/Tree_Round) 제외** ← 핵심 (북극에 일반 나무 안 나오게)
+   - 이 영역이 Element 0 이라 lat 65+ 어디든 가장 먼저 매칭
+
+**예시: Element 1 = 유럽**
 
 1. Region Name: `유럽` 입력
 2. Lat Min: `35`, Lat Max: `71`
 3. Lng Min: `-10`, Lng Max: `40`
 4. Prefabs: `Tree_Pine`, `Tree_Round`, `Bush`, `Rock` 드래그
-   - **palm 계열 제외** ← 핵심 (유럽에 야자수 안 나오게)
+   - **palm 계열 제외**
 
-**예시: Element 2 = 열대 아프리카**
+**예시: Element 3 = 열대 아프리카**
 
 1. Region Name: `열대 아프리카`
 2. Lat Min: `-35`, Lat Max: `15`
@@ -94,6 +105,8 @@ Inspector 변경은 자동 저장 (Ctrl+S 한 번 권장).
 2. 배를 유럽 항구 (예: 리스본, 런던) 근처로 이동
 3. 카메라가 새 chunk 진입 시 → **유럽엔 침엽수만, 야자수 없음**
 4. 적도 부근 (예: 잔지바르, 칼리만탄) 가면 → **야자수 등장**
+5. **북쪽 끝 (lat 65+, 그린란드·아이슬란드·스발바르·시베리아 북부) 가면 → 얼음·Tree_Dead 만 나옴**
+   - TyphoonSpawner 의 `Spawn Now Test` 로 임의 위치 확인 가능
 
 ## 6. 영역 정의 팁
 
