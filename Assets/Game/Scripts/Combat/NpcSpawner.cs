@@ -224,18 +224,29 @@ namespace Game.Combat
             _npcCurrentPort.Remove(npcId);
             if (_inPort.TryGetValue(fromPortId, out var list)) list.Remove(def);
 
-            // 항해 목표 결정 — destinationPort 가 있으면 cycle, 없으면 wander
+            // 항해 목표 결정 — 모든 NPC 가 cycle (home ↔ destination/random)
+            // home 이 null 이면 ResolveHomePort 가 character·destinationPort·nation 등에서 추론
             PortData fromPort = FindPortById(fromPortId);
+            PortData home = ResolveHomePort(def);
             PortData target = null;
             float wanderSeconds = 0f;
-            if (def.destinationPort != null && def.homePort != null)
+            if (home != null)
             {
-                // 현재 항구의 반대편 (home ↔ destination) — 상선·호위선
-                target = (fromPort == def.homePort) ? def.destinationPort : def.homePort;
+                if (fromPort == home)
+                {
+                    target = def.destinationPort != null && def.destinationPort != home
+                        ? def.destinationPort
+                        : PickRandomDestinationPort(def);
+                }
+                else
+                {
+                    target = home;
+                }
             }
-            else
+
+            // 목적지 못 정한 경우만 wander fallback (homePort 없는 정의 등)
+            if (target == null)
             {
-                // wander 30~50초 후 자동 본거지 복귀 — 해적
                 wanderSeconds = Random.Range(wanderDurationMin, wanderDurationMax);
             }
 
@@ -245,19 +256,58 @@ namespace Game.Combat
             if (ship != null) ship.ConfigureSailing(target, wanderSeconds);
         }
 
+        /// <summary>def.homePort 가 아닌 항구 중 랜덤 하나 — 매번 다른 목적지로 항해.</summary>
+        private PortData PickRandomDestinationPort(NpcDefinition def)
+        {
+            if (portCatalog == null || portCatalog.all == null || portCatalog.all.Length == 0)
+                return null;
+            var home = ResolveHomePort(def);
+            int tries = 16;
+            while (tries-- > 0)
+            {
+                var p = portCatalog.all[Random.Range(0, portCatalog.all.Length)];
+                if (p != null && p != home && !string.IsNullOrEmpty(p.portId))
+                    return p;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// def.homePort 가 null 인 NPC 의 home 자동 추론.
+        /// 우선순위: def.homePort → character.homePort → destinationPort → patrolPorts[0]
+        ///         → character.nation.startingPort → portCatalog 의 첫 항구.
+        /// </summary>
+        public PortData ResolveHomePort(NpcDefinition def)
+        {
+            if (def == null) return null;
+            if (def.homePort != null) return def.homePort;
+            if (def.character != null && def.character.homePort != null) return def.character.homePort;
+            if (def.destinationPort != null) return def.destinationPort;
+            if (def.patrolPorts != null && def.patrolPorts.Length > 0 && def.patrolPorts[0] != null)
+                return def.patrolPorts[0];
+            if (def.character != null && def.character.nation != null
+                && def.character.nation.startingPort != null)
+                return def.character.nation.startingPort;
+            if (portCatalog != null && portCatalog.all != null && portCatalog.all.Length > 0)
+            {
+                foreach (var p in portCatalog.all) if (p != null) return p;
+            }
+            return null;
+        }
+
         /// <summary>전투 패배 NPC → 본거지 광장으로 즉시 이동. NpcShip 이 호출.</summary>
         public void OnNpcDefeated(NpcDefinition def)
         {
             if (def == null || string.IsNullOrEmpty(def.npcId)) return;
             _spawned.Remove(def.npcId);
-            SendNpcToPort(def, 0f, def.homePort);   // 본거지 광장에 즉시 노출
+            SendNpcToPort(def, 0f, ResolveHomePort(def));   // 본거지 광장에 즉시 노출
         }
 
         /// <summary>NPC 항구 진입 + 광장 등록. 즉시 다음 roll 예약.</summary>
         public void SendNpcToPort(NpcDefinition def, float unused, PortData port = null)
         {
             if (def == null || string.IsNullOrEmpty(def.npcId)) return;
-            if (port == null) port = def.homePort;
+            if (port == null) port = ResolveHomePort(def);
             if (port == null || string.IsNullOrEmpty(port.portId)) return;
 
             _spawned.Remove(def.npcId);
@@ -367,13 +417,23 @@ namespace Game.Combat
             var origin = PickStartPortFor(def);
             Vector3 spawnPos = origin != null ? FindSeaPositionNearPort(origin) : ComputeFreshPosition(def);
 
+            PortData home = ResolveHomePort(def);
             PortData target = null;
             float wanderSeconds = 0f;
-            if (def.destinationPort != null && def.homePort != null)
+            if (home != null)
             {
-                target = (origin == def.homePort) ? def.destinationPort : def.homePort;
+                if (origin == home)
+                {
+                    target = def.destinationPort != null && def.destinationPort != home
+                        ? def.destinationPort
+                        : PickRandomDestinationPort(def);
+                }
+                else
+                {
+                    target = home;
+                }
             }
-            else
+            if (target == null)
             {
                 wanderSeconds = Random.Range(wanderDurationMin, wanderDurationMax);
             }
@@ -382,14 +442,15 @@ namespace Game.Combat
             if (ship != null) ship.ConfigureSailing(target, wanderSeconds);
         }
 
-        /// <summary>NPC 의 시작 항구 선택 — destinationPort 있으면 home/destination 50:50, 없으면 homePort.</summary>
+        /// <summary>NPC 의 시작 항구 선택 — destinationPort 있으면 home/destination 50:50, 없으면 resolved homePort.</summary>
         private PortData PickStartPortFor(NpcDefinition def)
         {
-            if (def.homePort != null && def.destinationPort != null)
+            var home = ResolveHomePort(def);
+            if (home != null && def.destinationPort != null && def.destinationPort != home)
             {
-                return Random.value < 0.5f ? def.homePort : def.destinationPort;
+                return Random.value < 0.5f ? home : def.destinationPort;
             }
-            return def.homePort;
+            return home;
         }
 
         private NpcDefinition FindDefById(string npcId)
@@ -404,9 +465,10 @@ namespace Game.Combat
 
         private Vector3 ComputeFreshPosition(NpcDefinition def)
         {
-            if (def.homePort != null)
+            var home = ResolveHomePort(def);
+            if (home != null)
             {
-                return FindSeaPositionNearPort(def.homePort);
+                return FindSeaPositionNearPort(home);
             }
             // homePort 없으면 무작위 해상 — 몇 번 재추첨 후 land 면 마지막값 그대로 사용
             for (int i = 0; i < 8; i++)
