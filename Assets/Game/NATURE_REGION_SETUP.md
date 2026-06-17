@@ -19,6 +19,7 @@
 
 | #   | Region Name          | latMin | latMax | lngMin | lngMax | 권장 prefab 예시                  |
 | --- | -------------------- | ------ | ------ | ------ | ------ | --------------------------------- | --- |
+| 0   | 북극권               | 65     | 89     | -180   | 180    | 얼음·눈·Tree_Dead·Rock            | x   |
 | 1   | 유럽                 | 35     | 71     | -10    | 40     | Tree_Pine, Tree_Round, Bush, Rock | x   |
 | 2   | 사하라·중동 사막     | 15     | 35     | -20    | 60     | Bush, Rock, Grass_Tuft (희소)     |
 | 3   | 열대 아프리카        | -35    | 15     | -20    | 50     | palm, Tree_Round, Bush, Mountain  | x   |
