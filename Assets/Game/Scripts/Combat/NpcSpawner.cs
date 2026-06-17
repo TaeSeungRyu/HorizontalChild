@@ -368,10 +368,45 @@ namespace Game.Combat
                 if (ship != null)
                 {
                     ship.RouteIndex = s.routeIndex;
+                    // 저장에는 sailingTarget 이 직렬화되지 않음 → PlaceInitial 과 동일 로직으로 새 target 부여
+                    // (이게 없으면 NPC 가 영원히 wander 만 함 — 빙글빙글 버그)
+                    AssignFreshSailingTarget(ship, def);
                     spawned++;
                 }
             }
             return spawned;
+        }
+
+        /// <summary>현재 위치 기준 fresh sailing target 부여. PlaceInitial / Undock 과 동일 정책.</summary>
+        private void AssignFreshSailingTarget(NpcShip ship, NpcDefinition def)
+        {
+            PortData home = ResolveHomePort(def);
+            PortData target = null;
+            float wanderSeconds = 0f;
+
+            // 현재 위치가 home 에 가까우면 → destination 으로 출항. 멀면 → home 으로 복귀.
+            if (home != null)
+            {
+                Vector3 homeWorld = GeoCoordinate.LatLngToWorld(home.latitude, home.longitude);
+                float distToHome = Vector3.Distance(ship.transform.position, homeWorld);
+                bool nearHome = distToHome < homePortSpawnDistance * 2f;
+
+                if (nearHome)
+                {
+                    target = def.destinationPort != null && def.destinationPort != home
+                        ? def.destinationPort
+                        : PickRandomDestinationPort(def);
+                }
+                else
+                {
+                    target = home;
+                }
+            }
+            if (target == null)
+            {
+                wanderSeconds = Random.Range(wanderDurationMin, wanderDurationMax);
+            }
+            ship.ConfigureSailing(target, wanderSeconds);
         }
 
         private int CountValidPortEntries(List<NpcRespawnEntry> entries)

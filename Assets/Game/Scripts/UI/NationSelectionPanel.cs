@@ -159,6 +159,14 @@ namespace Game.UI
         {
             if (_selected == null) return;
 
+            // 0) PlayerShip 안전 확보 — Inspector 누락 시 자동 탐색 (Bug: 조선 선택해도 엔리케 왕자 남는 케이스)
+            if (playerShip == null)
+            {
+                playerShip = FindAnyObjectByType<ShipController>(FindObjectsInactive.Include);
+                if (playerShip != null)
+                    Debug.LogWarning($"[NationSelectionPanel] Inspector 의 playerShip 미할당 — 자동 탐색으로 {playerShip.name} 사용.");
+            }
+
             // 1) GameSession 갱신
             if (gameSession == null) gameSession = GameSession.Instance;
             gameSession?.SetSelectedNation(_selected);
@@ -189,6 +197,10 @@ namespace Game.UI
             {
                 playerShip.captain = _selected.startingCharacter;
                 Debug.Log($"[NationSelectionPanel] 선장 할당: {_selected.startingCharacter.displayNameKo} (용기 {_selected.startingCharacter.bravery} / 항해 {_selected.startingCharacter.seamanship} / 눈썰미 {_selected.startingCharacter.keenEye})");
+            }
+            else if (_selected.startingCharacter == null)
+            {
+                Debug.LogWarning($"[NationSelectionPanel] {_selected.displayNameKo} 의 startingCharacter 가 null — 선장 미할당. M2CharacterSeeder 실행 + Game ▸ Refresh All Catalogs 권장.");
             }
 
             // 3.5) 시작 배 할당 — startingShip 있으면 그것, 없으면 ShipController.Start fallback 에 맡김
