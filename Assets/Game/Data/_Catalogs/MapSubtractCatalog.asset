@@ -12,4 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2df8f6307d038e4ba4f257e39317025, type: 3}
   m_Name: MapSubtractCatalog
   m_EditorClassIdentifier: Game::Game.Data.MapSubtractCatalog
-  all: []
+  all:
+  - {fileID: 11400000, guid: 29098e22cf122294fac0c470fe0bcdcd, type: 2}
+  - {fileID: 11400000, guid: 99b931f6f91b5a348bb03d458d60b26b, type: 2}
+  - {fileID: 11400000, guid: 7153268060f54414097743a9457d3a68, type: 2}
+  - {fileID: 11400000, guid: 0549c277d170af3429fccdc7b5cf4fa1, type: 2}
+  - {fileID: 11400000, guid: 3671f63ee28dfbc4393a4c1e7d47c78a, type: 2}
+  - {fileID: 11400000, guid: 612e9e8e373540641ac94be563fee287, type: 2}
+  - {fileID: 11400000, guid: 92772abb374ef3b48bea4bff432fabcd, type: 2}
+  - {fileID: 11400000, guid: c4c5a03785ea24c40b21dc7aeb91cf50, type: 2}
+  - {fileID: 11400000, guid: 1091bb6eafec24349ac85cb6e4cbecd0, type: 2}
+  - {fileID: 11400000, guid: 076ce17aa0588c2458feee797f0535d7, type: 2}
+  - {fileID: 11400000, guid: 2cd867e3994c33d46994f70b448b8230, type: 2}
+  - {fileID: 11400000, guid: d7580f3dcb9b2c04c9f4fa612525be2a, type: 2}
+  - {fileID: 11400000, guid: 57d7f98ef9646124e9ffac27d6bf7c1d, type: 2}
+  - {fileID: 11400000, guid: 0ff91ad90d61d0e4f8c18ba0d0e0b19e, type: 2}
+  - {fileID: 11400000, guid: 505cb4f1fe14f5140ad7d23fa0984371, type: 2}

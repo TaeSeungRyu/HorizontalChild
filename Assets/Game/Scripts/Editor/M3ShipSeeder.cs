@@ -188,22 +188,52 @@ namespace Game.Editor
                 s.shipId = "ship.east_indiaman";
                 s.displayName = "동인도무역선";
                 s.cannonPower = 16; s.speed = 5; s.cargoCapacity = 500; s.maxDurability = 170;
-                s.attackInterval = 1.7f;
+                s.attackInterval = 2.3f;
                 s.basePrice = 12000;
+                s.size = ShipSize.Large;
+                s.cannonColor = new Color(0.15f, 0.35f, 0.60f, 1f);   // 영국 진청
                 s.shortDescription = "큰 화물과 든든한 대포를 함께 갖춘 무역선이에요.";
                 s.longDescription = "네덜란드·영국 동인도회사가 인도양·동남아 무역에 띄운 거대 상선. 해적도 만만하게 못 봐요.";
                 s.sourceUrl = "https://ko.wikipedia.org/wiki/동인도회사";
+            });
+
+            CreateOrLoadShip("Ship_LaReal.asset", s =>
+            {
+                s.shipId = "ship.la_real";
+                s.displayName = "라레아르";
+                s.cannonPower = 8; s.speed = 9; s.cargoCapacity = 120; s.maxDurability = 140;
+                s.attackInterval = 1.0f;
+                s.basePrice = 8500;
+                s.size = ShipSize.Medium;
+                s.cannonColor = new Color(0.95f, 0.55f, 0.25f, 1f);   // 스페인 금적
+                s.shortDescription = "스페인 무적함대의 화려한 갤리 기함이에요.";
+                s.longDescription = "1571년 레판토 해전에서 돈 후안 데 아우스트리아가 지휘한 기함. 노와 라틴 돛을 함께 쓰고 선미에는 호화 조각이 가득해요.";
+                s.sourceUrl = "https://en.wikipedia.org/wiki/La_Real";
+            });
+
+            CreateOrLoadShip("Ship_VenetianGalleass.asset", s =>
+            {
+                s.shipId = "ship.venetian_galleass";
+                s.displayName = "베네치아 갤리어스";
+                s.cannonPower = 18; s.speed = 6; s.cargoCapacity = 130; s.maxDurability = 160;
+                s.attackInterval = 1.1f;
+                s.basePrice = 9500;
+                s.size = ShipSize.Large;
+                s.cannonColor = new Color(0.50f, 0.25f, 0.65f, 1f);   // 베네치아 진보라
+                s.shortDescription = "베네치아 공화국의 중무장 갤리어스예요.";
+                s.longDescription = "양옆에 대포 구멍이 빼곡한 2층 갑판 군함. 레판토 해전에서 오스만 전열을 깬 핵심 전력이에요.";
+                s.sourceUrl = "https://en.wikipedia.org/wiki/Galleass";
             });
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
             Debug.Log(
-                "[M3ShipSeeder] 완료 — 총 15종 배 시드 (기존 에셋은 보존).\n" +
-                "  Tier 1: Caravel · 라틴 카라벨 · 다우선 · 코그선\n" +
+                "[M3ShipSeeder] 완료 — 총 17종 배 시드 (기존 에셋은 보존).\n" +
+                "  Tier 1: 라틴 카라벨 · 다우선 · 코그선\n" +
                 "  Tier 2: 캐릭선 · 갤리선 · 정크선 · 플라이트선\n" +
-                "  Tier 3: 산타마리아호 · 갈레온선 · 갤리어스 · 판옥선\n" +
-                "  Tier 4: 거북선 · 클리퍼 · 동인도무역선\n" +
+                "  Tier 3: 카라벨 · 산타마리아호 · 갈레온선 · 갤리어스 · 판옥선\n" +
+                "  Tier 4: 거북선 · 라레아르 · 베네치아 갤리어스 · 클리퍼 · 동인도무역선\n" +
                 "다음: Game ▸ Refresh All Catalogs → ShipCatalog 자동 채움.");
         }
 

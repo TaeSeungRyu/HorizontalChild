@@ -108,7 +108,7 @@ namespace Game.Combat
 
         private static Color HullColorFor(NpcType type) => type switch
         {
-            NpcType.Pirate => new Color(0.5f, 0.15f, 0.15f),    // 어두운 빨강
+            NpcType.Pirate => new Color(0.12f, 0.10f, 0.09f),   // 거의 검정 (해적선 분위기)
             NpcType.Merchant => new Color(0.55f, 0.4f, 0.25f),  // 따뜻한 갈색
             NpcType.Escort => new Color(0.25f, 0.4f, 0.55f),    // 청회색
             _ => new Color(0.4f, 0.3f, 0.2f),

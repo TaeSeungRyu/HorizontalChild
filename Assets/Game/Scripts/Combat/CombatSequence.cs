@@ -53,8 +53,13 @@ namespace Game.Combat
         [Tooltip("parabolic 정점 높이.")]
         public float cannonballArcHeight = 4f;
 
+        [Tooltip("ShipData.cannonColor 가 비어있을 때 플레이어 fallback 색.")]
         public Color playerCannonColor = new Color(0.95f, 0.85f, 0.2f);
+        [Tooltip("ShipData.cannonColor 가 비어있을 때 NPC fallback 색.")]
         public Color npcCannonColor = new Color(0.15f, 0.15f, 0.15f);
+
+        [Tooltip("ShipSize 가 Medium/Large 일 때 추가 시각용 포탄 사이 간격(초). 데미지에는 영향 없음.")]
+        public float multiShotDelay = 0.1f;
 
         [Header("Tuning — Hit Flash")]
         public Color hitFlashColor = Color.white;
@@ -105,7 +110,9 @@ namespace Game.Combat
             float playerInterval = (ship != null && ship.attackInterval >= 0.3f) ? ship.attackInterval : 1.5f;
             int playerDmg = (ship != null && ship.cannonPower >= 1) ? ship.cannonPower : 3;
             float playerHit = ComputePlayerHitChance(player);
-            StartCoroutine(PlayerFireLoop(player, attackers, playerInterval, playerDmg, playerHit));
+            int playerBallCount = BallCountFor(ship);
+            Color playerColor = (ship != null) ? ship.cannonColor : playerCannonColor;
+            StartCoroutine(PlayerFireLoop(player, attackers, playerInterval, playerDmg, playerHit, playerBallCount, playerColor));
 
             for (int i = 0; i < attackers.Count; i++)
             {
@@ -207,7 +214,7 @@ namespace Game.Combat
         // ─── 발사 루프 ──────────────────────────────────────────────────────
 
         private IEnumerator PlayerFireLoop(ShipController player, List<NpcShip> targets,
-            float interval, int damage, float hitChance)
+            float interval, int damage, float hitChance, int ballCount, Color color)
         {
             yield return new WaitForSeconds(0.3f);
             while (!_combatOver)
@@ -216,9 +223,16 @@ namespace Game.Combat
                 var target = FindClosestAlive(targets, player.transform.position);
                 if (target == null) yield break;
                 bool willHit = Random.value <= hitChance;
-                StartCoroutine(FireCannonball(player.transform, target.transform, playerCannonColor,
-                    damage, willHit, attackerIsPlayer: true, player, target));
-                yield return new WaitForSeconds(interval);
+                // 첫 발만 데미지 — 나머지는 시각 전용 (0.1초씩 늦게 발사)
+                for (int b = 0; b < ballCount; b++)
+                {
+                    bool isDamageBall = (b == 0);
+                    StartCoroutine(FireCannonball(player.transform, target.transform, color,
+                        damage, willHit, attackerIsPlayer: true, player, target, isDamageBall));
+                    if (b < ballCount - 1) yield return new WaitForSeconds(multiShotDelay);
+                }
+                float remaining = interval - multiShotDelay * (ballCount - 1);
+                if (remaining > 0f) yield return new WaitForSeconds(remaining);
             }
         }
 
@@ -227,21 +241,42 @@ namespace Game.Combat
             yield return new WaitForSeconds(initialDelay);
             int damage = npc.CannonPower;
             float interval = npc.AttackInterval;
+            var npcShip = (npc.definition != null) ? npc.definition.shipData : null;
+            int ballCount = BallCountFor(npcShip);
+            Color color = (npcShip != null) ? npcShip.cannonColor : npcCannonColor;
             while (!_combatOver)
             {
                 if (npc == null || npc.CurrentDurability <= 0) yield break;
                 if (player == null) yield break;
                 bool willHit = Random.value <= hitChance;
-                StartCoroutine(FireCannonball(npc.transform, player.transform, npcCannonColor,
-                    damage, willHit, attackerIsPlayer: false, player, npc));
-                yield return new WaitForSeconds(interval);
+                for (int b = 0; b < ballCount; b++)
+                {
+                    bool isDamageBall = (b == 0);
+                    StartCoroutine(FireCannonball(npc.transform, player.transform, color,
+                        damage, willHit, attackerIsPlayer: false, player, npc, isDamageBall));
+                    if (b < ballCount - 1) yield return new WaitForSeconds(multiShotDelay);
+                }
+                float remaining = interval - multiShotDelay * (ballCount - 1);
+                if (remaining > 0f) yield return new WaitForSeconds(remaining);
             }
+        }
+
+        private static int BallCountFor(ShipData ship)
+        {
+            if (ship == null) return 1;
+            return ship.size switch
+            {
+                ShipSize.Large => 3,
+                ShipSize.Medium => 2,
+                _ => 1,
+            };
         }
 
         // ─── 포탄·이펙트 ────────────────────────────────────────────────────
 
         private IEnumerator FireCannonball(Transform from, Transform to, Color color,
-            int damage, bool willHit, bool attackerIsPlayer, ShipController playerRef, NpcShip npcRef)
+            int damage, bool willHit, bool attackerIsPlayer, ShipController playerRef, NpcShip npcRef,
+            bool isDamageBall)
         {
             if (from == null || to == null) yield break;
 
@@ -276,8 +311,8 @@ namespace Game.Combat
                 yield return null;
             }
 
-            // 도착 — 무효화 검사
-            if (!_combatOver && willHit)
+            // 도착 — 데미지 볼만 실제 데미지·hit flash 적용 (시각용 볼은 도착하고 사라짐)
+            if (!_combatOver && willHit && isDamageBall)
             {
                 if (attackerIsPlayer && npcRef != null && npcRef.CurrentDurability > 0)
                 {

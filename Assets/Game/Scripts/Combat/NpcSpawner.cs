@@ -556,10 +556,10 @@ namespace Game.Combat
                 {
                     visualCol.enabled = false;
                 }
-                // 해적은 빨강 틴트 — 어린이가 한눈에 적임을 알아볼 수 있게
+                // 해적은 어두운 (검정에 가까운) 틴트 — 적의 분위기는 살리되 빨강의 강한 자극은 완화
                 if (def.type == NpcType.Pirate)
                 {
-                    var tint = new Color(0.85f, 0.2f, 0.2f);
+                    var tint = new Color(0.15f, 0.12f, 0.10f);   // 거의 검정, 살짝 따뜻한 갈색 톤
                     foreach (var r in visual.GetComponentsInChildren<Renderer>())
                     {
                         if (r == null || r.material == null) continue;
@@ -631,7 +631,7 @@ namespace Game.Combat
 
         private static Color ColorFor(NpcType type) => type switch
         {
-            NpcType.Pirate => new Color(0.85f, 0.20f, 0.20f),    // 빨강
+            NpcType.Pirate => new Color(0.15f, 0.12f, 0.10f),    // 어두운 (검정 톤)
             NpcType.Merchant => new Color(0.90f, 0.75f, 0.25f),  // 노랑
             NpcType.Escort => new Color(0.30f, 0.60f, 0.90f),    // 파랑
             _ => Color.white,
