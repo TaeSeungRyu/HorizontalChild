@@ -87,13 +87,15 @@ namespace Game.World
         }
 
         /// <summary>
-        /// 눈썰미 보정 — 능력치(1~100)에 따라 허용 오차를 살짝 늘려준다.
-        /// keenEye 1   → base ×1.0
-        /// keenEye 100 → base ×1.67 (base 0.03 → 0.05)
+        /// 눈썰미 보정 — 능력치(0~150)에 따라 허용 오차를 늘려준다.
+        ///   tolerance × (1 + keenEye/100 × 0.5)
+        /// keenEye 0   → ×1.0
+        /// keenEye 100 → ×1.5  (base 0.03 → 0.045)
+        /// keenEye 150 → ×1.75 (선원 KeenEyeBonus 합산 시 최대)
         /// </summary>
         public static float ApplyKeenEyeBonus(float toleranceBase, int keenEye)
         {
-            float multiplier = 1f + (Mathf.Clamp(keenEye, 1, 100) / 100f) * 0.67f;
+            float multiplier = 1f + (Mathf.Clamp(keenEye, 0, 150) / 100f) * 0.5f;
             return toleranceBase * multiplier;
         }
     }

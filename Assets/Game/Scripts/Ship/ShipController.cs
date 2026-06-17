@@ -354,7 +354,8 @@ namespace Game.Ship
             // 선원 보너스 합산
             var crew = Game.Player.PlayerCrew.Instance;
             if (crew != null) seamanship += crew.SeamanshipBonus;
-            float bonus = 1f + (Mathf.Clamp(seamanship, 1, 200) / 100f) * 0.5f;
+            // 항해 0~150 클램프 (캡틴 100 + 선원 50 보너스 한도) × 0.5 비율 → 최대 +75% 속도
+            float bonus = 1f + (Mathf.Clamp(seamanship, 0, 150) / 100f) * 0.5f;
             return baseSpeed * bonus * testSpeedMultiplier;
         }
 

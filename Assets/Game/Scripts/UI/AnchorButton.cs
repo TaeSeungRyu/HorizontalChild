@@ -137,8 +137,10 @@ namespace Game.UI
                 return;
             }
 
-            // 거리 체크 + 눈썰미 보너스
+            // 거리 체크 + 눈썰미 보너스 (선원 KeenEyeBonus 합산)
             int keenEye = playerShip.captain != null ? playerShip.captain.keenEye : 50;
+            if (Game.Player.PlayerCrew.Instance != null)
+                keenEye += Game.Player.PlayerCrew.Instance.KeenEyeBonus;
             float adjusted = GeoCoordinate.ApplyKeenEyeBonus(target.searchToleranceBase, keenEye);
             float toleranceDist = GeoCoordinate.GetSearchToleranceDistance(adjusted);
 

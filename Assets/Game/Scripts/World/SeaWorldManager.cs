@@ -193,6 +193,8 @@ namespace Game.World
 
             var anchorPos = playerShip.transform.position;
             int keenEye = playerShip.captain != null ? playerShip.captain.keenEye : 50;
+            if (Game.Player.PlayerCrew.Instance != null)
+                keenEye += Game.Player.PlayerCrew.Instance.KeenEyeBonus;
 
             float closestDist = float.MaxValue;
             DiscoveryData closest = null;

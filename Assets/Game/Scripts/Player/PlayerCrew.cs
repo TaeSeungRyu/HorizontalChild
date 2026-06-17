@@ -69,15 +69,29 @@ namespace Game.Player
             onCrewChanged?.Invoke();
         }
 
-        // 능력치 보너스 합산 — 선장 stats 에 더해짐
+        /// <summary>
+        /// 전문가 보너스 — 각 선원의 **가장 높은 능력치(전공)** 에만 보너스 부여.
+        ///   bonus = clamp(maxStat / 20, floor, 5)
+        ///   floor: 해적 = 3 / 그 외 = 1
+        /// 한 선원은 한 stat 에만 기여하며, 균등 시 우선순위는 용기 > 항해 > 눈썰미.
+        /// 합산값은 ShipController·CombatSequence·발견 시스템이 captain.stat 에 더함.
+        /// </summary>
         public Vector3Int TotalHireBonus()
         {
-            var sum = Vector3Int.zero;
+            int b = 0, s = 0, k = 0;
             foreach (var n in _crew)
             {
-                if (n != null) sum += n.hireBonus;
+                if (n == null || n.character == null) continue;
+                var c = n.character;
+                int maxStat = Mathf.Max(c.bravery, Mathf.Max(c.seamanship, c.keenEye));
+                int floor = (n.type == NpcType.Pirate) ? 3 : 1;
+                int bonus = Mathf.Clamp(maxStat / 20, floor, 5);
+
+                if (c.bravery >= c.seamanship && c.bravery >= c.keenEye) b += bonus;
+                else if (c.seamanship >= c.keenEye) s += bonus;
+                else k += bonus;
             }
-            return sum;
+            return new Vector3Int(b, s, k);
         }
         public int BraveryBonus => TotalHireBonus().x;
         public int SeamanshipBonus => TotalHireBonus().y;

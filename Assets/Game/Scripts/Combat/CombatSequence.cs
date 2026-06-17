@@ -31,12 +31,6 @@ namespace Game.Combat
         public static CombatSequence Instance { get; private set; }
 
         [Header("Tuning — 시뮬레이션")]
-        [Tooltip("플레이어 기본 명중률(50). seamanship 1~100 보정 적용.")]
-        [Range(0.2f, 0.95f)] public float playerBaseHitChance = 0.65f;
-
-        [Tooltip("NPC 기본 명중률. bravery 1~100 보정 적용.")]
-        [Range(0.2f, 0.95f)] public float npcBaseHitChance = 0.55f;
-
         [Tooltip("최대 전투 시간(초). 안전장치 — 양측 다 안 죽으면 더 큰 durability 가 승.")]
         [Range(5f, 60f)] public float maxCombatSeconds = 20f;
 
@@ -108,18 +102,23 @@ namespace Game.Combat
             // 3) 발사 루프
             var ship = player.shipData;
             float playerInterval = (ship != null && ship.attackInterval >= 0.3f) ? ship.attackInterval : 1.5f;
-            int playerDmg = (ship != null && ship.cannonPower >= 1) ? ship.cannonPower : 3;
-            float playerHit = ComputePlayerHitChance(player);
+            int basePlayerDmg = (ship != null && ship.cannonPower >= 1) ? ship.cannonPower : 3;
+            // 용기 → 데미지 보정. captain + 선원 BraveryBonus 합산 후 0~150 클램프, × (1 + b/100 × 0.5)
+            int playerBravery = (player.captain != null ? player.captain.bravery : 50);
+            if (Game.Player.PlayerCrew.Instance != null)
+                playerBravery += Game.Player.PlayerCrew.Instance.BraveryBonus;
+            playerBravery = Mathf.Clamp(playerBravery, 0, 150);
+            int playerDmg = Mathf.RoundToInt(basePlayerDmg * (1f + playerBravery / 100f * 0.5f));
             int playerBallCount = BallCountFor(ship);
             Color playerColor = (ship != null) ? ship.cannonColor : playerCannonColor;
-            StartCoroutine(PlayerFireLoop(player, attackers, playerInterval, playerDmg, playerHit, playerBallCount, playerColor));
+            StartCoroutine(PlayerFireLoop(player, attackers, playerInterval, playerDmg, playerBallCount, playerColor));
 
             for (int i = 0; i < attackers.Count; i++)
             {
                 var npc = attackers[i];
                 if (npc == null) continue;
                 // NPC 들끼리 발사 타이밍 살짝 분산 — 동시 발사 부자연스러움 회피
-                StartCoroutine(NpcFireLoop(player, npc, ComputeNpcHitChance(npc), 0.55f + i * 0.25f));
+                StartCoroutine(NpcFireLoop(player, npc, 0.55f + i * 0.25f));
             }
 
             // 4) 종료 대기
@@ -196,25 +195,11 @@ namespace Game.Combat
             return best;
         }
 
-        private float ComputePlayerHitChance(ShipController player)
-        {
-            int seamanship = (player != null && player.captain != null) ? player.captain.seamanship : 50;
-            if (Game.Player.PlayerCrew.Instance != null)
-                seamanship += Game.Player.PlayerCrew.Instance.SeamanshipBonus;
-            return Mathf.Clamp(playerBaseHitChance + (seamanship - 50) * 0.003f, 0.2f, 0.95f);
-        }
-
-        private float ComputeNpcHitChance(NpcShip npcShip)
-        {
-            int bravery = (npcShip != null && npcShip.definition != null && npcShip.definition.character != null)
-                ? npcShip.definition.character.bravery : 50;
-            return Mathf.Clamp(npcBaseHitChance + (bravery - 50) * 0.003f, 0.2f, 0.95f);
-        }
-
         // ─── 발사 루프 ──────────────────────────────────────────────────────
+        // 명중률 폐지 — 모든 발은 100% 명중. 데미지는 용기 보정 후 base × (1 + b/100 × 0.5).
 
         private IEnumerator PlayerFireLoop(ShipController player, List<NpcShip> targets,
-            float interval, int damage, float hitChance, int ballCount, Color color)
+            float interval, int damage, int ballCount, Color color)
         {
             yield return new WaitForSeconds(0.3f);
             while (!_combatOver)
@@ -222,13 +207,12 @@ namespace Game.Combat
                 if (player == null) yield break;
                 var target = FindClosestAlive(targets, player.transform.position);
                 if (target == null) yield break;
-                bool willHit = Random.value <= hitChance;
                 // 첫 발만 데미지 — 나머지는 시각 전용 (0.1초씩 늦게 발사)
                 for (int b = 0; b < ballCount; b++)
                 {
                     bool isDamageBall = (b == 0);
                     StartCoroutine(FireCannonball(player.transform, target.transform, color,
-                        damage, willHit, attackerIsPlayer: true, player, target, isDamageBall));
+                        damage, attackerIsPlayer: true, player, target, isDamageBall));
                     if (b < ballCount - 1) yield return new WaitForSeconds(multiShotDelay);
                 }
                 float remaining = interval - multiShotDelay * (ballCount - 1);
@@ -236,10 +220,14 @@ namespace Game.Combat
             }
         }
 
-        private IEnumerator NpcFireLoop(ShipController player, NpcShip npc, float hitChance, float initialDelay)
+        private IEnumerator NpcFireLoop(ShipController player, NpcShip npc, float initialDelay)
         {
             yield return new WaitForSeconds(initialDelay);
-            int damage = npc.CannonPower;
+            int baseDamage = npc.CannonPower;
+            int npcBravery = (npc.definition != null && npc.definition.character != null)
+                ? npc.definition.character.bravery : 50;
+            npcBravery = Mathf.Clamp(npcBravery, 0, 100);
+            int damage = Mathf.RoundToInt(baseDamage * (1f + npcBravery / 100f * 0.5f));
             float interval = npc.AttackInterval;
             var npcShip = (npc.definition != null) ? npc.definition.shipData : null;
             int ballCount = BallCountFor(npcShip);
@@ -248,12 +236,11 @@ namespace Game.Combat
             {
                 if (npc == null || npc.CurrentDurability <= 0) yield break;
                 if (player == null) yield break;
-                bool willHit = Random.value <= hitChance;
                 for (int b = 0; b < ballCount; b++)
                 {
                     bool isDamageBall = (b == 0);
                     StartCoroutine(FireCannonball(npc.transform, player.transform, color,
-                        damage, willHit, attackerIsPlayer: false, player, npc, isDamageBall));
+                        damage, attackerIsPlayer: false, player, npc, isDamageBall));
                     if (b < ballCount - 1) yield return new WaitForSeconds(multiShotDelay);
                 }
                 float remaining = interval - multiShotDelay * (ballCount - 1);
@@ -275,7 +262,7 @@ namespace Game.Combat
         // ─── 포탄·이펙트 ────────────────────────────────────────────────────
 
         private IEnumerator FireCannonball(Transform from, Transform to, Color color,
-            int damage, bool willHit, bool attackerIsPlayer, ShipController playerRef, NpcShip npcRef,
+            int damage, bool attackerIsPlayer, ShipController playerRef, NpcShip npcRef,
             bool isDamageBall)
         {
             if (from == null || to == null) yield break;
@@ -312,7 +299,7 @@ namespace Game.Combat
             }
 
             // 도착 — 데미지 볼만 실제 데미지·hit flash 적용 (시각용 볼은 도착하고 사라짐)
-            if (!_combatOver && willHit && isDamageBall)
+            if (!_combatOver && isDamageBall)
             {
                 if (attackerIsPlayer && npcRef != null && npcRef.CurrentDurability > 0)
                 {
