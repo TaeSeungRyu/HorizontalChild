@@ -575,11 +575,7 @@ namespace Game.World
             var (lat, lng) = GeoCoordinate.WorldToLatLng(newWorldPos);
             port.latitude = lat;
             port.longitude = lng;
-#if UNITY_EDITOR
-            EditorUtility.SetDirty(port);
-            AssetDatabase.SaveAssets();
-#endif
-            Debug.Log($"[PortPlacementEditor] {port.displayNameKo} → lat {lat:F2}, lng {lng:F2} 저장.");
+            PersistAsset(port, $"{port.displayNameKo} → lat {lat:F4}, lng {lng:F4}");
         }
 
         public void SaveDiscoveryPosition(DiscoveryData disc, Vector3 newWorldPos)
@@ -588,11 +584,58 @@ namespace Game.World
             var (lat, lng) = GeoCoordinate.WorldToLatLng(newWorldPos);
             disc.latitude = lat;
             disc.longitude = lng;
-#if UNITY_EDITOR
-            EditorUtility.SetDirty(disc);
-            AssetDatabase.SaveAssets();
-#endif
-            Debug.Log($"[PortPlacementEditor] {disc.displayNameKo} → lat {lat:F2}, lng {lng:F2} 저장.");
+            PersistAsset(disc, $"{disc.displayNameKo} → lat {lat:F4}, lng {lng:F4}");
         }
+
+        /// <summary>
+        /// SO 변경분을 .asset 파일에 영속화. Unity 6 Play 모드에서는 SaveAssetIfDirty 까지만 호출 가능
+        /// (ForceReserializeAssets 는 Play 모드 금지). Play 종료 후 delayCall 로 재시리얼라이즈 보강.
+        /// </summary>
+        private static void PersistAsset(UnityEngine.Object asset, string changeLabel)
+        {
+#if UNITY_EDITOR
+            string path = AssetDatabase.GetAssetPath(asset);
+            if (string.IsNullOrEmpty(path))
+            {
+                Debug.LogError($"[PortPlacementEditor] {changeLabel} — AssetPath 비어있음! 자산이 .asset 파일로 저장 안 됐을 수 있음.");
+                return;
+            }
+            EditorUtility.SetDirty(asset);
+            AssetDatabase.SaveAssetIfDirty(asset);              // Play 모드에서도 안전 — 특정 자산 즉시 디스크 기록
+            Debug.Log($"[PortPlacementEditor] {changeLabel} 저장 → {path}");
+
+            // Play 종료 후 한 번만 재시리얼라이즈 — Unity 가 SO 스냅샷 복원하는 경우 대비
+            _pendingReserialize.Add(path);
+            if (!_reserializeScheduled)
+            {
+                _reserializeScheduled = true;
+                EditorApplication.playModeStateChanged += OnPlayModeChanged_ReserializeOnce;
+            }
+#else
+            Debug.LogWarning($"[PortPlacementEditor] {changeLabel} — 빌드 환경에서는 SO 저장 불가 (에디터 전용 툴).");
+#endif
+        }
+
+#if UNITY_EDITOR
+        private static readonly HashSet<string> _pendingReserialize = new();
+        private static bool _reserializeScheduled;
+
+        private static void OnPlayModeChanged_ReserializeOnce(PlayModeStateChange state)
+        {
+            // Play → Edit 모드로 전환 직후에 재시리얼라이즈 (Edit 모드에서만 가능)
+            if (state != PlayModeStateChange.EnteredEditMode) return;
+
+            EditorApplication.playModeStateChanged -= OnPlayModeChanged_ReserializeOnce;
+            _reserializeScheduled = false;
+
+            if (_pendingReserialize.Count == 0) return;
+            var paths = new string[_pendingReserialize.Count];
+            _pendingReserialize.CopyTo(paths);
+            _pendingReserialize.Clear();
+
+            AssetDatabase.ForceReserializeAssets(paths, ForceReserializeAssetsOptions.ReserializeAssets);
+            Debug.Log($"[PortPlacementEditor] Play 종료 후 {paths.Length}개 자산 재시리얼라이즈 완료 (포지션 영속화 확정).");
+        }
+#endif
     }
 }

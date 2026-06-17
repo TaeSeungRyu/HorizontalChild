@@ -16,8 +16,8 @@ MonoBehaviour:
   displayNameKo: "\uD504\uB188\uD39C"
   displayNameOriginal: Phnom Penh
   nation: {fileID: 0}
-  latitude: 11.56
-  longitude: 104.92
+  latitude: 11.255628
+  longitude: 103.48641
   shortDescription: "\uBA54\uCF69 \uAC15\uC774 \uAC08\uB77C\uC9C0\uB294 \uACF3\uC5D0
     \uC790\uB9AC\uD55C \uCE84\uBCF4\uB514\uC544\uC758 \uC61B \uC218\uB3C4."
   cityIllustration: {fileID: 0}

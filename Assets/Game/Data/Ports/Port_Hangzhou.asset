@@ -16,8 +16,8 @@ MonoBehaviour:
   displayNameKo: "\uD56D\uC800\uC6B0"
   displayNameOriginal: "\u676D\u5DDE"
   nation: {fileID: 0}
-  latitude: 30.25
-  longitude: 120.15
+  latitude: 30.065557
+  longitude: 121.34644
   shortDescription: "\uB9D1\uC740 \uD638\uC218 \uC606\uC5D0 \uBE44\uB2E8\uACFC \uCC28\uB97C
     \uBE5A\uB294 \uC61B \uB3C4\uC2DC."
   cityIllustration: {fileID: 0}
