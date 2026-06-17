@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc054
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc054
-  displayNameKo: "\uD55C \uB9C8\uB9AC\uC544"
+  displayNameKo: "\uB9AC\uCC98\uB4DC \uCF10\uD39C\uD3A0\uD2B8"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 79
-  seamanship: 67
-  keenEye: 50
+  bravery: 77
+  seamanship: 66
+  keenEye: 59
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uC601\uAD6D \uD574\uAD70 \uC804\uC220\uAC00. \uC6B0\uC0F9 \uACF6
+    \uD574\uC804\uC73C\uB85C \uC720\uBA85\uD574\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Richard_Kempenfelt

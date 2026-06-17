@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc067
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc067
-  displayNameKo: "\uB9D0\uB77C\uD14C\uC2A4\uD0C0 \uB9AC\uCC98\uB4DC"
+  displayNameKo: "\uC9C8 \uC5D0\uC544\uB124\uC2A4"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 38
-  seamanship: 49
-  keenEye: 89
+  bravery: 29
+  seamanship: 48
+  keenEye: 69
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\u2018\uC8FD\uC74C\uC758 \uACF6\u2019 \uBCF4\uC790\uB3C4\uB974 \uACF6\uC744
+    \uCC98\uC74C \uB118\uC5B4\uC120 \uD3EC\uB974\uD22C\uAC08 \uD56D\uD574\uC0AC\uC608\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Gil_Eanes

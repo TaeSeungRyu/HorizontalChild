@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc029
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc029
-  displayNameKo: "\uBC14\uCEE4 \uCE74\uB97C\uB85C\uC2A4"
+  displayNameKo: "\uB9C8\uD2F4 \uD504\uB85C\uBE44\uC154"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 58
-  seamanship: 64
-  keenEye: 65
+  bravery: 80
+  seamanship: 66
+  keenEye: 55
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uBD81\uC11C\uD56D\uB85C\uB97C \uCC3E\uC544 \uC138 \uCC28\uB840 \uD56D\uD574\uD55C
+    \uC601\uAD6D \uD0D0\uD5D8\uAC00 \uACB8 \uC81C\uB3C5\uC774\uC5D0\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Martin_Frobisher

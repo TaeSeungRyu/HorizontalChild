@@ -13,17 +13,19 @@ MonoBehaviour:
   m_Name: Char_Npc066
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc066
-  displayNameKo: "\uD398\uB808\uC774\uB77C \uD53C\uD130"
+  displayNameKo: "\uC544\uD750\uB9C8\uB4DC \uC774\uBE10 \uB9C8\uC9C0\uB4DC"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 48
-  seamanship: 51
-  keenEye: 65
+  bravery: 26
+  seamanship: 68
+  keenEye: 90
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uC544\uB77C\uBE44\uC544\uC758 \uC0AC\uC790. \uBC14\uC2A4\uCFE0 \uB2E4
+    \uAC00\uB9C8\uB97C \uC778\uB3C4\uAE4C\uC9C0 \uC548\uB0B4\uD55C \uC704\uB300\uD55C
+    \uD56D\uD574\uC0AC\uC608\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Ahmad_ibn_Majid

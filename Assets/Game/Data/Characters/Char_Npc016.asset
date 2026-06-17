@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc016
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc016
-  displayNameKo: "\uACE4\uCC28\uAC00 \uC5D4\uB9AC\uCF54"
-  gender: 1
+  displayNameKo: "\uC580 \uC580\uC2A4\uC874"
+  gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 65
-  seamanship: 53
-  keenEye: 47
+  bravery: 86
+  seamanship: 56
+  keenEye: 45
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uB124\uB35C\uB780\uB4DC \uCD9C\uC2E0\uC73C\uB85C \uBB34\uB77C\uD2B8
+    \uB808\uC774\uC2A4\uAC00 \uB41C \uCF54\uB974\uC138\uC5B4\uC608\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Jan_Janszoon

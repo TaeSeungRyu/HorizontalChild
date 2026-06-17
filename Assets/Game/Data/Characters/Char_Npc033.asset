@@ -13,17 +13,19 @@ MonoBehaviour:
   m_Name: Char_Npc033
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc033
-  displayNameKo: "\uBC15 \uCC9C"
+  displayNameKo: "\uD53C\uC584\uB808 \uD30C\uC0E4"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 68
-  seamanship: 62
-  keenEye: 50
+  bravery: 56
+  seamanship: 75
+  keenEye: 66
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uC624\uC2A4\uB9CC \uD574\uAD70 \uCD1D\uC0AC\uB839\uAD00(\uCE74\uD478\uB2E8
+    \uD30C\uC0E4). \uC81C\uB974\uBC14\xB7\uD0A4\uD504\uB85C\uC2A4 \uC815\uBCF5\uC758
+    \uC8FC\uC5ED\uC774\uC5D0\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Piyale_Pasha

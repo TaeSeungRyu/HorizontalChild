@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc040
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc040
-  displayNameKo: "\uBB34\uC5B4 \uC5D8\uB808\uB098"
-  gender: 1
+  displayNameKo: "\uB85C\uBC84\uD2B8 \uBE14\uB808\uC774\uD06C"
+  gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 83
-  seamanship: 65
-  keenEye: 63
+  bravery: 66
+  seamanship: 90
+  keenEye: 70
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uC601\uAD6D \uD574\uAD70\uC758 \uC544\uBC84\uC9C0\uB85C \uBD88\uB9AC\uB294
+    \uD06C\uB86C\uC6F0 \uC2DC\uB300 \uC81C\uB3C5\uC774\uC5D0\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Robert_Blake_(admiral)

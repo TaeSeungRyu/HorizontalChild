@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc081
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc081
-  displayNameKo: "\uB370\uC2E4\uBC14 \uD1A0\uB9C8\uC2A4"
+  displayNameKo: "\uC138\uBC14\uC2A4\uCC2C \uCE90\uBC97"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 26
-  seamanship: 51
-  keenEye: 77
+  bravery: 29
+  seamanship: 68
+  keenEye: 85
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uC874 \uCE90\uBC97\uC758 \uC544\uB4E4. \uC601\uAD6D\xB7\uC2A4\uD398\uC778\uC5D0\uC11C
+    \uD65C\uC57D\uD55C \uD0D0\uD5D8\uAC00\xB7\uC9C0\uB3C4\uC81C\uC791\uC790\uC608\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Sebastian_Cabot_(explorer)

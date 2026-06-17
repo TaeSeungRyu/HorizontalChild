@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc059
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc059
-  displayNameKo: "\uC2E0 \uC870\uBC18\uB2C8"
+  displayNameKo: "\uC560\uB364 \uB358\uCEE8"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 76
-  seamanship: 57
-  keenEye: 55
+  bravery: 58
+  seamanship: 66
+  keenEye: 58
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uCE84\uD37C\uB2E4\uC6B4 \uD574\uC804\uC5D0\uC11C \uB124\uB35C\uB780\uB4DC
+    \uD568\uB300\uB97C \uACA9\uD30C\uD55C \uC2A4\uCF54\uD2C0\uB79C\uB4DC \uC81C\uB3C5\uC774\uC5D0\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Adam_Duncan,_1st_Viscount_Duncan

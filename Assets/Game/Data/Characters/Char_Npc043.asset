@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc043
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc043
-  displayNameKo: "\uAE40 \uD398\uB4DC\uB85C"
+  displayNameKo: "\uCF54\uB974\uB12C\uB9AC\uC2A4 \uD2B8\uB86C\uD504"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 82
-  seamanship: 62
-  keenEye: 65
+  bravery: 81
+  seamanship: 67
+  keenEye: 61
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uB9C8\uB974\uD134 \uD2B8\uB86C\uD504\uC758 \uC544\uB4E4. \uB124\uB35C\uB780\uB4DC\xB7\uB374\uB9C8\uD06C\uC5D0\uC11C
+    \uD65C\uC57D\uD55C \uC81C\uB3C5\uC774\uC5D0\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Cornelis_Tromp

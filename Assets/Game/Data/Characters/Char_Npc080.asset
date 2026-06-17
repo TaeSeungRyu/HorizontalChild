@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc080
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc080
-  displayNameKo: "\uB4DC\uADF8\uB8E8\uD2B8 \uC2A4\uBCA4"
-  gender: 1
+  displayNameKo: "\uD398\uB974\uB514\uB09C\uB4DC \uB9C8\uC824\uB780"
+  gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 53
-  seamanship: 58
-  keenEye: 80
+  bravery: 90
+  seamanship: 90
+  keenEye: 67
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uCD5C\uCD08 \uC138\uACC4 \uC77C\uC8FC \uD56D\uD574\uB97C \uC2DC\uC791\uD55C
+    \uD3EC\uB974\uD22C\uAC08 \uCD9C\uC2E0 \uD0D0\uD5D8\uAC00\uC608\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uD398\uB974\uB514\uB09C\uB4DC_\uB9C8\uC824\uB780"

@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc031
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc031
-  displayNameKo: "\uBA54\uB514\uCE58 \uC0AC\uC774\uB4DC"
+  displayNameKo: "\uC720\uB300\uC720"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 66
-  seamanship: 55
-  keenEye: 53
+  bravery: 82
+  seamanship: 67
+  keenEye: 64
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uBA85\uB098\uB77C \uD56D\uC65C\uC7A5\uAD70. \uCC99\uACC4\uAD11\uACFC
+    \uD568\uAED8 \uC65C\uAD6C\uB97C \uACA9\uD30C\uD588\uC5B4\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Yu_Dayou

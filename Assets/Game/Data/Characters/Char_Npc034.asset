@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc034
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc034
-  displayNameKo: "\uB4DC\uC6A9 \uBBFC"
+  displayNameKo: "\uC6B8\uB8E8\uC9C0 \uC54C\uB9AC \uB808\uC774\uC2A4"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 59
-  seamanship: 61
-  keenEye: 53
+  bravery: 63
+  seamanship: 58
+  keenEye: 66
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uC774\uD0C8\uB9AC\uC544 \uCD9C\uC2E0 \uC624\uC2A4\uB9CC \uC81C\uB3C5.
+    \uB808\uD310\uD1A0 \uD6C4 \uD568\uB300\uB97C \uC7AC\uAC74\uD588\uC5B4\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: "https://en.wikipedia.org/wiki/Ulu\xE7_Ali_Reis"

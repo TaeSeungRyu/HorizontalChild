@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc023
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc023
-  displayNameKo: "\uC815 \uC694\uB098\uC2A4"
+  displayNameKo: "\uD398\uB85C \uB2C8\uB1E8"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 82
-  seamanship: 56
-  keenEye: 62
+  bravery: 85
+  seamanship: 72
+  keenEye: 67
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uCE74\uC2A4\uD2F0\uC57C\uC758 \u2018\uBB34\uD328\uC758 \uBC31\uC791\u2019
+    \u2014 \uC601\uBD88\uD574\uD611\uC744 \uD729\uC4F4 \uAE30\uC0AC \uC81C\uB3C5\uC774\uC5D0\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: "https://en.wikipedia.org/wiki/Pero_Ni\xF1o"

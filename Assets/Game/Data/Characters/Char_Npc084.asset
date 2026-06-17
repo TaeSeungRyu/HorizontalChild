@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc084
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc084
-  displayNameKo: "\uCD5C \uC11C\uC5F0"
-  gender: 1
+  displayNameKo: "\uC580 \uD53C\uD130\uB974\uC2A4\uC874 \uCF58"
+  gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 50
-  seamanship: 46
-  keenEye: 90
+  bravery: 44
+  seamanship: 45
+  keenEye: 85
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uB124\uB35C\uB780\uB4DC \uB3D9\uC778\uB3C4\uD68C\uC0AC 4\uB300 \uCD1D\uB3C5.
+    \uBC14\uD0C0\uBE44\uC544(\uC790\uCE74\uB974\uD0C0)\uB97C \uC138\uC6E0\uC5B4\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Jan_Pieterszoon_Coen

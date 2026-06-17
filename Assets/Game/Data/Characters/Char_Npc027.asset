@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc027
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc027
-  displayNameKo: "\uBE48\uC790\uC774\uB4DC \uC9C0\uC6B0"
+  displayNameKo: "\uCC30\uC2A4 \uD558\uC6CC\uB4DC"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 75
+  bravery: 79
   seamanship: 63
-  keenEye: 52
+  keenEye: 70
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "1588\uB144 \uC2A4\uD398\uC778 \uBB34\uC801\uD568\uB300\uB97C \uACA9\uD1F4\uD55C
+    \uC601\uAD6D \uC81C\uB3C5\uC774\uC5D0\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Charles_Howard,_1st_Earl_of_Nottingham

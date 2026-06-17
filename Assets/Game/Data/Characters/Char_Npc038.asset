@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc038
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc038
-  displayNameKo: "\uC774 \uB8E8\uB4DC"
+  displayNameKo: "\uB9C8\uB974\uD134 \uD2B8\uB86C\uD504"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 81
-  seamanship: 71
-  keenEye: 54
+  bravery: 83
+  seamanship: 90
+  keenEye: 62
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uB124\uB35C\uB780\uB4DC \uD669\uAE08\uAE30 \uC81C\uB3C5. \uC601\uAD6D
+    \uD568\uB300\uB97C \uB2E4\uC6B4\uC2A4 \uD574\uC804\uC5D0\uC11C \uACA9\uD30C\uD588\uC5B4\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Maarten_Tromp

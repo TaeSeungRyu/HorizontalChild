@@ -15,15 +15,15 @@ MonoBehaviour:
   npcId: npc.pirate016
   character: {fileID: 11400000, guid: 43dfe727e4432e844b7a7e27d1ab7563, type: 2}
   type: 2
-  homePort: {fileID: 11400000, guid: 79006b120a9b7ee449e7d079b682a591, type: 2}
+  homePort: {fileID: 11400000, guid: 1d034b15b52ae4744bca7fdd77e96b6a, type: 2}
   patrolRange: 180
   patrolPorts: []
   destinationPort: {fileID: 0}
-  hireBonus: {x: 1, y: 0, z: 0}
-  hireBasePrice: 1980
+  hireBonus: {x: 0, y: 0, z: 0}
+  hireBasePrice: 2244
   requiredGoodReputation: 0
   requiredBadReputation: 10
-  cannonPower: 5
-  maxDurability: 45
-  attackInterval: 1.8588088
-  shipData: {fileID: 11400000, guid: 01d6f53080eac994ba15bf41d4f26d49, type: 2}
+  cannonPower: 4
+  maxDurability: 36
+  attackInterval: 1.8912904
+  shipData: {fileID: 11400000, guid: 9ddc02c5801deae46b4ca9ec0765cb1c, type: 2}

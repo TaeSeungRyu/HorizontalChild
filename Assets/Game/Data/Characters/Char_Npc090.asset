@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc090
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc090
-  displayNameKo: "\uB4DC\uC6A9 \uC870"
+  displayNameKo: "\uC7A1 \uCC28\uB179"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 51
-  seamanship: 67
-  keenEye: 67
+  bravery: 44
+  seamanship: 63
+  keenEye: 74
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uCE98\uCEE4\uD0C0(\uCF5C\uCE74\uD0C0)\uB97C \uAC74\uC124\uD55C \uC601\uAD6D
+    \uB3D9\uC778\uB3C4\uD68C\uC0AC \uC0C1\uC778\uC774\uC5D0\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Job_Charnock

@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc044
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc044
-  displayNameKo: "\uB4DC\uD504\uB9AC\uC2A4 \uD30C\uC6B8\uB85C"
-  gender: 1
+  displayNameKo: "\uC5D0\uB4DC\uC6CC\uB4DC \uB9C8\uC6B4\uD130\uADDC"
+  gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 70
-  seamanship: 72
-  keenEye: 62
+  bravery: 63
+  seamanship: 73
+  keenEye: 66
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uC0CC\uB4DC\uC704\uCE58 \uBC31\uC791. \uC601\uAD6D \uC655\uC815 \uBCF5\uACE0\uC640
+    \uD574\uAD70 \uAC1C\uD601\uC758 \uC8FC\uC5ED\uC774\uC5D0\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Edward_Montagu,_1st_Earl_of_Sandwich

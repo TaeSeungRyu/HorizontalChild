@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc039
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc039
-  displayNameKo: "\uC580\uC13C \uD5E8\uB9AC"
+  displayNameKo: "\uC704\uD130 \uB354 \uBE57"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 75
-  seamanship: 80
-  keenEye: 60
+  bravery: 61
+  seamanship: 57
+  keenEye: 59
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uB124\uB35C\uB780\uB4DC \uBA85\uC81C\uB3C5. \uC601\uAD6D\xB7\uC2A4\uC6E8\uB374
+    \uD568\uB300\uC640 \uC5EC\uB7EC \uCC28\uB840 \uB9DE\uC130\uC5B4\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Witte_Corneliszoon_de_With

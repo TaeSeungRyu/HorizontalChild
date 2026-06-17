@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc048
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc048
-  displayNameKo: "\uC1A1\uAC00 \uB9BC"
-  gender: 1
+  displayNameKo: "\uC5D0\uB4DC\uC6CC\uB4DC \uBC84\uB10C"
+  gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 79
-  seamanship: 58
-  keenEye: 54
+  bravery: 65
+  seamanship: 74
+  keenEye: 51
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\u2018\uC62C\uB4DC \uADF8\uB85C\uADF8\u2019 \uBCC4\uBA85\uC758 \uC601\uAD6D
+    \uC81C\uB3C5. \uADF8\uB85C\uADF8\uC8FC \uC774\uB984\uC758 \uC720\uB798\uC608\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Edward_Vernon

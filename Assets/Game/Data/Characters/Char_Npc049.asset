@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc049
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc049
-  displayNameKo: "\uBC18\uC5D0\uC774\uD06C \uC11C\uC900"
+  displayNameKo: "\uC870\uC9C0 \uC564\uC2A8"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 72
-  seamanship: 80
-  keenEye: 52
+  bravery: 58
+  seamanship: 88
+  keenEye: 57
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "1740~44\uB144 \uC138\uACC4 \uC77C\uC8FC \uD56D\uD574\uB97C \uB9C8\uCE5C
+    \uC601\uAD6D \uC81C\uB3C5\uC774\uC5D0\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/George_Anson,_1st_Baron_Anson

@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc007
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc007
-  displayNameKo: "\uC774\uAC00 \uBBFC\uD638"
+  displayNameKo: "\uC5D0\uB4DC\uC6CC\uB4DC \uC789\uAE00\uB79C\uB4DC"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 61
-  seamanship: 78
-  keenEye: 55
+  bravery: 86
+  seamanship: 50
+  keenEye: 47
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uD3EC\uB85C\uC5D0\uAC8C \uC790\uBE44\uB97C \uBCA0\uD47C \u2018\uC778\uC815
+    \uB9CE\uC740 \uD574\uC801\u2019 \uC73C\uB85C \uC54C\uB824\uC84C\uC5B4\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Edward_England

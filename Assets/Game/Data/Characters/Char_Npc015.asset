@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc015
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc015
-  displayNameKo: "\uACE4\uC798\uB808\uC2A4 \uD638\uC138"
+  displayNameKo: "\uD074\uB77C\uC6B0\uC2A4 \uC288\uD1F4\uB974\uD14C\uBCA0\uCEE4"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 74
-  seamanship: 52
-  keenEye: 53
+  bravery: 85
+  seamanship: 72
+  keenEye: 56
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uD55C\uC790\uB3D9\uB9F9 \uC2DC\uB300 \uBC1C\uD2B8\uD574 \u2018\uC2DD\uB7C9
+    \uCE5C\uAD6C\uB2E8\u2019 \uC758 \uC6B0\uB450\uBA38\uB9AC\uC608\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: "https://en.wikipedia.org/wiki/Klaus_St\xF6rtebeker"

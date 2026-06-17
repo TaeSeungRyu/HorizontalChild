@@ -13,17 +13,19 @@ MonoBehaviour:
   m_Name: Char_Npc011
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc011
-  displayNameKo: "\uB9D0\uB77C\uD14C\uC2A4\uD0C0 \uC774\uC0AC\uBCA8"
+  displayNameKo: "\uC62C\uB9AC\uBE44\uC5D0 \uB974\uBC14\uC1E0\uB974"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 76
-  seamanship: 75
-  keenEye: 49
+  bravery: 95
+  seamanship: 56
+  keenEye: 50
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uCC98\uD615 \uC9C1\uC804 \u2018\uB0B4 \uBCF4\uBB3C\uC744 \uCC3E\uC744
+    \uC218 \uC788\uB294 \uC790, \uB204\uAD6C\uB4E0 \uAC00\uC838\uB77C!\u2019 \uC678\uCE5C
+    \uD504\uB791\uC2A4 \uD574\uC801\uC774\uC5D0\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Olivier_Levasseur

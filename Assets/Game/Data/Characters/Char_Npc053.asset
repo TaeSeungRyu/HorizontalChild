@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc053
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc053
-  displayNameKo: "\uC870\uAC00 \uC70C\uB9AC\uC5C4"
+  displayNameKo: "\uD53C\uC5D0\uB974 \uB4DC \uC26C\uD504\uB791"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 71
-  seamanship: 72
-  keenEye: 58
+  bravery: 69
+  seamanship: 58
+  keenEye: 51
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uC778\uB3C4\uC591\uC5D0\uC11C \uC601\uAD6D \uD568\uB300\uC640 5\uCC28\uB840
+    \uACA9\uC804\uC744 \uBC8C\uC778 \uD504\uB791\uC2A4 \uC81C\uB3C5\uC774\uC5D0\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: "https://en.wikipedia.org/wiki/Pierre_Andr\xE9_de_Suffren"

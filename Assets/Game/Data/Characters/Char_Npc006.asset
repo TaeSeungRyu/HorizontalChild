@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc006
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc006
-  displayNameKo: "\uC624\uB974\uC2DC\uB2C8 \uB3C4\uC724"
+  displayNameKo: "\uC0C8\uBBA4\uC5BC \uBCA8\uB7EC\uBBF8"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 74
-  seamanship: 50
-  keenEye: 43
+  bravery: 62
+  seamanship: 51
+  keenEye: 44
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uD669\uAE08\uAE30 \uCD5C\uACE0 \uBD80\uC790 \uD574\uC801. \u2018\uBE14\uB799
+    \uC0D8\u2019 \uC73C\uB85C \uBD88\uB838\uC5B4\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Samuel_Bellamy

@@ -135,23 +135,32 @@ namespace Game.Editor
                 c.sourceUrl = "https://ko.wikipedia.org/wiki/피리_레이스";
             });
 
-            var yiSunsin = CreateOrLoadCharacter("Character_YiSunsin.asset", c =>
+            // ※ 이순신은 NPC 호위선 으로 이동 (M3NpcSeeder 가 생성). 조선 주인공은 임상옥으로 교체.
+            var imSangOk = CreateOrLoadCharacter("Character_ImSangOk.asset", c =>
             {
-                c.characterId = "character.yi_sunsin";
-                c.displayNameKo = "이순신";
+                c.characterId = "character.im_sangok";
+                c.displayNameKo = "임상옥";
                 c.gender = Gender.Male;
                 c.role = CharacterRole.Adventurer;
-                c.bravery = 95;
-                c.seamanship = 85;
-                c.keenEye = 90;
+                c.bravery = 70;
+                c.seamanship = 75;
+                c.keenEye = 95;
                 c.startingGoodReputation = 50000;
                 c.startingBadReputation = 0;
                 c.nation = joseon;
                 c.homePort = busan;
-                c.shortIntro = "거북선과 함께 우리나라 바다를 잘 지킨 장군이에요.";
-                c.moreInfo = "꼼꼼히 일기를 써서 그날그날의 바다를 기록으로 남겼답니다.";
-                c.sourceUrl = "https://ko.wikipedia.org/wiki/이순신";
+                c.shortIntro = "조선의 큰 상인으로, 신용과 의리를 무엇보다 소중히 여겼어요.";
+                c.moreInfo = "청나라와 인삼 무역으로 거대한 부를 쌓고, 어려운 사람들에게 곡식을 나눠줬어요. ‘재상평여수 인중직사형(財上平如水 人中直似衡)’ 이라는 말로 유명해요.";
+                c.sourceUrl = "https://ko.wikipedia.org/wiki/임상옥";
             });
+
+            // 기존 Character_YiSunsin.asset 정리 (있으면 삭제 — NPC 풀로 이동했음)
+            var oldYiSunsinPath = $"{DataRoot}/Characters/Character_YiSunsin.asset";
+            if (AssetDatabase.LoadAssetAtPath<CharacterData>(oldYiSunsinPath) != null)
+            {
+                AssetDatabase.DeleteAsset(oldYiSunsinPath);
+                Debug.Log("[M2CharacterSeeder] 이순신 캐릭터를 NPC 호위선 풀로 이동 (Character_YiSunsin.asset 삭제).");
+            }
 
             var zhengHe = CreateOrLoadCharacter("Character_ZhengHe.asset", c =>
             {
@@ -182,7 +191,7 @@ namespace Game.Editor
             LinkStartingCharacter(netherlands, barents);
             LinkStartingCharacter(england, hudson);
             LinkStartingCharacter(ottoman, pirireis);
-            LinkStartingCharacter(joseon, yiSunsin);
+            LinkStartingCharacter(joseon, imSangOk);
             LinkStartingCharacter(china, zhengHe);
 
             AssetDatabase.SaveAssets();
@@ -195,7 +204,7 @@ namespace Game.Editor
                 "  • 바렌츠 (네덜란드)\n" +
                 "  • 허드슨 (영국)\n" +
                 "  • 피리 레이스 (오스만)\n" +
-                "  • 이순신 (조선)\n" +
+                "  • 임상옥 (조선) — 이순신 대신 NPC 풀로 이동\n" +
                 "  • 정화 (중국)\n" +
                 "\n포르투갈/엔리케 왕자 (M1) 와 합쳐 총 8명 실존 인물.\n" +
                 "NationSelectionPanel 에서 국적 선택 → PlayerShip.captain 자동 할당됨.");

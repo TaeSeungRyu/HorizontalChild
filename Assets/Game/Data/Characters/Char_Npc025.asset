@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc025
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc025
-  displayNameKo: "\uB370\uC2E4\uBC14 \uCC30\uC2A4"
+  displayNameKo: "\uB3C8 \uAC00\uB974\uC2DC\uC544 \uB370 \uD1A8\uB808\uB3C4"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 60
-  seamanship: 61
-  keenEye: 57
+  bravery: 79
+  seamanship: 59
+  keenEye: 65
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uBAB0\uD0C0 \uACF5\uBC29\uC804\uC5D0\uC11C \uC2A4\uD398\uC778 \uD568\uB300\uB97C
+    \uC774\uB048 \uBA85\uC7A5\uC774\uC5D0\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: "https://en.wikipedia.org/wiki/Garc\xEDa_\xC1lvarez_de_Toledo,_4th_Marquis_of_Villafranca"

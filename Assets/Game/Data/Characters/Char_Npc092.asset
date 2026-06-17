@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc092
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc092
-  displayNameKo: "\uC5D0\uB808\uB77C \uC8FC\uC6D0"
-  gender: 1
+  displayNameKo: "\uD53C\uC5D0\uB974 \uC5D0\uC2A4\uD504\uB9AC \uB77C\uB514\uC1A1"
+  gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 54
-  seamanship: 59
-  keenEye: 62
+  bravery: 38
+  seamanship: 51
+  keenEye: 71
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uD5C8\uB4DC\uC2A8 \uB9CC \uD68C\uC0AC \uC124\uB9BD\uC758 \uB2E8\uCD08\uAC00
+    \uB41C \uD504\uB791\uC2A4 \uBAA8\uD53C\uC0C1\uC774\uC5D0\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Pierre-Esprit_Radisson

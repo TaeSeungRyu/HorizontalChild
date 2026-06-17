@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc058
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc058
-  displayNameKo: "\uC7A5\uAC00 \uBBF8\uAC94"
+  displayNameKo: "\uCEE4\uC2A4\uBC84\uD2B8 \uCF5C\uB9C1\uC6B0\uB4DC"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 72
-  seamanship: 73
-  keenEye: 66
+  bravery: 85
+  seamanship: 74
+  keenEye: 65
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uD2B8\uB77C\uD314\uAC00\uC5D0\uC11C \uB12C\uC2A8 \uC0AC\uD6C4 \uD568\uB300\uB97C
+    \uC774\uB048 \uC601\uAD6D \uC81C\uB3C5\uC774\uC5D0\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Cuthbert_Collingwood,_1st_Baron_Collingwood

@@ -13,17 +13,19 @@ MonoBehaviour:
   m_Name: Char_Npc052
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc052
-  displayNameKo: "\uD30C\uB974\uB124\uC138 \uBE4C\uD5EC\uB984"
-  gender: 1
+  displayNameKo: "\uCF69\uD2B8 \uB4DC \uADF8\uB77C\uC2A4"
+  gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 76
-  seamanship: 67
-  keenEye: 63
+  bravery: 63
+  seamanship: 65
+  keenEye: 59
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uCCB4\uC0AC\uD53C\uD06C \uD574\uC804\uC5D0\uC11C \uC601\uAD6D \uD568\uB300\uB97C
+    \uB9C9\uC544 \uBBF8\uAD6D \uB3C5\uB9BD\uC744 \uB3C4\uC6B4 \uD504\uB791\uC2A4
+    \uC81C\uB3C5\uC774\uC5D0\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: "https://en.wikipedia.org/wiki/Fran\xE7ois_Joseph_Paul_de_Grasse"

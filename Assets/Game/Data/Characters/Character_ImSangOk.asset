@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0d9a81d75203b74cbb07915727d4c52, type: 3}
+  m_Name: Character_ImSangOk
+  m_EditorClassIdentifier: Game::Game.Data.CharacterData
+  characterId: character.im_sangok
+  displayNameKo: "\uC784\uC0C1\uC625"
+  gender: 0
+  role: 0
+  portrait: {fileID: 0}
+  bravery: 70
+  seamanship: 75
+  keenEye: 95
+  startingGoodReputation: 50000
+  startingBadReputation: 0
+  nation: {fileID: 11400000, guid: eb895b40b2897d649806972105641d59, type: 2}
+  homePort: {fileID: 11400000, guid: 79006b120a9b7ee449e7d079b682a591, type: 2}
+  shortIntro: "\uC870\uC120\uC758 \uD070 \uC0C1\uC778\uC73C\uB85C, \uC2E0\uC6A9\uACFC
+    \uC758\uB9AC\uB97C \uBB34\uC5C7\uBCF4\uB2E4 \uC18C\uC911\uD788 \uC5EC\uACBC\uC5B4\uC694."
+  moreInfo: "\uCCAD\uB098\uB77C\uC640 \uC778\uC0BC \uBB34\uC5ED\uC73C\uB85C \uAC70\uB300\uD55C
+    \uBD80\uB97C \uC313\uACE0, \uC5B4\uB824\uC6B4 \uC0AC\uB78C\uB4E4\uC5D0\uAC8C
+    \uACE1\uC2DD\uC744 \uB098\uB220\uC92C\uC5B4\uC694. \u2018\uC7AC\uC0C1\uD3C9\uC5EC\uC218
+    \uC778\uC911\uC9C1\uC0AC\uD615(\u8CA1\u4E0A\u5E73\u5982\u6C34 \u4EBA\u4E2D\u76F4\u4F3C\u8861)\u2019
+    \uC774\uB77C\uB294 \uB9D0\uB85C \uC720\uBA85\uD574\uC694."
+  sourceUrl: "https://ko.wikipedia.org/wiki/\uC784\uC0C1\uC625"

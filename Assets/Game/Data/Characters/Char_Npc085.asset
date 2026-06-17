@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc085
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc085
-  displayNameKo: "\uBC14\uCEE4 \uC11C\uC544"
+  displayNameKo: "\uC548\uD1A0\uB2C8 \uD310 \uB514\uBA58"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 35
-  seamanship: 66
-  keenEye: 80
+  bravery: 26
+  seamanship: 51
+  keenEye: 83
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uB124\uB35C\uB780\uB4DC VOC \uCD1D\uB3C5. \uD0C0\uC2A4\uB9CC\uC744
+    \uD6C4\uC6D0\uD574 \uD638\uC8FC \uD0D0\uD5D8\uC744 \uBCF4\uB0C8\uC5B4\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Anthony_van_Diemen

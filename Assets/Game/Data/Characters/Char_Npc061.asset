@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc061
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc061
-  displayNameKo: "\uB9C8\uB974\uD2F0\uB124\uC2A4 \uC655"
+  displayNameKo: "\uB2C8\uCF5C\uB85C \uD3F4\uB85C"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 37
-  seamanship: 60
-  keenEye: 63
+  bravery: 43
+  seamanship: 67
+  keenEye: 62
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uB9C8\uB974\uCF54 \uD3F4\uB85C\uC758 \uC544\uBC84\uC9C0. \uCC98\uC74C
+    \uC6D0\uB098\uB77C\uAE4C\uC9C0 \uB2E4\uB140\uC628 \uBCA0\uB124\uCE58\uC544 \uC0C1\uC778\uC774\uC5D0\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: "https://en.wikipedia.org/wiki/Niccol\xF2_and_Maffeo_Polo"

@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc055
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc055
-  displayNameKo: "\uBE0C\uB77C\uC6B4 \uC5E0\uB9C8"
+  displayNameKo: "\uC0C8\uBBA4\uC5BC \uD6C4\uB4DC"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 63
-  seamanship: 60
-  keenEye: 51
+  bravery: 78
+  seamanship: 57
+  keenEye: 53
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uB12C\uC2A8\uC758 \uBA58\uD1A0\uB85C\uB3C4 \uC54C\uB824\uC9C4 \uC601\uAD6D
+    \uBA85\uC81C\uB3C5\uC774\uC5D0\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Samuel_Hood,_1st_Viscount_Hood

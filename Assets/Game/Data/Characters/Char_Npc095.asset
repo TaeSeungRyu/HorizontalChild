@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc095
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc095
-  displayNameKo: "\uC580\uC13C \uC624\uD1A0"
+  displayNameKo: "\uC2A4\uBBF8\uD1A0\uBAA8 \uB9C8\uC0AC\uD1A0\uBAA8"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 42
-  seamanship: 47
-  keenEye: 80
+  bravery: 30
+  seamanship: 45
+  keenEye: 89
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uC2A4\uBBF8\uD1A0\uBAA8 \uAC00\uBB38\uC758 \uC2DC\uC870. \uB3D9(\u9285)
+    \uC815\uB828\uC220\uB85C \uBD80\uB97C \uC313\uC558\uC5B4\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Sumitomo_family

@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Char_Npc093
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc093
-  displayNameKo: "\uC774\uBE10 \uD0DC\uC6D0"
+  displayNameKo: "\uC2A4\uD2F0\uBE10 \uC9C0\uB77C\uB4DC"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 43
-  seamanship: 56
-  keenEye: 87
+  bravery: 39
+  seamanship: 62
+  keenEye: 66
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uD504\uB791\uC2A4 \uCD9C\uC2E0 \uBBF8\uAD6D \uAC70\uC0C1. \uBBF8\uAD6D\uC5D0\uC11C
+    \uAC00\uC7A5 \uBD80\uC790\uC600\uB2E4\uB294 \uD3C9\uC744 \uBC1B\uC544\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Stephen_Girard

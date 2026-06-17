@@ -13,17 +13,19 @@ MonoBehaviour:
   m_Name: Char_Npc045
   m_EditorClassIdentifier: Game::Game.Data.CharacterData
   characterId: char.npc045
-  displayNameKo: "\uC70C\uC2A8 \uB9C8\uD14C\uC624"
+  displayNameKo: "\uD22C\uB974\uBE4C \uBC31\uC791"
   gender: 0
   role: 0
   portrait: {fileID: 0}
-  bravery: 69
-  seamanship: 55
-  keenEye: 59
+  bravery: 59
+  seamanship: 90
+  keenEye: 56
   startingGoodReputation: 0
   startingBadReputation: 0
   nation: {fileID: 0}
   homePort: {fileID: 0}
-  shortIntro: 
+  shortIntro: "\uB8E8\uC774 14\uC138 \uC2DC\uB300 \uD504\uB791\uC2A4 \uD574\uAD70
+    \uC6D0\uC218. \uBE44\uCE58 \uD574\uB4DC \uD574\uC804\uC5D0\uC11C \uC601\uB124
+    \uC5F0\uD569\uC744 \uACA9\uD30C\uD588\uC5B4\uC694."
   moreInfo: 
-  sourceUrl: 
+  sourceUrl: https://en.wikipedia.org/wiki/Anne_Hilarion_de_Tourville
