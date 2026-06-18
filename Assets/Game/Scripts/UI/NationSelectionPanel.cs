@@ -71,10 +71,13 @@ namespace Game.UI
 
             ClearSelectedDisplay();
 
-            // SaveService 가 이미 국가를 복원했으면 패널 안 띄움
+            // SaveService 가 이미 국가를 복원했으면 패널 안 띄움.
+            // BUT 그래도 startingCharacter 를 PlayerShip.captain 에 적용해야 함
+            // (SaveService 는 nation 만 직렬화하고 captain 은 안 함 → 직접 보강).
             bool nationAlreadySet = gameSession != null && gameSession.SelectedNation != null;
             if (nationAlreadySet)
             {
+                ApplyNationToPlayer(gameSession.SelectedNation, skipPositionTeleport: true);
                 panelRoot.SetActive(false);
                 return;
             }
@@ -86,6 +89,56 @@ namespace Game.UI
             else
             {
                 panelRoot.SetActive(false);
+            }
+        }
+
+        /// <summary>
+        /// nation 의 startingCharacter / startingShip 을 PlayerShip 에 적용.
+        /// OnConfirmClicked (사용자 선택 시) 와 Start (저장 복원 시) 양쪽에서 호출.
+        /// skipPositionTeleport=true 면 위치 텔레포트는 건너뜀 (저장에서 복원된 위치를 보존).
+        /// </summary>
+        private void ApplyNationToPlayer(NationData nation, bool skipPositionTeleport)
+        {
+            if (nation == null) return;
+
+            if (playerShip == null)
+            {
+                playerShip = FindAnyObjectByType<ShipController>(FindObjectsInactive.Include);
+                if (playerShip != null)
+                    Debug.LogWarning($"[NationSelectionPanel] Inspector 의 playerShip 미할당 — 자동 탐색으로 {playerShip.name} 사용.");
+            }
+            if (playerShip == null)
+            {
+                Debug.LogError("[NationSelectionPanel] PlayerShip 못 찾음 — captain·ship 적용 불가.");
+                return;
+            }
+
+            if (!skipPositionTeleport && nation.startingPort != null)
+            {
+                var port = nation.startingPort;
+                var spawnLat = port.latitude + nation.startingSeaOffsetLatitude;
+                var spawnLng = port.longitude + nation.startingSeaOffsetLongitude;
+                var spawnWorld = GeoCoordinate.LatLngToWorld(spawnLat, spawnLng);
+                playerShip.transform.position = new Vector3(spawnWorld.x, playerShip.transform.position.y, spawnWorld.z);
+                playerShip.HardStop();
+            }
+
+            if (nation.startingCharacter != null)
+            {
+                playerShip.captain = nation.startingCharacter;
+                Debug.Log($"[NationSelectionPanel] 선장 적용: {nation.startingCharacter.displayNameKo} " +
+                    $"(용기 {nation.startingCharacter.bravery} / 항해 {nation.startingCharacter.seamanship} / 눈썰미 {nation.startingCharacter.keenEye})" +
+                    (skipPositionTeleport ? " [복원]" : " [신규]"));
+            }
+            else
+            {
+                Debug.LogWarning($"[NationSelectionPanel] {nation.displayNameKo} 의 startingCharacter null — M2CharacterSeeder + Refresh All Catalogs 권장.");
+            }
+
+            if (nation.startingShip != null && playerShip.shipData == null)
+            {
+                playerShip.shipData = nation.startingShip;
+                playerShip.RefreshVisual();
             }
         }
 
